@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bemote0wheel00001"]
+
+[ext_resource type="Script" path="res://scripts/ui/emote_wheel.gd" id="1_emote"]
+
+[node name="EmoteWheel" type="Control"]
+script = ExtResource("1_emote")

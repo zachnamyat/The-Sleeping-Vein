@@ -1,0 +1,172 @@
+[gd_scene load_steps=3 format=3 uid="uid://bsettingspanel001"]
+
+[ext_resource type="Script" path="res://scripts/ui/settings_panel.gd" id="1_sp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sp"]
+bg_color = Color(0.02, 0.02, 0.03, 0.96)
+border_color = Color(0.95, 0.84, 0.5, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="SettingsPanel" type="CanvasLayer"]
+layer = 91
+process_mode = 3
+script = ExtResource("1_sp")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.6)
+
+[node name="Root" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -120.0
+offset_right = 200.0
+offset_bottom = 120.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_sp")
+
+[node name="Title" type="Label" parent="Root"]
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 392.0
+offset_bottom = 18.0
+modulate = Color(0.97, 0.85, 0.5, 1)
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="Tabs" type="TabContainer" parent="Root"]
+offset_left = 6.0
+offset_top = 22.0
+offset_right = 394.0
+offset_bottom = 200.0
+
+[node name="Display" type="MarginContainer" parent="Root/Tabs"]
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Grid" type="GridContainer" parent="Root/Tabs/Display"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 6
+
+[node name="WindowLabel" type="Label" parent="Root/Tabs/Display/Grid"]
+text = "Window Mode"
+
+[node name="WindowModeBtn" type="OptionButton" parent="Root/Tabs/Display/Grid"]
+custom_minimum_size = Vector2(180, 0)
+size_flags_horizontal = 3
+
+[node name="ResLabel" type="Label" parent="Root/Tabs/Display/Grid"]
+text = "Resolution"
+
+[node name="ResolutionBtn" type="OptionButton" parent="Root/Tabs/Display/Grid"]
+custom_minimum_size = Vector2(180, 0)
+size_flags_horizontal = 3
+
+[node name="VsyncLabel" type="Label" parent="Root/Tabs/Display/Grid"]
+text = "V-Sync"
+
+[node name="VsyncCheck" type="CheckBox" parent="Root/Tabs/Display/Grid"]
+
+[node name="Audio" type="MarginContainer" parent="Root/Tabs"]
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Grid" type="GridContainer" parent="Root/Tabs/Audio"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 6
+
+[node name="Game" type="MarginContainer" parent="Root/Tabs"]
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Grid" type="GridContainer" parent="Root/Tabs/Game"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 2
+theme_override_constants/h_separation = 16
+theme_override_constants/v_separation = 6
+
+[node name="HudScaleLabel" type="Label" parent="Root/Tabs/Game/Grid"]
+text = "HUD Scale"
+
+[node name="HudScaleSlider" type="HSlider" parent="Root/Tabs/Game/Grid"]
+custom_minimum_size = Vector2(180, 0)
+size_flags_horizontal = 3
+min_value = 0.5
+max_value = 2.0
+step = 0.05
+value = 1.0
+
+[node name="HudOpacityLabel" type="Label" parent="Root/Tabs/Game/Grid"]
+text = "HUD Opacity"
+
+[node name="HudOpacitySlider" type="HSlider" parent="Root/Tabs/Game/Grid"]
+custom_minimum_size = Vector2(180, 0)
+size_flags_horizontal = 3
+min_value = 0.2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="TooltipDelayLabel" type="Label" parent="Root/Tabs/Game/Grid"]
+text = "Tooltip Delay"
+
+[node name="TooltipDelayBtn" type="OptionButton" parent="Root/Tabs/Game/Grid"]
+custom_minimum_size = Vector2(180, 0)
+size_flags_horizontal = 3
+
+[node name="AccentLabel" type="Label" parent="Root/Tabs/Game/Grid"]
+text = "Accent Color"
+
+[node name="AccentPickerBtn" type="ColorPickerButton" parent="Root/Tabs/Game/Grid"]
+custom_minimum_size = Vector2(180, 0)
+size_flags_horizontal = 3
+color = Color(1, 0.85, 0.45, 1)
+
+[node name="Controls" type="MarginContainer" parent="Root/Tabs"]
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="Scroll" type="ScrollContainer" parent="Root/Tabs/Controls"]
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="List" type="VBoxContainer" parent="Root/Tabs/Controls/Scroll"]
+size_flags_horizontal = 3
+
+[node name="Buttons" type="HBoxContainer" parent="Root"]
+offset_left = 8.0
+offset_top = 204.0
+offset_right = 392.0
+offset_bottom = 232.0
+alignment = 1
+theme_override_constants/separation = 12
+
+[node name="Reset" type="Button" parent="Root/Buttons"]
+text = "Reset Defaults"
+custom_minimum_size = Vector2(140, 0)
+
+[node name="Close" type="Button" parent="Root/Buttons"]
+text = "Close"
+custom_minimum_size = Vector2(80, 0)

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bombsleepvein01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bomb"
+display_name = "Bomb"
+description = "Throwable explosive. 1.5s fuse, ~32px AoE. Mines weak tiles in a radius too."
+max_stack = 99
+item_type = 4
+tier = 1
+rarity = 1
+base_damage = 0
+attack_cooldown_seconds = 0.5
+weapon_class = &"bomb"
+lore_ref = "docs/reference/core-keeper-mechanics.md#3-combat"

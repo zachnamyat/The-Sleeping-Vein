@@ -9,23 +9,32 @@ The only tool that authors art for The Sleeping Vein is **Google Gemini 2.5 Flas
 ## 1. Pipeline overview
 
 ```
-Gemini prompt  →  raw PNG (1024x1024 with #FF00FF bg)
-                                   ↓
-                                   ↓  sharp/Pillow (via gemini-image MCP)
-                                   ↓     - crop to specific frame/grid cell
-                                   ↓     - resize nearest-neighbor to target size
-                                   ↓     - initial chroma-key (loose)
-                                   ↓
+Gemini prompt  ->  raw PNG (1024x1024 with #FF00FF-ish bg)
+                                   |
+                                   v  Pillow (via tools/process_phase1_assets.py
+                                   v     style; the MCP can't do nearest-neighbor)
+                                   v     - find non-bg bbox (hue-dominance)
+                                   v     - crop
+                                   v     - resize Image.Resampling.NEAREST
+                                   v     - magenta -> alpha=0
+                                   |
                        processed PNG (target size, alpha-keyed)
-                                   ↓
-                                   ↓  tools/clean_alpha.ps1 (ImageMagick)
-                                   ↓     - re-chroma-key with multi-shade fuzz
-                                   ↓     - skip if already alpha-clean
-                                   ↓
-                       final PNG  →  assets/sprites/<category>/<id>.png
-                                   ↓
-                                   ↓  manifest.json entry (status: "final")
-                                   ↓
+                                   |
+                                   v  tools/clean_alpha.ps1 (ImageMagick)
+                                   v     - multi-shade fuzz chroma-key (5 magenta variants)
+                                   v     - binary alpha threshold at 30%
+                                   v     - skip if already alpha-clean
+                                   |
+                                   v  tools/snap_to_palette.py
+                                   v     - remap every opaque pixel to the
+                                   v       sleeping_vein.json biome ramp
+                                   |
+                       final PNG  ->  assets/sprites/<category>/<id>.png
+                                   |
+                                   v  manifest.json entry (status: "final")
+                                   |
+                                   v  godot --headless --import (refresh cache)
+                                   |
                        in-game via res:// path
 ```
 
@@ -58,7 +67,18 @@ For multi-frame strips append `ANIMATION:`. For tile sheets append `ROW LAYOUT:`
 
 ### Stage 3 — Post-process
 
-The Anthropic / Claude image-gen MCP's `process_image` tool handles the first pass:
+**Important caveat on the first pass:** the gemini-image MCP's `process_image`
+tool (sharp-backed) does not expose the resize kernel and defaults to lanczos3
+— that smooths pixel-art edges and is wrong for our target sizes. For any
+sprite that needs explicit nearest-neighbor downsampling (every sprite for
+this project), use Pillow directly instead. See
+[tools/process_phase1_assets.py](../../tools/process_phase1_assets.py) for the
+canonical Pillow flow: find non-bg bbox by hue-dominance → crop → resize with
+`Image.Resampling.NEAREST` → magenta-to-alpha. The MCP's `process_image` is
+fine for non-pixel-art post-process (file format conversion, simple cropping)
+but skip it for pixel-art resize.
+
+If you do reach for the MCP's process_image:
 
 ```jsonc
 {

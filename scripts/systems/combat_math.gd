@@ -47,6 +47,13 @@ static func resolve_damage(
 static func resolve_mining_damage(pickaxe_base: int, pickaxe_tier: int, tile_tier: int, mining_skill_level: int) -> int:
 	if pickaxe_tier < tile_tier:
 		return -1
+	return mining_damage(pickaxe_base, mining_skill_level)
+
+
+## Mining damage for a swing that has already cleared the tier-gate. Used by
+## player_combat to compute the per-swing damage before passing into the
+## MiningSystem (which re-checks the gate against the cell's actual tier).
+static func mining_damage(pickaxe_base: int, mining_skill_level: int) -> int:
 	var talent_bonus: int = int(GameState.allocated_talents.get(&"skill_mining", 0)) * 2
 	return pickaxe_base + mining_skill_level + talent_bonus
 

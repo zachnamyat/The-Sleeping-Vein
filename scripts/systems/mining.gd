@@ -10,6 +10,7 @@ signal tile_mined(coord: Vector2i, ore_id: StringName, source: Node)
 const DEFAULT_TILE_HP: int = 20
 
 var _tile_health: Dictionary = {}  ## {(layer_path:String, coord:Vector2i) -> hp:int}
+var _damage_overlays: Dictionary = {}  ## same key -> TileDamageOverlay instance
 
 
 func swing_on_tile(layer: TileMapLayer, world_position: Vector2, pickaxe_tier: int, mining_damage: int) -> bool:
@@ -34,15 +35,54 @@ func swing_on_tile(layer: TileMapLayer, world_position: Vector2, pickaxe_tier: i
 	hp -= maxi(1, mining_damage)
 	if hp <= 0:
 		_tile_health.erase(key)
+		_clear_overlay(key)
 		layer.set_cell(cell, -1)
-		EventBus.skill_xp_gained.emit(&"skill_mining", 3 * tier)
+		# Phase 2 pacing: 10 XP per tier per tile, so a wood pick on tier-1
+		# shaleseed surfaces a Mining level-up around 10 broken tiles. Tunable
+		# from Phase 7 talent balance work.
+		EventBus.skill_xp_gained.emit(&"skill_mining", 10 * tier)
 		EventBus.tile_changed.emit(cell, source_id, -1)
 		_spawn_drop(ore_id, layer.map_to_local(cell) + layer.global_position)
 		tile_mined.emit(cell, ore_id, null)
 		return true
 	_tile_health[key] = hp
+	# Ticket 2.23 — visible crack overlay + shake reflects accumulated damage.
+	var ratio: float = clampf(1.0 - float(hp) / float(DEFAULT_TILE_HP), 0.0, 1.0)
+	_bump_overlay(layer, cell, key, ratio)
 	EventBus.tile_changed.emit(cell, source_id, source_id)
 	return true
+
+
+func _bump_overlay(layer: TileMapLayer, cell: Vector2i, key: String, ratio: float) -> void:
+	var overlay: TileDamageOverlay = _damage_overlays.get(key)
+	if overlay == null or not is_instance_valid(overlay):
+		overlay = TileDamageOverlay.new()
+		var world_pos: Vector2 = layer.map_to_local(cell) + layer.global_position
+		overlay.global_position = world_pos
+		# Parent under the entity layer so it gets the same Y-sort context as
+		# the player/mobs. Falls back to the scene root if no entity layer.
+		var parent: Node = _find_entity_parent()
+		if parent == null:
+			parent = (Engine.get_main_loop() as SceneTree).current_scene
+		if parent:
+			parent.add_child(overlay)
+		_damage_overlays[key] = overlay
+	overlay.bump(ratio)
+
+
+func _clear_overlay(key: String) -> void:
+	var overlay: TileDamageOverlay = _damage_overlays.get(key)
+	if overlay and is_instance_valid(overlay):
+		overlay.queue_free()
+	_damage_overlays.erase(key)
+
+
+func _find_entity_parent() -> Node:
+	var tree := Engine.get_main_loop() as SceneTree
+	if tree == null or tree.current_scene == null:
+		return null
+	var n := tree.current_scene.get_node_or_null("WorldGen/YSortRoot/Entities")
+	return n
 
 
 func _spawn_drop(ore_id: StringName, world_pos: Vector2) -> void:

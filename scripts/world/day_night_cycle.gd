@@ -15,10 +15,10 @@ const PHASE_NAMES: Array[StringName] = [
 ]
 
 @export var canvas_modulate_path: NodePath
-@export_color_no_alpha var phase_color_high: Color = Color(1.0, 0.92, 0.75)
-@export_color_no_alpha var phase_color_falling: Color = Color(0.72, 0.65, 0.50)
-@export_color_no_alpha var phase_color_low: Color = Color(0.40, 0.36, 0.28)
-@export_color_no_alpha var phase_color_rising: Color = Color(0.72, 0.65, 0.50)
+@export_color_no_alpha var phase_color_high: Color = Color(0.78, 0.72, 0.58)
+@export_color_no_alpha var phase_color_falling: Color = Color(0.55, 0.50, 0.40)
+@export_color_no_alpha var phase_color_low: Color = Color(0.28, 0.25, 0.20)
+@export_color_no_alpha var phase_color_rising: Color = Color(0.55, 0.50, 0.40)
 
 var phase_idx: int = 0
 

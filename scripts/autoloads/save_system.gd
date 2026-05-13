@@ -11,7 +11,7 @@ extends Node
 ## Save format version is bumped any time a save-affecting field changes.
 
 const SAVE_ROOT: String = "user://saves/"
-const SAVE_VERSION: int = 1
+const SAVE_VERSION: int = 2
 
 signal save_started(slot_name: String)
 signal save_completed(slot_name: String)
@@ -21,8 +21,20 @@ signal load_completed(slot_name: String)
 signal load_failed(slot_name: String, reason: String)
 
 
+## True between load_from_slot() and the next time the loaded world's
+## WorldBootstrap consumes it. WorldBootstrap reads this to skip granting
+## starter items / spawning at origin when the saved state should take over.
+var pending_load: bool = false
+
+
 func _ready() -> void:
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SAVE_ROOT))
+
+
+func consume_pending_load() -> bool:
+	var was_pending: bool = pending_load
+	pending_load = false
+	return was_pending
 
 
 # ----- Public API -----
@@ -84,6 +96,7 @@ func load_from_slot(slot_name: String) -> Error:
 
 	GameState.world_seed = int(meta.get("world_seed", 0))
 	_restore_game_state(state)
+	pending_load = true
 
 	load_completed.emit(slot_name)
 	return OK
@@ -132,6 +145,11 @@ func _dump_game_state() -> Dictionary:
 		"unlocked_recipes": GameState.unlocked_recipes,
 		"unlocked_compendium": GameState.unlocked_compendium,
 		"sovereign_threads": GameState.sovereign_threads,
+		"unallocated_talent_points": GameState.unallocated_talent_points,
+		"allocated_talents": _stringify_keys(GameState.allocated_talents),
+		"player": _dump_player(),
+		"inventory": _dump_inventory(),
+		"skills": _dump_skills(),
 	}
 
 
@@ -143,6 +161,155 @@ func _restore_game_state(state: Dictionary) -> void:
 	GameState.unlocked_recipes = state.get("unlocked_recipes", {})
 	GameState.unlocked_compendium = state.get("unlocked_compendium", {})
 	GameState.sovereign_threads = int(state.get("sovereign_threads", 0))
+	GameState.unallocated_talent_points = int(state.get("unallocated_talent_points", 0))
+	GameState.allocated_talents = _stringname_keys(state.get("allocated_talents", {}))
+	_restore_inventory(state.get("inventory", {}))
+	_restore_skills(state.get("skills", {}))
+	# Player restore is signal-driven: when SaveSystem holds pending state, it
+	# subscribes once to EventBus.player_spawned. The next player to spawn
+	# (either the existing one re-detected, or a fresh one after scene change)
+	# receives the saved position + vitals.
+	_pending_player_restore = state.get("player", {})
+	if not _pending_player_restore.is_empty():
+		if not EventBus.player_spawned.is_connected(_on_player_spawned_for_restore):
+			EventBus.player_spawned.connect(_on_player_spawned_for_restore)
+		# Also try immediately in case the player already exists in the tree
+		# (e.g. mid-game pause-menu Load on the active world).
+		var players := get_tree().get_nodes_in_group("player") if get_tree() else []
+		if not players.is_empty():
+			_apply_player_restore(players[0])
+
+
+# Per-Walker state. Position + hp + mana. Multiplayer (Phase 13) will replace
+# with an array keyed by peer_id.
+func _dump_player() -> Dictionary:
+	var players := get_tree().get_nodes_in_group("player") if get_tree() else []
+	if players.is_empty():
+		return {}
+	var p := players[0] as Node2D
+	if p == null:
+		return {}
+	var out: Dictionary = {
+		"position_x": p.global_position.x,
+		"position_y": p.global_position.y,
+	}
+	var hp := p.get_node_or_null("HealthComponent") as HealthComponent
+	if hp:
+		out["hp_current"] = hp.current_health
+		out["hp_max"] = hp.max_health
+	var mp := p.get_node_or_null("ManaComponent") as ManaComponent
+	if mp:
+		out["mp_current"] = mp.current_mana
+		out["mp_max"] = mp.max_mana
+	return out
+
+
+var _pending_player_restore: Dictionary = {}
+
+
+func _on_player_spawned_for_restore(player: Node) -> void:
+	_apply_player_restore(player)
+
+
+func _apply_player_restore(player: Node) -> void:
+	if _pending_player_restore.is_empty() or player == null:
+		return
+	var p := player as Node2D
+	if p == null:
+		return
+	var pos := Vector2(
+		float(_pending_player_restore.get("position_x", 0.0)),
+		float(_pending_player_restore.get("position_y", 0.0)),
+	)
+	p.global_position = pos
+	if p is PlayerController:
+		(p as PlayerController).set_respawn_position(pos)
+	var hp := p.get_node_or_null("HealthComponent") as HealthComponent
+	if hp and _pending_player_restore.has("hp_current"):
+		hp.max_health = int(_pending_player_restore.get("hp_max", hp.max_health))
+		hp.current_health = clampi(int(_pending_player_restore["hp_current"]), 1, hp.max_health)
+		hp.health_changed.emit(hp.current_health, hp.max_health)
+	var mp := p.get_node_or_null("ManaComponent") as ManaComponent
+	if mp and _pending_player_restore.has("mp_current"):
+		mp.max_mana = int(_pending_player_restore.get("mp_max", mp.max_mana))
+		mp.current_mana = clampf(float(_pending_player_restore["mp_current"]), 0.0, float(mp.max_mana))
+		mp.mana_changed.emit(int(mp.current_mana), mp.max_mana)
+	_pending_player_restore = {}
+	# Player state has been applied — nothing left for a future WorldBootstrap
+	# to honour, so clear the bootstrap skip-flag too.
+	pending_load = false
+	if EventBus.player_spawned.is_connected(_on_player_spawned_for_restore):
+		EventBus.player_spawned.disconnect(_on_player_spawned_for_restore)
+
+
+func _dump_inventory() -> Dictionary:
+	var slots: Array = []
+	for s in Inventory.slots:
+		if s == null:
+			slots.append(null)
+		else:
+			slots.append({"item_id": String(s.get("item_id", "")), "count": int(s.get("count", 0))})
+	var equipment: Dictionary = {}
+	for k in Inventory.equipment.keys():
+		equipment[String(k)] = String(Inventory.equipment[k])
+	return {"slots": slots, "equipment": equipment}
+
+
+func _restore_inventory(data: Dictionary) -> void:
+	if data.is_empty():
+		return
+	Inventory.clear()
+	var slots: Array = data.get("slots", [])
+	for i in range(mini(slots.size(), Inventory.slots.size())):
+		var s = slots[i]
+		if s == null:
+			continue
+		var item_id := StringName(String(s.get("item_id", "")))
+		var count := int(s.get("count", 0))
+		if item_id == &"" or count <= 0:
+			continue
+		Inventory.slots[i] = {"item_id": item_id, "count": count}
+		Inventory.slot_changed.emit(i, item_id, count)
+	for k in (data.get("equipment", {}) as Dictionary).keys():
+		Inventory.equip(StringName(String(k)), StringName(String(data["equipment"][k])))
+	EventBus.inventory_changed.emit()
+
+
+func _dump_skills() -> Dictionary:
+	var out: Dictionary = {}
+	for s in SkillSystem.ALL_SKILLS:
+		out[String(s)] = {
+			"xp": int(SkillSystem.get_xp(s)),
+			"level": int(SkillSystem.get_level(s)),
+		}
+	return out
+
+
+func _restore_skills(data: Dictionary) -> void:
+	if data.is_empty():
+		return
+	for s in SkillSystem.ALL_SKILLS:
+		var rec: Dictionary = data.get(String(s), {})
+		if rec.is_empty():
+			SkillSystem._xp[s] = 0
+			SkillSystem._level[s] = 0
+		else:
+			SkillSystem._xp[s] = int(rec.get("xp", 0))
+			SkillSystem._level[s] = int(rec.get("level", 0))
+
+
+func _stringify_keys(d: Dictionary) -> Dictionary:
+	var out: Dictionary = {}
+	for k in d.keys():
+		out[String(k)] = d[k]
+	return out
+
+
+func _stringname_keys(d: Dictionary) -> Dictionary:
+	var out: Dictionary = {}
+	for k in d.keys():
+		out[StringName(String(k))] = d[k]
+	return out
 
 
 func _write_json(path: String, data: Variant) -> Error:

@@ -4,17 +4,26 @@ class_name Minimap
 ## Top-down minimap. Paints explored chunks (per WorldGen chunk = 32 tiles) as
 ## faint biome-colored dots. Player as a bright gold dot at center. Each minimap
 ## pixel covers `tiles_per_minimap_pixel` world tiles.
+##
+## Pressing the `open_map` action (default M) toggles between the corner widget
+## and a full-screen overlay (4× scale, centered, dimmed backdrop).
 
 @export var pixel_size: int = 96
 @export var world_path: NodePath
 @export var tiles_per_minimap_pixel: int = 8
+@export var fullscreen_pixel_size: int = 240  ## Edge length in viewport pixels when expanded
 
 @onready var player_dot: ColorRect = $Border/PlayerDot
+@onready var border: ColorRect = $Border
+@onready var bg: ColorRect = $Border/BG
 
 var _explored_chunks: Dictionary = {}   ## Vector2i chunk_coord -> Color (biome accent)
 var _player: Node2D
 var _world_gen: Node
 var _last_player_chunk: Vector2i = Vector2i(99999, 99999)
+var _fullscreen: bool = false
+var _saved_anchors: Dictionary = {}     ## restored when leaving fullscreen
+var _backdrop: ColorRect = null
 
 const CHUNK_TILES: int = 32  ## Must match WorldGen.CHUNK_TILES
 
@@ -26,6 +35,77 @@ func _ready() -> void:
 		break
 	if has_node(world_path):
 		_world_gen = get_node(world_path)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("open_map"):
+		_toggle_fullscreen()
+		get_viewport().set_input_as_handled()
+
+
+func _toggle_fullscreen() -> void:
+	_fullscreen = not _fullscreen
+	if _fullscreen:
+		_saved_anchors = {
+			"al": anchor_left, "ar": anchor_right, "at": anchor_top, "ab": anchor_bottom,
+			"ol": offset_left, "or": offset_right, "ot": offset_top, "ob": offset_bottom,
+			"ps": pixel_size, "tpp": tiles_per_minimap_pixel,
+		}
+		var size: int = fullscreen_pixel_size
+		anchor_left = 0.5
+		anchor_right = 0.5
+		anchor_top = 0.5
+		anchor_bottom = 0.5
+		offset_left = -size / 2
+		offset_right = size / 2
+		offset_top = -size / 2
+		offset_bottom = size / 2
+		pixel_size = size
+		tiles_per_minimap_pixel = max(2, _saved_anchors["tpp"] / 2) # zoom in 2x while fullscreen
+		_resize_children(size)
+		_show_backdrop()
+	else:
+		anchor_left = _saved_anchors["al"]
+		anchor_right = _saved_anchors["ar"]
+		anchor_top = _saved_anchors["at"]
+		anchor_bottom = _saved_anchors["ab"]
+		offset_left = _saved_anchors["ol"]
+		offset_right = _saved_anchors["or"]
+		offset_top = _saved_anchors["ot"]
+		offset_bottom = _saved_anchors["ob"]
+		pixel_size = _saved_anchors["ps"]
+		tiles_per_minimap_pixel = _saved_anchors["tpp"]
+		_resize_children(pixel_size)
+		_hide_backdrop()
+	custom_minimum_size = Vector2(pixel_size, pixel_size)
+	queue_redraw()
+
+
+func _resize_children(size: int) -> void:
+	if border:
+		border.size = Vector2(size, size)
+	if bg:
+		bg.position = Vector2(1, 1)
+		bg.size = Vector2(size - 2, size - 2)
+
+
+func _show_backdrop() -> void:
+	if _backdrop != null and is_instance_valid(_backdrop):
+		_backdrop.visible = true
+		return
+	_backdrop = ColorRect.new()
+	_backdrop.color = Color(0, 0, 0, 0.55)
+	_backdrop.anchor_right = 1.0
+	_backdrop.anchor_bottom = 1.0
+	_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_backdrop.z_index = -1
+	add_sibling(_backdrop)
+	move_to_front()
+
+
+func _hide_backdrop() -> void:
+	if _backdrop != null and is_instance_valid(_backdrop):
+		_backdrop.visible = false
 
 
 func _process(_delta: float) -> void:

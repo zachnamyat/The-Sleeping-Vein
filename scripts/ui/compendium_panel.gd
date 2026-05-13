@@ -19,6 +19,7 @@ func _ready() -> void:
 	tab_bestiary.pressed.connect(func() -> void: _switch_tab(&"bestiary"))
 	tab_tablets.pressed.connect(func() -> void: _switch_tab(&"tablets"))
 	EventBus.ui_compendium_entry_unlocked.connect(_on_unlock)
+	UIAudio.wire_button_sfx(self)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -32,6 +33,14 @@ func toggle() -> void:
 	visible = not visible
 	if visible:
 		_rebuild()
+		UIAudio.play_page_flip()
+	else:
+		UIAudio.play_panel_close()
+
+
+func _switch_tab_with_sfx(tab: StringName) -> void:
+	_switch_tab(tab)
+	UIAudio.play_page_flip()
 
 
 func _switch_tab(tab: StringName) -> void:

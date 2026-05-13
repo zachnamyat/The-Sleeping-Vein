@@ -92,7 +92,7 @@ func _try_swing() -> void:
 		_cooldown_timer = defn.attack_cooldown_seconds
 		return
 
-	# Ranged / Magic / Summon / Fishing branch
+	# Ranged / Magic / Summon / Fishing / Bomb branch
 	if defn and defn.weapon_class != &"":
 		if defn.weapon_class == &"fishing":
 			if FishingSystem.cast(player):
@@ -111,11 +111,15 @@ func _try_swing() -> void:
 				if _resolve_summon(player, defn):
 					_cooldown_timer = defn.attack_cooldown_seconds
 				return
+			&"bomb":
+				if _resolve_bomb(player, defn, aim_target):
+					_cooldown_timer = defn.attack_cooldown_seconds
+				return
 
 	# Melee branch
 	var base_damage: int = defn.base_damage if defn else 1
 	var dtype: StringName = defn.damage_type if defn else DamageType.PHYSICAL
-	_resolve_melee(player, base_damage, dtype, aim_dir)
+	_resolve_melee(player, base_damage, dtype, aim_dir, defn)
 	_cooldown_timer = defn.attack_cooldown_seconds if defn else 0.4
 
 
@@ -155,6 +159,18 @@ func _resolve_magic(player: PlayerController, defn: ItemDef, dir: Vector2) -> bo
 		return false
 	_spawn_projectile(player, dir, defn.base_damage, defn.damage_type, defn.projectile_speed)
 	EventBus.skill_xp_gained.emit(&"skill_magic", 1)
+	return true
+
+
+func _resolve_bomb(player: PlayerController, defn: ItemDef, target: Vector2) -> bool:
+	# Ticket 2.17 — consume one bomb from inventory, lob a Bomb scene toward
+	# the aim point. The bomb owns its own fuse + AoE resolution.
+	if Inventory.try_remove(defn.id, 1) <= 0:
+		return false
+	var bomb := Bomb.new()
+	bomb.toss(player.global_position, target)
+	get_tree().current_scene.add_child(bomb)
+	EventBus.skill_xp_gained.emit(&"skill_explosives", 2)
 	return true
 
 
@@ -219,7 +235,7 @@ func _aim_target(player: PlayerController) -> Vector2:
 	return player.global_position + player.facing * 16.0
 
 
-func _resolve_melee(player: PlayerController, dmg: int, dtype: StringName, dir: Vector2) -> void:
+func _resolve_melee(player: PlayerController, dmg: int, dtype: StringName, dir: Vector2, weapon_def: ItemDef = null) -> void:
 	var hb_node := get_node_or_null(hitbox_path)
 	if hb_node == null:
 		return
@@ -229,11 +245,49 @@ func _resolve_melee(player: PlayerController, dmg: int, dtype: StringName, dir: 
 	hb.base_damage = dmg
 	hb.damage_type = dtype
 	hb.team = &"player"
-	(hb as Node2D).position = dir * swing_offset
+	# Ticket 2.29 — roll crit before arming so HitboxComponent applies the
+	# bonus and the damage-float VFX uses the crit colour.
+	hb.is_crit_this_swing = randf() < CombatMath.player_crit_chance()
+	# Ticket 2.45 — reach is data-driven per weapon (sword = 18, dagger could be
+	# 12, spear could be 28). Fallback to the inspector default if no def.
+	var reach: float = float(weapon_def.melee_range_pixels) if weapon_def and weapon_def.melee_range_pixels > 0 else swing_offset
+	(hb as Node2D).position = dir * reach
 	hb.arm(0.15)
+	_spawn_swing_visual(player, dir)
+	# Play tool-use SFX per tool (ticket 2.41).
+	_play_tool_sfx(weapon_def)
 	# Player melee XP for connecting attacks is awarded in the hitbox signal
 	if not hb.hit_landed.is_connected(_on_hit_landed):
 		hb.hit_landed.connect(_on_hit_landed)
+
+
+func _play_tool_sfx(defn: ItemDef) -> void:
+	if AudioBus == null:
+		return
+	# Ticket 2.41 — distinct swing tone per tool class.
+	var sound: StringName = &"swing_fist"
+	if defn:
+		if defn.pickaxe_tier > 0:
+			sound = &"swing_pickaxe"
+		elif defn.axe_tier > 0:
+			sound = &"swing_axe"
+		elif defn.weapon_class == &"magic":
+			sound = &"swing_magic"
+		elif defn.weapon_class == &"ranged_bow" or defn.weapon_class == &"ranged_gun":
+			sound = &"swing_ranged"
+		elif defn.weapon_class == &"summon":
+			sound = &"swing_summon"
+		elif defn.id != &"":
+			sound = &"swing_melee"
+	AudioBus.play_sfx(sound)
+
+
+func _spawn_swing_visual(player: Node2D, dir: Vector2) -> void:
+	var arc := SwingArc.new()
+	arc.position = dir * 4.0  # nudge the arc slightly forward of the player
+	arc.rotation = dir.angle()
+	arc.z_index = 6  # above the player sprite (z=5)
+	player.add_child(arc)
 
 
 func _on_hit_landed(victim: Node, dealt: int) -> void:
@@ -242,6 +296,7 @@ func _on_hit_landed(victim: Node, dealt: int) -> void:
 
 
 func _resolve_mining(player: PlayerController, pick: ItemDef, dir: Vector2) -> void:
+	_spawn_swing_visual(player, dir)
 	# Find the ore layer in the current scene by group.
 	var ore_layers := get_tree().get_nodes_in_group("ore_layer")
 	var wall_layers := get_tree().get_nodes_in_group("wall_layer")
@@ -251,7 +306,7 @@ func _resolve_mining(player: PlayerController, pick: ItemDef, dir: Vector2) -> v
 		if cam:
 			target_pos = cam.get_global_mouse_position()
 	var mining_skill: int = SkillSystem.get_level(&"skill_mining")
-	var damage: int = pick.base_damage + mining_skill
+	var damage: int = CombatMath.mining_damage(pick.base_damage, mining_skill)
 	var hit: bool = false
 	for layer in ore_layers:
 		hit = MiningSystem.swing_on_tile(layer as TileMapLayer, target_pos, pick.pickaxe_tier, damage) or hit

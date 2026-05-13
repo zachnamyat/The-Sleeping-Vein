@@ -19,7 +19,12 @@ signal player_hunger_changed(current: float, maximum: float)
 
 # --- Combat ---
 signal damage_dealt(source: Node, target: Node, amount: int, type: StringName)
+signal damage_floated(world_pos: Vector2, amount: int, is_crit: bool, type: StringName)
 signal entity_killed(entity: Node, killer: Node)
+signal camera_shake_requested(intensity: float, duration: float)
+signal hit_pause_requested(duration: float)
+signal screen_pulse_requested(strength: float, duration: float)
+signal letterbox_requested(enabled: bool, fade_seconds: float)
 
 # --- Inventory / crafting ---
 signal item_picked_up(item_id: StringName, count: int)

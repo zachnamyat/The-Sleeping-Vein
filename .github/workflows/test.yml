@@ -1,0 +1,56 @@
+# Ticket 0.15 — GitHub Actions CI: run GUT unit tests headlessly on every push & PR.
+name: tests
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+jobs:
+  gut:
+    name: GUT (Godot 4.6 headless)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    env:
+      GODOT_VERSION: "4.6.2-stable"
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Cache Godot binary
+        id: cache-godot
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: godot-${{ env.GODOT_VERSION }}-linux-headless
+
+      - name: Download Godot ${{ env.GODOT_VERSION }} headless
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p ~/godot
+          base="https://github.com/godotengine/godot-builds/releases/download"
+          ver_dir="${GODOT_VERSION}"
+          file="Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+          url="${base}/${ver_dir}/${file}"
+          echo "Downloading $url"
+          curl -fL -o ~/godot/godot.zip "$url"
+          unzip -q ~/godot/godot.zip -d ~/godot
+          mv ~/godot/Godot_v${GODOT_VERSION}_linux.x86_64 ~/godot/godot
+          chmod +x ~/godot/godot
+
+      - name: Verify Godot version
+        run: ~/godot/godot --version
+
+      - name: Import project (materialize .import files)
+        run: ~/godot/godot --headless --path . --import || true
+
+      - name: Run GUT tests
+        run: |
+          ~/godot/godot --headless --path . \
+            -s addons/gut/gut_cmdln.gd \
+            -gconfig=res://.gutconfig.json \
+            -gexit

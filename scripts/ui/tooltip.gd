@@ -8,6 +8,9 @@ class_name Tooltip
 @onready var name_label: Label = $Panel/VBox/Name
 @onready var detail_label: Label = $Panel/VBox/Detail
 
+var _pending_item: StringName = &""
+var _pending_delay: float = 0.0
+
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -15,7 +18,11 @@ func _ready() -> void:
 	top_level = true
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
+	if _pending_delay > 0.0:
+		_pending_delay -= delta
+		if _pending_delay <= 0.0 and _pending_item != &"":
+			_show_now(_pending_item)
 	if not visible:
 		return
 	var pos: Vector2 = get_viewport().get_mouse_position() + Vector2(14, 14)
@@ -29,6 +36,20 @@ func _process(_delta: float) -> void:
 
 
 func show_for_item(item_id: StringName) -> void:
+	# Ticket 1.31 — apply user-configured tooltip delay (instant/0.5s/1s).
+	var delay: float = 0.0
+	if Settings:
+		delay = float(Settings.get_value("tooltip_delay", 0.0))
+	if delay <= 0.001:
+		_show_now(item_id)
+		return
+	_pending_item = item_id
+	_pending_delay = delay
+
+
+func _show_now(item_id: StringName) -> void:
+	_pending_item = &""
+	_pending_delay = 0.0
 	var defn: ItemDef = ItemRegistry.get_def(item_id)
 	if defn == null:
 		visible = false
@@ -50,4 +71,6 @@ func show_for_item(item_id: StringName) -> void:
 
 
 func hide_tooltip() -> void:
+	_pending_item = &""
+	_pending_delay = 0.0
 	visible = false

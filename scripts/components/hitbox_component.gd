@@ -10,9 +10,19 @@ signal hit_landed(victim: Node, dealt: int)
 @export var damage_type: StringName = DamageType.PHYSICAL
 @export var team: StringName = &"neutral"
 @export var lifetime: float = 0.0
+## When > 0, the `_already_hit` ledger is cleared at this cadence so a
+## permanently-armed hitbox (e.g. enemy contact damage) keeps applying damage
+## to the same victim. Per-victim i-frames still gate via HurtboxComponent.
+@export var repeat_interval: float = 0.0
+## Ticket 2.29 — set per-swing by the attacker (player_combat). When true, the
+## resulting damage gets the crit bonus and the floated-number VFX uses the
+## crit colour ramp.
+var is_crit_this_swing: bool = false
+@export var crit_bonus_fraction: float = 0.5  ## +50% damage on crit
 
 var _active: bool = false
 var _timer: float = 0.0
+var _repeat_accum: float = 0.0
 var _already_hit: Dictionary = {}
 
 
@@ -43,9 +53,21 @@ func _physics_process(delta: float) -> void:
 		if _timer <= 0.0:
 			disarm()
 			return
+	if repeat_interval > 0.0:
+		_repeat_accum += delta
+		if _repeat_accum >= repeat_interval:
+			_repeat_accum = 0.0
+			_already_hit.clear()
 	for area in get_overlapping_areas():
 		if area is HurtboxComponent and not _already_hit.has(area):
 			_already_hit[area] = true
-			var dealt: int = (area as HurtboxComponent).receive_hit(get_parent(), base_damage, damage_type, team)
+			var crit: bool = is_crit_this_swing
+			var swing_damage: int = base_damage
+			if crit:
+				swing_damage = int(round(float(base_damage) * (1.0 + crit_bonus_fraction)))
+			var dealt: int = (area as HurtboxComponent).receive_hit(get_parent(), swing_damage, damage_type, team)
 			if dealt > 0:
 				hit_landed.emit((area as HurtboxComponent).get_parent(), dealt)
+				var victim := (area as HurtboxComponent).get_parent() as Node2D
+				if victim:
+					EventBus.damage_floated.emit(victim.global_position, dealt, crit, damage_type)

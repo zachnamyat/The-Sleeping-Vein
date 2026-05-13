@@ -42,3 +42,14 @@ func test_mining_below_tier_returns_negative() -> void:
 func test_mining_at_or_above_tier_uses_skill_level() -> void:
 	var dmg := CombatMath.resolve_mining_damage(5, 3, 3, 10)
 	assert_eq(dmg, 15)
+
+
+func test_mining_damage_helper_adds_talent_bonus() -> void:
+	# Phase 2.1 — the gate-less helper used by player_combat. Sums base + skill +
+	# (2 per allocated Mining talent point).
+	GameState.allocated_talents.clear()
+	assert_eq(CombatMath.mining_damage(4, 0), 4)
+	assert_eq(CombatMath.mining_damage(4, 6), 10)
+	GameState.allocated_talents[&"skill_mining"] = 3
+	assert_eq(CombatMath.mining_damage(4, 6), 16)  # 4 + 6 + 3*2
+	GameState.allocated_talents.clear()

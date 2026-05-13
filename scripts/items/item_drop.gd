@@ -59,16 +59,53 @@ func _nearest_player() -> Node2D:
 
 
 func _apply_rarity_modulate() -> void:
-	# Phase 2.12: white / green / blue / purple / yellow ramp
+	# Phase 2.12: white / green / blue / purple / yellow ramp. The spawner can
+	# override `rarity` for boss-rolled rares; otherwise we fall back to the
+	# ItemDef's static rarity so common drops still get a consistent tint.
 	var sprite := get_node_or_null("Sprite2D") as Sprite2D
 	if sprite == null:
 		return
 	var defn: ItemDef = ItemRegistry.get_def(item_id)
 	if defn and defn.icon:
 		sprite.texture = defn.icon
-	var color: Color = _color_for_rarity(rarity)
-	if sprite:
-		sprite.modulate = color
+	else:
+		# No icon authored yet (most Phase 2 items still need their Gemini pass).
+		# Render a small generic gem so the drop is visible on the floor instead
+		# of invisible — the rarity tint still distinguishes it.
+		sprite.texture = _fallback_drop_texture()
+	var effective_rarity: int = rarity if rarity > 0 else (defn.rarity if defn else 0)
+	sprite.modulate = _color_for_rarity(effective_rarity)
+
+
+static var _cached_fallback_texture: Texture2D = null
+
+
+static func _fallback_drop_texture() -> Texture2D:
+	if _cached_fallback_texture != null:
+		return _cached_fallback_texture
+	# 8x8 diamond pixel art so the drop sits at the right size for 16-tile world.
+	var img := Image.create(8, 8, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var fill_color := Color(1, 1, 1, 1)
+	var edge_color := Color(0.2, 0.2, 0.2, 1)
+	# Filled diamond.
+	for y in range(8):
+		var half: int = 3 - absi(y - 3)
+		for x in range(4 - half - 1, 4 + half + 1):
+			if x < 0 or x >= 8:
+				continue
+			img.set_pixel(x, y, fill_color)
+	# Dark edge.
+	for y in range(8):
+		var half: int = 3 - absi(y - 3)
+		var left: int = 4 - half - 1
+		var right: int = 4 + half
+		if left >= 0 and left < 8:
+			img.set_pixel(left, y, edge_color)
+		if right >= 0 and right < 8:
+			img.set_pixel(right, y, edge_color)
+	_cached_fallback_texture = ImageTexture.create_from_image(img)
+	return _cached_fallback_texture
 
 
 static func _color_for_rarity(r: int) -> Color:

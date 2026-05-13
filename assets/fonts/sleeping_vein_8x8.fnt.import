@@ -1,0 +1,17 @@
+[remap]
+
+importer="font_data_bmfont"
+type="FontFile"
+uid="uid://cbechec6crohq"
+path="res://.godot/imported/sleeping_vein_8x8.fnt-5e8d892d3a2b6c11f09529a9dbafcd84.fontdata"
+
+[deps]
+
+source_file="res://assets/fonts/sleeping_vein_8x8.fnt"
+dest_files=["res://.godot/imported/sleeping_vein_8x8.fnt-5e8d892d3a2b6c11f09529a9dbafcd84.fontdata"]
+
+[params]
+
+fallbacks=[]
+compress=true
+scaling_mode=2

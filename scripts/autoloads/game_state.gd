@@ -4,6 +4,10 @@ extends Node
 ## the Aphelion's remaining slivers, defeated bosses, etc. SaveSystem reads
 ## and writes this autoload.
 
+## Semantic version of the build. Bump on every release; surfaced in title screen
+## footer and pause-menu status. Matches the latest CHANGELOG.md entry.
+const VERSION: String = "0.1.0-dev"
+
 const APHELION_STARTING_SLIVERS: int = 70_000
 
 var world_seed: int = 0

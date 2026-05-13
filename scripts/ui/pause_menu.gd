@@ -16,8 +16,23 @@ func _ready() -> void:
 	$Root/Buttons/Resume.pressed.connect(_resume)
 	$Root/Buttons/Save.pressed.connect(_save)
 	$Root/Buttons/Load.pressed.connect(_load)
+	$Root/Buttons/Settings.pressed.connect(_open_settings)
 	$Root/Buttons/Title.pressed.connect(_to_title)
 	$Root/Buttons/Quit.pressed.connect(_quit)
+	UIAudio.wire_button_sfx(self)
+	get_tree().root.get_window().focus_exited.connect(_on_focus_lost)
+
+
+func _on_focus_lost() -> void:
+	# Ticket 1.45 — auto-pause on ALT-TAB / window focus loss.
+	if not visible and not get_tree().paused:
+		toggle()
+
+
+func _open_settings() -> void:
+	var panel := $SettingsPanel as SettingsPanel
+	if panel:
+		panel.open()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -28,8 +43,12 @@ func _unhandled_input(event: InputEvent) -> void:
 func toggle() -> void:
 	visible = not visible
 	get_tree().paused = visible
-	if visible and status_label:
-		status_label.text = ""
+	if visible:
+		UIAudio.play_panel_open()
+		if status_label:
+			status_label.text = ""
+	else:
+		UIAudio.play_panel_close()
 
 
 func _resume() -> void:

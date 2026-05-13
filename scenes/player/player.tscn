@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://bplayer0scene00001"]
+[gd_scene load_steps=14 format=3 uid="uid://bplayer0scene00001"]
 
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_player"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/walker_default_idle_down_frame0.png" id="2_sprite"]
 [ext_resource type="Script" path="res://scripts/components/health_component.gd" id="3_health"]
 [ext_resource type="Script" path="res://scripts/components/mana_component.gd" id="4_mana"]
+[ext_resource type="Script" path="res://scripts/components/stamina_component.gd" id="4b_stam"]
 [ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="5_hurtbox"]
 [ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="6_hitbox"]
 [ext_resource type="Script" path="res://scripts/player/player_combat.gd" id="7_combat"]
@@ -17,6 +18,18 @@ radius = 8.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_swing"]
 radius = 12.0
 
+[sub_resource type="Gradient" id="Gradient_torch"]
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(1, 0.88, 0.6, 1, 1, 0.6, 0.3, 0.5, 1, 0.4, 0.15, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_torch"]
+gradient = SubResource("Gradient_torch")
+width = 128
+height = 128
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
 [node name="Player" type="CharacterBody2D" groups=["player"]]
 collision_layer = 2
 collision_mask = 1
@@ -28,7 +41,13 @@ texture = ExtResource("2_sprite")
 centered = true
 offset = Vector2(0, -24)
 modulate = Color(1, 1, 1, 1)
-z_index = 5
+
+[node name="Torch" type="PointLight2D" parent="."]
+position = Vector2(0, -8)
+texture = SubResource("GradientTexture2D_torch")
+texture_scale = 0.35
+energy = 1.4
+color = Color(1, 0.78, 0.5, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)
@@ -43,6 +62,19 @@ armor = 0
 script = ExtResource("4_mana")
 max_mana = 100
 regen_per_second = 2.0
+
+[node name="StaminaComponent" type="Node" parent="."]
+script = ExtResource("4b_stam")
+max_stamina = 100.0
+regen_per_second = 20.0
+
+[node name="Nameplate" type="Label" parent="."]
+position = Vector2(-40, -56)
+size = Vector2(80, 8)
+horizontal_alignment = 1
+text = "Walker"
+modulate = Color(0.95, 0.84, 0.5, 0.85)
+z_index = 6
 
 [node name="Hurtbox" type="Area2D" parent="."]
 collision_layer = 4

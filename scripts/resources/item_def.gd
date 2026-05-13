@@ -17,6 +17,7 @@ enum ItemType { MATERIAL, TOOL, WEAPON, ARMOR, CONSUMABLE, PLACEABLE, AMMO, KEY 
 
 # Tool / weapon stats
 @export var pickaxe_tier: int = 0   ## > 0 if this is a pickaxe
+@export var axe_tier: int = 0       ## > 0 if this is a tree-felling axe
 @export var base_damage: int = 0
 @export var damage_type: StringName = &"physical"
 @export var attack_cooldown_seconds: float = 0.5

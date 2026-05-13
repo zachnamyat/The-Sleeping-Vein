@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bletter0scene0001"]
+
+[ext_resource type="Script" path="res://scripts/ui/letterbox.gd" id="1_letterbox"]
+
+[node name="Letterbox" type="CanvasLayer"]
+script = ExtResource("1_letterbox")

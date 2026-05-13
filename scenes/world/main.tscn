@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://bmain0scene000001"]
+[gd_scene load_steps=32 format=3 uid="uid://bmain0scene000001"]
 
 [ext_resource type="TileSet" path="res://resources/tilesets/biomes.tres" id="1_tileset"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/world/day_night_cycle.gd" id="4_daynight"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hotbar.tscn" id="5_hotbar"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/stone_hopper.tscn" id="6_mob"]
+[ext_resource type="PackedScene" path="res://scenes/world/tree.tscn" id="6b_tree"]
 [ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
 [ext_resource type="PackedScene" path="res://scenes/ui/inventory_panel.tscn" id="8_inv"]
 [ext_resource type="PackedScene" path="res://scenes/ui/crafting_panel.tscn" id="9_craft"]
@@ -25,16 +26,24 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/cookbook_panel.tscn" id="24_cookbook"]
 [ext_resource type="PackedScene" path="res://scenes/ui/compendium_panel.tscn" id="25_compendium"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="26_pause"]
+[ext_resource type="Script" path="res://scripts/fx/fog_of_war.gd" id="27_fog"]
+[ext_resource type="Script" path="res://scripts/fx/screen_pulse.gd" id="28_pulse"]
+[ext_resource type="Script" path="res://scripts/fx/damage_number_spawner.gd" id="33_dmgnum"]
+[ext_resource type="PackedScene" path="res://scenes/ui/death_screen.tscn" id="29_death"]
+[ext_resource type="PackedScene" path="res://scenes/ui/letterbox.tscn" id="30_letter"]
+[ext_resource type="PackedScene" path="res://scenes/ui/loading_screen.tscn" id="31_loading"]
+[ext_resource type="PackedScene" path="res://scenes/ui/emote_wheel.tscn" id="32_emote"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("3_bootstrap")
 spawn_player_scene = ExtResource("2_player")
 stone_hopper_scene = ExtResource("6_mob")
+tree_scene = ExtResource("6b_tree")
 world_gen_path = NodePath("WorldGen")
 entity_layer_path = NodePath("WorldGen/YSortRoot/Entities")
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color(1, 0.92, 0.75, 1)
+color = Color(0.78, 0.72, 0.58, 1)
 
 [node name="WorldGen" type="Node2D" parent="."]
 script = ExtResource("14_gen")
@@ -94,6 +103,16 @@ ore_layer_path = NodePath("../WorldGen/Ore")
 script = ExtResource("4_daynight")
 canvas_modulate_path = NodePath("../CanvasModulate")
 
+[node name="FogOfWar" type="Node2D" parent="."]
+script = ExtResource("27_fog")
+
+[node name="ScreenPulse" type="CanvasLayer" parent="."]
+script = ExtResource("28_pulse")
+
+[node name="DamageNumberSpawner" type="Node" parent="."]
+script = ExtResource("33_dmgnum")
+spawn_parent_path = NodePath("../WorldGen/YSortRoot/Entities")
+
 [node name="HUD" parent="." instance=ExtResource("7_hud")]
 
 [node name="UI" type="CanvasLayer" parent="."]
@@ -125,3 +144,11 @@ canvas_modulate_path = NodePath("../CanvasModulate")
 [node name="CompendiumPanel" parent="." instance=ExtResource("25_compendium") groups=["compendium_panel"]]
 
 [node name="PauseMenu" parent="." instance=ExtResource("26_pause") groups=["pause_menu"]]
+
+[node name="DeathScreen" parent="." instance=ExtResource("29_death") groups=["death_screen"]]
+
+[node name="Letterbox" parent="." instance=ExtResource("30_letter")]
+
+[node name="LoadingScreen" parent="." instance=ExtResource("31_loading")]
+
+[node name="EmoteWheel" parent="UI" instance=ExtResource("32_emote")]

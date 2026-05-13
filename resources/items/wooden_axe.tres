@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://b2xvxasleep14"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"wooden_axe"
+display_name = "Wooden Axe"
+description = "A rough wooden axe. Fells tier-1 trees."
+max_stack = 1
+item_type = 1
+tier = 0
+rarity = 0
+pickaxe_tier = 0
+axe_tier = 1
+base_damage = 4
+damage_type = &"axe"
+attack_cooldown_seconds = 0.5
+melee_range_pixels = 18
+lore_ref = "docs/reference/core-keeper-mechanics.md#4-mining"

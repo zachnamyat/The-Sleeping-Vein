@@ -1,6 +1,9 @@
-[gd_resource type="Theme" format=3 uid="uid://btheme0sleepingvn"]
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://btheme0sleepingvn"]
+
+[ext_resource type="Font" path="res://assets/fonts/sleeping_vein_8x8.fnt" id="1_font"]
 
 [resource]
+default_font = ExtResource("1_font")
 default_font_size = 8
 Label/font_sizes/font_size = 8
 Button/font_sizes/font_size = 8

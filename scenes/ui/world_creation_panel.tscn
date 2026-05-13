@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bworld0create00001"]
+
+[ext_resource type="Script" path="res://scripts/ui/world_creation_panel.gd" id="1_wc"]
+
+[node name="WorldCreationPanel" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("1_wc")

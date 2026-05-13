@@ -6,6 +6,7 @@ class_name DamageType
 ## physical, fire, poison, cold, magic, summon, explosive, lightning, void.
 
 const PHYSICAL: StringName = &"physical"
+const AXE: StringName = &"axe"  ## Tree-felling damage; trees resist all other types.
 const FIRE: StringName = &"fire"
 const POISON: StringName = &"poison"
 const COLD: StringName = &"cold"
@@ -16,7 +17,7 @@ const LIGHTNING: StringName = &"lightning"
 const VOID: StringName = &"void"
 
 const ALL_TYPES: Array[StringName] = [
-	PHYSICAL, FIRE, POISON, COLD, MAGIC, SUMMON, EXPLOSIVE, LIGHTNING, VOID,
+	PHYSICAL, AXE, FIRE, POISON, COLD, MAGIC, SUMMON, EXPLOSIVE, LIGHTNING, VOID,
 ]
 
 

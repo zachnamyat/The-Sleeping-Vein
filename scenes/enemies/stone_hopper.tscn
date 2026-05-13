@@ -5,6 +5,7 @@
 [ext_resource type="Script" path="res://scripts/components/health_component.gd" id="3_health"]
 [ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="4_hurtbox"]
 [ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="5_hitbox"]
+[ext_resource type="Script" path="res://scripts/fx/damage_flash.gd" id="6_flash"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 radius = 5.0
@@ -50,3 +51,8 @@ team = &"enemy"
 [node name="ContactHitboxShape" type="CollisionShape2D" parent="ContactHitbox"]
 position = Vector2(0, -4)
 shape = SubResource("CircleShape2D_contact")
+
+[node name="DamageFlash" type="Node" parent="."]
+script = ExtResource("6_flash")
+flash_color = Color(1.6, 0.6, 0.6, 1)
+flash_seconds = 0.08

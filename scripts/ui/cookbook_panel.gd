@@ -24,6 +24,9 @@ func toggle() -> void:
 	visible = not visible
 	if visible:
 		_rebuild()
+		UIAudio.play_page_flip()
+	else:
+		UIAudio.play_panel_close()
 
 
 func _rebuild() -> void:

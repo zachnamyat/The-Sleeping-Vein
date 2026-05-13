@@ -1,0 +1,55 @@
+#!/usr/bin/env sh
+# Ticket 0.19 — pre-commit hook: GDScript syntax check on every staged .gd file.
+#
+# Install (one-time, from the repo root):
+#     git config core.hooksPath tools/git-hooks
+#
+# Each commit runs `godot --check-only --script <file>` against staged GDScript so
+# parse errors are caught before they reach the branch. The hook is silent on success.
+# Bypass once with `git commit --no-verify` only when you know what you're doing.
+
+set -e
+
+# Locate godot binary. Prefer a "godot" on PATH; fall back to the user's bin/.
+if command -v godot >/dev/null 2>&1; then
+    GODOT="godot"
+elif [ -x "$HOME/bin/godot" ]; then
+    GODOT="$HOME/bin/godot"
+elif [ -x "$HOME/bin/godot.exe" ]; then
+    GODOT="$HOME/bin/godot.exe"
+elif [ -x "/c/Users/$USER/bin/godot.exe" ]; then
+    GODOT="/c/Users/$USER/bin/godot.exe"
+else
+    echo "pre-commit: no 'godot' found on PATH or in ~/bin/. Install Godot 4.6 or skip with --no-verify." >&2
+    exit 1
+fi
+
+# Collect staged .gd files (added/modified/copied/renamed).
+STAGED_GD=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.gd$' || true)
+
+if [ -z "$STAGED_GD" ]; then
+    exit 0
+fi
+
+FAIL=0
+for f in $STAGED_GD; do
+    if [ ! -f "$f" ]; then
+        continue
+    fi
+    # --check-only parses the script and returns non-zero on syntax errors.
+    OUT=$("$GODOT" --headless --check-only --script "$f" 2>&1) || RC=$?
+    RC=${RC:-0}
+    if [ "$RC" -ne 0 ]; then
+        echo "pre-commit: GDScript parse failed in $f"
+        echo "$OUT" | sed 's/^/    /'
+        FAIL=1
+    fi
+    unset RC
+done
+
+if [ "$FAIL" -ne 0 ]; then
+    echo "pre-commit: aborting commit. Fix the parse errors above (or use --no-verify to bypass)."
+    exit 1
+fi
+
+exit 0
