@@ -1,0 +1,27 @@
+# Tickets 5.7 + 5.11 + 5.12 — NPC dialogue + Tablet + Compendium UI
+
+SUBJECT: A pixel-art UI sprite sheet covering: NPC dialogue box, tablet-reader frame, compendium book (bestiary + tablets tabs).
+
+STYLE: (see prompts/_STYLE.txt) — UI on 8-pixel grid.
+
+COMPOSITION: A composite sheet, final size 256×192. Layout:
+
+Panel A — Dialogue box (top, 0..255 × 0..63): a horizontal 256×64 dialogue panel. Left 64×64 = portrait slot (will display NPC portrait frame from npc_*.txt sheets). Right 192×64 = text area with thin Aphelion-gold border (#d4a857), small name-strip at top, ▼ continue-indicator at bottom-right.
+
+Panel B — Tablet reader (middle, 0..127 × 64..191): a 128×128 vertical panel styled as an open Vesari stone tablet (carved-stone texture, glyph-margins), with a central readable area. Used for tablet shard lore-display (ticket 5.11). Salt-encrusted edges.
+
+Panel C — Compendium book (right, 128..255 × 64..191): a 128×128 vertical panel styled as an open book with two facing pages. Left page has a small portrait slot (for bestiary creature thumbnails); right page has stat/lore text area. Tab strip across the top edge with 3 tabs: Bestiary | Tablets | Echoes. Active-tab indicator in Aphelion gold.
+
+SIZE: Generate at 4096×3072 source. Downsample 16× nearest-neighbor to 256×192 final.
+
+PALETTE: AAP-64 dark UI greys + parchment off-white + Aphelion gold accents. Tablet uses Vesari Necropolis salt-pale ramp. Book uses warm browns (Root Hollows leather binding). Background #FF00FF.
+
+LORE: NPCs do not speak aloud the way the Walker remembers — they use mixed inscription + gesture (lore/07_echo_walkers_player.md §7.3). The dialogue box text is canonically a translation. Tablets are pre-Inversion stone artifacts surfaced by Lattice and Vesari excavations. The Compendium organizes the player's gathered knowledge — analogous to Core Keeper's bestiary but lore-loaded.
+
+POST-GENERATION:
+- Downsample 256×192 nearest-neighbor.
+- Crop:
+  - assets/sprites/ui/dialogue_box.png (256×64)
+  - assets/sprites/ui/tablet_reader.png (128×128)
+  - assets/sprites/ui/compendium_book.png (128×128)
+- Manifest entries: ui_dialogue_box, ui_tablet_reader, ui_compendium_book. Category "ui", status "final".

@@ -1,0 +1,31 @@
+# Tickets 1.11 + 2.13 + 6.13 — Core HUD elements
+
+SUBJECT: A pixel-art UI sprite sheet for the core HUD: 10-slot hotbar, health bar, mana bar, Aphelion-sliver readout, buff/debuff icon strip frame.
+
+STYLE: (see prompts/_STYLE.txt) — note: UI is on an 8-pixel grid (multiples of 8 for panels), per docs/design/00_tile_atlas_spec.md §1.
+
+COMPOSITION: A vertical sheet stacking discrete UI elements. Final sheet: 192×80. Layout top-to-bottom:
+
+Row 0 (0–15, 16×192): 10-slot hotbar — 10 cells of 16×16 in a horizontal strip plus 8 pixels left + 24 pixels right padding for selection indicators. Each cell is a recessed metal frame with subtle Aphelion-gold inner glow on the selected slot (provide both "unselected" and "selected" variants in two rows — actually use Row 0 for unselected, Row 1 for selected).
+Row 1 (16–31, 16×192): hotbar selected variant.
+Row 2 (32–47, 8×96): horizontal health bar empty-frame + filled segments. Heart-pulse glyph icon on left.
+Row 3 (48–63, 8×96): horizontal mana bar empty-frame + filled segments. Crystal-glyph icon on left.
+Row 4 (64–71, 8×96): Aphelion-sliver readout — a horizontal strip of 9 tiny sliver-shapes that fill golden when slivers remain (one per remaining respawn, capped at 9 visible). On left, a soft golden "Aphelion" emblem icon.
+Row 5 (72–79, 8×192): buff/debuff icon strip frame — empty 8×8 cells that buff/debuff icons render into.
+
+SIZE: Generate at 3072×1280 source. Downsample 16× nearest-neighbor to 192×80 final.
+
+PALETTE: AAP-64 base for metal frames (cool greys), Final Spiral gold for Aphelion-sliver readout, red-orange for health, cyan-blue for mana. Outlines #000000. Background #FF00FF.
+
+LORE: The Aphelion-sliver readout is the player's most lore-loaded HUD element — each remaining sliver is one more respawn the Aphelion can afford to spend. Cantor of Five Bells comments on the count (lore/07_echo_walkers_player.md §7.4). The Aphelion Beat (23s cycle) is felt softly through a pulse animation on the sliver icons.
+
+POST-GENERATION:
+- Downsample 192×80 nearest-neighbor.
+- Crop into separate PNGs:
+  - assets/sprites/ui/hotbar_unselected.png (16×192)
+  - assets/sprites/ui/hotbar_selected.png (16×192)
+  - assets/sprites/ui/health_bar.png (8×96)
+  - assets/sprites/ui/mana_bar.png (8×96)
+  - assets/sprites/ui/aphelion_sliver_readout.png (8×96)
+  - assets/sprites/ui/buff_debuff_strip.png (8×192)
+- Manifest entries: ui_hotbar_unselected, ui_hotbar_selected, ui_health_bar, ui_mana_bar, ui_aphelion_sliver_readout, ui_buff_debuff_strip. Category "ui", biome "global", status "final".

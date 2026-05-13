@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://cfkdweic8nvjj"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_arrow_wood"
+display_name = "Wooden Arrows (x8)"
+inputs = [{ "item_id": "loam", "count": 2 }]
+outputs = [{ "item_id": "arrow_wood", "count": 8 }]
+stations = []
+skill_xp_grant = 1
+skill_xp_id = &"skill_crafting"

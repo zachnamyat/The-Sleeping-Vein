@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://cfkpi8h7bayy0"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_memory_root_broth"
+display_name = "Memory-Root Broth"
+inputs = [{ "item_id": "memory_root", "count": 1 }, { "item_id": "pale_cap", "count": 1 }]
+outputs = [{ "item_id": "memory_root_broth", "count": 1 }]
+stations = [&"cooking_pot"]
+skill_xp_grant = 4
+skill_xp_id = &"skill_cooking"

@@ -1,0 +1,31 @@
+{
+  "_doc": "Machine-readable palette for The Sleeping Vein. Mirrors assets/palettes/sleeping_vein.gpl. See docs/design/00_tile_atlas_spec.md §6.",
+  "_schema_version": 1,
+  "universal": {
+    "outline": "#000000",
+    "background_key": "#FF00FF"
+  },
+  "biome_ramps": {
+    "root_hollows":        ["#1c130d", "#3a2a1c", "#6b5036", "#a4854f", "#d4a857", "#f0d27d"],
+    "glasswright_reaches": ["#0e1626", "#1c2c4a", "#3d5b8a", "#6e8fc4", "#a5c2e8", "#dfeefb"],
+    "vesari_necropolis":   ["#161616", "#2a2e34", "#4a5159", "#7d8492", "#b2b9c3", "#e8ecf0"],
+    "sunless_verdancy":    ["#0c1a0f", "#1f4022", "#3e7a3b", "#7bbf64", "#c0e08a", "#f3f6c2"],
+    "drowned_aphelion":    ["#03101a", "#0a2640", "#15527a", "#2c8fb8", "#6cd3e1", "#cdf7f3"],
+    "emberforge":          ["#1a0808", "#3d150b", "#7a2814", "#c44a1d", "#f08a2e", "#f8d167"],
+    "salt_wastes":         ["#1f1c1a", "#4a443f", "#857d72", "#bdb5a8", "#e3dccf", "#fdfbf0"],
+    "auroric_veil":        ["#0a1224", "#1c1c4e", "#3a35a0", "#7062d7", "#c7a8ee", "#f0e0ff"],
+    "final_spiral":        ["#1a1407", "#3e2e0e", "#6e521a", "#a87f24", "#dab14a", "#f8e088"]
+  },
+  "biome_glow_pairs": {
+    "_doc": "Per-biome light tint for Light2D and CanvasModulate. Two values: ambient (low light), torch (mid light).",
+    "root_hollows":        ["#6b5036", "#f0d27d"],
+    "glasswright_reaches": ["#3d5b8a", "#a5c2e8"],
+    "vesari_necropolis":   ["#4a5159", "#e8ecf0"],
+    "sunless_verdancy":    ["#3e7a3b", "#c0e08a"],
+    "drowned_aphelion":    ["#15527a", "#6cd3e1"],
+    "emberforge":          ["#7a2814", "#f08a2e"],
+    "salt_wastes":         ["#857d72", "#fdfbf0"],
+    "auroric_veil":        ["#3a35a0", "#c7a8ee"],
+    "final_spiral":        ["#6e521a", "#dab14a"]
+  }
+}

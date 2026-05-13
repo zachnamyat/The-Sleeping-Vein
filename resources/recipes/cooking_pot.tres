@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://cfkftbd40s76j"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_cooking_pot"
+display_name = "Cookpot"
+inputs = [{ "item_id": "loam", "count": 8 }, { "item_id": "shaleseed", "count": 2 }]
+outputs = [{ "item_id": "cooking_pot_placeable", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 3
+skill_xp_id = &"skill_crafting"

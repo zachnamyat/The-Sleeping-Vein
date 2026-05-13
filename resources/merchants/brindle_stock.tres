@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="MerchantInventory" load_steps=2 format=3 uid="uid://merchstock0brindle"]
+
+[ext_resource type="Script" path="res://scripts/resources/merchant_inventory.gd" id="1_mi"]
+
+[resource]
+script = ExtResource("1_mi")
+sell_items = [
+	{ "item_id": "wooden_sword",          "price": 25,  "stock": -1 },
+	{ "item_id": "wooden_pickaxe",        "price": 25,  "stock": -1 },
+	{ "item_id": "hoe",                   "price": 18,  "stock": -1 },
+	{ "item_id": "watering_can",          "price": 22,  "stock": -1 },
+	{ "item_id": "small_healing_potion",  "price": 15,  "stock": 8 },
+	{ "item_id": "small_mana_potion",     "price": 15,  "stock": 8 },
+	{ "item_id": "torch",                 "price": 3,   "stock": -1 },
+]
+buy_prices = {
+	"loam": 1,
+	"shaleseed": 4,
+	"loambeetle": 2,
+	"pale_cap": 3,
+	"memory_root": 12,
+	"tablet_shard": 25,
+}
+restock_minutes = 30.0

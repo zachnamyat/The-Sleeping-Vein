@@ -1,0 +1,31 @@
+# Tickets 5.11 + 9.4 + Glaur-em drops + various small items
+
+SUBJECT: A pixel-art sheet of small miscellaneous lore/economy items: Tablet Shard, Ancient Coin, Engorged Stone-Shell (Glaur-em crafting drop), Sovereign Name Fragment scrolls (one per boss — 9 total fragments for Sovereign-Naming sidequest).
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A horizontal sheet of 16 cells × 16×16. Final: 256×16. Layout left-to-right:
+- (0) Tablet Shard — a small fragment of carved Vesari stone with Old Vesari glyph visible.
+- (1) Ancient Coin — a pre-Inversion bronze coin with a worn sun-emblem on one face.
+- (2) Engorged Stone-Shell — armor-tier crafting material; a dense mossy stone plate.
+- (3) Memory Root — rare Root Hollows root with a faint inner pulse.
+- (4) Pale Cap — small white-capped mushroom.
+- (5) Loam-Wax — yellow honeycomb-pattern wax block (Loambeetle drop).
+- (6) Resonant Tuning Rod — slender Glasswright crystal-tipped rod (Quiet Forge key item).
+- (7) Ship-Bone — bleached Vesari bone fragment.
+- (8–16) Sovereign Name Fragments — 9 small parchment scrolls, each tied with a different colored ribbon matching its source biome. Each scroll shows a faint glyph in its biome's accent color (Root Hollows gold, Glasswright blue, Necropolis pale, Verdancy green, Drowned cyan, Emberforge red, Salt Wastes tan, Auroric violet, Drowned Crown silver — for the optional fight).
+
+SIZE: Generate at 4096×256 source. Downsample 16× nearest-neighbor to 256×16 final.
+
+PALETTE: Per-item palette; scrolls use their source biome's ramp. Most other items use AAP-64. Background #FF00FF.
+
+LORE: Tablet shards are Vesari pre-Inversion stone tablets that come back together to form readable inscriptions (compendium ticket 5.12). Ancient Coins are the universal currency. Sovereign Name Fragments are the items the Cantor of Five Bells assembles into the Sovereign-Naming song (lore/05_aeon_sovereigns_bosses.md, Sovereign-Naming sidequest section).
+
+POST-GENERATION:
+- Downsample 256×16 nearest-neighbor.
+- Crop 17 separate 16×16 PNGs (note: 9 fragments + 8 misc items = 17 items, but the sheet has 17 cells if I count fragment 0):
+  Wait — the layout above shows cells 0-7 as 8 misc items, then cells 8-16 as 9 fragments. That's 17 cells total. Adjust the sheet to 272×16 to fit 17 cells, OR drop one item. For simplicity: drop the Resonant Tuning Rod here (it can ship in items_misc_phase4.txt). 16 cells: 7 misc + 9 fragments.
+- Final crop list:
+  - assets/sprites/items/lore/tablet_shard.png, ancient_coin.png, engorged_stone_shell.png, memory_root.png, pale_cap.png, loam_wax.png, ship_bone.png
+  - assets/sprites/items/lore/sovereign_name_fragment_1.png ... _9.png (one per Sovereign)
+- Manifest entries: item_tablet_shard, item_ancient_coin, item_engorged_stone_shell, item_memory_root, item_pale_cap, item_loam_wax, item_ship_bone, item_sovereign_name_fragment_1 ... _9. Status "final".

@@ -1,0 +1,24 @@
+# Ticket 10.6 — Drowned Aphelion bestiary sprite set
+
+SUBJECT: 5 creature sprites for the Drowned Aphelion biome. 3 hostile + 2 friendly.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A horizontal 16×16 strip of 5 cells. Final: 80×16. Layout:
+- (0) Deep-Mawl (hostile, infected) — fast lunging fish-predator, gold-vein streaks.
+- (1) Hollow Coral (hostile, infected, stationary) — Spawnmother-spread coral, spits ranged spore clusters. Pale pink with gold cracks.
+- (2) Wreck-Wraith (hostile, Echo) — translucent drowned Vesari sailor underwater, cyan glow.
+- (3) Lantern Squid (friendly, large) — slow squid with bioluminescent head-lantern, provides ambient light.
+- (4) Brinekin (friendly, ambient) — tiny fish that briefly follow the Walker underwater.
+
+SIZE: Generate at 1280×256 source. Downsample 16× nearest-neighbor to 80×16 final.
+
+PALETTE: Drowned Aphelion ramp + Hollowling gold-vein overlay on hostiles. Background #FF00FF.
+
+LORE: See lore/06_creatures_and_enemies.md §6.2 (Stratum 5).
+
+POST-GENERATION:
+- Downsample 80×16 nearest-neighbor.
+- Crop 5 separate 16×16 PNGs:
+  - assets/sprites/enemies/drowned_aphelion/deep_mawl.png, hollow_coral.png, wreck_wraith.png, lantern_squid.png, brinekin.png
+- Manifest entries: enemy_deep_mawl through enemy_brinekin. Biome "drowned_aphelion", status "final".

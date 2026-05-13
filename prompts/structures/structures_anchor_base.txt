@@ -1,0 +1,38 @@
+# Tickets 4.4 + 4.5 + 3.6 + 9.2 — Anchor / Resonance Loom / Chest / Bed
+# Hero structures — 2 polish passes recommended for Loom and Anchor.
+
+SUBJECT: A pixel-art set of the core "base" structures the player builds the Anchor around: the Resonance Loom (central spawn structure), a generic placeable Chest, a generic placeable Bed, and the Anchor plateau decor (background ground type for the home base).
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: Four separate output assets in one source sheet, laid out as follows (positions in the 1024×1024 source):
+
+Asset A — Resonance Loom (top-left quadrant): single static sprite, 48×48 final size (medium-boss size per docs/design/00_tile_atlas_spec.md §1). A half-buried pre-Inversion construct — a vertical loom-like frame of brushed steel and pale-gold filigree, with vertical resonance-strands suspended between two posts, faintly glowing. A central thread pulses to the Aphelion Beat. Anchored on a small stone plinth. Generate at 1536×1536 source → 32× downsample → 48×48 final.
+
+Asset B — Chest (top-right): single static sprite, 32×32. Wood-and-iron-band chest in closed state; key plate on front. Will support an "open" variant later but ship closed-only for now.
+
+Asset C — Bed (bottom-left): single static sprite, 32×32. Simple wooden frame, plain linen mattress, woollen cover; head-end has a small carved keel-stone (Vesari nod). 1 frame static.
+
+Asset D — Anchor plateau decor strip (bottom-right): horizontal 64×16 strip of 4 placement tiles representing the plateau ground type — slightly brighter than Root Hollows base floor, suggesting Aphelion-Light "anchoring" the ground. 4 variations (subtle wear patterns).
+
+Generate each asset as a separate Gemini call OR composite into one source sheet at 1024×1024 with the four positions reserved. Recommend separate calls for cleaner palette adherence.
+
+SIZE: See per-asset notes above.
+
+PALETTE:
+- Loom: AAP-64 brushed steel/grey + Final Spiral gold ramp for resonance threads.
+- Chest: AAP-64 wood + iron.
+- Bed: AAP-64 wood + cloth + Vesari Necropolis pale grey for keel-stone.
+- Anchor plateau: Root Hollows ramp, slightly brighter (more #a4854f and #d4a857 than base floor).
+- Background: #FF00FF (keyed out).
+
+LORE:
+- The Resonance Loom is the player's respawn point; canonically a half-buried pre-Inversion construct (lore/01_cosmology_and_universe.md). It absorbs an Aphelion-sliver on respawn.
+- The Anchor plateau is the player's home. Multiple Walkers share one Anchor; the Anchor grows more stable with more Walkers present (lore/07_echo_walkers_player.md §7.8).
+- The Bed is a generic survival item; NPCs need it for housing detection (ticket 9.1).
+
+POST-GENERATION:
+- Asset A: downsample to 48×48; save raw → assets/raw/structures/resonance_loom_v1.png; final → assets/sprites/structures/resonance_loom.png; manifest "structure_resonance_loom" (size [48,48], category "structure", biome "global", lore_ref "lore/01_cosmology_and_universe.md", status "final").
+- Asset B: 32×32; → assets/sprites/structures/chest.png; manifest "structure_chest".
+- Asset C: 32×32; → assets/sprites/structures/bed.png; manifest "structure_bed".
+- Asset D: 64×16 (4 tiles); → assets/sprites/tiles/anchor_plateau_decor.png; manifest "tile_anchor_plateau_decor".

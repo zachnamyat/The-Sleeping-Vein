@@ -1,0 +1,30 @@
+# SHARED STYLE PREAMBLE
+#
+# Every Gemini prompt in this directory implicitly inherits the STYLE and ANTI-PROMPT
+# blocks below. When you assemble a prompt for the model, prepend these blocks to the
+# per-asset file's content unless that file overrides them.
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Inspired visually by Core Keeper, Stardew Valley, and Songs of Conquest pixel-art density. Pixel art should remain crisp and readable when downsampled to its target size.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels (unless the asset IS a text/script piece), frame, border, isometric perspective, JPG compression artifacts, color bleed across cell boundaries, mismatched cell sizes in sheets, multiple disjoint subjects per cell.
+
+# CANONICAL PALETTES (see docs/design/00_tile_atlas_spec.md §6 for the full table)
+#
+# Global: AAP-64 (58 shared slots + 6 biome-specific accent slots 56–61)
+#
+# Biome 6-color accent ramps (darkest → brightest):
+#   root_hollows:       #1c130d #3a2a1c #6b5036 #a4854f #d4a857 #f0d27d
+#   glasswright_reaches: #0e1626 #1c2c4a #3d5b8a #6e8fc4 #a5c2e8 #dfeefb
+#   vesari_necropolis:  #161616 #2a2e34 #4a5159 #7d8492 #b2b9c3 #e8ecf0
+#   sunless_verdancy:   #0c1a0f #1f4022 #3e7a3b #7bbf64 #c0e08a #f3f6c2
+#   drowned_aphelion:   #03101a #0a2640 #15527a #2c8fb8 #6cd3e1 #cdf7f3
+#   emberforge:         #1a0808 #3d150b #7a2814 #c44a1d #f08a2e #f8d167
+#   salt_wastes:        #1f1c1a #4a443f #857d72 #bdb5a8 #e3dccf #fdfbf0
+#   auroric_veil:       #0a1224 #1c1c4e #3a35a0 #7062d7 #c7a8ee #f0e0ff
+#   final_spiral:       #1a1407 #3e2e0e #6e521a #a87f24 #dab14a #f8e088
+#
+# Universal additions: #000000 (outline only, sparingly), #FF00FF (background, keyed out).
+#
+# CHARACTER PALETTE (Walker, NPCs, Hollowling-infected mobs):
+#   Use AAP-64 skin/cloth tones. Walker's hand-of-light glow uses the Final Spiral ramp
+#   (gold). Hollowling-infected gold-vein overlay uses #d4a857 / #f0d27d.

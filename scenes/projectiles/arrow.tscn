@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://barrow0scene000001"]
+
+[ext_resource type="Script" path="res://scripts/combat/projectile.gd" id="1_proj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_proj"]
+radius = 2.5
+
+[node name="Arrow" type="Area2D"]
+collision_layer = 0
+collision_mask = 5
+script = ExtResource("1_proj")
+speed = 280.0
+lifetime = 0.9
+base_damage = 7
+damage_type = &"physical"
+team = &"player"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+
+[node name="ProjShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_proj")

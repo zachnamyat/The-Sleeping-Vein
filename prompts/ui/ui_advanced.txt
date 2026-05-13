@@ -1,0 +1,37 @@
+# Tickets 7.2 + 8.10 + 12.5 + 12.12 + 16.4 + 16.13 — Advanced UI screens
+
+SUBJECT: A pixel-art UI sprite sheet for advanced/late-game screens: talent tree, fishing minigame, Elision-Script puzzle, Cantor's Five Bells music puzzle, Aphelion Hymn assembly, credits + run-stats.
+
+STYLE: (see prompts/_STYLE.txt) — UI on 8-pixel grid.
+
+COMPOSITION: A composite sheet, final 256×256. Layout:
+
+Panel A — Talent tree node + connectors (top-left, 64×64): a single rounded talent-node frame (16×16 circle) with 4-direction connector line segments (4×16 pixels each). Active vs inactive variants — provide both as a 2-row strip.
+
+Panel B — Per-skill talent tab icons (right of A, 12×16 each, 96×16 strip for 12 skills): 12 small icons matching the 12 skills (Stratabreaking pickaxe, Walking boot, Hand-Strike fist, Hand-Throw arrow, Anchoring shield, Form-Making hammer, Tending leaf, Listening fish, Hearth bowl, Resonance crystal, Calling summon-orb, Bursting explosion).
+
+Panel C — Fishing minigame UI (top-right, 96×64): a vertical bar with a small fish-marker and a movable hook-marker that the player keeps centered on the fish-marker. Tense-/calm-zone color shading. Aphelion-gold cap-and-base.
+
+Panel D — Elision-Script puzzle (bottom-left, 128×96): a grid of glyph-slots where the player rearranges salvaged glyph fragments to spell an elided word. Slots are 16×16 each in a 3×3 puzzle area. Outer frame has Vesari salt-pale styling.
+
+Panel E — Cantor's Five Bells (bottom-mid, 64×96): five bell-shape icons in a vertical stack on the left; central note-pattern grid on the right where the player matches a played sequence. Aphelion-gold bell highlights.
+
+Panel F — Aphelion Hymn assembly (bottom-right, 64×64): a small parchment-style UI showing 9 hymn-fragment slots that fill as the player gathers them. When complete, the central area shows a "play" indicator.
+
+Bonus — Credits + run-stats screen background slice (use any remaining space at 96×16): a parchment-roll decoration for the credits/stats screen.
+
+SIZE: Generate at 4096×4096 source. Downsample 16× nearest-neighbor to 256×256 final.
+
+PALETTE: AAP-64 UI greys + parchment + Aphelion gold accents. Each puzzle uses one biome-accent for theming (Elision: Necropolis pale; Cantor: Final Spiral gold; Hymn: Final Spiral gold). Background #FF00FF.
+
+POST-GENERATION:
+- Downsample 256×256 nearest-neighbor.
+- Crop into separate PNGs:
+  - assets/sprites/ui/talent_node.png (32×16; active+inactive)
+  - assets/sprites/ui/talent_skill_icons.png (96×16; sliced to 12 icons by Antigravity post-process)
+  - assets/sprites/ui/fishing_minigame.png (96×64)
+  - assets/sprites/ui/elision_puzzle.png (128×96)
+  - assets/sprites/ui/cantor_bells_puzzle.png (64×96)
+  - assets/sprites/ui/aphelion_hymn_assembly.png (64×64)
+  - assets/sprites/ui/credits_decoration.png (96×16)
+- Manifest entries: ui_talent_node, ui_talent_skill_icons, ui_fishing_minigame, ui_elision_puzzle, ui_cantor_bells_puzzle, ui_aphelion_hymn_assembly, ui_credits_decoration. Status "final".

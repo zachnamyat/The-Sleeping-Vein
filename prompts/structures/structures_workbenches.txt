@@ -1,0 +1,30 @@
+# Tickets 3.7 + 3.11 + per-biome forge unlocks — All 9 crafting station tiers
+
+SUBJECT: A pixel-art sheet of the nine canonical crafting stations, one per material tier. Each is a placeable workbench-style structure rendered top-down with a slight 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 3×3 grid of 32×32 cells. Final sheet: 96×96. Layout left-to-right, top-to-bottom:
+- (0,0) Tier 0 — Loam Bench (Root Hollows): rough wooden bench with packed-loam top, simple hand-tools laid out. (Core Keeper analog: Basic Workbench.)
+- (0,1) Tier 1 — Clearstone Forge (Glasswright Reaches): crystal-veined forge with pale-blue glow inside, anvil + bellows.
+- (0,2) Tier 2 — Saltbound Anvil (Vesari Necropolis): salt-encrusted iron anvil on a Vesari ship-stone base, half-buried bone fittings.
+- (1,0) Tier 3 — Verdant Cradle (Sunless Verdancy): living-wood loom-bench, growing roots forming the work surface, bioluminescent fungi for light.
+- (1,1) Tier 4 — Tideglass Loom (Drowned Aphelion): tideglass-shard frame with caustic-light ripples, brass fittings, slow water dripping at the base.
+- (1,2) Tier 5 — Pyrenkin Bellows (Emberforge): heavy ember-iron forge with active bellows, embers visible in the firebox, glowing slag on the anvil.
+- (2,0) Tier 6 — Salt-Crown Press (Salt Wastes): tall salt-pillar press with Wormbound bone-inlay handle, salt-crystal hopper above.
+- (2,1) Tier 7 — Auroric Anvil (Auroric Veil): ice-spire anvil with aurora-shimmer overlay, suspended chime-stones at the corners.
+- (2,2) Tier 8 — Diadem Reliquary (Final Spiral): obsidian altar-bench with Diadem-gold inlay, manifesto-plate slots on the back wall, faint Aphelion-pulse glow.
+
+Each station fits within its 32×32 cell with 1-pixel padding.
+
+SIZE: Generate at 6144×6144 source (each cell 2048×2048). Downsample 64× nearest-neighbor to 96×96 final.
+
+PALETTE: Each station uses its parent biome's ramp + AAP-64 wood/metal/cloth tones. Outline #000000. Background #FF00FF.
+
+LORE: See docs/design/02_lore_to_mechanics_mapping.md §5 for the full tier table. Each station unlocks at the biome boss kill that grants the corresponding material tier (Shaleseed → Clearstone Forge unlocks; Clearstone → Saltbound Anvil; etc.).
+
+POST-GENERATION:
+- Downsample 96×96 nearest-neighbor.
+- Crop into 9 separate 32×32 PNGs:
+  - assets/sprites/structures/loam_bench.png, clearstone_forge.png, saltbound_anvil.png, verdant_cradle.png, tideglass_loom.png, pyrenkin_bellows.png, salt_crown_press.png, auroric_anvil.png, diadem_reliquary.png
+- Manifest entries: structure_loam_bench through structure_diadem_reliquary (9 entries, category "structure", biome per tier, status "final").

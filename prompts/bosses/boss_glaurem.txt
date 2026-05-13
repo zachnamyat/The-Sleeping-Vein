@@ -1,0 +1,29 @@
+# Ticket 5.2 — Glaur-em the Engorged Stone-Father (first boss)
+# Hero asset — 2 polish passes recommended.
+
+SUBJECT: Glaur-em, the corrupted Aeon Sovereign of the Root Hollows — once the Stone-Father, responsible for slow lithification of the world-shell, now a bloated mound of fused stone, mosses, and consumed Hollowlings. Roughly five times the size of the player. Slow. Implacable. Pieces of it slough off as smaller Hollowling-infected stone-creatures. The face is suggestion only — a pale soft creature curls inside the largest fragment (the "true body").
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A three-phase boss sprite sheet showing Glaur-em in his three combat phases. Each phase is a 64×64 medium-boss sprite (per docs/design/00_tile_atlas_spec.md §1). Total sheet: 192×64.
+
+- Phase 1 (left, 0..63): full Glaur-em — a fused mound the size of 4 walker characters. Mossy stone surface, gold-vein corruption cracks pulsing softly. No visible face.
+- Phase 2 (middle, 64..127): split form — two slightly smaller mounds (each ~32×32 within the 64×64 cell, side by side). Same surface treatment.
+- Phase 3 (right, 128..191): partly broken — one large fragment cracked open, exposing a pale, soft, slug-like inner body curled inside. The inner body is uninfected pale flesh — "Glaur-em's true body."
+
+SIZE: Generate at 12288×4096 source (or 4096×4096 per phase × 3). Downsample 64× nearest-neighbor to 192×64 final.
+
+PALETTE: Root Hollows ramp (#1c130d → #f0d27d) for stone surface. AAP-64 mossy greens for moss. Hollowling-corruption gold-veins in #d4a857 / #f0d27d. Inner body in pale skin tones (#d2b48c, #e8d5b7). Outline #000000.
+
+LORE: Glaur-em was the first Sovereign to fall — slow metabolism let Hollowlings nest undetected for centuries. The Lattice Survivors say their oldest walls "are still warm from Glaur-em's breath." When the fight ends, a single phrase is carved into the floor by his final shudder: "thank you for the quiet." See lore/05_aeon_sovereigns_bosses.md#boss-1.
+
+POST-GENERATION:
+- Downsample to 192×64 nearest-neighbor.
+- Verify each 64×64 cell aligns to a phase.
+- Key out magenta.
+- Palette check.
+- Save raw → assets/raw/bosses/glaurem_v1.png
+- Save final → assets/sprites/bosses/glaurem.png
+- Wrap as SpriteFrames at resources/sprites/boss_glaurem.tres with "phase_1", "phase_2", "phase_3" each a single-frame animation.
+- Animations for slam/split/reveal are a Phase 6 polish pass; this ticket ships static phase poses.
+- Manifest entry "boss_glaurem": status → "final".

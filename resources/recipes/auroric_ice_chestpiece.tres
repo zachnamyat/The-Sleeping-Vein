@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" load_steps=2 format=3 uid="uid://recipe0auroricchst"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_auroric_ice_chestpiece"
+display_name = "Auroric-Ice Chestpiece"
+inputs = [{ "item_id": "shaleseed", "count": 32 }, { "item_id": "memory_root", "count": 4 }]
+outputs = [{ "item_id": "auroric_ice_chestpiece", "count": 1 }]
+stations = [&"clearstone_forge"]
+skill_xp_grant = 18
+skill_xp_id = &"skill_crafting"

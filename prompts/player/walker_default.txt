@@ -1,0 +1,37 @@
+# Ticket 1.1 — PlayerController scene (Echo-Walker baseline sprites)
+# Hero asset — 2 polish passes recommended.
+
+SUBJECT: Echo-Walker character sprite sheet — the player character. A bald, humanoid figure of indeterminate ancestry (the Aphelion's eroded human template), wearing plain unmarked attire in soft natural fibers (Aphelion-template default — no faction markings, no armor). Front, back, and side views. Their right hand emits a faint golden Aphelion-light glow when not holding a tool.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A horizontal sprite sheet covering idle and walk animations across 4 facing directions. Layout (left-to-right):
+- Frames 0–3   : Idle, facing DOWN (toward camera) — 4-frame breathing loop
+- Frames 4–7   : Idle, facing UP
+- Frames 8–11  : Idle, facing LEFT
+- Frames 12–15 : Idle, facing RIGHT
+- Frames 16–21 : Walk, facing DOWN — 6-frame cycle
+- Frames 22–27 : Walk, facing UP
+- Frames 28–33 : Walk, facing LEFT
+- Frames 34–39 : Walk, facing RIGHT
+Each frame is exactly 16×24 pixels (feet aligned to row 23, head at row 0). Final sheet: 640×24. No gaps between frames.
+
+SIZE: Generate at 10240×384 source (256× per-frame width × 64× height; effectively 1024×384 per 16-frame strip stacked OR one mega-strip — pick whichever Gemini handles best). Downsample 16× nearest-neighbor for a final 640×24 sheet. If single-shot 640×24 is impossible at scale, generate 4 strips (one per direction × idle/walk pair) at 256×24 each and concatenate horizontally.
+
+PALETTE: AAP-64 skin and natural-fiber tones for body + clothing. Hand-of-light glow uses Final Spiral gold ramp (#a87f24, #dab14a, #f8e088). Outline #000000 sparingly. Background #FF00FF (keyed out).
+
+LORE: The Walker is bald, humanoid, plain in attire. The Aphelion's template has drifted across uncounted Beats — different Walkers look different, none match any surviving culture. The right hand glows golden when empty — the visible signature of the Aphelion-sliver they were spun from. See lore/07_echo_walkers_player.md.
+
+ANIMATION:
+- Idle (4 frames, 8 fps per direction): subtle breathing — chest rise/fall + hand-glow pulse sync to a slow rhythm.
+- Walk (6 frames, 12 fps per direction): 2-step cycle (left foot forward, mid, right foot forward, mid). Feet stay on row 23. Arms swing slightly counter to legs.
+
+POST-GENERATION:
+- Downsample to 640×24 nearest-neighbor.
+- Verify each 16-pixel column slice is a clean frame; feet at row 23 in every frame.
+- Key out magenta.
+- Palette check.
+- Save raw → assets/raw/player/walker_default_v1.png
+- Save final → assets/sprites/player/walker_default.png
+- Wrap as SpriteFrames at resources/sprites/player_walker_default.tres with two animations: "idle_<dir>" (4 frames, fps 8, looping) and "walk_<dir>" (6 frames, fps 12, looping) for each direction.
+- Manifest entry "player_walker_default": status → "final".

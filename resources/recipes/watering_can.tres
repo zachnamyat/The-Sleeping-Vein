@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://cfk0ff66m8u6j"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_watering_can"
+display_name = "Watering Can"
+inputs = [{ "item_id": "shaleseed", "count": 4 }]
+outputs = [{ "item_id": "watering_can", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_crafting"

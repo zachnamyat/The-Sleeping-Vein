@@ -1,0 +1,26 @@
+# Ticket 16.3 (Extension) — Resonance Echo VFX system
+
+SUBJECT: A pixel-art VFX overlay for Resonance Echoes — the "ghost-scene" apparitions that briefly play out fragments of pre-Inversion or recent-history events. 60+ Echoes are planned across the game; this asset is the SHARED overlay frame all Echoes use.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A horizontal sprite strip of 8 frames at 32×32 each. Final: 256×32. The 8 frames represent the Echo's fade-in / steady / fade-out cycle:
+- F0–F2: fade-in — gradually building translucency, golden particle wisps materializing.
+- F3–F5: steady — the Echo is fully manifest; only minor particle drift.
+- F6–F7: fade-out — Echo dissolves back into gold particles.
+
+Each frame is a generic Echo-overlay (a humanoid silhouette that the game will composite with per-Echo character art). The overlay's character-shape is generic Walker silhouette; per-Echo specifics will be added in code by tinting + masking.
+
+SIZE: Generate at 4096×512 source. Downsample 16× nearest-neighbor to 256×32 final.
+
+PALETTE: Final Spiral gold ramp ONLY for the overlay (#1a1407 → #f8e088), plus alpha-transparency for the fade. Background #FF00FF.
+
+LORE: Echoes are manifestations of the Resonance Field. The Walker can stabilize them by holding still (lore/07_echo_walkers_player.md §7.6). Each Echo plays a fragment of a witnessed scene — the player learns most of the game's emotional weight through Echoes. See lore/11_environmental_storytelling.md.
+
+POST-GENERATION:
+- Downsample 256×32 nearest-neighbor.
+- Key out magenta.
+- Save raw → assets/raw/vfx/resonance_echo_v1.png
+- Save final → assets/sprites/vfx/resonance_echo.png
+- Wrap as SpriteFrames at resources/sprites/vfx_resonance_echo.tres ("fade_in_steady_fade_out" 8f @ 12fps).
+- Manifest entry "vfx_resonance_echo": status → "final".

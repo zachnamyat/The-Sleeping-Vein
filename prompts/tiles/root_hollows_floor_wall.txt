@@ -1,0 +1,40 @@
+# Ticket 1.5 — Floor + Capped Wall (Root Hollows)
+#
+# This is a TEMPORARY subset of the full Root Hollows atlas (ticket 1.12). It exists so Phase 1
+# can render walls before ticket 1.12 ships the full 256-tile atlas. Generate THIS asset for
+# ticket 1.5; superseded by tile_root_hollows_atlas_16.png when 1.12 lands.
+
+SUBJECT: A minimal pixel-art tile sheet for the Root Hollows biome containing exactly two tile types laid out in a 2×3 grid (32×48 pixels final): top row = three floor variants (16×16 each — base loam, mid wear, heavy wear), bottom row = three capped-wall variants (16×24 each — straight wall section with the 16×8 cap on top and 16×16 base below; left end-cap, middle straight, right end-cap).
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Inspired by Core Keeper / Stardew Valley.
+
+COMPOSITION: A single PNG of 32×48 pixels (after downsample). Top 32×16 strip = three floor tiles (left to right: base, mid wear, heavy wear). Bottom 32×24 strip = three capped wall tiles (left end-cap, middle straight wall, right end-cap). No gaps between cells; cell boundaries are exactly on 16-pixel grid lines except the wall caps which extend 8 pixels upward (16×24 cell).
+
+NOTE on the capped-wall format: each wall tile is 16×24 — the bottom 16×16 is the wall footprint (occludes player when entity is below it), and the top 16×8 is the cap silhouette (drawn in the WallCap Y-sorted layer, overlaps anything walking behind the wall). See docs/design/00_tile_atlas_spec.md §1 for the cap/base split and §5 for the Y-sort layer order.
+
+SIZE: Generate at 2048×3072 source. Downsample 64× nearest-neighbor to final 32×48 pixels.
+
+PALETTE: Restrict to the Root Hollows ramp + pure black for outlines + pure magenta for background only:
+  #1c130d  (deepest shadow — wall cap interior)
+  #3a2a1c  (dark loam — wall base)
+  #6b5036  (warm earth — main floor)
+  #a4854f  (lit loam — top edge of wall caps catching Aphelion light)
+  #d4a857  (gold accent — sparse highlights)
+  #f0d27d  (brightest highlight — rare, on cap tops only)
+  #000000  (outline only, very sparing)
+  #FF00FF  (background outside the 6 cells only; key out after generation)
+
+LORE: The Root Hollows is soft loam and shale outcropping under filtered Aphelion light; mood is cozy and dim, "dim sunset under a high ceiling." See lore/04_biomes.md#stratum-1--the-root-hollows. The walls here are weathered shale and packed loam; the caps are the dark overhanging silhouette of the cave's curved ceiling implied by the 3/4 lean.
+
+ANIMATION: None — these are static tiles.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, per-tile 3D rendering, mismatched cell sizes, gaps between cells, JPG artifacts.
+
+POST-GENERATION:
+- Downsample to 32×48 nearest-neighbor.
+- Verify 16-pixel cell grid; top row cells = 16×16; bottom row cells = 16×24.
+- Key out magenta background (#FF00FF → transparent).
+- Palette check.
+- Save raw → assets/raw/tiles/root_hollows_floor_wall_v1.png
+- Save final → assets/sprites/tiles/root_hollows_floor_wall.png
+- Update manifest entry "tile_root_hollows_floor_wall": status → "final".

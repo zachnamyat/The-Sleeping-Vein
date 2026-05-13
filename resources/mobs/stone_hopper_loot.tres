@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://f48hugk3hlyl"]
+
+[ext_resource type="Script" path="res://scripts/resources/loot_table.gd" id="1_loot"]
+
+[resource]
+script = ExtResource("1_loot")
+guaranteed_drops = [{ "item_id": "loambeetle", "min": 1, "max": 2 }]
+weighted_drops = [
+	{ "item_id": "loam", "min": 1, "max": 3, "weight": 4.0 },
+	{ "item_id": "shaleseed", "min": 1, "max": 1, "weight": 1.0 },
+]
+max_rolls = 1

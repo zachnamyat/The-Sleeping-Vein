@@ -1,0 +1,49 @@
+# Tickets 8.9–8.12 — Fishing rods + fish species across biomes
+
+SUBJECT: A pixel-art sheet of fishing equipment (3 rod tiers + bait variants) and 12 fish species spread across biomes.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 7×3 grid of 16×16 cells. Final sheet: 112×48. Layout:
+
+Row 0 (rods + bait):
+- (0,0) Wooden Fishing Rod (tier 0)
+- (0,1) Copper Fishing Rod (tier 1)
+- (0,2) Iron Fishing Rod (tier 2)
+- (0,3) Loam-Wax Bait (basic)
+- (0,4) Salt-Wort Bait (mid)
+- (0,5) Resonant Bait (tier 3+, attracts rare fish)
+- (0,6) Lure pouch (utility)
+
+Row 1 (Root Hollows + Glasswright + Vesari fish):
+- (1,0) Hollow Trout (Root Hollows, common)
+- (1,1) Memory Carp (Root Hollows, rare)
+- (1,2) Crystal Glint Fish (Glasswright Reaches, common — facets reflect light)
+- (1,3) Veinglass Eel (Glasswright, rare)
+- (1,4) Salt-Bound Tuna (Vesari Necropolis, common — slightly fossilized appearance)
+- (1,5) Threnos Lantern-Fish (Vesari, rare — small glowing organ on head)
+- (1,6) Bone-Pike (Vesari, uncommon)
+
+Row 2 (Verdancy + Drowned + endgame fish):
+- (2,0) Spore-Carp (Verdancy)
+- (2,1) Tideglass Pike (Drowned Aphelion, common)
+- (2,2) Lantern Squid (Drowned, large + non-hostile in fauna, but can be caught)
+- (2,3) Wreck Eel (Drowned, rare)
+- (2,4) Ember-Catfish (Emberforge)
+- (2,5) Salt-Carp (Salt Wastes — survives in mineralized oases)
+- (2,6) Auroric Char (Auroric Veil — pale violet scales)
+
+That's 14 fish + 7 rod/bait = 21 cells in 3 rows of 7. Final size 112×48 matches.
+
+SIZE: Generate at 1792×768 source. Downsample 16× nearest-neighbor to 112×48 final.
+
+PALETTE: AAP-64 + per-biome accent for each fish. Background #FF00FF.
+
+LORE: Old Hask is the fishing merchant (Drowned Aphelion). Each biome has its own fish list (data-driven, ticket 8.12). Fishing skill is "Listening" per docs/design/02_lore_to_mechanics_mapping.md §7.
+
+POST-GENERATION:
+- Downsample 112×48 nearest-neighbor.
+- Crop 21 separate 16×16 PNGs:
+  - assets/sprites/items/fishing/rod_wooden.png, rod_copper.png, rod_iron.png, bait_loam_wax.png, bait_salt_wort.png, bait_resonant.png, lure_pouch.png
+  - assets/sprites/items/fish/hollow_trout.png ... auroric_char.png (14 species)
+- Manifest entries: tool_rod_wooden..rod_iron, item_bait_loam_wax..bait_resonant, item_lure_pouch, fish_hollow_trout through fish_auroric_char. Status "final".

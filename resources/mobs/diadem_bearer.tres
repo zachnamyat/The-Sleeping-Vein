@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://bmca2srda3tor"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bosses/diadem_bearer.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"boss_diadem_bearer"
+display_name = "The Diadem-Bearer"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(96, 96)
+max_health = 6500
+armor = 26
+contact_damage = 55
+move_speed = 30.0
+detection_radius = 320.0
+behavior = 4
+xp_skill = &"skill_melee"
+xp_value = 6000
+biome = &"final_spiral"

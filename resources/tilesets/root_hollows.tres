@@ -1,0 +1,40 @@
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://b1tileset0root0hollows"]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles/root_hollows_floor.png" id="1_floor"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles/root_hollows_wall.png" id="2_wall"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles/smoke_test_shaleseed.png" id="3_ore"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_floor"]
+texture = ExtResource("1_floor")
+texture_region_size = Vector2i(16, 16)
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wall"]
+texture = ExtResource("2_wall")
+texture_region_size = Vector2i(16, 24)
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 0, 8, 0, 8, 8, -8, 8)
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ore"]
+texture = ExtResource("3_ore")
+texture_region_size = Vector2i(16, 16)
+0:0/0 = 0
+0:0/0/physics_layer_0/linear_velocity = Vector2(0, 0)
+0:0/0/physics_layer_0/angular_velocity = 0.0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:0/0/custom_data_0 = 1
+0:0/0/custom_data_1 = "shaleseed"
+
+[resource]
+tile_size = Vector2i(16, 16)
+physics_layer_0/collision_layer = 1
+physics_layer_0/collision_mask = 1
+custom_data_layer_0/name = "tile_tier"
+custom_data_layer_0/type = 2
+custom_data_layer_1/name = "ore_id"
+custom_data_layer_1/type = 4
+sources/0 = SubResource("TileSetAtlasSource_floor")
+sources/1 = SubResource("TileSetAtlasSource_wall")
+sources/2 = SubResource("TileSetAtlasSource_ore")

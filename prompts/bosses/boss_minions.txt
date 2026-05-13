@@ -1,0 +1,32 @@
+# Tickets 5.4 + 10.x + 11.x + 12.x — All boss-summoned minion types (one sheet)
+
+SUBJECT: 12 boss-minion creature sprites. Each is summoned by a specific Sovereign during their fight, and is sprite-distinct from both the boss and from base bestiary creatures.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 4×3 grid of 16×16 single-frame sprites (or larger for size-class consistency). Final sheet: 64×48 (12 cells × 16×16). Layout left-to-right, top-to-bottom:
+- (0,0) Stoneslough — small fragments that calve off Glaur-em's body. Mossy stone shard with gold-cracks.
+- (0,1) Vorr'kell's Crystal Larva — crystal-segmented worm-larva, blue-glow.
+- (0,2) Spawnmother's Carrion Hatchling — small spider-like Hollowling vessel, salt-pale.
+- (0,3) Sythrenn's Bloomling — tiny vine-creature with bright toxic flower head.
+- (1,0) Auriax's Wither-Root — animated dead-root creature, grey-green.
+- (1,1) Vol'thaar's Tentacle-Echo — translucent tentacle wisp, shadowy with luminescent tip.
+- (1,2) Skoldur's Hammer-Shade — ember-iron specter with glowing forge-mark.
+- (1,3) Naeren's Salt-Splinter — crystalline salt-shard creature, pale white.
+- (2,0) Veyl-Aurora's Spire-Voice (rendered as a small wisp form for HUD; the actual spire is 64×64 — render the wisp here).
+- (2,1) Drowned Crown's Drowned Subject — ghostly drowned Vesari sailor, cyan-blue.
+- (2,2) Diadem Reader — Sunken Diadem foot-soldier in golden mask + dark robes. (Used as Diadem-Bearer's add and Phase 12.2 mob.)
+- (2,3) Aphelion light-pattern entity — abstract gold geometric pattern, no body.
+
+SIZE: Generate at 1024×768 source. Downsample 16× nearest-neighbor to 64×48 final.
+
+PALETTE: Each minion uses its parent biome's accent ramp + Hollowling gold-vein overlay where applicable. Diadem agents use Final Spiral gold + cool indigo robes. Background #FF00FF.
+
+LORE: See lore/06_creatures_and_enemies.md §6.5 (boss-only minions). Diadem agents are mortal humans, not Hollowling-infected — see lore/05_aeon_sovereigns_bosses.md#boss-11.
+
+POST-GENERATION:
+- Downsample 64×48 nearest-neighbor.
+- Crop into 12 separate 16×16 PNGs:
+  - assets/sprites/enemies/minions/stoneslough.png, crystal_larva.png, carrion_hatchling.png, bloomling.png, wither_root.png, tentacle_echo.png, hammer_shade.png, salt_splinter.png, spire_voice.png, drowned_subject.png, diadem_reader_minion.png, aphelion_pattern.png
+- Manifest entries (one per minion, category "enemy", biome per parent boss, status "final"): minion_stoneslough through minion_aphelion_pattern.
+- Note: Diadem Readers also appear at full mob size (24×24) in Phase 12.2 — see prompts/enemies/enemies_final_spiral.txt for the larger detailed version.

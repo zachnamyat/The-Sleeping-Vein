@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://batti753bb83d"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/loam_bench.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"loam_bench_placeable"
+display_name = "Loam Bench"
+description = "Place to craft tier-0 tools and Tier-1 stations."
+icon = ExtResource("2_icon")
+max_stack = 99
+item_type = 5
+tier = 0
+placeable_layer = &"structures"

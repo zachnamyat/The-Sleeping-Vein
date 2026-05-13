@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://d0n5n5vibvyv8"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_wooden_pickaxe"
+display_name = "Wooden Pickaxe"
+inputs = [{ "item_id": "loam", "count": 6 }]
+outputs = [{ "item_id": "wooden_pickaxe", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_crafting"
+description = "Cuts a basic pickaxe from packed loam. Tier 1 mining."

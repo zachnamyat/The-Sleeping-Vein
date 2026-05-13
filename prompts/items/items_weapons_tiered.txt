@@ -1,0 +1,27 @@
+# Tickets 6.1 + 6.2 + 6.3 — Weapon family inventory icons (Bow, Gun, Staff) across all tiers
+
+SUBJECT: A pixel-art sheet of three weapon families × 9 material tiers each = 27 inventory icons. Each weapon's silhouette is consistent within its family; only the materials/colors change across tiers.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 9×3 grid of 16×16 cells (9 columns of tiers × 3 rows of weapon families). Final sheet: 144×48. Layout:
+- Row 0 (Bows): Wooden Bow (tier 0) → Shaleseed Recurve (tier 1) → Clearstone Hunter (tier 2) → Saltbound Composite (tier 3) → Heartwood Living Bow (tier 4) → Tideglass Echo Bow (tier 5) → Ember-iron Forge Bow (tier 6) → Saltbound-steel Crown Bow (tier 7) → Auroric-ice Choir Bow (tier 8) → Diadem-gold Reliquary Bow (tier 9, 10th slot if grid allows; otherwise truncate to 9 tiers).
+- Row 1 (Guns): same tier ladder. Pre-Inversion gun designs — clockwork-styled, not modern firearms. Tier 0 is "Tinker Pistol" (scavenged pre-Inversion parts), each tier upgrades materials.
+- Row 2 (Staves): same tier ladder. Each staff has a faceted crystal tip in the tier's signature color.
+
+Each icon centered with 1-pixel padding. Each tier uses its biome's accent ramp as a material accent on top of base wood/metal.
+
+SIZE: Generate at 2304×768 source. Downsample 16× nearest-neighbor to 144×48 final.
+
+PALETTE: AAP-64 base + per-tier biome accent. Bow strings always white-grey. Gun mechanisms always dark iron. Staff crystals match tier biome accent. Background #FF00FF.
+
+LORE: Ranged weapons emerged from pre-Inversion technology adapted with Hollow materials. The Pyrenkin originally made guns; the Glasswrights made staves. Bows are pan-cultural. See docs/design/02_lore_to_mechanics_mapping.md §4 for tier material list.
+
+POST-GENERATION:
+- Downsample 144×48 nearest-neighbor.
+- Crop 27 separate 16×16 PNGs:
+  - assets/sprites/items/weapons/bow_tier0..tier8.png (9 files)
+  - assets/sprites/items/weapons/gun_tier0..tier8.png (9 files)
+  - assets/sprites/items/weapons/staff_tier0..tier8.png (9 files)
+- Manifest entries: item_bow_tier_<0..8>, item_gun_tier_<0..8>, item_staff_tier_<0..8>. Status "final".
+- Note: ammunition (arrows + bullets) is in items_ammo.txt.

@@ -1,0 +1,45 @@
+SUBJECT: A complete 16×16 pixel-art tile atlas for "The Emberforge Strata" biome — the sixth stratum, a magma-heated industrial zone of Pyrenkin forge-architecture; basalt floors, forge-iron walls, geothermal vents, ember-glow steel arches, and ribbons of slow-flowing magma.
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Inspired by Core Keeper / Stardew Valley / Songs of Conquest.
+
+COMPOSITION: 256×256, 16×16 grid of 16×16-pixel cells with no gaps.
+
+SIZE: Generate 1024×1024 source, downsample 4× nearest-neighbor to 256×256.
+
+ROW LAYOUT (see docs/design/00_tile_atlas_spec.md §2):
+- Row 0  : Floor variants — 8 base basalt-tile floors + 8 wear variants (heat-cracks, soot streaks, ember dust).
+- Rows 1–2: 47-tile Wang autotile (basalt-floor to forge-iron-wall transitions).
+- Row 3  : Wall caps — dark forge-iron silhouettes with hint of inner ember-glow at edge.
+- Row 4  : Wall bases — riveted forge-iron plate walls, Pyrenkin industrial seams.
+- Row 5  : Ore tiles — Ember-iron (tier-6, lore: "iron annealed in Aphelion-heat") in 8 mining sub-stages, plus 8 variants for raw magma-crystal.
+- Row 6  : Small decoration tiles — Pyrenkin forge-bellows, half-buried hammers, glowing coal piles, scattered slag chunks.
+- Row 7  : Small decoration tiles — Pyrenkin cultural artifacts (forge-mark brands, broken anvils, ceremonial smith-tongs).
+- Row 8  : Liquid surface — slow-flowing magma; viscous, bright orange-red, with crusty cooling edges.
+- Row 9  : Liquid edge transitions — magma meets basalt.
+- Row 10 : Hazard / trap tiles — geothermal vents (burst-fire), heat-shimmer tiles, cooling-crust thin floors.
+- Row 11 : Mural fragments — 8 tiles forming one Pyrenkin forge-mural of Skoldur in his pre-corruption guardianship (lore/05_aeon_sovereigns_bosses.md#boss-7).
+- Row 12 : Furniture & door components — heavy iron forge-doors, bellows-tube fittings, anvil surfaces.
+- Row 13 : Built-by-player variants — clean ember-iron plate, regular forge-mark inlays.
+- Row 14 : VFX overlay tiles — ember sparks, heat-haze shimmer overlays, magma-glow halos.
+- Row 15 : Reserved blank — solid #FF00FF.
+
+PALETTE: Restrict to the Emberforge ramp + black + magenta:
+  #1a0808  (deepest forge-shadow)
+  #3d150b  (dark forge-iron)
+  #7a2814  (mid forge-red)
+  #c44a1d  (lit ember)
+  #f08a2e  (bright fire)
+  #f8d167  (brightest molten highlight)
+  #000000  (outline only)
+  #FF00FF  (Row 15 only)
+
+LORE: The Emberforge Strata is a magma-heated zone of Pyrenkin forge-architecture — the Pyrenkin were industrial smiths who served the Aphelion Wardens and worked the forges that shaped Tideglass and Aphelion-iron. Their forges have not stopped since the Inversion. The Aeon Sovereign Skoldur the Forge-Forsaken rules here; he is the only Sovereign who recognizes returning Echo-Walkers. See lore/04_biomes.md#stratum-6--the-emberforge-strata.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, gaps between cells.
+
+POST-GENERATION:
+- Downsample 256×256 nearest-neighbor.
+- 16×16 grid alignment + palette check.
+- Save raw → assets/raw/tiles/emberforge_atlas_v1.png
+- Save final → assets/sprites/tiles/emberforge_atlas_16.png
+- Update manifest entry "tile_emberforge_atlas_16": status → "final".

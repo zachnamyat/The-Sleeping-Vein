@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://d4c7wh3q8uka7"]
+
+[ext_resource type="Script" path="res://scripts/enemies/boss.gd" id="1_boss"]
+[ext_resource type="Resource" path="res://resources/mobs/glaurem.tres" id="2_def"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="3_health"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="4_hurtbox"]
+[ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="5_hitbox"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 22.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_contact"]
+radius = 30.0
+
+[node name="Glaurem" type="CharacterBody2D" groups=["boss"]]
+collision_layer = 16
+collision_mask = 1
+script = ExtResource("1_boss")
+mob_def = ExtResource("2_def")
+boss_id = &"boss_glaurem"
+minion_def_path = "res://resources/mobs/stoneslough.tres"
+minion_spawn_period = 5.0
+minion_max_alive = 3
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+offset = Vector2(0, -24)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("CircleShape2D_body")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_health")
+max_health = 800
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_hurtbox")
+team = &"boss"
+
+[node name="HurtboxShape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -22)
+shape = SubResource("CircleShape2D_contact")
+
+[node name="ContactHitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("5_hitbox")
+base_damage = 12
+team = &"boss"
+
+[node name="ContactHitboxShape" type="CollisionShape2D" parent="ContactHitbox"]
+position = Vector2(0, -22)
+shape = SubResource("CircleShape2D_contact")

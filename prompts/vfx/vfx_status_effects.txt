@@ -1,0 +1,41 @@
+# Tickets 2.11 + 6.6 + 6.7 + 6.8 + 6.9 + 6.13 — Combat VFX (damage flash + DoT overlays + status effect overlays)
+
+SUBJECT: A pixel-art sheet of small VFX overlay sprites for combat status feedback: damage flash, burn, poison, cold, freeze, stun.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 6×4 grid of 16×16 cells (each VFX is a 4-frame strip). Final sheet: 96×64. Layout (one row per VFX, 4 frames per row):
+
+Row 0 — Damage Flash: 4-frame white-pulse overlay (frame 0: full white, frame 1: 80% white, frame 2: 40% white, frame 3: fade-out).
+Row 1 — Burn: 4-frame ember-flame mote that lifts upward off the affected entity.
+Row 2 — Poison: 4-frame green spore puffs (alternating dense/sparse).
+Row 3 — Cold: 4-frame frost-shimmer overlay with snowflake-mote drift.
+Row 4 — Freeze: 4-frame ice-block encasement (frame 0: thin ice forming, frame 3: fully encased translucent block).
+Row 5 — Stun: 4-frame yellow lightning-bolt circle rotating around the target's head.
+
+Each frame fills its 16×16 cell with the VFX content (the target it overlays is not drawn — these are pure overlays).
+
+SIZE: Generate at 1536×1024 source. Downsample 16× nearest-neighbor to 96×64 final.
+
+PALETTE: VFX-specific:
+- Damage flash: pure white #FFFFFF + slight #FFE0E0 tint on edges.
+- Burn: Emberforge ramp (#c44a1d, #f08a2e, #f8d167).
+- Poison: Verdancy ramp (#3e7a3b, #7bbf64, #c0e08a) for the spore puffs.
+- Cold: Drowned Aphelion ramp light end + AAP-64 whites (#6cd3e1, #cdf7f3, #FFFFFF).
+- Freeze: Drowned Aphelion ramp full + slight white core.
+- Stun: Final Spiral gold ramp + AAP-64 yellow.
+Background #FF00FF (keyed out).
+
+LORE: Status effects map 1:1 to Core Keeper mechanics with lore-flavor names per docs/design/02_lore_to_mechanics_mapping.md.
+
+POST-GENERATION:
+- Downsample 96×64 nearest-neighbor.
+- Slice into 6 horizontal 64×16 sub-strips (one per VFX), saved separately:
+  - assets/sprites/vfx/damage_flash.png (64×16, 4 frames)
+  - assets/sprites/vfx/status_burn.png (64×16, 4 frames)
+  - assets/sprites/vfx/status_poison.png (64×16, 4 frames)
+  - assets/sprites/vfx/status_cold.png (64×16, 4 frames)
+  - assets/sprites/vfx/status_freeze.png (64×16, 4 frames)
+  - assets/sprites/vfx/status_stun.png (64×16, 4 frames)
+- Wrap each as SpriteFrames at resources/sprites/vfx_<name>.tres with one looping animation.
+- Manifest entries: vfx_damage_flash, vfx_status_burn, vfx_status_poison, vfx_status_cold, vfx_status_freeze, vfx_status_stun. Status "final".

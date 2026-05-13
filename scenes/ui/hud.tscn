@@ -1,0 +1,86 @@
+[gd_scene load_steps=3 format=3 uid="uid://buckk0t138cqy"]
+
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="Script" path="res://scripts/ui/compass.gd" id="2_compass"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+
+[node name="TopLeft" type="Control" parent="."]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 124.0
+offset_bottom = 40.0
+
+[node name="HealthBar" type="ProgressBar" parent="TopLeft"]
+offset_right = 110.0
+offset_bottom = 12.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+modulate = Color(1, 0.4, 0.4, 1)
+
+[node name="ManaBar" type="ProgressBar" parent="TopLeft"]
+offset_top = 14.0
+offset_right = 110.0
+offset_bottom = 24.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+modulate = Color(0.45, 0.7, 1.0, 1)
+
+[node name="TopRight" type="Control" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -130.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = 28.0
+
+[node name="Slivers" type="Label" parent="TopRight"]
+offset_right = 122.0
+offset_bottom = 16.0
+text = "Slivers: 70000"
+modulate = Color(0.95, 0.84, 0.5, 1)
+horizontal_alignment = 2
+
+[node name="CompassDistance" type="Label" parent="TopRight"]
+offset_top = 56.0
+offset_right = 122.0
+offset_bottom = 70.0
+modulate = Color(0.7, 0.6, 0.4, 1)
+text = ""
+horizontal_alignment = 2
+
+[node name="Compass" type="Control" parent="TopRight"]
+offset_left = 86.0
+offset_top = 18.0
+offset_right = 122.0
+offset_bottom = 54.0
+script = ExtResource("2_compass")
+distance_label = NodePath("../CompassDistance")
+
+[node name="Center" type="Control" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -90.0
+offset_top = -60.0
+offset_right = 90.0
+offset_bottom = -32.0
+
+[node name="Toast" type="Label" parent="Center"]
+offset_right = 180.0
+offset_bottom = 14.0
+horizontal_alignment = 1
+modulate = Color(1, 0.95, 0.7, 1)
+visible = false
+
+[node name="SkillToast" type="Label" parent="Center"]
+offset_top = 16.0
+offset_right = 180.0
+offset_bottom = 30.0
+horizontal_alignment = 1
+modulate = Color(0.7, 1.0, 0.6, 1)
+visible = false

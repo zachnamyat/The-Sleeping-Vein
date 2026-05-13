@@ -1,0 +1,64 @@
+[gd_scene format=3 uid="uid://bippnn6kykos3"]
+
+[ext_resource type="Script" path="res://scripts/ui/endings_panel.gd" id="1_ending"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_end"]
+bg_color = Color(0.02, 0.02, 0.03, 0.97)
+border_color = Color(0.95, 0.85, 0.45, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="EndingsPanel" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_ending")
+
+[node name="Root" type="Panel" parent="."]
+offset_left = 40.0
+offset_top = 24.0
+offset_right = 440.0
+offset_bottom = 246.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_end")
+
+[node name="Title" type="Label" parent="Root"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 388.0
+offset_bottom = 22.0
+modulate = Color(0.97, 0.85, 0.5, 1)
+text = "The Diadem-Bearer has fallen."
+horizontal_alignment = 1
+
+[node name="Sub" type="RichTextLabel" parent="Root"]
+offset_left = 12.0
+offset_top = 24.0
+offset_right = 388.0
+offset_bottom = 58.0
+bbcode_enabled = true
+text = "[i]The Aphelion's last sliver hangs in the air. Three paths open before you.[/i]"
+
+[node name="Choices" type="HBoxContainer" parent="Root"]
+offset_left = 12.0
+offset_top = 64.0
+offset_right = 388.0
+offset_bottom = 90.0
+
+[node name="Restore" type="Button" parent="Root/Choices"]
+custom_minimum_size = Vector2(120, 24)
+text = "A — Restore"
+
+[node name="Break" type="Button" parent="Root/Choices"]
+custom_minimum_size = Vector2(120, 24)
+text = "B — Break"
+
+[node name="Become" type="Button" parent="Root/Choices"]
+custom_minimum_size = Vector2(120, 24)
+text = "C — Become"
+
+[node name="Credits" type="RichTextLabel" parent="Root"]
+offset_left = 12.0
+offset_top = 100.0
+offset_right = 388.0
+offset_bottom = 214.0
+bbcode_enabled = true

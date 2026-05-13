@@ -1,0 +1,27 @@
+# Ticket 5.8 — Aelstren the Cartographer (first NPC arrival)
+# Hero NPC — 2 polish passes recommended.
+
+SUBJECT: Aelstren the Cartographer — a Lattice Survivor cartographer. Silent, calm, wears a deep travel-cloak with many small map-rolls tucked into the inner pockets. Carries a leather mapping-case strapped across her back. Pale skin, wind-burned cheeks, brown braided hair, weather-soft. Indeterminate age (middle, but the Hollow ages people slowly). She speaks rarely. Her hands are stained with diluted ink.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A character sprite sheet covering idle (4-dir × 4 frames) and walk (4-dir × 6 frames). Layout matches walker_default.txt. Final sheet: 640×24. Plus a single 24×24 "portrait" frame for dialogue UI, appended at the right end (so final sheet becomes 664×24).
+
+Aelstren's silhouette is distinctive: cloak hem at row 22 (one pixel above feet), shoulder map-roll bulge visible from any side, mapping-case visible only from front/side views.
+
+SIZE: Generate at 10624×384 source. Downsample 16× nearest-neighbor to 664×24 final.
+
+PALETTE: AAP-64 — earth-tones for cloak (browns + warm grey), pale skin (#e8d5b7), brown hair (#6b5036). Small accents of Root Hollows gold (#d4a857) on map-roll ribbons. No infection markers — Aelstren is fully Lattice. Background #FF00FF.
+
+LORE: Aelstren is the first NPC to arrive at the Anchor after the player defeats Glaur-em. She brings a partial map of the strata — the player's first map fragment. She is silent because she lost her voice in an Echo encounter years ago. She rarely meets the Walker's eyes, but she signs her gift carefully. See lore/03_factions_and_civilizations.md and lore/11_environmental_storytelling.md (NPC arrival triggers).
+
+ANIMATION: Idle 4 frames per direction at 8 fps. Walk 6 frames per direction at 10 fps (slightly slower than the Walker — Aelstren walks measured).
+
+POST-GENERATION:
+- Downsample to 664×24 nearest-neighbor.
+- Key out magenta.
+- Palette check.
+- Save raw → assets/raw/npcs/aelstren_v1.png
+- Save final → assets/sprites/npcs/aelstren.png
+- Wrap as SpriteFrames at resources/sprites/npc_aelstren.tres ("idle_<dir>" 4f @ 8fps, "walk_<dir>" 6f @ 10fps, "portrait" 1f).
+- Manifest entry "npc_aelstren": status → "final".

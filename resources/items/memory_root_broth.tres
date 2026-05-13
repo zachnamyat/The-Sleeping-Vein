@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://batt8k8kuypft"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"memory_root_broth"
+display_name = "Memory-Root Broth"
+description = "Restores 30 HP + 20 mana. Buff: +10% magic damage for 90s."
+max_stack = 20
+item_type = 4
+tier = 2
+rarity = 2
+heal_amount = 30
+mana_restore = 20
+buff_id = &"buff_resonance_warmth"
+buff_duration_seconds = 90.0

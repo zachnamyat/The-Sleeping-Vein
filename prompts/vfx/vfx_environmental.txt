@@ -1,0 +1,30 @@
+# Tickets 10.15 + 10.16 + 11.4 + 11.5 + 11.6 + 12.3 — Environmental VFX
+
+SUBJECT: A sheet of environmental hazard / status VFX overlays: toxic spore cloud, salt corrosion, heat shimmer, cold mist, heat damage flash, cold damage flash, Hollowling Mote drift, Mote Tide event particle.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 4×2 grid of 16×16 cells, each cell being a 4-frame animation strip (4×16=64 per row of 16×16 frames). Restructure as: an 8-row × 4-frame layout in a single sheet 64×128. Each row is one VFX, 4 frames horizontal.
+
+Rows:
+- Row 0 — Toxic Spore (Verdancy hazard): 4-frame green spore puff that expands and dissipates.
+- Row 1 — Salt Corrosion (Necropolis): 4-frame salt-crystal-forming patch.
+- Row 2 — Heat Shimmer (Emberforge ambient): 4-frame distortion shimmer.
+- Row 3 — Cold Mist (Auroric Veil ambient): 4-frame icy breath fog.
+- Row 4 — Heat Damage Flash (player taking heat damage): 4-frame ember-overlay on the Walker.
+- Row 5 — Cold Damage Flash (player taking cold damage): 4-frame frost-overlay on the Walker.
+- Row 6 — Hollowling Mote Drift (single mote): 4-frame slow gold-puff drifting upward.
+- Row 7 — Mote Tide event particle (Final Spiral): 4-frame swarming-gold-particle wave.
+
+SIZE: Generate at 1024×2048 source. Downsample 16× nearest-neighbor to 64×128 final.
+
+PALETTE: Per-row biome accent (Verdancy green for spore, Necropolis salt-pale for corrosion, Emberforge red for heat, Auroric violet for cold, Final Spiral gold for motes). Background #FF00FF.
+
+LORE: Each VFX is keyed to a specific gameplay system. The Mote Tide is a Phase 12 event (ticket 12.3). Heat/cold damage are Phase 11 mechanics.
+
+POST-GENERATION:
+- Downsample 64×128 nearest-neighbor.
+- Slice into 8 horizontal 64×16 strips, one per VFX:
+  - assets/sprites/vfx/env_toxic_spore.png, env_salt_corrosion.png, env_heat_shimmer.png, env_cold_mist.png, env_heat_damage.png, env_cold_damage.png, env_hollowling_mote.png, env_mote_tide.png
+- Wrap each as SpriteFrames at resources/sprites/vfx_<name>.tres.
+- Manifest entries: vfx_env_toxic_spore through vfx_env_mote_tide. Status "final".

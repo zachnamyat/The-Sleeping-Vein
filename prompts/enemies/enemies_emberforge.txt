@@ -1,0 +1,22 @@
+# Phase 11 — Emberforge bestiary
+
+SUBJECT: 5 creature sprites for the Emberforge Strata. 3 hostile + 2 friendly.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: 16×16 strip of 5 cells. Final 80×16. Layout:
+- (0) Slag-Hound (hostile, infected) — quadruped forge-creature, ember-glow body, fast melee, burning-ground trail.
+- (1) Forge-Echo (hostile, Echo) — Pyrenkin smith ghost, hammer raised, ember-iron silhouette.
+- (2) Ember-Lurker (hostile, infected) — burrows in basalt, ambushes. Mostly shown emerging from a vent.
+- (3) Forge-Cricket (friendly) — heat-resistant insect; produces fuel-pellets.
+- (4) Charred Goat (friendly) — surviving Pyrenkin domesticated stock, ash-grey wool with ember-glow eyes.
+
+SIZE: Generate at 1280×256 source. Downsample 16× nearest-neighbor to 80×16 final.
+
+PALETTE: Emberforge ramp + Hollowling gold on hostiles. Background #FF00FF.
+
+LORE: See lore/06_creatures_and_enemies.md §6.2 (Stratum 6).
+
+POST-GENERATION:
+- Downsample, crop 5 separate 16×16 PNGs at assets/sprites/enemies/emberforge/.
+- Manifest entries: enemy_slag_hound through enemy_charred_goat. Status "final".

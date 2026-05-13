@@ -1,0 +1,31 @@
+# Tickets 5.5 + boss-drop relics across phases 5/10/11/12 — Key relics (one inventory icon each)
+
+SUBJECT: A pixel-art sheet of the 9 canonical key relics — boss drops that unlock progression. Each is rendered as an inventory icon.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 3×3 grid of 16×16 cells. Final sheet: 48×48. Layout:
+- (0,0) Stone-Father's Pulse — a pale, soft, palm-sized heart-shaped stone with a slow gold-pulse inside. (Glaur-em drop.)
+- (0,1) Vorr'kell's Lantern — a small Glasswright-style lantern with twisted crystal-shard housing, illuminates dark areas. (Vorr'kell drop.)
+- (0,2) Coral Veil — a delicate translucent veil of resonance-coral, allows brief underwater breathing. (Spawnmother drop.)
+- (1,0) Sythrenn's Crown — a flowering crown of vine and bloom, allows passage through toxic spore clouds. (Sythrenn drop, standard path.)
+- (1,1) Verdant Heart — a glowing core of living wood, second Loom power-up. (Auriax drop.)
+- (1,2) Tide-Heart — a cephalopod-organ-shaped fluid sphere, extended water-traversal. (Vol'thaar drop, kill path.)
+- (2,0) Skoldur's Hammer — a small forge-hammer relic in iron + ember-gold, breaks ember-locked doors. (Skoldur drop.)
+- (2,1) Choir's Resonance — a faceted aurora-crystal that hums in harmony, lets the Walker perceive Echoes more clearly. (Veyl-Aurora drop.)
+- (2,2) The Shattered Diadem — a broken gold circlet in three pieces, allows the player to choose the ending. (Diadem-Bearer drop.)
+
+Each icon is centered with 1-pixel padding. Subjects fill their cell.
+
+SIZE: Generate at 3072×3072 source. Downsample 64× nearest-neighbor to 48×48 final.
+
+PALETTE: Each relic uses its origin-biome's accent ramp. Stone-Father's Pulse uses Root Hollows gold; Vorr'kell's Lantern uses Glasswright pale-blue; Coral Veil uses Drowned Aphelion cyan; Sythrenn's Crown + Verdant Heart use Verdancy greens; Tide-Heart uses Drowned cyan; Skoldur's Hammer uses Emberforge orange; Choir's Resonance uses Auroric violet; Shattered Diadem uses Final Spiral gold (cracked, dimmer than its un-shattered state). Background #FF00FF.
+
+LORE: See lore/09_relics_artifacts_progression.md for full relic descriptions and lore-justifications. Each relic functionally replaces a Core Keeper progression key item per docs/design/02_lore_to_mechanics_mapping.md §8.
+
+POST-GENERATION:
+- Downsample 48×48 nearest-neighbor.
+- Crop into 9 separate 16×16 PNGs:
+  - assets/sprites/items/relics/stone_fathers_pulse.png, vorrkells_lantern.png, coral_veil.png, sythrenns_crown.png, verdant_heart.png, tide_heart.png, skoldurs_hammer.png, choirs_resonance.png, shattered_diadem.png
+- Manifest entries: item_stone_fathers_pulse through item_shattered_diadem (9 entries, category "item", biome per origin, lore_ref per relic, status "final").
+- Note: Sythrenn's Last Petal (mercy-kill alt drop) and Vol'thaar's Promise (mercy-release alt drop) are in items_extensions.txt (Phase 16 extension assets).

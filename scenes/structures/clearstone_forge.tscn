@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://18ir2owyo01n"]
+
+[ext_resource type="Script" path="res://scripts/structures/workstation.gd" id="1_ws"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cf"]
+size = Vector2(28, 28)
+
+[node name="ClearstoneForge" type="Area2D"]
+script = ExtResource("1_ws")
+station_id = &"clearstone_forge"
+display_name = "Clearstone Forge"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+offset = Vector2(0, -8)
+modulate = Color(0.7, 0.85, 1.0, 1)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_cf")

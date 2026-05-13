@@ -1,0 +1,134 @@
+GIMP Palette
+Name: Sleeping Vein
+Columns: 8
+# The Sleeping Vein palette — AAP-64 shared base + 9 biome 6-color accent ramps.
+# See docs/design/00_tile_atlas_spec.md §6 for the canonical reference.
+# Format: r g b name
+  0   0   0	black_outline
+255   0 255	magenta_background_keyed_out
+# --- Root Hollows ramp (warm earth) ---
+ 28  19  13	root_hollows_1
+ 58  42  28	root_hollows_2
+107  80  54	root_hollows_3
+164 133  79	root_hollows_4
+212 168  87	root_hollows_5
+240 210 125	root_hollows_6
+# --- Glasswright Reaches ramp (pale crystal blue) ---
+ 14  22  38	glasswright_1
+ 28  44  74	glasswright_2
+ 61  91 138	glasswright_3
+110 143 196	glasswright_4
+165 194 232	glasswright_5
+223 238 251	glasswright_6
+# --- Vesari Necropolis ramp (cold stone) ---
+ 22  22  22	vesari_1
+ 42  46  52	vesari_2
+ 74  81  89	vesari_3
+125 132 146	vesari_4
+178 185 195	vesari_5
+232 236 240	vesari_6
+# --- Sunless Verdancy ramp (poison green) ---
+ 12  26  15	verdancy_1
+ 31  64  34	verdancy_2
+ 62 122  59	verdancy_3
+123 191 100	verdancy_4
+192 224 138	verdancy_5
+243 246 194	verdancy_6
+# --- Drowned Aphelion ramp (deep sea) ---
+  3  16  26	drowned_1
+ 10  38  64	drowned_2
+ 21  82 122	drowned_3
+ 44 143 184	drowned_4
+108 211 225	drowned_5
+205 247 243	drowned_6
+# --- Emberforge ramp (magma) ---
+ 26   8   8	emberforge_1
+ 61  21  11	emberforge_2
+122  40  20	emberforge_3
+196  74  29	emberforge_4
+240 138  46	emberforge_5
+248 209 103	emberforge_6
+# --- Salt Wastes ramp (dawning sand) ---
+ 31  28  26	salt_1
+ 74  68  63	salt_2
+133 125 114	salt_3
+189 181 168	salt_4
+227 220 207	salt_5
+253 251 240	salt_6
+# --- Auroric Veil ramp (cold violet) ---
+ 10  18  36	auroric_1
+ 28  28  78	auroric_2
+ 58  53 160	auroric_3
+112  98 215	auroric_4
+199 168 238	auroric_5
+240 224 255	auroric_6
+# --- Final Spiral ramp (Aphelion gold) ---
+ 26  20   7	spiral_1
+ 62  46  14	spiral_2
+110  82  26	spiral_3
+168 127  36	spiral_4
+218 177  74	spiral_5
+248 224 136	spiral_6
+# --- AAP-64 shared core (skin / cloth / blood / glow / UI) ---
+255 255 255	aap_white
+192 192 192	aap_silver
+128 128 128	aap_grey
+ 64  64  64	aap_dark_grey
+255  87  87	aap_blood
+210 105  30	aap_skin_warm
+244 164  96	aap_skin_light
+139  69  19	aap_skin_dark
+ 70 130 180	aap_steel_blue
+124 252   0	aap_lawn_green
+255 215   0	aap_gold
+138  43 226	aap_violet
+255 165   0	aap_orange
+220 220 220	aap_gainsboro
+105 105 105	aap_dim_grey
+139  90  43	aap_leather
+160  82  45	aap_sienna
+205 133  63	aap_peru
+210 180 140	aap_tan
+245 222 179	aap_wheat
+255 218 185	aap_peach
+175 196 222	aap_light_steel
+176 196 222	aap_light_steel_2
+119 136 153	aap_slate
+112 128 144	aap_slate_grey
+ 25  25 112	aap_midnight
+  0   0 128	aap_navy
+  0   0 205	aap_medium_blue
+ 30 144 255	aap_dodger_blue
+  0 191 255	aap_deep_sky
+135 206 235	aap_sky
+135 206 250	aap_light_sky
+176 224 230	aap_powder
+175 238 238	aap_pale_turquoise
+ 64 224 208	aap_turquoise
+ 72 209 204	aap_medium_turquoise
+  0 206 209	aap_dark_turquoise
+102 205 170	aap_aquamarine
+ 60 179 113	aap_medium_sea_green
+ 46 139  87	aap_sea_green
+  0 128   0	aap_green
+ 34 139  34	aap_forest_green
+  0 100   0	aap_dark_green
+107 142  35	aap_olive_drab
+128 128   0	aap_olive
+189 183 107	aap_dark_khaki
+240 230 140	aap_khaki
+238 232 170	aap_pale_goldenrod
+250 250 210	aap_light_goldenrod
+255 255 224	aap_light_yellow
+255 250 205	aap_lemon_chiffon
+250 250 210	aap_light_goldenrod_2
+255 245 238	aap_seashell
+255 228 196	aap_bisque
+255 222 173	aap_navajo_white
+255 239 213	aap_papaya_whip
+255 245 245	aap_lavender_blush
+253 245 230	aap_old_lace
+255 235 205	aap_blanched_almond
+255 248 220	aap_cornsilk
+240 248 255	aap_alice_blue
+245 245 220	aap_beige

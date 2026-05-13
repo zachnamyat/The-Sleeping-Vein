@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="BiomeDef" format=3 uid="uid://cyiqqxswu232k"]
+
+[ext_resource type="Script" path="res://scripts/resources/biome_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"vesari_necropolis"
+display_name = "The Vesari Necropolis"
+stratum_index = 3
+distance_from_anchor_tiles = 160.0
+ring_thickness_tiles = 80.0
+floor_source_id = 6
+wall_source_id = 7
+ore_source_id = 8
+ore_id = &"saltbound_iron"
+ore_required_pickaxe_tier = 3
+ore_density_per_chunk = 5
+wall_density_per_chunk = 15
+ambient_high_color = Color(0.85, 0.88, 0.92, 1)
+ambient_low_color = Color(0.20, 0.22, 0.26, 1)
+mob_spawn_table = [&"stone_hopper"]
+mobs_per_chunk = 1
+hazard_id = &"salt_corrosion"
+hazard_damage_per_second = 1
+hazard_damage_type = &"physical"
+lore_ref = "lore/04_biomes.md#stratum-3--the-vesari-necropolis"

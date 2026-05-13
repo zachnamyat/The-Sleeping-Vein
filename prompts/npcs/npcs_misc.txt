@@ -1,0 +1,33 @@
+# Tickets 11.13 + 16.x + lore NPCs — Listeners-Below, Wormbound elders, Korya, Glasswright Remnant
+
+SUBJECT: Four less-prominent NPCs / NPC groups, each with a single character sprite sheet (idle + walk + portrait, same structure as Aelstren).
+
+STYLE: (see prompts/_STYLE.txt)
+
+CHARACTER PROFILES:
+
+1. **Listener-Below** (npc_listener_below.png)
+   - Masked endgame trader. Tall, robed in deep indigo-grey, wears a smooth obsidian mask carved with a single vertical crack. Carries a bundle of small wrapped goods.
+   - Palette: AAP-64 indigo/black + a small Final Spiral gold accent on the bundle.
+   - Lore: First appearance in Auroric Veil (ticket 11.13); face is revealed in Phase 16.9 extension. See lore/03_factions_and_civilizations.md.
+
+2. **Korya the Returned** (npc_korya.png)
+   - Ambiguous "previous Echo-Walker" NPC. Looks similar to the Walker (bald, plain attire) but their gold hand-glow is dimmer and inconsistent — sometimes off entirely. Eyes tired. Soft expression. Carries no tools — they have left walker-life behind.
+   - Palette: AAP-64 Walker-baseline tones, slightly desaturated. Final Spiral gold hand-glow is rendered weak (only the dimmest hex, #a87f24).
+   - Lore: lore/03_factions_and_civilizations.md §3.1.4 — Korya may be a previous Walker. The ambiguity is intentional; never confirm in dialogue.
+
+3. **Glasswright Remnant** (npc_glasswright_remnant.png)
+   - Member of a sealed enclave of surviving Glasswrights behind the Quiet Forge gate. Tall, slender, pale-skinned, wears the modular geometric Glasswright robes in pale blue + cream. Carries a small Concord light-collector (lantern variant).
+   - Palette: Glasswright Reaches ramp + AAP-64 character tones.
+   - Lore: lore/03_factions_and_civilizations.md §Glasswright Concord. Multi-NPC enclave behind Quiet Forge.
+
+4. **Wormbound Elder** (already generated as cell 4 of enemies_salt_wastes.txt — skip here)
+   - Note: ensure the Wormbound elder sprite from that sheet is duplicated/registered properly in the NPCs folder.
+
+SIZES: Per character: 10624×384 source → 664×24 final (matches npc_aelstren.txt structure).
+
+POST-GENERATION (per NPC):
+- Generate the three NPCs above (Listener-Below, Korya, Glasswright Remnant) — Wormbound Elder is already covered.
+- Save raws/finals to assets/raw/npcs/ and assets/sprites/npcs/.
+- Wrap as SpriteFrames at resources/sprites/npc_<name>.tres.
+- Manifest entries: npc_listener_below, npc_korya, npc_glasswright_remnant. Status "final".

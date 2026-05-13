@@ -1,0 +1,25 @@
+# Ticket 1.7 + 1.10 — Aphelion Beat pulse VFX (global ambient effect)
+
+SUBJECT: A pixel-art VFX overlay — a soft golden ring-pulse that emanates from screen-edges and the Walker's hand, synced to the 23-second Aphelion Beat cycle. Used as a subtle ambient overlay layer over gameplay.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A horizontal sprite strip of 6 frames at 32×32 each. Final: 192×32. The pulse builds and decays over 23 seconds — frame 0 is the start (faint), frame 2 is the peak, frame 5 is the dim recovery before the next Beat begins.
+
+Each frame shows a single soft golden ring expanding outward, with subtle gold-mote particles drifting along the ring. The ring is intentionally low-opacity so it doesn't dominate gameplay.
+
+SIZE: Generate at 3072×512 source. Downsample 16× nearest-neighbor to 192×32 final.
+
+PALETTE: Final Spiral gold ramp (#a87f24 → #dab14a → #f8e088) for the ring + AAP-64 gentle yellows for motes. Background #FF00FF.
+
+LORE: The Aphelion Beat is the 23-second pulse of the captive sun. Audio cue lives in 1.10. The visual Beat is felt: hand-of-light VFX intensifies on Beat, Aphelion-sliver readout shimmers, certain mob types (Hollowling-infected) flicker their eye-glow on Beat. See lore/01_cosmology_and_universe.md and lore/07_echo_walkers_player.md.
+
+ANIMATION: 6 frames at sync to 23-second Beat (effective FPS varies; Antigravity should drive frame index from a Beat-cycle timer in code, not a fixed FPS).
+
+POST-GENERATION:
+- Downsample 192×32 nearest-neighbor.
+- Key out magenta.
+- Save raw → assets/raw/vfx/aphelion_beat_v1.png
+- Save final → assets/sprites/vfx/aphelion_beat.png
+- Wrap as SpriteFrames at resources/sprites/vfx_aphelion_beat.tres ("pulse" 6f, custom-timed in code per Beat cycle).
+- Manifest entry "vfx_aphelion_beat": status → "final".

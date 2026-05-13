@@ -1,0 +1,29 @@
+# Ticket 0.2 — AI Image Generator plugin smoke test
+#
+# This is the FIRST asset generated. Its purpose is to verify the plugin pipeline end-to-end:
+# generate → save to assets/raw/ → key out magenta → save final → manifest entry.
+# The asset itself is throwaway, but its successful round-trip proves the pipeline works.
+
+SUBJECT: A single pixel-art shaleseed ore tile — a chunk of pale stone with three small luminous golden flecks of "shaleseed metal" inside, cracked just enough to show one fleck poking through. Top-down view.
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Inspired by Core Keeper / Stardew Valley.
+
+COMPOSITION: Subject centered with 1 pixel of padding inside the 16×16 frame. Solid magenta background (#FF00FF) which will be keyed out.
+
+SIZE: Generate at 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Restrict to the Root Hollows ramp ONLY plus pure black and pure magenta:
+  #1c130d, #3a2a1c, #6b5036, #a4854f, #d4a857, #f0d27d, #000000, #FF00FF.
+
+LORE: Shaleseed is the tier-1 metal of the Root Hollows — a pale-gold metal that forms in shale veins like seeds. The first material the Walker mines. See lore/04_biomes.md#stratum-1--the-root-hollows.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border.
+
+POST-GENERATION:
+- Downsample 16×16 nearest-neighbor.
+- Key out magenta.
+- Palette check: only the 6 Root Hollows ramp colors + black + transparency.
+- Save raw → assets/raw/tiles/smoke_test_shaleseed_v1.png
+- Save final → assets/sprites/tiles/smoke_test_shaleseed.png
+- Manifest entry "smoke_test_shaleseed": status → "final".
+- This entry can be deleted once Phase 0 closes; its existence proves the pipeline ran.

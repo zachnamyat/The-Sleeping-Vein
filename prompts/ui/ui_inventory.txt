@@ -1,0 +1,34 @@
+# Tickets 3.1 + 3.3 + 3.4 — Inventory grid + tooltip frame + equipment slots panel
+
+SUBJECT: A pixel-art UI sprite sheet for the inventory system: 3×10 inventory grid panel, equipment-slots panel (8 slots + pet slot), tooltip frame.
+
+STYLE: (see prompts/_STYLE.txt) — UI on 8-pixel grid.
+
+COMPOSITION: A single composite sheet. Final size: 256×128. Layout:
+
+Panel A — Inventory Grid (top-left, 0..143 × 0..47): 3 rows × 10 cols of 16×16 cells, total grid 160×48. Plus 8 pixels of frame padding on all sides (total panel 176×64, position 0,0). Style: dark recessed metal frame with rivets at corners; inner cells have subtle 1-pixel inner shadow.
+
+Panel B — Equipment slots (top-right, 144..255 × 0..47): vertical column of 9 slot-cells (8 equipment + 1 pet) arranged in a humanoid silhouette layout:
+  - Head (top), Chest (mid-upper), Legs (mid-lower), Boots (bottom)
+  - Two hand slots flanking Chest
+  - Accessory slot above head
+  - Cape slot below Chest
+  - Pet slot at bottom-right
+Each slot is 16×16 with a soft outline icon (head/chest/hand/foot/cape/cuff/cuff/pet) embossed faintly to hint at slot-type.
+
+Panel C — Tooltip frame (bottom-left, 0..127 × 48..127): generic tooltip box 128×80. Dark background, thin Aphelion-gold border (#d4a857), with internal areas for: name (top), rarity color-strip, body text, stats list. Use a procedural-tooltip placeholder showing layout.
+
+SIZE: Generate at 4096×2048 source. Downsample 16× nearest-neighbor to 256×128 final.
+
+PALETTE: AAP-64 dark UI greys for panels + Aphelion gold for accents/highlights. Rarity color strip uses Core Keeper rarity colors (white/green/blue/purple/yellow). Background #FF00FF.
+
+LORE: Inventory persistence is part of Walker-resonance — items the Walker carries do not "spoil" because they are anchored to the Walker's resonance signature (lore/07_echo_walkers_player.md §7.2 references resonant compatibility for shared items).
+
+POST-GENERATION:
+- Downsample 256×128 nearest-neighbor.
+- Crop:
+  - assets/sprites/ui/inventory_grid_panel.png (176×64)
+  - assets/sprites/ui/equipment_slots_panel.png (112×48)
+  - assets/sprites/ui/tooltip_frame.png (128×80)
+- Manifest entries: ui_inventory_grid_panel, ui_equipment_slots_panel, ui_tooltip_frame. Category "ui", status "final".
+- Wire to scenes/ui/inventory.tscn in ticket 3.1 implementation.

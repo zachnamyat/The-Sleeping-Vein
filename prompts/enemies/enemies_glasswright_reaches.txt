@@ -1,0 +1,24 @@
+# Phase 2-4 — Glasswright Reaches bestiary sprite set
+
+SUBJECT: 5 creature sprites for the Glasswright Reaches biome (crystal-and-pale-clay civilization-ruin). 3 hostile + 2 friendly.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A horizontal 16×16 strip of 5 cells. Final: 80×16. Layout:
+- (0) Glassglint (hostile, infected) — crystal-skinned skink, blue-shard carapace, reflects ranged. Gold-vein corruption seams.
+- (1) Concord Wraith (hostile, infected) — slow ranged ghost-figure in tattered Concord robes, pale blue glow.
+- (2) Chime-Stalker (hostile, infected) — long predator, crystal-pointed limbs, faint chime indicator pixel above head.
+- (3) Singing Moth (friendly) — pale moth with crystal-veined wings, soft glow.
+- (4) Veinglass Spider (friendly) — large crystal-spider, non-aggressive.
+
+SIZE: Generate at 1280×256 source. Downsample 16× nearest-neighbor to 80×16 final.
+
+PALETTE: Glasswright Reaches ramp + AAP-64 character tones + Hollowling gold-vein overlay on the 3 hostile types. Background #FF00FF.
+
+LORE: See lore/06_creatures_and_enemies.md §6.2 (Stratum 2). The Chime-Stalker's audible cue is a Phase 6 audio polish (15.7); visually here, render the chime as a single faint white pixel above its head.
+
+POST-GENERATION:
+- Downsample 80×16 nearest-neighbor.
+- Crop 5 separate 16×16 PNGs:
+  - assets/sprites/enemies/glasswright_reaches/glassglint.png, concord_wraith.png, chime_stalker.png, singing_moth.png, veinglass_spider.png
+- Manifest entries: enemy_glassglint, enemy_concord_wraith, enemy_chime_stalker, enemy_singing_moth, enemy_veinglass_spider. Biome "glasswright_reaches", status "final".

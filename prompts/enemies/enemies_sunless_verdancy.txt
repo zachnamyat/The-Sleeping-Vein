@@ -1,0 +1,24 @@
+# Ticket 10.5 — Sunless Verdancy bestiary sprite set
+
+SUBJECT: 5 creature sprites for the Sunless Verdancy biome. 3 hostile (infected) + 2 friendly.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A horizontal 16×16 strip of 5 cells. Final: 80×16. Layout:
+- (0) Spore-Lurk (hostile) — bipedal fungus-creature, glowing cap, releases poison spores.
+- (1) Vine-Stalker (hostile) — camouflaged mid-size predator, vine-tendril limbs.
+- (2) Bloom-Hag (hostile, larger, 24×24 ideally — render at 16×16 here, separate solo 24×24 prompt later) — stationary flora-monster, ranged poison-spit. Bright flowering crown.
+- (3) Verdant Hare (friendly) — small hopping forest creature, soft green tones.
+- (4) Glow-Crane (friendly) — long-legged bird with bioluminescent feather tips.
+
+SIZE: Generate at 1280×256 source. Downsample 16× nearest-neighbor to 80×16 final.
+
+PALETTE: Sunless Verdancy ramp + AAP-64 character tones + Hollowling gold-vein overlay on hostiles. Background #FF00FF.
+
+LORE: See lore/06_creatures_and_enemies.md §6.2 (Stratum 4). Brindle Quench-of-Coals has a quiet sub-quest if the Walker refrains from killing a Glow-Crane.
+
+POST-GENERATION:
+- Downsample 80×16 nearest-neighbor.
+- Crop 5 separate 16×16 PNGs:
+  - assets/sprites/enemies/sunless_verdancy/spore_lurk.png, vine_stalker.png, bloom_hag.png, verdant_hare.png, glow_crane.png
+- Manifest entries: enemy_spore_lurk through enemy_glow_crane. Biome "sunless_verdancy", status "final".

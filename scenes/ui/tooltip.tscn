@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://1n7p777118wy"]
+
+[ext_resource type="Script" path="res://scripts/ui/tooltip.gd" id="1_tt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tt"]
+bg_color = Color(0.03, 0.03, 0.04, 0.9)
+border_color = Color(0.85, 0.66, 0.34, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_top = 1
+border_width_bottom = 1
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_left = 2
+corner_radius_bottom_right = 2
+
+[node name="Tooltip" type="Control"]
+script = ExtResource("1_tt")
+mouse_filter = 2
+
+[node name="Panel" type="PanelContainer" parent="."]
+offset_right = 160.0
+offset_bottom = 60.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tt")
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+modulate = Color(1, 0.95, 0.7, 1)
+text = "Item Name"
+
+[node name="Detail" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+modulate = Color(0.86, 0.85, 0.80, 1)
+text = "description"
+autowrap_mode = 3

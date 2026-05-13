@@ -1,0 +1,47 @@
+SUBJECT: A complete 16×16 pixel-art tile atlas for "The Root Hollows" biome — the outermost stratum of the inverted earth in The Sleeping Vein, a region of soft loam, shale outcroppings, dangling root networks, and scattered mushroom growths under filtered Aphelion light. The atlas contains floor tiles, an autotile transition set, capped wall tiles, ore tiles, and decoration tiles arranged on a 16×16 grid (256 total cells).
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows, no per-tile perspective. Inspired visually by Core Keeper, Stardew Valley, and Songs of Conquest pixel-art density.
+
+COMPOSITION: A 256×256 pixel image divided into a 16×16 grid; each cell is exactly 16×16 pixels with no gaps, padding, or borders between cells. Each cell is a self-contained tile whose content fills its 16×16 bounding box.
+
+SIZE: Generate at 1024×1024 source resolution. Final asset is 256×256 (4× nearest-neighbor downsample). Each tile is 64×64 in the source image so the 16×16 grid survives the downsample exactly.
+
+ROW LAYOUT (canonical — match exactly, see docs/design/00_tile_atlas_spec.md §2):
+- Row 0  : Floor variants — 8 base loam tiles + 8 wear/debris variants (scuffs, paw-prints, scattered shale fragments, faint root-tendril impressions).
+- Row 1  : 47-tile Wang autotile set, part 1 (16 cells — loam-to-shale-wall edge blending).
+- Row 2  : 47-tile Wang autotile set, part 2 + part 3 (31 cells; final 2 cells blank/unused).
+- Row 3  : Wall caps — top 16×8 half. Dark silhouette implying the 3/4 lean overhang of a shale ledge. 8 cap variants + 8 corner/end-cap variants.
+- Row 4  : Wall bases — bottom 16×16. Vertical rough shale-and-loam texture, with occasional dangling root tendrils. Match cap variants 1-for-1.
+- Row 5  : Ore tiles — Shaleseed ore (tier-1 metal, "shaleseed" because it forms in shale veins like seeds) in 8 visible mining sub-stages (intact → cracked → 50% broken → near-destroyed), plus 8 variants for Memory Root (rare gnarled root with a faint inner pulse — used in early Echo-Walker upgrades).
+- Row 6  : Small decoration tiles — root tendrils, Pale Cap mushrooms (food, weak healing), scattered shale fragments, small puddles of seeping groundwater.
+- Row 7  : Small decoration tiles — pre-Inversion artifacts (worn stone shards, half-buried metal fragments, eroded carved symbols hinting at the buried surface beneath).
+- Row 8  : Liquid surface — slow seeping groundwater, dim and slightly reflective.
+- Row 9  : Liquid edge transitions — 4-direction blends + corners.
+- Row 10 : Hazard / trap tiles — root snares, soft loose loam (sink hazard), occasional glyphs of Hollowling corruption (sickly darker earth tendrils).
+- Row 11 : Mural fragments — 8 tiles forming one worn Hollowkin warding glyph spelling a fragmentary protective phrase (lore in lore/10_language_glyphs_writing.md).
+- Row 12 : Furniture & door 16×16 components — simple wooden plank doors, loam-and-stone fireplace front, rough shelving.
+- Row 13 : Built-by-player tile variants — cleaner placed-loam tiles, regular brick-like cuts (distinct from natural placement; slightly brighter, more uniform).
+- Row 14 : VFX overlay tiles — soft golden Aphelion-light glow halos, dust motes, faint gold sparkles where Aphelion light filters through cracks.
+- Row 15 : Reserved blank/debug — leave as solid magenta (#FF00FF).
+
+PALETTE: Restrict to the Root Hollows accent ramp ONLY plus pure black for outlines and pure magenta for the row-15 blank cells:
+  #1c130d  (deepest shadow — under-ledge darkness)
+  #3a2a1c  (dark loam)
+  #6b5036  (warm earth — main floor tone)
+  #a4854f  (lit loam — Aphelion-touched surfaces)
+  #d4a857  (Aphelion gold accent)
+  #f0d27d  (brightest Aphelion highlight)
+  #000000  (outline only — sparingly, never as a full fill)
+  #FF00FF  (Row 15 reserved cells only; never inside any tile's content)
+
+LORE: The Root Hollows is the outermost stratum of the inverted earth — soft loam, shale outcroppings, root networks from above-folded forests, scattered mushroom growths, slow groundwater seeping through cracks in the world-shell. The Anchor plateau sits here. Aphelion light filters through cracks giving everything a soft golden cast; the mood is "dim sunset under a high ceiling" — cozy and slightly melancholy. The Aeon Sovereign Glaur-em's corruption is visible in darker, sicklier earth tendrils. See lore/04_biomes.md#stratum-1--the-root-hollows.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, per-tile 3D rendering, mismatched cell sizes, gaps between cells, JPG compression artifacts, color bleed across cell boundaries.
+
+POST-GENERATION:
+- Downsample to 256×256 with nearest-neighbor.
+- Verify each cell is exactly 16×16 by gridding at 16px intervals.
+- Palette check: every non-magenta pixel matches one of the 6 Root Hollows ramp hex values or pure black.
+- Save raw → assets/raw/tiles/root_hollows_atlas_v1.png
+- Save final → assets/sprites/tiles/root_hollows_atlas_16.png
+- Update manifest entry "tile_root_hollows_atlas_16": status → "final".

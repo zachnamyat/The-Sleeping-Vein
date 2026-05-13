@@ -1,0 +1,45 @@
+SUBJECT: A complete 16×16 pixel-art tile atlas for "The Vesari Necropolis" biome — the third stratum, a vast salt-encrusted folded coastline where the upturned wrecks of Vesari ships are fused into the stone, mausoleums dot the landscape, and old quay walls lead nowhere; the Vesari called this *Threnos*, "the place of remembered keels."
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Inspired by Core Keeper / Stardew Valley / Songs of Conquest.
+
+COMPOSITION: 256×256 image, 16×16 grid of 16×16-pixel cells with no gaps.
+
+SIZE: Generate 1024×1024 source, downsample 4× nearest-neighbor to 256×256.
+
+ROW LAYOUT (see docs/design/00_tile_atlas_spec.md §2):
+- Row 0  : Floor variants — 8 base salt-encrusted stone tiles + 8 wear (cracked salt crusts, weathered iron stains, bone fragments).
+- Rows 1–2: 47-tile Wang autotile (salt-stone to mausoleum-wall transitions).
+- Row 3  : Wall caps — dark silhouettes hinting at carved mausoleum cornices.
+- Row 4  : Wall bases — layered architecture: pre-Inversion stone below, Continuity-era brick above. Match cap variants 1-for-1.
+- Row 5  : Ore tiles — Saltbound iron (tier-3, lore: "Vesari ship-iron preserved by the salt") in 8 mining sub-stages, plus 8 variants for Mausoleum stone (placeable structural).
+- Row 6  : Small decoration tiles — scattered salt crystals, weathered ship-bone scrimshaw fragments, small bronze ship-fittings, mounds of dried salt.
+- Row 7  : Small decoration tiles — Vesari grave-markers (carved stone keel-stones), broken Continuity-era lanterns, tablet shards (lore items — see lore/11_environmental_storytelling.md).
+- Row 8  : Liquid surface — saltwater puddles, cold and even-lit.
+- Row 9  : Liquid edge transitions.
+- Row 10 : Hazard / trap tiles — salt-corrosion patches (degrades equipment), Salt-Bound ritual circles (passive glyphs that wake when a Walker stands on them).
+- Row 11 : Mural fragments — 8 tiles forming one Vesari sea-mural (the Year of No Stars; see lore/02_history_and_timeline.md).
+- Row 12 : Furniture & door components — wooden ship-door fragments fused with stone, ship-rib arches, half-buried anchors as doorways.
+- Row 13 : Built-by-player variants — clean salt-stone brick, regular cuts.
+- Row 14 : VFX overlay tiles — cold museum-light halos, distant bell-ring glints, salt crystallization shimmers.
+- Row 15 : Reserved blank — solid #FF00FF.
+
+PALETTE: Restrict to the Vesari Necropolis ramp + black + magenta:
+  #161616  (deepest mausoleum shadow)
+  #2a2e34  (dark salt-stone)
+  #4a5159  (mid grey)
+  #7d8492  (lit grey)
+  #b2b9c3  (salt-pale grey)
+  #e8ecf0  (brightest salt-white)
+  #000000  (outline only)
+  #FF00FF  (Row 15 only)
+
+LORE: A mournful, salt-encrusted stratum — the Vesari were a people of the sea, and their entire culture was folded into a dry tomb at the Inversion. Most of their ships were docked; many had crews aboard, waiting to sail at the Year of No Stars. The fossilized remains of those crews are interred in the mausoleums; pre-Inversion architecture lies under Continuity-era rebuilds. See lore/04_biomes.md#stratum-3--the-vesari-necropolis.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, per-tile 3D rendering, gaps between cells.
+
+POST-GENERATION:
+- Downsample 256×256 nearest-neighbor.
+- 16×16 grid alignment + palette check.
+- Save raw → assets/raw/tiles/vesari_necropolis_atlas_v1.png
+- Save final → assets/sprites/tiles/vesari_necropolis_atlas_16.png
+- Update manifest entry "tile_vesari_necropolis_atlas_16": status → "final".

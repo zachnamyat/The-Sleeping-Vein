@@ -1,0 +1,45 @@
+SUBJECT: A complete 16×16 pixel-art tile atlas for "The Auroric Veil" biome — the eighth stratum, a frozen high-altitude zone of crystalline ice formations, aurora-storm overlays, and ancient spire-architecture; cold mechanics dominate, and the air shimmers with violet-and-rose auroras even at the surface.
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Inspired by Core Keeper / Stardew Valley / Songs of Conquest.
+
+COMPOSITION: 256×256, 16×16 grid of 16×16-pixel cells with no gaps.
+
+SIZE: Generate 1024×1024 source, downsample 4× nearest-neighbor to 256×256.
+
+ROW LAYOUT (see docs/design/00_tile_atlas_spec.md §2):
+- Row 0  : Floor variants — 8 base ice-and-stone tiles + 8 wear variants (frost-cracks, snow-drift patches, faint aurora-mark imprints).
+- Rows 1–2: 47-tile Wang autotile (ice-floor to spire-wall transitions).
+- Row 3  : Wall caps — dark spire-silhouettes with faint inner violet-glow at the edge.
+- Row 4  : Wall bases — crystalline ice spire-walls, with embedded auroric-veil filaments.
+- Row 5  : Ore tiles — Auroric ice (tier-8, lore: "ice that remembers the song of the Veil") in 8 mining sub-stages, plus 8 variants for Choir's-Resonance fragments.
+- Row 6  : Small decoration tiles — frost-flowers, hanging icicles, broken Veil-spire fragments, drifting snow patches.
+- Row 7  : Small decoration tiles — Veyl-Aurora cultural artifacts (resonant tuning forks, choir-stone shards, suspended chime-clusters).
+- Row 8  : Liquid surface — supercooled liquid pools; almost-frozen, faintly luminous.
+- Row 9  : Liquid edge transitions.
+- Row 10 : Hazard / trap tiles — ice-cracks, aurora-flare burst tiles, freezing-mist vents.
+- Row 11 : Mural fragments — 8 tiles forming one mural of the Veyl-Aurora's seven spires in pre-corruption choral harmony (lore/05_aeon_sovereigns_bosses.md#boss-9).
+- Row 12 : Furniture & door components — ice-spire doors, frost-arch frames, suspended chime-stone bells.
+- Row 13 : Built-by-player variants — clean auroric-ice planks, regular Veil-filament inlays.
+- Row 14 : VFX overlay tiles — aurora-ribbon overlays (violet to pink), frost shimmer halos, drifting snow motes.
+- Row 15 : Reserved blank — solid #FF00FF.
+
+PALETTE: Restrict to the Auroric Veil ramp + black + magenta:
+  #0a1224  (deepest night-shadow)
+  #1c1c4e  (dark indigo)
+  #3a35a0  (mid aurora-blue)
+  #7062d7  (lit Auroric purple)
+  #c7a8ee  (bright rose-violet)
+  #f0e0ff  (brightest aurora-pink highlight)
+  #000000  (outline only)
+  #FF00FF  (Row 15 only)
+
+LORE: A frozen high-altitude zone where the Veil — a ribbon of resonance-light — falls visibly through the strata, painting auroras even at the surface. The Veyl-Aurora is a collective Sovereign of seven spires, each a former singer-priest of the Concord. The encounter mechanic is harmony-themed: spires fall to their proper musical sequence. See lore/04_biomes.md#stratum-8--the-auroric-veil.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, gaps between cells.
+
+POST-GENERATION:
+- Downsample 256×256 nearest-neighbor.
+- 16×16 grid alignment + palette check.
+- Save raw → assets/raw/tiles/auroric_veil_atlas_v1.png
+- Save final → assets/sprites/tiles/auroric_veil_atlas_16.png
+- Update manifest entry "tile_auroric_veil_atlas_16": status → "final".

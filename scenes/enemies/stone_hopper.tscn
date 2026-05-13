@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://cr055mgcfwlr1"]
+
+[ext_resource type="Script" path="res://scripts/enemies/mob.gd" id="1_mob"]
+[ext_resource type="Resource" path="res://resources/mobs/stone_hopper.tres" id="2_def"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="3_health"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="4_hurtbox"]
+[ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="5_hitbox"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body"]
+radius = 5.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_contact"]
+radius = 7.0
+
+[node name="StoneHopper" type="CharacterBody2D" groups=["mob"]]
+collision_layer = 16
+collision_mask = 1
+script = ExtResource("1_mob")
+mob_def = ExtResource("2_def")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+offset = Vector2(0, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -2)
+shape = SubResource("CircleShape2D_body")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_health")
+max_health = 18
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_hurtbox")
+team = &"enemy"
+
+[node name="HurtboxShape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_contact")
+
+[node name="ContactHitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("5_hitbox")
+base_damage = 4
+team = &"enemy"
+
+[node name="ContactHitboxShape" type="CollisionShape2D" parent="ContactHitbox"]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_contact")

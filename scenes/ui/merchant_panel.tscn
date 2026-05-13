@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://b8y8mw15laxb1"]
+
+[ext_resource type="Script" path="res://scripts/ui/merchant_panel.gd" id="1_mch"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mch"]
+bg_color = Color(0.04, 0.03, 0.03, 0.96)
+border_color = Color(0.95, 0.84, 0.5, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="MerchantPanel" type="CanvasLayer"]
+layer = 80
+script = ExtResource("1_mch")
+
+[node name="Root" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -240.0
+offset_top = -110.0
+offset_right = 240.0
+offset_bottom = 110.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_mch")
+
+[node name="Title" type="Label" parent="Root"]
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 472.0
+offset_bottom = 18.0
+modulate = Color(0.97, 0.85, 0.5, 1)
+text = "Trade"
+horizontal_alignment = 1
+
+[node name="Coins" type="Label" parent="Root"]
+offset_left = 8.0
+offset_top = 198.0
+offset_right = 472.0
+offset_bottom = 212.0
+modulate = Color(0.95, 0.84, 0.5, 1)
+text = "Ancient Coins: 0"
+horizontal_alignment = 1
+
+[node name="Cols" type="HBoxContainer" parent="Root"]
+offset_left = 8.0
+offset_top = 22.0
+offset_right = 472.0
+offset_bottom = 192.0
+
+[node name="BuyCol" type="VBoxContainer" parent="Root/Cols"]
+
+[node name="BuyLabel" type="Label" parent="Root/Cols/BuyCol"]
+modulate = Color(0.7, 1, 0.6, 1)
+text = "BUY"
+
+[node name="Scroll" type="ScrollContainer" parent="Root/Cols/BuyCol"]
+custom_minimum_size = Vector2(232, 150)
+
+[node name="List" type="VBoxContainer" parent="Root/Cols/BuyCol/Scroll"]
+custom_minimum_size = Vector2(228, 150)
+
+[node name="SellCol" type="VBoxContainer" parent="Root/Cols"]
+
+[node name="SellLabel" type="Label" parent="Root/Cols/SellCol"]
+modulate = Color(1.0, 0.7, 0.5, 1)
+text = "SELL"
+
+[node name="Scroll" type="ScrollContainer" parent="Root/Cols/SellCol"]
+custom_minimum_size = Vector2(232, 150)
+
+[node name="List" type="VBoxContainer" parent="Root/Cols/SellCol/Scroll"]
+custom_minimum_size = Vector2(228, 150)

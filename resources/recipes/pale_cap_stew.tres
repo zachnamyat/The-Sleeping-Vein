@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://b1eot81y0mfaj"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_pale_cap_stew"
+display_name = "Pale Cap Stew"
+inputs = [{ "item_id": "pale_cap", "count": 2 }]
+outputs = [{ "item_id": "pale_cap_stew", "count": 1 }]
+stations = [&"cooking_pot"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_cooking"

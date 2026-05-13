@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MobDef" load_steps=3 format=3 uid="uid://mobdef0diadwarden"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/final_spiral/diadem_reader.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"diadem_warden"
+display_name = "Diadem Warden"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 140
+armor = 14
+contact_damage = 24
+move_speed = 18.0
+detection_radius = 160.0
+behavior = 2
+xp_skill = &"skill_melee"
+xp_value = 40
+biome = &"final_spiral"

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwwj45iy8jh6"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"memory_root_seed"
+display_name = "Memory Root Cutting"
+description = "Plant on loam. Slower-growing rare root."
+max_stack = 999
+item_type = 5
+tier = 1
+rarity = 1

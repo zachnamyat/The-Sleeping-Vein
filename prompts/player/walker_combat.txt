@@ -1,0 +1,36 @@
+# Ticket 1.1 + 2.5 + 6.1/6.2/6.3 — Walker combat sprites (4 weapon classes × 4 directions × 4 frames)
+# Hero asset — 2 polish passes recommended.
+
+SUBJECT: Echo-Walker attack-swing sprite sheets across 4 weapon classes — melee (one-handed sword), ranged (bow draw + release), magic (staff casting), summoning (calling-gesture). The Walker is the same baseline figure as walker_default.txt (bald, plain attire, hand-glow).
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: Generate FOUR separate sprite sheets, one per weapon class. Each sheet is a 4-direction × 4-frame attack-swing animation laid horizontally:
+- Frames 0–3   : Attack, facing DOWN — 4-frame swing
+- Frames 4–7   : Attack, facing UP
+- Frames 8–11  : Attack, facing LEFT
+- Frames 12–15 : Attack, facing RIGHT
+Each frame is 16×24 pixels (feet at row 23). Final sheet per weapon class: 256×24. No gaps.
+
+For melee: the Walker's right hand holds the weapon (no glow); for ranged: bow drawn and released; for magic: staff held forward, glyph appears at staff tip on frame 3; for summoning: open empty hand with growing gold-light ball.
+
+SIZE: Per weapon class, generate at 4096×384 source. Downsample 16× nearest-neighbor to 256×24 final.
+
+PALETTE: Same as walker_default.txt — AAP-64 character tones + Final Spiral gold for any magic VFX. Weapons get tier-1 base materials (wood haft + grey iron blade for sword, oiled wood for bow, plain wood + crystal-tip for staff). Background #FF00FF (keyed out).
+
+LORE: Walkers attack by anchoring physical motion to their resonance; the gold hand-glow brightens slightly on impact frame (frame 2 of 4). See lore/07_echo_walkers_player.md and docs/reference/core-keeper-mechanics.md combat section.
+
+ANIMATION: 4 frames at 16 fps:
+- F0: wind-up pose
+- F1: mid-swing
+- F2: impact pose (peak motion, brightest hand-glow)
+- F3: follow-through / recovery
+
+POST-GENERATION (per weapon class):
+- Downsample to 256×24 nearest-neighbor.
+- Key out magenta.
+- Palette check.
+- Save raw → assets/raw/player/walker_attack_<melee|ranged|magic|summon>_v1.png
+- Save final → assets/sprites/player/walker_attack_<class>.png
+- Wrap as SpriteFrames resource resources/sprites/player_walker_attack_<class>.tres with "attack_<dir>" animations (4 frames, fps 16, non-looping).
+- Manifest entries "player_walker_attack_melee", "player_walker_attack_ranged", "player_walker_attack_magic", "player_walker_attack_summon": status → "final".

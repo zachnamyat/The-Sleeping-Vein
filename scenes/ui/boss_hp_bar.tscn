@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://bvt3q57tpd3i7"]
+
+[ext_resource type="Script" path="res://scripts/ui/boss_hp_bar.gd" id="1_hp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hpframe"]
+bg_color = Color(0.05, 0.04, 0.06, 0.85)
+border_color = Color(0.85, 0.66, 0.34, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="BossHpBar" type="CanvasLayer"]
+layer = 50
+script = ExtResource("1_hp")
+
+[node name="Root" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -160.0
+offset_top = 14.0
+offset_right = 160.0
+offset_bottom = 50.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_hpframe")
+
+[node name="Name" type="Label" parent="Root"]
+offset_left = 6.0
+offset_top = 2.0
+offset_right = 314.0
+offset_bottom = 14.0
+modulate = Color(0.97, 0.85, 0.5, 1)
+text = "Boss"
+horizontal_alignment = 1
+
+[node name="HpBar" type="ProgressBar" parent="Root"]
+offset_left = 6.0
+offset_top = 16.0
+offset_right = 252.0
+offset_bottom = 30.0
+max_value = 100.0
+value = 100.0
+show_percentage = false
+modulate = Color(0.93, 0.42, 0.32, 1)
+
+[node name="Phase" type="Label" parent="Root"]
+offset_left = 258.0
+offset_top = 16.0
+offset_right = 314.0
+offset_bottom = 30.0
+modulate = Color(0.95, 0.84, 0.5, 1)
+horizontal_alignment = 2
+text = ""

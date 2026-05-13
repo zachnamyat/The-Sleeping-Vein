@@ -1,0 +1,2303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Sleeping Vein — Kanban</title>
+<style>
+  :root {
+    --bg: #0e0d12;
+    --bg-2: #15141b;
+    --bg-3: #1d1c25;
+    --bg-4: #25232e;
+    --fg: #e8e3d6;
+    --fg-dim: #998d75;
+    --accent: #d4a857;          /* Aphelion gold */
+    --accent-dim: #836838;
+    --danger: #c44a1d;          /* Emberforge red */
+    --ok: #7bbf64;              /* Verdancy green */
+    --info: #6e8fc4;            /* Glasswright blue */
+    --warn: #f08a2e;
+    --purple: #7062d7;          /* Auroric Veil */
+    --salt: #bdb5a8;            /* Salt Wastes */
+    --pink: #c44a8a;
+    --border: #2a2832;
+    --border-strong: #3d3a47;
+    --shadow: 0 2px 6px rgba(0,0,0,0.6);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+    background: var(--bg);
+    color: var(--fg);
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  header {
+    padding: 14px 22px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--border-strong);
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 18px;
+    color: var(--accent);
+    letter-spacing: 0.5px;
+    font-weight: 600;
+  }
+  header .subtitle {
+    color: var(--fg-dim);
+    font-size: 12px;
+  }
+  header .stats {
+    margin-left: auto;
+    color: var(--fg-dim);
+    font-size: 12px;
+  }
+  header .stats span { color: var(--fg); margin: 0 6px; }
+  header .stats span.done { color: var(--ok); }
+  header .stats span.progress { color: var(--accent); }
+
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 10px 22px;
+    background: var(--bg-2);
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .toolbar input, .toolbar select, .toolbar button {
+    background: var(--bg-3);
+    color: var(--fg);
+    border: 1px solid var(--border-strong);
+    padding: 5px 9px;
+    font-family: inherit;
+    font-size: 12px;
+    border-radius: 3px;
+  }
+  .toolbar input:focus, .toolbar select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .toolbar button {
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .toolbar button:hover { background: var(--bg-4); }
+  .toolbar button.primary {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: #0e0d12;
+    font-weight: 600;
+  }
+  .toolbar button.primary:hover { background: var(--accent); }
+  .toolbar .toolbar-label {
+    color: var(--fg-dim);
+    margin-left: 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .phases {
+    padding: 14px 22px 60px;
+  }
+
+  .phase {
+    margin-bottom: 28px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .phase-header {
+    background: var(--bg-3);
+    padding: 10px 14px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-header:hover { background: var(--bg-4); }
+  .phase-header .twist {
+    color: var(--fg-dim);
+    transition: transform 0.15s;
+    display: inline-block;
+    width: 12px;
+  }
+  .phase.collapsed .phase-header .twist { transform: rotate(-90deg); }
+  .phase.collapsed .phase-body { display: none; }
+  .phase-header h2 {
+    margin: 0;
+    font-size: 14px;
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .phase-header .phase-desc {
+    color: var(--fg-dim);
+    font-size: 12px;
+    font-weight: 400;
+  }
+  .phase-header .phase-count {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--fg-dim);
+  }
+  .phase-header .phase-count span.done { color: var(--ok); }
+
+  .phase-body {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(220px, 1fr));
+    gap: 0;
+  }
+  .lane {
+    background: var(--bg-2);
+    border-right: 1px solid var(--border);
+    min-height: 80px;
+  }
+  .lane:last-child { border-right: none; }
+  .lane-header {
+    padding: 8px 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--fg-dim);
+    background: var(--bg-3);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+  }
+  .lane-header.lane-backlog { color: var(--fg-dim); }
+  .lane-header.lane-ready { color: var(--info); }
+  .lane-header.lane-in_progress { color: var(--accent); }
+  .lane-header.lane-review { color: var(--warn); }
+  .lane-header.lane-done { color: var(--ok); }
+  .lane-count {
+    font-weight: 600;
+    color: var(--fg);
+  }
+  .lane-body {
+    min-height: 60px;
+    padding: 6px;
+  }
+  .lane-body.drag-over {
+    background: rgba(212, 168, 87, 0.08);
+  }
+
+  .card {
+    background: var(--bg-3);
+    border: 1px solid var(--border-strong);
+    border-left: 3px solid var(--accent);
+    border-radius: 3px;
+    padding: 7px 9px;
+    margin-bottom: 6px;
+    cursor: grab;
+    box-shadow: var(--shadow);
+    transition: transform 0.1s, border-color 0.1s;
+    font-size: 12px;
+  }
+  .card:hover {
+    transform: translateY(-1px);
+    border-color: var(--accent-dim);
+  }
+  .card.dragging {
+    opacity: 0.4;
+    cursor: grabbing;
+  }
+  .card-id {
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 10px;
+    margin-right: 6px;
+  }
+  .card-title {
+    display: inline;
+    color: var(--fg);
+  }
+  .card-tags {
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+  }
+  .tag {
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 2px;
+    background: var(--bg-4);
+    color: var(--fg-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .tag.parity { background: #1d3a2e; color: var(--ok); }
+  .tag.extension { background: #3a1d3a; color: var(--pink); }
+  .tag.infra { background: #1d2c3a; color: var(--info); }
+  .tag.art { background: #3a2e1d; color: var(--accent); }
+  .tag.lore { background: #3a1d1d; color: #f0a878; }
+  .tag.test { background: #1d2a2a; color: #88c4c4; }
+  .tag.netcode { background: #2a1d3a; color: var(--purple); }
+
+  /* Border colors per lane indicate status visually */
+  .card[data-status="backlog"] { border-left-color: var(--fg-dim); }
+  .card[data-status="ready"] { border-left-color: var(--info); }
+  .card[data-status="in_progress"] { border-left-color: var(--accent); }
+  .card[data-status="review"] { border-left-color: var(--warn); }
+  .card[data-status="done"] {
+    border-left-color: var(--ok);
+    opacity: 0.65;
+  }
+  .card[data-status="done"] .card-title { text-decoration: line-through; }
+
+  /* Modal */
+  .modal-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--bg-2);
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
+    width: 540px;
+    max-width: 92%;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 18px;
+  }
+  .modal h3 {
+    color: var(--accent);
+    margin: 0 0 12px;
+    font-size: 15px;
+  }
+  .modal label {
+    display: block;
+    margin: 10px 0 4px;
+    color: var(--fg-dim);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .modal input, .modal select, .modal textarea {
+    width: 100%;
+    background: var(--bg-3);
+    color: var(--fg);
+    border: 1px solid var(--border-strong);
+    padding: 7px 9px;
+    font-family: inherit;
+    font-size: 12px;
+    border-radius: 3px;
+  }
+  .modal input:focus, .modal select:focus, .modal textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .modal textarea {
+    min-height: 90px;
+    resize: vertical;
+    font-family: inherit;
+  }
+  .modal .tag-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+  .modal .tag-pick {
+    cursor: pointer;
+    user-select: none;
+    padding: 3px 9px;
+    border-radius: 2px;
+    background: var(--bg-3);
+    border: 1px solid var(--border-strong);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--fg-dim);
+  }
+  .modal .tag-pick.active { background: var(--accent-dim); color: #0e0d12; border-color: var(--accent); }
+  .modal .actions {
+    margin-top: 18px;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+  }
+  .modal .actions button {
+    padding: 7px 14px;
+    background: var(--bg-3);
+    color: var(--fg);
+    border: 1px solid var(--border-strong);
+    cursor: pointer;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 12px;
+  }
+  .modal .actions button.primary {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: #0e0d12;
+    font-weight: 600;
+  }
+  .modal .actions button.danger {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: white;
+  }
+  .modal .actions button:hover { filter: brightness(1.2); }
+
+  .empty-hint {
+    color: var(--fg-dim);
+    text-align: center;
+    font-size: 11px;
+    font-style: italic;
+    padding: 12px 6px;
+    opacity: 0.6;
+  }
+
+  footer {
+    padding: 12px 22px;
+    text-align: center;
+    color: var(--fg-dim);
+    font-size: 11px;
+    border-top: 1px solid var(--border);
+    background: var(--bg-2);
+  }
+  footer a { color: var(--accent); }
+
+  /* Filter inactive */
+  .card.filtered-out { display: none; }
+  .phase.empty-by-filter { display: none; }
+
+  @media (max-width: 1100px) {
+    .phase-body { grid-template-columns: 1fr 1fr; }
+    .lane { border-right: 1px solid var(--border); }
+  }
+  @media (max-width: 600px) {
+    .phase-body { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>The Sleeping Vein</h1>
+  <span class="subtitle">Mechanical parity with Core Keeper → custom extensions. Saved locally in your browser.</span>
+  <div class="stats" id="globalStats">—</div>
+</header>
+
+<div class="toolbar">
+  <button class="primary" id="addBtn">+ New Card</button>
+  <button id="collapseAllBtn">Collapse All</button>
+  <button id="expandAllBtn">Expand All</button>
+
+  <span class="toolbar-label">Filter:</span>
+  <input type="text" id="filterText" placeholder="Search title or ID…" style="flex: 1; min-width: 140px; max-width: 320px;">
+  <select id="filterTag">
+    <option value="">All tags</option>
+    <option value="parity">parity</option>
+    <option value="extension">extension</option>
+    <option value="infra">infra</option>
+    <option value="art">art</option>
+    <option value="lore">lore</option>
+    <option value="test">test</option>
+    <option value="netcode">netcode</option>
+  </select>
+  <select id="filterStatus">
+    <option value="">All statuses</option>
+    <option value="backlog">Backlog</option>
+    <option value="ready">Ready</option>
+    <option value="in_progress">In Progress</option>
+    <option value="review">Review</option>
+    <option value="done">Done</option>
+  </select>
+
+  <span style="flex: 1"></span>
+  <button id="exportBtn">Export JSON</button>
+  <button id="importBtn">Import JSON</button>
+  <button id="resetBtn">Reset</button>
+</div>
+
+<div class="phases" id="phases"></div>
+
+<footer>
+  Drag cards between lanes. Click a card to edit. Data lives in your browser's localStorage —
+  <a href="ROADMAP.md">ROADMAP.md</a> · <a href="docs/reference/core-keeper-mechanics.md">Parity reference</a> · <a href="docs/design/00_tile_atlas_spec.md">Tile spec</a> · <a href="docs/design/02_lore_to_mechanics_mapping.md">Lore mapping</a>
+</footer>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <h3 id="modalTitle">Edit Card</h3>
+    <label>ID</label>
+    <input type="text" id="m_id" placeholder="e.g. 1.5">
+    <label>Title</label>
+    <input type="text" id="m_title">
+    <label>Phase</label>
+    <select id="m_phase"></select>
+    <label>Status</label>
+    <select id="m_status">
+      <option value="backlog">Backlog</option>
+      <option value="ready">Ready</option>
+      <option value="in_progress">In Progress</option>
+      <option value="review">Review</option>
+      <option value="done">Done</option>
+    </select>
+    <label>Tags</label>
+    <div class="tag-row" id="m_tags"></div>
+    <label>Description / acceptance criteria (optional)</label>
+    <textarea id="m_desc"></textarea>
+    <div class="actions">
+      <button class="danger" id="m_delete">Delete</button>
+      <span style="flex:1"></span>
+      <button id="m_cancel">Cancel</button>
+      <button class="primary" id="m_save">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+/* ============================================================
+ *  THE SLEEPING VEIN — KANBAN BOARD
+ *  Storage: localStorage, key 'tsv_kanban_v1'
+ * ============================================================ */
+
+const LANES = ['backlog', 'ready', 'in_progress', 'review', 'done'];
+const LANE_LABEL = {
+  backlog: 'Backlog',
+  ready: 'Ready',
+  in_progress: 'In Progress',
+  review: 'Review',
+  done: 'Done',
+};
+const TAGS = ['parity', 'extension', 'infra', 'art', 'lore', 'test', 'netcode'];
+
+const PHASES = [
+  { id: 0,  name: 'Phase 0 — Foundation',                desc: 'Project setup, plugins, asset pipeline, tests scaffolded.' },
+  { id: 1,  name: 'Phase 1 — Player & World',            desc: 'Player walks. Tiles render. Camera snaps. Aphelion Beat pulses.' },
+  { id: 2,  name: 'Phase 2 — Mining & Combat',           desc: 'Pickaxe + sword loop. First mob. First XP.' },
+  { id: 3,  name: 'Phase 3 — Inventory & Crafting',      desc: 'Grid inventory, recipes, first workbench tier.' },
+  { id: 4,  name: 'Phase 4 — Procedural World & Biomes 1–2', desc: 'Chunk gen. Root Hollows + Glasswright Reaches.' },
+  { id: 5,  name: 'Phase 5 — First Boss & NPC',          desc: 'Glaur-em fight. Aelstren arrives. Loom power-up.' },
+  { id: 6,  name: 'Phase 6 — Combat Depth',              desc: 'Bow/Gun/Staff/Summon, status effects, crit, armor.' },
+  { id: 7,  name: 'Phase 7 — Skill Talents',             desc: 'Full talent trees for all 12 skills.' },
+  { id: 8,  name: 'Phase 8 — Farming, Cooking, Fishing', desc: 'Life-sim verbs.' },
+  { id: 9,  name: 'Phase 9 — NPCs & Housing',            desc: 'Merchant shops, beds, currency, dialogue.' },
+  { id: 10, name: 'Phase 10 — Biomes 3–5 + Bosses 2–6',  desc: 'Necropolis, Verdancy, Drowned Aphelion.' },
+  { id: 11, name: 'Phase 11 — Biomes 6–8 + Bosses 7–9',  desc: 'Emberforge, Salt Wastes, Auroric Veil.' },
+  { id: 12, name: 'Phase 12 — Final Spiral + Endings',   desc: 'Diadem-Bearer. Three endings.' },
+  { id: 13, name: 'Phase 13 — Multiplayer',              desc: '1–8 player co-op.' },
+  { id: 14, name: 'Phase 14 — Automation & Electricity', desc: 'Conveyors, drills, wires, logic.' },
+  { id: 15, name: 'Phase 15 — Polish & Verify',          desc: 'Close every [VERIFY] in the parity spec.' },
+  { id: 16, name: 'Phase 16 — Custom Extensions',        desc: 'Aphelion-sliver mortality, Echoes, three-ending forks, user vision.' },
+];
+
+/* Default seed of tickets. Status defaults to 'backlog' unless overridden.
+ * Tags drive color-coding and filtering. */
+const SEED_TICKETS = [
+  /* ---------- PHASE 0 ---------- */
+  { id: '0.1',  phase: 0, title: 'Project skeleton (folders, autoloads, project.godot)',          tags: ['infra'], status: 'done' },
+  { id: '0.2',  phase: 0, title: 'AI image-generator plugin: smoke-test generation → raw/',       tags: ['infra', 'art'], status: 'ready', desc: `[GEMINI ASSET — Antigravity-ready]
+Goal: prove the plugin pipeline works end-to-end. Disposable asset.
+Prompt: prompts/_smoke_test.txt
+Final: assets/sprites/tiles/smoke_test_shaleseed.png (16×16, 1 frame)
+Model: gemini-2.5-flash-image. Polish: 1 pass.
+After gen, follow prompts/_HOWTO.md §2; update manifest entry "smoke_test_shaleseed" status→"final".
+Lore: lore/04_biomes.md#stratum-1--the-root-hollows
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '0.3',  phase: 0, title: 'GUT framework: first unit test (e.g. health component)',        tags: ['infra', 'test'], status: 'ready' },
+  { id: '0.4',  phase: 0, title: 'SaveSystem real implementation (JSON or binary, round-trip)',   tags: ['infra'] },
+  { id: '0.5',  phase: 0, title: 'Project palette file (.gpl) + palette-check tool',              tags: ['infra', 'art'] },
+  { id: '0.6',  phase: 0, title: 'Asset manifest loader with magenta-placeholder fallback',       tags: ['infra'] },
+  { id: '0.7',  phase: 0, title: 'Pick + import pixel font (6×8 vs 8×8)',                         tags: ['infra', 'art'] },
+  { id: '0.8',  phase: 0, title: 'Camera2D pixel-snap scene template',                            tags: ['infra'] },
+  { id: '0.9',  phase: 0, title: 'Game icon final (Gemini-generated, replaces placeholder)',      tags: ['art'], desc: `[GEMINI ASSET — Antigravity-ready, HERO]
+Prompt: prompts/ui/game_icon.txt
+Final: assets/sprites/ui/game_icon.png (128×128, 1 frame)
+Model: gemini-2.5-flash-image. Polish: 2 passes (hero asset).
+After gen: follow prompts/_HOWTO.md §2; update manifest entry "ui_game_icon" status→"final"; update project.godot config/icon to point to the new path; retire icon.svg + icon.svg.import.
+Lore: lore/07_echo_walkers_player.md, lore/01_cosmology_and_universe.md
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '0.10', phase: 0, title: 'tools/batch_generate.py wrapper for plugin REST endpoint',      tags: ['infra'] },
+  { id: '0.11', phase: 0, title: 'Pause menu + settings UI accessible mid-game',                  tags: ['infra'] },
+  { id: '0.12', phase: 0, title: 'Resolution / fullscreen / window-mode options',                 tags: ['infra'] },
+  { id: '0.13', phase: 0, title: 'Audio bus volume sliders (master / sfx / music / ambient)',     tags: ['infra'] },
+  { id: '0.14', phase: 0, title: 'Key remap UI (rebind any action, persist to settings)',         tags: ['infra'] },
+  { id: '0.15', phase: 0, title: 'CI / GitHub Actions test runner setup (GUT headless)',          tags: ['infra', 'test'] },
+  { id: '0.16', phase: 0, title: 'Build pipeline (Godot CLI export Win/Mac/Linux/Deck)',          tags: ['infra'] },
+  { id: '0.17', phase: 0, title: 'Versioning + CHANGELOG system (semver per release)',            tags: ['infra'] },
+  { id: '0.18', phase: 0, title: 'Localization-key (i18n) string-table scaffold',                 tags: ['infra'] },
+  { id: '0.19', phase: 0, title: 'Pre-commit hooks (GDScript lint / format check)',               tags: ['infra'] },
+  { id: '0.20', phase: 0, title: 'PR / issue templates + .editorconfig',                          tags: ['infra'] },
+  { id: '0.21', phase: 0, title: 'Initial boot smoke test (open project, run scene, no errors)',  tags: ['infra', 'test'] },
+
+  /* ---------- PHASE 1 ---------- */
+  { id: '1.1',  phase: 1, title: 'PlayerController scene + state machine',                        tags: ['parity'], desc: `Asset (Gemini) + scene/state-machine work.
+Gemini assets:
+- prompts/player/walker_default.txt → assets/sprites/player/walker_default.png (640×24, 40 frames) — idle 4-dir × 4f + walk 4-dir × 6f
+- prompts/player/walker_combat.txt → 4 attack sheets (256×24 each, 16 frames) for melee/ranged/magic/summon
+- Polish: 2 passes each (hero asset).
+Non-asset work: scenes/player/Player.tscn + scripts/player/player_controller.gd with state machine (idle/walk/attack/dash/dead).
+Lore: lore/07_echo_walkers_player.md
+Manifest IDs: player_walker_default, player_walker_attack_melee/ranged/magic/summon.` },
+  { id: '1.2',  phase: 1, title: '8-directional movement + Running skill stub',                   tags: ['parity'] },
+  { id: '1.3',  phase: 1, title: 'HealthComponent + ManaComponent (reusable)',                    tags: ['parity', 'test'] },
+  { id: '1.4',  phase: 1, title: 'Death + respawn at Loom (consumes Aphelion sliver)',            tags: ['parity', 'lore'] },
+  { id: '1.5',  phase: 1, title: 'TileMap floor + capped wall (Y-sort layering)',                 tags: ['parity', 'art'], desc: `[GEMINI ASSET — Antigravity-ready] + scene work.
+Asset (temp subset of full Root Hollows atlas; superseded by 1.12):
+- Prompt: prompts/tiles/root_hollows_floor_wall.txt
+- Final: assets/sprites/tiles/root_hollows_floor_wall.png (32×48, 1 frame — 3 floor tiles + 3 capped-wall tiles)
+- Model: gemini-2.5-flash-image. Polish: 1 pass.
+- Manifest: "tile_root_hollows_floor_wall" → status "final".
+Non-asset work (Godot):
+- Build TileMap scene with WallBase + WallCap Y-sorted layers per docs/design/00_tile_atlas_spec.md §5.
+- Verify cap occlusion: an entity walking behind a wall is overlapped by the cap top.
+Lore: lore/04_biomes.md#stratum-1--the-root-hollows
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '1.6',  phase: 1, title: 'Camera2D follows player, pixel-snap on',                        tags: ['parity'] },
+  { id: '1.7',  phase: 1, title: 'Day/night hook to Aphelion Beat (23s)',                         tags: ['parity', 'lore'] },
+  { id: '1.8',  phase: 1, title: 'Ambient light + Light2D player torch',                          tags: ['parity'] },
+  { id: '1.9',  phase: 1, title: 'Hand-of-light idle glow VFX (lore §7.6)',                       tags: ['lore', 'art'], desc: `[GEMINI ASSET]
+Prompt: prompts/vfx/hand_of_light.txt
+Final: assets/sprites/vfx/hand_of_light.png (48×8, 6 frames)
+After gen: prompts/_HOWTO.md §2; wrap as SpriteFrames; manifest "vfx_hand_of_light" status→"final".
+Lore: lore/07_echo_walkers_player.md §7.6` },
+  { id: '1.10', phase: 1, title: 'Aphelion Beat audio cue (placeholder OK)',                      tags: ['parity'] },
+  { id: '1.11', phase: 1, title: 'Hotbar UI shell (10 slots, keyboard + scroll wheel)',           tags: ['parity', 'art'], desc: `[GEMINI ASSET] + UI code.
+Prompt: prompts/ui/ui_hud_core.txt (covers hotbar + health/mana/sliver/buff strip)
+Final: assets/sprites/ui/hotbar_unselected.png + hotbar_selected.png
+After gen: prompts/_HOWTO.md §2; manifest "ui_hud_core_set" status→"final".
+Non-asset: scenes/ui/Hotbar.tscn with 10 slot Buttons; keyboard 1-0 + scroll-wheel selection.` },
+  { id: '1.12', phase: 1, title: 'Root Hollows placeholder tile atlas (Gemini, 16×16)',           tags: ['art', 'lore'], desc: `[GEMINI ASSET — Antigravity-ready]
+Prompt: prompts/tiles/root_hollows_atlas.txt
+Final: assets/sprites/tiles/root_hollows_atlas_16.png (256×256, single image, 256 cells of 16×16)
+Model: gemini-2.5-flash-image. Polish: 1 pass.
+Source res: 1024×1024 → 4× nearest-neighbor downsample.
+After gen: follow prompts/_HOWTO.md §2; row layout MUST match docs/design/00_tile_atlas_spec.md §2; update manifest entry "tile_root_hollows_atlas_16" status→"final".
+Acceptance: 256×256 exact, 16×16 grid alignment, Root Hollows palette only (+ black outline + magenta row-15), Godot import Filter=Nearest.
+Lore: lore/04_biomes.md#stratum-1--the-root-hollows
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '1.13', phase: 1, title: 'Screen-space fog of war (LOS darkness shader)',                 tags: ['parity'] },
+  { id: '1.14', phase: 1, title: 'Death + respawn UI screen (animation, sliver cost, prompt)',    tags: ['parity', 'lore'] },
+  { id: '1.15', phase: 1, title: 'In-game clock / time-of-day HUD readout',                       tags: ['parity'] },
+  { id: '1.16', phase: 1, title: 'Character creation screen (template, hair, skin, outfit)',      tags: ['parity', 'lore'] },
+  { id: '1.17', phase: 1, title: 'Title screen + main menu (New / Load / MP / Settings / Quit)',  tags: ['parity'] },
+  { id: '1.18', phase: 1, title: 'World creation screen (seed, size, difficulty modifiers)',      tags: ['parity'] },
+  { id: '1.19', phase: 1, title: 'Save-slot select / load screen',                                tags: ['parity'] },
+  { id: '1.20', phase: 1, title: 'Loading screen (chunk pre-warm + tip-of-the-day)',              tags: ['parity'] },
+  { id: '1.21', phase: 1, title: 'Knockback application on damage hit (impulse + i-frames)',     tags: ['parity'] },
+  { id: '1.22', phase: 1, title: 'Camera shake on impact / explosions / boss-stomp',              tags: ['parity'] },
+  { id: '1.23', phase: 1, title: 'Player nameplate above head (multiplayer-prep)',                tags: ['parity'] },
+  { id: '1.24', phase: 1, title: 'Footstep SFX per tile-material (data-driven sound profile)',    tags: ['parity'] },
+  { id: '1.25', phase: 1, title: 'Hit-pause / microfreeze on big strikes',                        tags: ['parity'] },
+  { id: '1.26', phase: 1, title: 'Pickup-sparkle VFX on rare loot',                               tags: ['parity'] },
+  { id: '1.27', phase: 1, title: 'Stamina bar for sprint / swim / dodge consumption',             tags: ['parity'] },
+  { id: '1.28', phase: 1, title: 'Recent-pickup feed (right-side toast stream)',                  tags: ['parity'] },
+  { id: '1.29', phase: 1, title: 'HUD health-regen tick rate display',                            tags: ['parity'] },
+  { id: '1.30', phase: 1, title: 'Aim cursor / target indicator (mouse cursor swap on hover)',    tags: ['parity'] },
+  { id: '1.31', phase: 1, title: 'Tooltip delay setting (instant / 0.5s / 1s)',                   tags: ['parity'] },
+  { id: '1.32', phase: 1, title: 'HUD scale + opacity sliders',                                   tags: ['parity'] },
+  { id: '1.33', phase: 1, title: 'Animated title-screen background (Aphelion pulse)',             tags: ['parity', 'art'] },
+  { id: '1.34', phase: 1, title: 'Sit-on-chair animation + interaction',                          tags: ['parity'] },
+  { id: '1.35', phase: 1, title: 'Sleep-in-bed visual (idle pose, fade-to-black)',                tags: ['parity'] },
+  { id: '1.36', phase: 1, title: 'Eat / drink animation on consumable use',                       tags: ['parity'] },
+  { id: '1.37', phase: 1, title: 'Emote system (wave / dance / sit / point / sleep) — wheel UI',  tags: ['parity'] },
+  { id: '1.38', phase: 1, title: 'Player shadow under feet (blob-cast on floor)',                 tags: ['parity'] },
+  { id: '1.39', phase: 1, title: 'Player splash VFX in water',                                    tags: ['parity'] },
+  { id: '1.40', phase: 1, title: 'Whole-screen Aphelion-Beat pulse tone (subtle ambient VFX)',    tags: ['parity', 'lore'] },
+  { id: '1.41', phase: 1, title: 'Player blink + breath idle animation',                          tags: ['parity'] },
+  { id: '1.42', phase: 1, title: 'UI button hover / click SFX hooks',                             tags: ['parity'] },
+  { id: '1.43', phase: 1, title: 'Inventory open / close SFX',                                    tags: ['parity'] },
+  { id: '1.44', phase: 1, title: 'Page-flip SFX for books / recipes / cookbooks',                 tags: ['parity'] },
+  { id: '1.45', phase: 1, title: 'Auto-pause on ALT-TAB / focus loss',                            tags: ['parity'] },
+  { id: '1.46', phase: 1, title: 'Settings reset-to-defaults button',                             tags: ['parity'] },
+  { id: '1.47', phase: 1, title: 'Color picker for player accent / glow color',                   tags: ['parity', 'lore'] },
+  { id: '1.48', phase: 1, title: 'Title screen music',                                            tags: ['parity', 'art'] },
+  { id: '1.49', phase: 1, title: 'Death screen with retry / load / quit buttons + summary',       tags: ['parity'] },
+  { id: '1.50', phase: 1, title: 'HUD show / hide toggle (F1 to clean for screenshots)',          tags: ['parity'] },
+  { id: '1.51', phase: 1, title: 'Cinematic letterbox toggle for narrative moments',              tags: ['parity'] },
+
+  /* ---------- PHASE 2 ---------- */
+  { id: '2.1',  phase: 2, title: 'Pickaxe mining: tier check, damage formula',                    tags: ['parity'] },
+  { id: '2.2',  phase: 2, title: 'Tile drop spawning system',                                     tags: ['parity'] },
+  { id: '2.3',  phase: 2, title: 'Item pickup proximity + inventory stub',                        tags: ['parity'] },
+  { id: '2.4',  phase: 2, title: 'HitboxComponent + HurtboxComponent',                            tags: ['parity', 'test'] },
+  { id: '2.5',  phase: 2, title: 'Melee swing arc + damage application',                          tags: ['parity'] },
+  { id: '2.6',  phase: 2, title: 'First mob: Stone-Hopper (chase AI)',                            tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET] + AI code.
+Prompt: prompts/enemies/enemies_root_hollows.txt (covers all 6 Root Hollows creatures including Stone-Hopper)
+Final for Stone-Hopper: assets/sprites/enemies/root_hollows/stone_hopper.png (16×16)
+After gen: prompts/_HOWTO.md §2; manifest "enemy_set_root_hollows" → mark sub-asset stone_hopper "final" (and others as they ship).
+Non-asset: scenes/enemies/StoneHopper.tscn with HealthComponent, HitboxComponent, chase-AI state machine.
+Lore: lore/06_creatures_and_enemies.md §6.2 (Stratum 1)` },
+  { id: '2.7',  phase: 2, title: 'Loot table .tres format + mob drop on death',                   tags: ['parity'] },
+  { id: '2.8',  phase: 2, title: 'Skill system: 12 skills, XP, level, EventBus',                  tags: ['parity', 'test'] },
+  { id: '2.9',  phase: 2, title: 'Mining XP wired (Stratabreaking)',                              tags: ['parity'] },
+  { id: '2.10', phase: 2, title: 'Melee XP wired (Hand-Strike)',                                  tags: ['parity'] },
+  { id: '2.11', phase: 2, title: 'Damage flash + hit SFX hooks',                                  tags: ['parity', 'art'], desc: `[GEMINI ASSET] + shader/code.
+Prompt: prompts/vfx/vfx_status_effects.txt (covers damage_flash + status DoT overlays)
+Final: assets/sprites/vfx/damage_flash.png (64×16, 4 frames)
+After gen: prompts/_HOWTO.md §2; manifest "vfx_status_effects_set" → mark damage_flash "final".
+Non-asset: damage-flash shader hook on HurtboxComponent; SFX hooks (audio is separate ticket).` },
+  { id: '2.12', phase: 2, title: 'Item rarity tier colors (white→yellow)',                        tags: ['parity'] },
+  { id: '2.13', phase: 2, title: 'Aphelion-sliver HUD readout (lore §1.7)',                       tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET] + UI code.
+Prompt: prompts/ui/ui_hud_core.txt (covers Aphelion-sliver readout strip)
+Final: assets/sprites/ui/aphelion_sliver_readout.png (8×96, 9 slivers)
+After gen: prompts/_HOWTO.md §2; manifest "ui_hud_core_set" → mark aphelion_sliver_readout "final".
+Non-asset: HUD widget showing remaining slivers (player has finite respawns canonically); pulse animation synced to Aphelion Beat (ticket 1.7).
+Lore: lore/01_cosmology_and_universe.md §1.7 + lore/07_echo_walkers_player.md §7.4` },
+  { id: '2.14', phase: 2, title: 'Axe tool + tree-felling verb (drops Wood / Heartwood)',         tags: ['parity'] },
+  { id: '2.15', phase: 2, title: 'Tree object (multi-stage mineable, HP, biome variants)',        tags: ['parity', 'lore'] },
+  { id: '2.16', phase: 2, title: 'Death corpse + item-drop-on-death recovery',                    tags: ['parity'] },
+  { id: '2.17', phase: 2, title: 'Bombs as throwable items (timer + AoE damage)',                 tags: ['parity'] },
+  { id: '2.18', phase: 2, title: 'Critter / passive wildlife flee behavior',                      tags: ['parity'] },
+  { id: '2.19', phase: 2, title: 'Mob aggro range + leash radius (data-driven per mob)',          tags: ['parity'] },
+  { id: '2.20', phase: 2, title: 'Damage numbers floating-text VFX',                              tags: ['parity'] },
+  { id: '2.21', phase: 2, title: 'Mob death animation + ragdoll / fade',                          tags: ['parity'] },
+  { id: '2.22', phase: 2, title: 'Loot magnet stat / accessory (pickup radius +)',                tags: ['parity'] },
+  { id: '2.23', phase: 2, title: 'Tile damage states (visible cracks before break)',              tags: ['parity'] },
+  { id: '2.24', phase: 2, title: 'Ore-extract particle VFX (per-ore color)',                      tags: ['parity'] },
+  { id: '2.25', phase: 2, title: 'Pickup SFX per item rarity tier',                               tags: ['parity'] },
+  { id: '2.26', phase: 2, title: 'Death recap UI (last damage source + total run stats)',         tags: ['parity'] },
+  { id: '2.27', phase: 2, title: 'Charge-mine / area-mine talent (mining pattern variants)',      tags: ['parity'] },
+  { id: '2.28', phase: 2, title: 'Mob spawn de-aggro after distance / time threshold',            tags: ['parity'] },
+  { id: '2.29', phase: 2, title: 'Critical hit screen-flash + distinct number color',             tags: ['parity'] },
+  { id: '2.30', phase: 2, title: 'AoE radius indicators (telegraphed ring on floor)',             tags: ['parity'] },
+  { id: '2.31', phase: 2, title: 'Mob class data (caster / melee / ranged / tank)',               tags: ['parity'] },
+  { id: '2.32', phase: 2, title: 'Elite mob variants (random affix rare spawn)',                  tags: ['parity'] },
+  { id: '2.33', phase: 2, title: 'Champion mob mini-boss random spawn',                           tags: ['parity'] },
+  { id: '2.34', phase: 2, title: 'Mob scan / photograph for compendium completion',               tags: ['parity'] },
+  { id: '2.35', phase: 2, title: 'Stack split (shift-click) + merge logic',                       tags: ['parity'] },
+  { id: '2.36', phase: 2, title: 'Held-item visual per weapon class on Walker sprite',            tags: ['parity'] },
+  { id: '2.37', phase: 2, title: 'Item pickup-magnet curve animation',                            tags: ['parity'] },
+  { id: '2.38', phase: 2, title: 'Mob stagger animation on heavy hit',                            tags: ['parity'] },
+  { id: '2.39', phase: 2, title: 'Combo counter UI (hits-in-row tracker)',                        tags: ['parity'] },
+  { id: '2.40', phase: 2, title: 'Damage-type icons + tooltips',                                  tags: ['parity'] },
+  { id: '2.41', phase: 2, title: 'Tool-use SFX per tool (pickaxe vs axe vs hoe)',                 tags: ['parity'] },
+  { id: '2.42', phase: 2, title: 'Hit SFX per damage type (slash / crush / pierce / magic)',      tags: ['parity'] },
+  { id: '2.43', phase: 2, title: 'Mob death SFX per species (data-driven)',                       tags: ['parity'] },
+  { id: '2.44', phase: 2, title: 'Mob amber / catch-mob-as-pet system',                           tags: ['parity'] },
+  { id: '2.45', phase: 2, title: 'Reach radius per melee weapon (data-driven)',                   tags: ['parity'] },
+  { id: '2.46', phase: 2, title: 'Stack-count for arrows / bullets in HUD',                       tags: ['parity'] },
+  { id: '2.47', phase: 2, title: 'Mob loot-pool randomness + Luck stat modifier',                 tags: ['parity'] },
+  { id: '2.48', phase: 2, title: 'Workbench / placeable preview ghost-tile before commit',        tags: ['parity'] },
+  { id: '2.49', phase: 2, title: 'Light-source tier progression (torch → lantern → lamp → ward)', tags: ['parity'] },
+  { id: '2.50', phase: 2, title: 'Fall-damage decision RFC (yes/no — flat world, debatable)',     tags: ['parity'] },
+
+  /* ---------- PHASE 3 ---------- */
+  { id: '3.1',  phase: 3, title: 'Inventory grid UI (3×10, expandable)',                          tags: ['parity', 'art'], desc: `[GEMINI ASSET] + UI code.
+Prompt: prompts/ui/ui_inventory.txt (covers grid + equipment + tooltip)
+Final: assets/sprites/ui/inventory_grid_panel.png (176×64)
+After gen: prompts/_HOWTO.md §2; manifest "ui_inventory_set" → mark inventory_grid_panel "final".
+Non-asset: scenes/ui/Inventory.tscn with 30-cell grid; drag/drop in ticket 3.2; expand-to-50 logic.` },
+  { id: '3.2',  phase: 3, title: 'Drag-and-drop between inventory cells',                         tags: ['parity'] },
+  { id: '3.3',  phase: 3, title: 'Item tooltip on hover',                                         tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by ui_inventory.txt] + UI code.
+Asset: tooltip_frame.png ships from prompts/ui/ui_inventory.txt (covers grid + equipment + tooltip).
+Non-asset: hover-detect on inventory cells; tooltip layout with name/rarity-strip/body/stats.` },
+  { id: '3.4',  phase: 3, title: 'Equipment slots panel (8 slots + pet)',                         tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by ui_inventory.txt] + UI code.
+Asset: equipment_slots_panel.png ships from prompts/ui/ui_inventory.txt.
+Non-asset: scenes/ui/EquipmentPanel.tscn with 9 slot Buttons (head/chest/legs/boots/2 hands/accessory/cape/pet); per-slot type validation on drop.` },
+  { id: '3.5',  phase: 3, title: 'Hotbar selection + held-item sprite swap',                      tags: ['parity'] },
+  { id: '3.6',  phase: 3, title: 'Chest container (placeable, savable)',                          tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by structures_anchor_base.txt] + code.
+Asset: chest.png (32×32) ships from prompts/structures/structures_anchor_base.txt.
+Non-asset: scenes/items/Chest.tscn; persistent inventory tied to world position; save/load.` },
+  { id: '3.7',  phase: 3, title: 'Loam Bench placeable + UI (Basic Workbench analog)',            tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by structures_workbenches.txt] + code.
+Asset: loam_bench.png (32×32) ships from prompts/structures/structures_workbenches.txt (cell 0,0 of the 9-station sheet).
+Non-asset: scenes/structures/LoamBench.tscn; tier-0 crafting UI panel; unlocks Wood Pick recipe.` },
+  { id: '3.8',  phase: 3, title: 'Recipe .tres resource format',                                  tags: ['parity'] },
+  { id: '3.9',  phase: 3, title: 'Recipe unlock system + persistence',                            tags: ['parity'] },
+  { id: '3.10', phase: 3, title: 'First 12 recipes (Wood Pick, Sword, Torch, Floor, Wall, …)',    tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by items_tools_basic.txt] + recipe data.
+Asset: 16 icons ship from prompts/items/items_tools_basic.txt (Wood Pick/Sword/Torch + Loam Floor/Wall + Hoe + Watering Can + Cooking Pot + Shaleseed tier-1 armor set + potions).
+Non-asset: 12 Recipe .tres files in resources/recipes/; recipe-unlock state in SaveSystem.` },
+  { id: '3.11', phase: 3, title: 'Shaleseed ore → Clearstone Forge upgrade (Tier 1)',             tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — covered by structures_workbenches.txt] + code.
+Asset: clearstone_forge.png (32×32) ships from prompts/structures/structures_workbenches.txt (cell 0,1).
+Non-asset: scenes/structures/ClearstoneForge.tscn; recipe-unlock for tier-1 metal tools after first Shaleseed ingot crafted.
+Lore: docs/design/02_lore_to_mechanics_mapping.md §5` },
+  { id: '3.12', phase: 3, title: 'Crafting skill XP source',                                      tags: ['parity'] },
+  { id: '3.13', phase: 3, title: 'Quick Stack to Nearby Chests button',                           tags: ['parity'] },
+  { id: '3.14', phase: 3, title: 'Loot All / pick-up-all-nearby',                                 tags: ['parity'] },
+  { id: '3.15', phase: 3, title: 'Auto-deposit to last-used container',                           tags: ['parity'] },
+  { id: '3.16', phase: 3, title: 'Recipe search / filter / favorites',                            tags: ['parity'] },
+  { id: '3.17', phase: 3, title: 'Tooltip equipped-comparison overlay',                           tags: ['parity'] },
+  { id: '3.18', phase: 3, title: 'Multi-craft (Shift-click to craft N at once)',                  tags: ['parity'] },
+  { id: '3.19', phase: 3, title: 'Crafting queue (queue N of recipe, walk away)',                 tags: ['parity'] },
+  { id: '3.20', phase: 3, title: 'Equipment set-bonus system + UI indicator',                     tags: ['parity'] },
+  { id: '3.21', phase: 3, title: 'Item affix/modifier rolls (rarity → affix count)',              tags: ['parity'] },
+  { id: '3.22', phase: 3, title: 'Reforging bench (stat reroll, currency cost)',                  tags: ['parity'] },
+  { id: '3.23', phase: 3, title: 'Salvage / disassemble items into materials',                    tags: ['parity'] },
+  { id: '3.24', phase: 3, title: 'Enchantment scrolls (apply/reroll affixes)',                    tags: ['parity'] },
+  { id: '3.25', phase: 3, title: 'Trash slot / discard confirmation dialog',                      tags: ['parity'] },
+  { id: '3.26', phase: 3, title: 'Inventory category tabs / sort modes',                          tags: ['parity'] },
+  { id: '3.27', phase: 3, title: 'Bag-in-bag UX (open sub-bag without closing inventory)',        tags: ['parity'] },
+  { id: '3.28', phase: 3, title: 'Furnace smelting station (separate from workbench)',            tags: ['parity'] },
+  { id: '3.29', phase: 3, title: 'Anvil station (smithing reforge component)',                    tags: ['parity'] },
+  { id: '3.30', phase: 3, title: 'Sawmill (wood → planks intermediate)',                          tags: ['parity'] },
+  { id: '3.31', phase: 3, title: 'Tannery (hides → leather)',                                     tags: ['parity'] },
+  { id: '3.32', phase: 3, title: 'Workbench adjacency-detection (multiple stations one room)',    tags: ['parity'] },
+  { id: '3.33', phase: 3, title: 'Auto-equip best armor button',                                  tags: ['parity'] },
+  { id: '3.34', phase: 3, title: 'Bucket item (carry liquid in inventory)',                       tags: ['parity'] },
+  { id: '3.35', phase: 3, title: 'Place liquid back as tile (water / lava / slime)',              tags: ['parity'] },
+  { id: '3.36', phase: 3, title: 'Item dyeing (recolor cosmetic gear)',                           tags: ['parity'] },
+  { id: '3.37', phase: 3, title: 'Wardrobe / outfit save slots',                                  tags: ['parity'] },
+  { id: '3.38', phase: 3, title: 'Item star-rating / quality grade per drop',                     tags: ['parity'] },
+  { id: '3.39', phase: 3, title: 'Soulbound items (no-trade flag for multiplayer)',               tags: ['parity'] },
+  { id: '3.40', phase: 3, title: 'Recipe scrolls as drops (one-time-use unlock)',                 tags: ['parity'] },
+  { id: '3.41', phase: 3, title: 'Place-multiple drag-tool for tile placement',                   tags: ['parity'] },
+  { id: '3.42', phase: 3, title: 'Crafting cancel + ingredient refund logic',                     tags: ['parity'] },
+  { id: '3.43', phase: 3, title: 'Item lock toggle (prevent accidental sell / discard)',          tags: ['parity'] },
+  { id: '3.44', phase: 3, title: 'Item compare-and-replace shortcut (one-click swap)',            tags: ['parity'] },
+  { id: '3.45', phase: 3, title: 'Inventory sort by stat (Atk / Def / Rarity)',                   tags: ['parity'] },
+  { id: '3.46', phase: 3, title: 'Two-handed weapon slot rule (occupies main + off-hand)',        tags: ['parity'] },
+  { id: '3.47', phase: 3, title: 'Dual-wield support (two one-handers)',                          tags: ['parity'] },
+  { id: '3.48', phase: 3, title: 'Trinket / charm accessory slot',                                tags: ['parity'] },
+  { id: '3.49', phase: 3, title: 'Belt slot (utility consumables hotkeyed)',                      tags: ['parity'] },
+  { id: '3.50', phase: 3, title: 'Drag item to ground = drop',                                    tags: ['parity'] },
+  { id: '3.51', phase: 3, title: 'Hotbar swap-sets (Q to swap between two saved hotbars)',        tags: ['parity'] },
+  { id: '3.52', phase: 3, title: 'Right-click context menu on items',                             tags: ['parity'] },
+  { id: '3.53', phase: 3, title: 'Recycle bin / discard confirmation modal',                      tags: ['parity'] },
+  { id: '3.54', phase: 3, title: 'Multi-shot affix on bows (3 arrows per draw)',                  tags: ['parity'] },
+  { id: '3.55', phase: 3, title: 'Penetrating-shot affix (pierce multiple enemies)',              tags: ['parity'] },
+  { id: '3.56', phase: 3, title: 'Stat re-roll vs Reforge (distinct mechanic from 3.22)',         tags: ['parity'] },
+  { id: '3.57', phase: 3, title: 'Crafting station tier upgrade item (Place Block analog)',       tags: ['parity'] },
+  { id: '3.58', phase: 3, title: 'Liquid containers (bottles, vials)',                            tags: ['parity'] },
+  { id: '3.59', phase: 3, title: 'Item tooltip lore-text excerpt (for relics / key items)',       tags: ['parity', 'lore'] },
+  { id: '3.60', phase: 3, title: 'Item search box in inventory + chest',                          tags: ['parity'] },
+  { id: '3.61', phase: 3, title: 'Set-bonus tooltip preview (which pieces give what)',            tags: ['parity'] },
+  { id: '3.62', phase: 3, title: 'Helmet visual rendered on player head',                         tags: ['parity'] },
+  { id: '3.63', phase: 3, title: 'Cape / cloak animation slot (back-layer)',                      tags: ['parity'] },
+  { id: '3.64', phase: 3, title: 'Off-hand item rendered on player (shield / lantern)',           tags: ['parity'] },
+  { id: '3.65', phase: 3, title: 'Backpack visual (visible bag on back-layer)',                   tags: ['parity'] },
+  { id: '3.66', phase: 3, title: 'Item history "last acquired" sort / filter',                    tags: ['parity'] },
+  { id: '3.67', phase: 3, title: 'Item flavor text per rarity tier',                              tags: ['parity', 'lore'] },
+  { id: '3.68', phase: 3, title: 'Cosmetic-only hat slot (separate from helmet-armor)',           tags: ['parity'] },
+  { id: '3.69', phase: 3, title: 'Pet collar / cosmetic accessory customization',                 tags: ['parity'] },
+  { id: '3.70', phase: 3, title: 'Boss-unique trinket drops (one per boss)',                      tags: ['parity'] },
+  { id: '3.71', phase: 3, title: 'Crafting-complete success SFX',                                 tags: ['parity'] },
+  { id: '3.72', phase: 3, title: 'Recipe-scroll drops from chests (some recipes gated)',          tags: ['parity'] },
+  { id: '3.73', phase: 3, title: 'Crystal-cluster resource (Glasswright multi-tile node)',        tags: ['parity', 'lore'] },
+  { id: '3.74', phase: 3, title: 'Tool durability + repair system',                               tags: ['parity'] },
+  { id: '3.75', phase: 3, title: 'Throwing axe weapon (returns to player)',                       tags: ['parity'] },
+  { id: '3.76', phase: 3, title: 'Rapier weapon (fast melee, lower damage)',                      tags: ['parity'] },
+  { id: '3.77', phase: 3, title: 'Greatsword (slow heavy two-handed melee)',                      tags: ['parity'] },
+  { id: '3.78', phase: 3, title: 'Heavy crossbow (slow fire, high damage)',                       tags: ['parity'] },
+  { id: '3.79', phase: 3, title: 'Wand weapon (single-target magic, low cost)',                   tags: ['parity'] },
+  { id: '3.80', phase: 3, title: 'Tome weapon (held magic, support buffs / heals)',               tags: ['parity'] },
+  { id: '3.81', phase: 3, title: 'Reload-time animation per ranged weapon',                       tags: ['parity'] },
+  { id: '3.82', phase: 3, title: 'Auto-reload from quiver / pouch',                               tags: ['parity'] },
+  { id: '3.83', phase: 3, title: 'Drop-rate boost / Luck-stat accessory tier',                    tags: ['parity'] },
+  { id: '3.84', phase: 3, title: 'Reach / range stat display in tooltip',                         tags: ['parity'] },
+  { id: '3.85', phase: 3, title: 'Aphelion-fragment rare crafting reagent (cross-tier upgrades)', tags: ['parity', 'lore'] },
+  { id: '3.86', phase: 3, title: 'Glow-tube combination item (light source + waypoint)',          tags: ['parity'] },
+
+  /* ---------- PHASE 4 ---------- */
+  { id: '4.1',  phase: 4, title: 'Chunk system (64×64 tiles, load-on-proximity)',                 tags: ['parity'] },
+  { id: '4.2',  phase: 4, title: 'Procedural floor + wall per biome',                             tags: ['parity'] },
+  { id: '4.3',  phase: 4, title: 'Ore vein placement (Perlin / Poisson)',                         tags: ['parity'] },
+  { id: '4.4',  phase: 4, title: 'Anchor structure prefab (pre-placed)',                          tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — covered by structures_anchor_base.txt] + scene work.
+Asset: anchor_plateau_decor.png (64×16, 4 tiles) ships from prompts/structures/structures_anchor_base.txt.
+Non-asset: scenes/world/Anchor.tscn — pre-placed plateau with Resonance Loom (4.5), starter chest, bed, basic loam-bench.
+Lore: lore/07_echo_walkers_player.md §7.8` },
+  { id: '4.5',  phase: 4, title: 'Resonance Loom interactable (set spawn + sliver count UI)',     tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — hero] + code.
+Asset: resonance_loom.png (48×48) ships from prompts/structures/structures_anchor_base.txt. Polish: 2 passes.
+Non-asset: scenes/structures/ResonanceLoom.tscn; interact = set respawn; integrate Aphelion-sliver readout (ticket 2.13); spawn-flicker SFX hook.
+Lore: lore/01_cosmology_and_universe.md` },
+  { id: '4.6',  phase: 4, title: 'Biome boundary corridor tunnels',                               tags: ['parity'] },
+  { id: '4.7',  phase: 4, title: 'Root Hollows biome data + Shaleseed ore',                       tags: ['parity', 'lore', 'art'], desc: `Hybrid: data-resource work + reuse of 1.12's Gemini atlas.
+Asset (already covered by ticket 1.12):
+- The Shaleseed ore tiles and biome floor/wall tiles ALL live inside assets/sprites/tiles/root_hollows_atlas_16.png at canonical row positions (row 5 for Shaleseed ore, rows 0/3/4 for floor/wall). Do NOT regenerate. If 1.12 is not yet "final" in the manifest, complete 1.12 first.
+Non-asset work (Godot, data-driven):
+- Create resources/biomes/root_hollows.tres referencing the atlas + tile-row positions for floor, walls, ore stages.
+- Create resources/items/ore_shaleseed.tres (tier 1, drops on full mining, lore-named per docs/design/02_lore_to_mechanics_mapping.md §4).
+- Create resources/loot/root_hollows_basic.tres mob/ore drop tables.
+- Wire the Stratabreaking skill XP source per ticket 2.9.
+Lore: lore/04_biomes.md#stratum-1--the-root-hollows; docs/design/02_lore_to_mechanics_mapping.md
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '4.8',  phase: 4, title: 'Glasswright Reaches biome data + Clearstone ore',               tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — Antigravity-ready] + biome-data work.
+Asset (Gemini):
+- Prompt: prompts/tiles/glasswright_reaches_atlas.txt
+- Final: assets/sprites/tiles/glasswright_reaches_atlas_16.png (256×256)
+- Model: gemini-2.5-flash-image. Polish: 1 pass. Source 1024×1024 → 4× downsample.
+- After gen: prompts/_HOWTO.md §2; update manifest "tile_glasswright_reaches_atlas_16" status→"final".
+Non-asset work (Godot):
+- resources/biomes/glasswright_reaches.tres (references atlas + tile-row positions; Clearstone ore in row 5; Veinglass shards in row 5 secondary).
+- resources/items/ore_clearstone.tres (tier 2; lore-name; see docs/design/02_lore_to_mechanics_mapping.md §4).
+- Crystal-tier crafting unlock at the Clearstone Forge (ticket 3.11).
+Lore: lore/04_biomes.md#stratum-2--the-glasswright-reaches
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '4.9',  phase: 4, title: 'Biome-specific ambient music swap on cross',                    tags: ['parity', 'art'] },
+  { id: '4.10', phase: 4, title: 'Map UI (mini-map + full-screen, chunks reveal as visited)',     tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by ui_merchant_map_misc.txt] + code.
+Assets: map_fullscreen.png (128×128), minimap_widget.png (64×64) ship from prompts/ui/ui_merchant_map_misc.txt.
+Non-asset: scenes/ui/Map.tscn; chunk-revealed state stored in SaveSystem; biome-color shading on revealed chunks.` },
+  { id: '4.11', phase: 4, title: 'Compass to Loom',                                               tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — covered by ui_merchant_map_misc.txt] + code.
+Asset: compass_to_loom.png (16×16) ships from prompts/ui/ui_merchant_map_misc.txt.
+Non-asset: HUD widget pointing toward the player's set Loom; lore says compass points "down/in" not "out".
+Lore: docs/design/02_lore_to_mechanics_mapping.md §1` },
+  { id: '4.12', phase: 4, title: 'Minimap fog of war (unexplored chunks hidden, reveal on enter)', tags: ['parity'] },
+  { id: '4.13', phase: 4, title: 'Glow Tube / teleporter waypoint network',                       tags: ['parity'] },
+  { id: '4.14', phase: 4, title: 'Bound Compass / recall-to-Loom item (hearthstone-equiv)',       tags: ['parity', 'lore'] },
+  { id: '4.15', phase: 4, title: 'Mob spawn budget + density per 16×16 cell',                     tags: ['parity'] },
+  { id: '4.16', phase: 4, title: 'Walls block enemy spawns within radius (CK base-safety rule)',  tags: ['parity'] },
+  { id: '4.17', phase: 4, title: 'Mob spawner objects (destructible enemy generators)',           tags: ['parity'] },
+  { id: '4.18', phase: 4, title: 'Procedural unique rooms / loot chambers per biome',             tags: ['parity'] },
+  { id: '4.19', phase: 4, title: 'Map markers / pins (player-placed, labels)',                    tags: ['parity'] },
+  { id: '4.20', phase: 4, title: 'Procedural lakes / rivers / liquid bodies',                     tags: ['parity'] },
+  { id: '4.21', phase: 4, title: 'Abandoned camps / pre-placed structures per biome',             tags: ['parity', 'lore'] },
+  { id: '4.22', phase: 4, title: 'World-gen seed-reproducibility test',                           tags: ['parity', 'test'] },
+  { id: '4.23', phase: 4, title: 'Treasure chests with rare loot tables (placed in world)',       tags: ['parity'] },
+  { id: '4.24', phase: 4, title: 'Pre-placed lore-tablet anchors per biome',                      tags: ['parity', 'lore'] },
+  { id: '4.25', phase: 4, title: 'Skeleton-key items for locked chests / doors',                  tags: ['parity'] },
+  { id: '4.26', phase: 4, title: 'Bridge tile (placeable over water / lava)',                     tags: ['parity'] },
+  { id: '4.27', phase: 4, title: 'Liquid pumping / piping (water / lava transfer)',               tags: ['parity'] },
+  { id: '4.28', phase: 4, title: 'Trapdoor / hatch placeables',                                   tags: ['parity'] },
+  { id: '4.29', phase: 4, title: 'Hidden walls / secret passages (mineable, no surface clue)',    tags: ['parity'] },
+  { id: '4.30', phase: 4, title: 'Treasure-map items (lead to fixed chests)',                     tags: ['parity'] },
+  { id: '4.31', phase: 4, title: 'Coordinate display in HUD + paste-to-chat',                     tags: ['parity'] },
+  { id: '4.32', phase: 4, title: 'Random world events scheduler (Wandering Trader, etc.)',        tags: ['parity'] },
+  { id: '4.33', phase: 4, title: 'Roof / overhead detection (rain shelter / indoor scoring)',     tags: ['parity'] },
+  { id: '4.34', phase: 4, title: 'Crystal regrowth in Glasswright Reaches (lore-specific)',       tags: ['parity', 'lore'] },
+  { id: '4.35', phase: 4, title: 'Liquid mixing rules (water + lava → stone, etc.)',              tags: ['parity'] },
+  { id: '4.36', phase: 4, title: 'Tile-conversion rules (sand + water → mud, etc.)',              tags: ['parity'] },
+  { id: '4.37', phase: 4, title: 'Player-built statues (commemorate boss kills)',                 tags: ['parity'] },
+  { id: '4.38', phase: 4, title: 'World scanner item (reveal biome layout in radius)',            tags: ['parity'] },
+  { id: '4.39', phase: 4, title: 'Compass to last-death-location item',                           tags: ['parity'] },
+  { id: '4.40', phase: 4, title: 'Wishing-well placeable (random buff or item)',                  tags: ['parity'] },
+  { id: '4.41', phase: 4, title: 'Sticky tile / slow tile placeable hazards',                     tags: ['parity'] },
+  { id: '4.42', phase: 4, title: 'Suncrack event scheduler (visible Aphelion damage event)',      tags: ['parity', 'lore'] },
+  { id: '4.43', phase: 4, title: 'Hollowling motes wandering ambient VFX',                        tags: ['parity', 'lore'] },
+  { id: '4.44', phase: 4, title: 'Sub-biome detection (e.g. Quiet Forge inside Reaches)',         tags: ['parity', 'lore'] },
+  { id: '4.45', phase: 4, title: 'Biome-transition tile blending shader',                         tags: ['parity', 'art'] },
+  { id: '4.46', phase: 4, title: 'Day/night cycle distinct from Aphelion Beat (24-min day)',      tags: ['parity', 'lore'] },
+  { id: '4.47', phase: 4, title: 'Heat / cold radiation gradient zones (per-tile temperature)',   tags: ['parity'] },
+  { id: '4.48', phase: 4, title: 'World border behavior at finite edge (bounded radius)',         tags: ['parity'] },
+  { id: '4.49', phase: 4, title: 'Anchor temporary-base portable item (CK Anchor of Soul analog)',tags: ['parity'] },
+  { id: '4.50', phase: 4, title: 'Sub-biome rare-loot rooms per major biome',                     tags: ['parity'] },
+  { id: '4.51', phase: 4, title: 'Light radius affects mob spawning (safe-zone gameplay)',        tags: ['parity'] },
+  { id: '4.52', phase: 4, title: 'Bed cooldown (cannot sleep again until N Beats pass)',          tags: ['parity'] },
+  { id: '4.53', phase: 4, title: 'Glow shrooms (light-source crop placeable)',                    tags: ['parity'] },
+  { id: '4.54', phase: 4, title: 'Boss-altar / re-fight summon tile',                             tags: ['parity'] },
+  { id: '4.55', phase: 4, title: 'Floor scatter decorations (small bones, fungi clumps)',         tags: ['parity', 'art'] },
+  { id: '4.56', phase: 4, title: 'Weather effects per biome (rain Verdancy, ash Emberforge, snow Auroric)', tags: ['parity'] },
+  { id: '4.57', phase: 4, title: 'Weather affects gameplay (rain extinguishes torches, ash slows)',tags: ['parity'] },
+  { id: '4.58', phase: 4, title: 'Wind direction per biome (visual particles + projectile drift)',tags: ['parity'] },
+  { id: '4.59', phase: 4, title: 'Mob spawner upgrade tiers (rare elite spawners)',               tags: ['parity'] },
+  { id: '4.60', phase: 4, title: 'Locked dungeon doors (defeat-inside-mob to open)',              tags: ['parity'] },
+  { id: '4.61', phase: 4, title: 'Time-of-day affects mob spawns (night-Beat = more aggressive)', tags: ['parity', 'lore'] },
+  { id: '4.62', phase: 4, title: 'Player tombstone / death-location marker (persist until pickup)',tags: ['parity'] },
+  { id: '4.63', phase: 4, title: 'Sleep skips world-time (24-min day → 1 dawn)',                  tags: ['parity'] },
+  { id: '4.64', phase: 4, title: 'Sleep blocked when hostile mobs nearby',                        tags: ['parity'] },
+  { id: '4.65', phase: 4, title: 'First-run wizard / new-player setup flow',                      tags: ['parity'] },
+
+  /* ---------- PHASE 5 ---------- */
+  { id: '5.1',  phase: 5, title: 'Boss arena prefab + rune circle',                               tags: ['parity', 'art'], desc: `[GEMINI ASSET — partial; uses Root Hollows atlas tiles]
+Assets: rune-circle decoration is part of prompts/tiles/root_hollows_atlas.txt (Row 10 hazard/trap tiles, biome-specific glyphs). No new prompt needed.
+Non-asset: scenes/world/BossArena.tscn — pre-placed circular arena chamber with rune-circle entry tile; cinematic camera trigger on boss-spawn.` },
+  { id: '5.2',  phase: 5, title: 'Glaur-em 3-phase fight',                                        tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — hero] + boss fight code.
+Prompt: prompts/bosses/boss_glaurem.txt
+Final: assets/sprites/bosses/glaurem.png (192×64, 3 phase poses). Polish: 2 passes.
+After gen: prompts/_HOWTO.md §2; manifest "boss_glaurem" status→"final".
+Non-asset: scenes/bosses/Glaurem.tscn with 3-phase state machine (slam → split → reveal-soft-core); attack patterns per lore/05 §Boss 1; minion-summon (Stoneslough, ticket 5.4); end-of-fight floor-carving "thank you for the quiet."` },
+  { id: '5.3',  phase: 5, title: 'Boss HP bar UI',                                                tags: ['parity', 'art'], desc: `[GEMINI ASSET]
+Prompt: prompts/ui/ui_boss_hp.txt
+Final: assets/sprites/ui/boss_hp_bar.png (256×24)
+After gen: prompts/_HOWTO.md §2; manifest "ui_boss_hp_bar" status→"final".
+Non-asset: scenes/ui/BossHPBar.tscn; phase-marker thresholds; boss-name-plate display.` },
+  { id: '5.4',  phase: 5, title: 'Stoneslough boss-minion add',                                   tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — covered by boss_minions.txt]
+Asset: stoneslough.png ships from prompts/bosses/boss_minions.txt (cell 0,0 of the 12-minion sheet).
+Non-asset: scenes/enemies/minions/Stoneslough.tscn; spawned by Glaur-em phase 1+; simple chase-AI.
+Lore: lore/06_creatures_and_enemies.md §6.5 + lore/05_aeon_sovereigns_bosses.md#boss-1` },
+  { id: '5.5',  phase: 5, title: 'Glaur-em drops: Pulse, Shell, name fragment 1',                 tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSETS — covered by items_relics_key.txt + items_misc_phase5.txt]
+Assets:
+- stone_fathers_pulse.png ships from prompts/items/items_relics_key.txt
+- engorged_stone_shell.png + sovereign_name_fragment_1.png ship from prompts/items/items_misc_phase5.txt
+Non-asset: 3 Item .tres definitions; Glaur-em drop-table .tres; Pulse unlocks Anchor repair step.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-1` },
+  { id: '5.6',  phase: 5, title: 'Loom power-up flow → unlock descent corridor',                  tags: ['parity', 'lore'] },
+  { id: '5.7',  phase: 5, title: 'NPC base class + dialogue UI',                                  tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by ui_dialogue_compendium.txt] + code.
+Asset: dialogue_box.png (256×64) ships from prompts/ui/ui_dialogue_compendium.txt.
+Non-asset: scripts/npcs/npc_base.gd, scenes/ui/DialogueBox.tscn; dialogue-tree format (ticket 9.12); NPC portrait slot wired to npc_*.png portrait frames.` },
+  { id: '5.8',  phase: 5, title: 'Aelstren the Cartographer (silent + map-fragment gift)',        tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — hero NPC]
+Prompt: prompts/npcs/npc_aelstren.txt
+Final: assets/sprites/npcs/aelstren.png (664×24, 41 frames). Polish: 2 passes.
+After gen: prompts/_HOWTO.md §2; manifest "npc_aelstren" status→"final".
+Non-asset: scenes/npcs/Aelstren.tscn (silent NPC, gestures only); first-NPC-arrival trigger after Glaur-em kill (ticket 5.9); map-fragment gift item.
+Lore: lore/03_factions_and_civilizations.md + lore/11_environmental_storytelling.md` },
+  { id: '5.9',  phase: 5, title: 'NPC arrival trigger (boss kill → arrives at Anchor)',           tags: ['parity'] },
+  { id: '5.10', phase: 5, title: 'NPC housing checks (stub: 8×8, door, bed)',                     tags: ['parity'] },
+  { id: '5.11', phase: 5, title: 'Tablet placement + compendium entry',                           tags: ['lore', 'art'], desc: `[GEMINI ASSET — covered by ui_dialogue_compendium.txt + items_misc_phase5.txt] + code.
+Assets:
+- tablet_reader.png (128×128) ships from prompts/ui/ui_dialogue_compendium.txt
+- tablet_shard.png (16×16) ships from prompts/items/items_misc_phase5.txt
+Non-asset: placeable tablet item; pick-up adds an entry to compendium (ticket 5.12); lore text from lore/11_environmental_storytelling.md.` },
+  { id: '5.12', phase: 5, title: 'Compendium UI shell (bestiary + tablets tabs)',                 tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — covered by ui_dialogue_compendium.txt]
+Asset: compendium_book.png (128×128) ships from prompts/ui/ui_dialogue_compendium.txt.
+Non-asset: scenes/ui/Compendium.tscn with 3 tabs (Bestiary | Tablets | Echoes); per-creature kill-count unlocks bestiary entry; per-tablet pickup unlocks tablet text.` },
+  { id: '5.13', phase: 5, title: 'Sleep-in-bed interaction (set spawn, optional time-skip)',      tags: ['parity'] },
+  { id: '5.14', phase: 5, title: 'Worship statue / shrine buff station',                          tags: ['parity', 'lore'] },
+  { id: '5.15', phase: 5, title: 'Tutorial / onboarding hint flow (Aelstren-led, skippable)',     tags: ['parity', 'lore'] },
+  { id: '5.16', phase: 5, title: 'Compendium first-encounter trigger (first kill / first pickup)',tags: ['parity'] },
+  { id: '5.17', phase: 5, title: 'Boss respawn-after-defeat (idol summon at rune)',               tags: ['parity'] },
+  { id: '5.18', phase: 5, title: 'Boss music swap (encounter start / mid-phase / clear)',         tags: ['parity', 'art'] },
+  { id: '5.19', phase: 5, title: 'Hunter\'s Crown / title earned per boss-kill',                  tags: ['parity'] },
+  { id: '5.20', phase: 5, title: 'NPC arrival cinematic-toast (world-pause prompt, no cutscene)', tags: ['parity'] },
+  { id: '5.21', phase: 5, title: 'Floor traps (spike, dart, placeable)',                          tags: ['parity'] },
+  { id: '5.22', phase: 5, title: 'Healing-tile shrine (placeable + Loom-flavored)',               tags: ['parity', 'lore'] },
+  { id: '5.23', phase: 5, title: 'Hidden doors (look like wall until proximity)',                 tags: ['parity'] },
+  { id: '5.24', phase: 5, title: 'Locked doors requiring key items',                              tags: ['parity'] },
+  { id: '5.25', phase: 5, title: 'Boss-arena gate-lock during fight',                             tags: ['parity'] },
+  { id: '5.26', phase: 5, title: 'Boss intro voice-line / sting',                                 tags: ['parity', 'art'] },
+  { id: '5.27', phase: 5, title: 'Mob unique vocalization per species',                           tags: ['art'] },
+  { id: '5.28', phase: 5, title: 'Boss attack telegraph red-zone shader',                         tags: ['parity'] },
+  { id: '5.29', phase: 5, title: 'Boss enrage timer (force-end mode after N min)',                tags: ['parity'] },
+  { id: '5.30', phase: 5, title: 'Boss-defeat fanfare music sting + screen-shake',                tags: ['parity', 'art'] },
+  { id: '5.31', phase: 5, title: 'Trial chamber / proving-ground variants per biome',             tags: ['parity'] },
+  { id: '5.32', phase: 5, title: 'Aelstren after-first-kill paper-bird memorial trigger',         tags: ['lore'] },
+  { id: '5.33', phase: 5, title: 'Glaur-em "thank you for the quiet" floor-carving on defeat',    tags: ['lore'] },
+  { id: '5.34', phase: 5, title: 'NPC reaction barks to boss defeats (per-NPC, per-boss)',        tags: ['lore'] },
+  { id: '5.35', phase: 5, title: 'Pre-fight murals in arena approach corridor (lore §11)',        tags: ['lore', 'art'] },
+  { id: '5.36', phase: 5, title: 'First-NPC-arrival warm-up sequence (skippable, lore-flavored)', tags: ['lore'] },
+  { id: '5.37', phase: 5, title: 'NPC interaction prompt (E-key floats over interactable)',       tags: ['parity'] },
+  { id: '5.38', phase: 5, title: 'Pre-boss tactical-prep summary panel (recommended gear hint)',  tags: ['parity'] },
+  { id: '5.39', phase: 5, title: 'Boss intro voice-over text crawl (lore-flavored)',              tags: ['parity', 'lore'] },
+  { id: '5.40', phase: 5, title: 'Game-open opening sequence (Loom + first-Beat hum + Aelstren)', tags: ['parity', 'lore'] },
+
+  /* ---------- PHASE 6 ---------- */
+  { id: '6.1',  phase: 6, title: 'Ranged: Bow + Arrow ammo',                                      tags: ['parity', 'art'], desc: `[GEMINI ASSETS]
+- bow_tier_0..8 ships from prompts/items/items_weapons_tiered.txt
+- arrow variants ship from prompts/items/items_ammo.txt
+- player_walker_attack_ranged ships from prompts/player/walker_combat.txt
+Non-asset: Bow .tres; ammo-consumption; projectile with arc physics.` },
+  { id: '6.2',  phase: 6, title: 'Ranged: Gun + Bullet ammo',                                     tags: ['parity', 'art'], desc: `[GEMINI ASSETS]
+- gun_tier_0..8 ships from prompts/items/items_weapons_tiered.txt
+- bullet variants ship from prompts/items/items_ammo.txt
+Non-asset: Gun .tres; straight-line projectile (faster than arrow); ammo-consumption.` },
+  { id: '6.3',  phase: 6, title: 'Magic: Staff (mana cost, cooldown)',                            tags: ['parity', 'art'], desc: `[GEMINI ASSETS]
+- staff_tier_0..8 ships from prompts/items/items_weapons_tiered.txt
+- player_walker_attack_magic ships from prompts/player/walker_combat.txt
+Non-asset: Staff .tres; mana + cooldown; per-tier projectile pattern.` },
+  { id: '6.4',  phase: 6, title: 'Summoning: Minion spawn + follow AI',                           tags: ['parity', 'art'], desc: `[GEMINI ASSETS]
+- player_walker_attack_summon ships from prompts/player/walker_combat.txt
+- Summoned-minion placeholder uses tinted Walker silhouette + hand-of-light glow; a dedicated prompts/enemies/summoned_minion.txt can be authored later for a unique sprite.
+Non-asset: scenes/enemies/SummonedMinion.tscn; follow-player AI; minion-count cap by talent.` },
+  { id: '6.5',  phase: 6, title: 'Damage-type system (typed StringName)',                         tags: ['parity', 'test'] },
+  { id: '6.6',  phase: 6, title: 'Burn DoT (8.4s, 2s ticks)',                                     tags: ['parity'] },
+  { id: '6.7',  phase: 6, title: 'Poison DoT + -75% healing-received',                            tags: ['parity'] },
+  { id: '6.8',  phase: 6, title: 'Cold / Freeze slow',                                            tags: ['parity'] },
+  { id: '6.9',  phase: 6, title: 'Stun lockout',                                                  tags: ['parity'] },
+  { id: '6.10', phase: 6, title: 'Resistance/weakness per mob (data-driven)',                     tags: ['parity', 'test'] },
+  { id: '6.11', phase: 6, title: 'Crit chance + crit damage stats',                               tags: ['parity'] },
+  { id: '6.12', phase: 6, title: 'Armor formula + final damage calc',                             tags: ['parity', 'test'] },
+  { id: '6.13', phase: 6, title: 'Buff/debuff icon strip on HUD',                                 tags: ['parity', 'art'], desc: `[GEMINI ASSETS]
+- buff_debuff_icons.png ships from prompts/ui/ui_merchant_map_misc.txt (8 icons: Burn/Poison/Cold/Freeze/Stun/HoT/Speed/Strength)
+- buff_debuff_strip frame ships from prompts/ui/ui_hud_core.txt
+Non-asset: HUD strip composition; per-effect duration counter; icon-tinting on stack-count > 1.` },
+  { id: '6.14', phase: 6, title: 'Off-hand shield + block / parry mechanic',                      tags: ['parity'] },
+  { id: '6.15', phase: 6, title: 'Off-hand lantern as combat util (light + minor stat)',          tags: ['parity'] },
+  { id: '6.16', phase: 6, title: 'Weapon-special attacks per class (boomerang, whip, charge)',    tags: ['parity'] },
+  { id: '6.17', phase: 6, title: 'Status-resistance gear stats (per-element resist %)',           tags: ['parity'] },
+  { id: '6.18', phase: 6, title: 'Combo / multi-hit weapon attack patterns',                      tags: ['parity'] },
+  { id: '6.19', phase: 6, title: 'Bleed DoT status (scales with target max HP)',                  tags: ['parity'] },
+  { id: '6.20', phase: 6, title: 'Lightning damage type (Void & Voltage)',                        tags: ['parity'] },
+  { id: '6.21', phase: 6, title: 'Void damage type (endgame)',                                    tags: ['parity'] },
+  { id: '6.22', phase: 6, title: 'Confusion / reverse-input status effect',                       tags: ['parity'] },
+  { id: '6.23', phase: 6, title: 'Dodge roll with i-frames + cooldown',                           tags: ['parity'] },
+  { id: '6.24', phase: 6, title: 'Whip weapon class (long-reach single-target pull)',             tags: ['parity'] },
+  { id: '6.25', phase: 6, title: 'Boomerang weapon class (returns to player, hits twice)',        tags: ['parity'] },
+  { id: '6.26', phase: 6, title: 'Spear charge attack (hold-to-thrust)',                          tags: ['parity'] },
+  { id: '6.27', phase: 6, title: 'Throwable knife / dagger (consumable ammo)',                    tags: ['parity'] },
+  { id: '6.28', phase: 6, title: 'Lifesteal / mana-steal stats',                                  tags: ['parity'] },
+  { id: '6.29', phase: 6, title: 'Thorns reflect stat (return-damage to attacker)',               tags: ['parity'] },
+  { id: '6.30', phase: 6, title: 'Movement-speed slow status + cleanse mechanic',                 tags: ['parity'] },
+  { id: '6.31', phase: 6, title: 'Sword whirlwind / spin attack (sword-class special)',           tags: ['parity'] },
+  { id: '6.32', phase: 6, title: 'Aim cone / accuracy stat (ranged scatter)',                     tags: ['parity'] },
+  { id: '6.33', phase: 6, title: 'Knockback resistance stat',                                     tags: ['parity'] },
+  { id: '6.34', phase: 6, title: 'Move-while-attacking speed penalty',                            tags: ['parity'] },
+  { id: '6.35', phase: 6, title: 'Backstab / positional damage bonus (mob facing)',               tags: ['parity'] },
+  { id: '6.36', phase: 6, title: 'Crossbow weapon type (slower fire, higher damage)',             tags: ['parity'] },
+  { id: '6.37', phase: 6, title: 'Charged attack (hold-to-charge release for bonus damage)',      tags: ['parity'] },
+  { id: '6.38', phase: 6, title: 'Heavy attack vs light attack distinction',                      tags: ['parity'] },
+  { id: '6.39', phase: 6, title: 'Stagger meter (mob breaks under heavy hits)',                   tags: ['parity'] },
+  { id: '6.40', phase: 6, title: 'Mana regen stat + mana-on-kill rune',                           tags: ['parity'] },
+  { id: '6.41', phase: 6, title: 'Skill cooldown reduction stat (magic / summon)',                tags: ['parity'] },
+  { id: '6.42', phase: 6, title: 'HP bar above mob heads (toggle option)',                        tags: ['parity'] },
+  { id: '6.43', phase: 6, title: 'Counter-attack window (parry success → riposte slot)',          tags: ['parity'] },
+  { id: '6.44', phase: 6, title: 'Reflect projectile mechanic (block-direction sends back)',      tags: ['parity'] },
+  { id: '6.45', phase: 6, title: 'Two-handed weapon class (slower, harder hitting)',              tags: ['parity'] },
+  { id: '6.46', phase: 6, title: 'Mana-burst on kill (rune affix)',                               tags: ['parity'] },
+  { id: '6.47', phase: 6, title: 'Adrenaline / rage meter (build on hit, spend on big attack)',   tags: ['parity'] },
+  { id: '6.48', phase: 6, title: 'Boss attack-pattern data (.tres) and runtime cycler',           tags: ['parity', 'test'] },
+  { id: '6.49', phase: 6, title: 'DPS meter / parser opt-in HUD',                                 tags: ['parity'] },
+  { id: '6.50', phase: 6, title: 'Status-effect overlays on character (burn / poison / freeze)',  tags: ['parity', 'art'] },
+  { id: '6.51', phase: 6, title: 'Confusion-status reversed-input visual',                        tags: ['parity', 'art'] },
+  { id: '6.52', phase: 6, title: 'Frozen visual (ice-cube around player)',                        tags: ['parity', 'art'] },
+  { id: '6.53', phase: 6, title: 'Bleeding visual (blood-drip particle on character)',            tags: ['parity', 'art'] },
+  { id: '6.54', phase: 6, title: 'Lightning chain-arc visual (Void & Voltage parity)',            tags: ['parity', 'art'] },
+  { id: '6.55', phase: 6, title: 'Mining swing-speed stat (gated by Crafting talent)',            tags: ['parity'] },
+  { id: '6.56', phase: 6, title: 'Mining-penetration affix (break N tiles in one swing)',         tags: ['parity'] },
+  { id: '6.57', phase: 6, title: 'Weapon ammo display (arrows / bullets in HUD)',                 tags: ['parity'] },
+  { id: '6.58', phase: 6, title: 'Auto-target nearest mob (Tab cycles target)',                   tags: ['parity'] },
+  { id: '6.59', phase: 6, title: 'Adaptive music layering (combat intensity ramps)',              tags: ['parity', 'art'] },
+  { id: '6.60', phase: 6, title: 'Audio occlusion (muffled through walls)',                       tags: ['parity', 'art'] },
+  { id: '6.61', phase: 6, title: '3D positional audio for boss attacks',                          tags: ['parity', 'art'] },
+
+  /* ---------- PHASE 7 ---------- */
+  { id: '7.1', phase: 7, title: 'Talent tree data format (.tres)',                                tags: ['parity'] },
+  { id: '7.2', phase: 7, title: 'Talent UI screen (per-skill tab)',                               tags: ['parity', 'art'], desc: `[GEMINI ASSETS]
+- talent_node.png (active+inactive) ships from prompts/ui/ui_advanced.txt
+- talent_skill_icons.png (12 skill icons) ships from prompts/ui/ui_advanced.txt
+Non-asset: scenes/ui/TalentTree.tscn with per-skill tabs; node-connection rendering; point-spend logic from ticket 7.7.` },
+  { id: '7.3', phase: 7, title: 'Mining talents (Stratabreaking tree)',                           tags: ['parity'] },
+  { id: '7.4', phase: 7, title: 'Running, Melee, Ranged, Vitality talents',                       tags: ['parity'] },
+  { id: '7.5', phase: 7, title: 'Crafting, Gardening, Fishing, Cooking talents',                  tags: ['parity'] },
+  { id: '7.6', phase: 7, title: 'Magic, Summoning, Explosives talents',                           tags: ['parity'] },
+  { id: '7.7', phase: 7, title: 'Talent-point allocation + respec scroll',                        tags: ['parity'] },
+  { id: '7.8',  phase: 7, title: 'Skill XP boost food / potions (temporary +XP buff)',            tags: ['parity'] },
+  { id: '7.9',  phase: 7, title: 'Skill level-up notification popup + SFX',                       tags: ['parity'] },
+  { id: '7.10', phase: 7, title: 'Skill-cap-100 reward / vanity (cosmetic per skill mastered)',   tags: ['parity'] },
+  { id: '7.11', phase: 7, title: 'Skill bonus from accessory items (rings/necks that +skill)',    tags: ['parity'] },
+  { id: '7.12', phase: 7, title: 'Skill XP shared in party (multiplayer)',                        tags: ['parity', 'netcode'] },
+  { id: '7.13', phase: 7, title: 'Talent prerequisites (some nodes require earlier ones)',        tags: ['parity'] },
+  { id: '7.14', phase: 7, title: 'Stats / character sheet screen (full stat readout)',            tags: ['parity'] },
+  { id: '7.15', phase: 7, title: 'Skill challenges / time trials per skill',                      tags: ['parity'] },
+  { id: '7.16', phase: 7, title: 'Talent loadout presets (save / load 3 builds)',                 tags: ['parity'] },
+  { id: '7.17', phase: 7, title: 'Talent tree visualization on character-sheet hover',            tags: ['parity'] },
+  { id: '7.18', phase: 7, title: 'Skill XP curve visualization (current level + next)',           tags: ['parity'] },
+  { id: '7.19', phase: 7, title: 'Luck stat (drop-rate, fishing, treasure-chest contents)',       tags: ['parity'] },
+  { id: '7.20', phase: 7, title: 'Skill-passive cosmetic (small glow per skill 100)',             tags: ['parity'] },
+
+  /* ---------- PHASE 8 ---------- */
+  { id: '8.1',  phase: 8, title: 'Hoe → till soil',                                               tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered]
+- hoe.png ships from prompts/items/items_tools_basic.txt
+- tilled_soil_icon.png ships from prompts/items/items_farming.txt
+Non-asset: tool-use on dirt tile → swap to tilled-soil tile; can be reverted by walking on undecided ones.` },
+  { id: '8.2',  phase: 8, title: 'Watering Can → moisture state',                                 tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by items_tools_basic.txt]
+Asset: watering_can.png (tier 0); tier-5 Tideglass upgrade in items_farming.txt.
+Non-asset: moisture state on tilled-soil tile; visual darken on watered; auto-dry after N Beats.` },
+  { id: '8.3',  phase: 8, title: 'Seed plant + growth-stage tile + ~10 min real-time growth',     tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by items_farming.txt]
+Assets: pale_cap_stage_1..4 + pale_cap_harvested (5 growth stages of the canonical first crop)
+Non-asset: growth-stage tile state with 10-min real-time clock; Aphelion-Beat-synced visual pulse on near-ripe stages.` },
+  { id: '8.4',  phase: 8, title: 'First 6 crops (Pale Cap, Memory Root, …)',                      tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSETS — covered by items_farming.txt]
+Assets: pale_cap, memory_root, salt_wort, verdant_sprout, glow_cap, brinevine (6 crops, 16×16 each)
+Non-asset: 6 Crop .tres definitions; per-biome soil requirement; harvested-output → inventory.
+Lore: per crop, see lore/04_biomes.md for biome flavor.` },
+  { id: '8.5',  phase: 8, title: 'Cooking Pot station + 2-ingredient recipe discovery',           tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by items_tools_basic.txt]
+Asset: cooking_pot.png ships from items_tools_basic.txt.
+Non-asset: scenes/structures/CookingPot.tscn; 2-slot UI; recipe discovery on first successful combination; unlocked-recipe list in SaveSystem.` },
+  { id: '8.6',  phase: 8, title: 'First 20 cooking recipes with food buffs',                      tags: ['parity', 'art'], desc: `[GEMINI ASSETS]
+Prompt: prompts/items/items_food_consumables.txt → 20 food sprites in assets/sprites/items/food/
+After gen: prompts/_HOWTO.md §2; manifest "items_food_set" → expand per-item entries to "final".
+Non-asset: 20 Recipe .tres + 20 FoodBuff .tres files; buff-stack rules in ticket 8.7.` },
+  { id: '8.7',  phase: 8, title: 'Food buff stacking rules (1 of each type)',                     tags: ['parity'] },
+  { id: '8.8',  phase: 8, title: 'Cookbook UI',                                                   tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by ui_merchant_map_misc.txt]
+Asset: cookbook_page.png (128×64).
+Non-asset: scenes/ui/Cookbook.tscn; left-page recipe list (locked greyed out, unlocked normal); right-page recipe detail (ingredients + buff effect).` },
+  { id: '8.9',  phase: 8, title: 'Fishing rod tiers (Wood/Copper/Iron)',                          tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by items_fishing.txt]
+Assets: rod_wooden, rod_copper, rod_iron (16×16 each)
+Non-asset: 3 Rod item .tres; per-tier base-fishing-power stat; tier-gates which fish species can be hooked.` },
+  { id: '8.10', phase: 8, title: 'Fishing minigame (click-to-hook, hold-to-reel)',                tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by ui_advanced.txt]
+Asset: fishing_minigame.png (96×64)
+Non-asset: scenes/ui/FishingMinigame.tscn; vertical-bar mechanic (keep hook on fish-marker for N seconds); per-fish difficulty curve.` },
+  { id: '8.11', phase: 8, title: 'Bait off-hand slot logic',                                      tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by items_fishing.txt]
+Assets: bait_loam_wax, bait_salt_wort, bait_resonant + lure_pouch
+Non-asset: off-hand bait slot in equipment panel (ticket 3.4); per-bait attract-rare-fish modifier.` },
+  { id: '8.12', phase: 8, title: 'Fish list per biome (data-driven)',                             tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by items_fishing.txt]
+Assets: 14 fish species (Hollow Trout, Memory Carp, Crystal Glint, Veinglass Eel, Salt-Bound Tuna, Threnos Lantern-Fish, Bone-Pike, Spore-Carp, Tideglass Pike, Lantern Squid, Wreck Eel, Ember-Catfish, Salt-Carp, Auroric Char)
+Non-asset: per-biome fish-table .tres; biome+rod-tier → fish-pool resolver.` },
+  { id: '8.13', phase: 8, title: 'Sprinkler automation tile',                                     tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by items_farming.txt]
+Assets: sprinkler, verdant_sprinkler (16×16 each)
+Non-asset: Sprinkler placeable .tscn; auto-waters surrounding 3×3 tiles; Aphelion-Tap power-feed in Phase 14.` },
+  { id: '8.14', phase: 8, title: 'Aquarium / fish display tank placeable (multi-fish slots)',     tags: ['parity'] },
+  { id: '8.15', phase: 8, title: 'Bug catching net + ambient critter collection',                 tags: ['parity'] },
+  { id: '8.16', phase: 8, title: 'Composter (refuse → fertilizer)',                               tags: ['parity'] },
+  { id: '8.17', phase: 8, title: 'Greenhouse buff structure (faster crop growth)',                tags: ['parity'] },
+  { id: '8.18', phase: 8, title: 'Beekeeping / hives + honey production',                         tags: ['parity'] },
+  { id: '8.19', phase: 8, title: 'Multi-harvest crops (regrow without replanting)',               tags: ['parity'] },
+  { id: '8.20', phase: 8, title: 'Bait crafting recipes',                                         tags: ['parity'] },
+  { id: '8.21', phase: 8, title: 'Net trap (passive fishing yields over time)',                   tags: ['parity'] },
+  { id: '8.22', phase: 8, title: 'Crops in pots (placeable indoor planters)',                     tags: ['parity'] },
+  { id: '8.23', phase: 8, title: 'Food spoilage + drying rack preservation',                      tags: ['parity'] },
+  { id: '8.24', phase: 8, title: 'Drinking water canteen + water-source interaction',             tags: ['parity'] },
+  { id: '8.25', phase: 8, title: 'Animal husbandry (Charred Goat / Pale Fox feed → tame)',        tags: ['parity', 'lore'] },
+  { id: '8.26', phase: 8, title: 'Fishing rod tier upgrade (Scarlet/Octarine/Galaxite/Solarite)', tags: ['parity'] },
+  { id: '8.27', phase: 8, title: 'Cooking pot fuel consumption (wood / charcoal / blue-coal)',    tags: ['parity'] },
+  { id: '8.28', phase: 8, title: 'Cookbook page-flip UX + ingredient hints for undiscovered',     tags: ['parity'] },
+  { id: '8.29', phase: 8, title: 'Mill (grain → flour intermediate)',                             tags: ['parity'] },
+  { id: '8.30', phase: 8, title: 'Bakery / Oven (cooking sub-station)',                           tags: ['parity'] },
+  { id: '8.31', phase: 8, title: 'Fertilizer variants per biome (Verdant compost, Salt-fert)',    tags: ['parity', 'lore'] },
+  { id: '8.32', phase: 8, title: 'Trellis crops (vertical-growing variant)',                      tags: ['parity'] },
+  { id: '8.33', phase: 8, title: 'Sapling planting (grow into a tree)',                           tags: ['parity'] },
+  { id: '8.34', phase: 8, title: 'Crystal / coral propagation (Glasswright / Drowned)',           tags: ['parity', 'lore'] },
+  { id: '8.35', phase: 8, title: 'Drying rack for meat preservation',                             tags: ['parity'] },
+  { id: '8.36', phase: 8, title: 'Fish-to-trophy mount placeable',                                tags: ['parity'] },
+  { id: '8.37', phase: 8, title: 'Fishing tournament event (timed, scoreboard)',                  tags: ['parity'] },
+  { id: '8.38', phase: 8, title: 'Recipe-unlock audio sting on cooking discovery',                tags: ['parity', 'art'] },
+  { id: '8.39', phase: 8, title: 'Honey production chain (bees → honey → buff recipes)',          tags: ['parity'] },
+  { id: '8.40', phase: 8, title: 'Composter recipes (refuse → fertilizer variants)',              tags: ['parity'] },
+  { id: '8.41', phase: 8, title: 'Pet feeding favorites (per-pet preferred food affects mood)',   tags: ['parity'] },
+  { id: '8.42', phase: 8, title: 'Cooking animation at pot (Walker stirs)',                       tags: ['parity'] },
+  { id: '8.43', phase: 8, title: 'Fishing-pole cast animation + line VFX',                        tags: ['parity'] },
+  { id: '8.44', phase: 8, title: 'Crop watering animation (Walker tips can)',                     tags: ['parity'] },
+  { id: '8.45', phase: 8, title: 'Bomb Pepper (explosive crop on impact)',                        tags: ['parity'] },
+  { id: '8.46', phase: 8, title: 'Glow Cap (light-source crop variant)',                          tags: ['parity'] },
+  { id: '8.47', phase: 8, title: 'Heart Berry (HP-regen food, lore-flavored)',                    tags: ['parity', 'lore'] },
+  { id: '8.48', phase: 8, title: 'Fishing seed-bait crafting (catch-rate variants)',              tags: ['parity'] },
+  { id: '8.49', phase: 8, title: 'Pet leveling (XP from being near combat / kills)',              tags: ['parity'] },
+  { id: '8.50', phase: 8, title: 'Pet death + revive (carry-corpse mechanic)',                    tags: ['parity'] },
+
+  /* ---------- PHASE 9 ---------- */
+  { id: '9.1',  phase: 9, title: 'NPC housing detection (8×8, wood door, bed, empty tile)',       tags: ['parity'] },
+  { id: '9.2',  phase: 9, title: 'Bed item placeable + single-NPC binding',                       tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by structures_anchor_base.txt]
+Asset: bed.png (32×32)
+Non-asset: Bed placeable .tscn; NPC housing detection (ticket 9.1) requires bed + door + 8×8 enclosed room; one bed → one NPC binding.` },
+  { id: '9.3',  phase: 9, title: 'Merchant UI (buy/sell tabs)',                                   tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by ui_merchant_map_misc.txt]
+Asset: merchant_tabs.png (128×64)
+Non-asset: scenes/ui/MerchantUI.tscn; buy/sell tabs; per-NPC inventory restock timer (ticket 9.10).` },
+  { id: '9.4',  phase: 9, title: 'Ancient Coin currency (drops + chests)',                        tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by items_misc_phase5.txt + ui_merchant_map_misc.txt]
+Assets: ancient_coin.png (16×16) + currency_display.png (32×16 UI widget)
+Non-asset: Coin item .tres; mob drop tables; chest loot tables; HUD currency display.` },
+  { id: '9.5',  phase: 9, title: 'Brindle Quench-of-Coals (smith merchant)',                      tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — hero NPC]
+Prompt: prompts/npcs/npcs_merchants.txt (covers all 5 merchants — Brindle is profile 1)
+Final: assets/sprites/npcs/brindle.png (664×24). Polish: 2 passes.
+After gen: prompts/_HOWTO.md §2; manifest "npc_brindle" status→"final".
+Non-asset: scenes/npcs/Brindle.tscn; smith-merchant inventory (tools, armor); arrives after first resonant ingot crafted; Glow-Crane sub-quest hook.
+Lore: lore/03_factions_and_civilizations.md` },
+  { id: '9.6',  phase: 9, title: 'Mira-no-Last-Name (storage clerk)',                             tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — hero NPC]
+Prompt: prompts/npcs/npcs_merchants.txt (profile 2)
+Final: assets/sprites/npcs/mira.png (664×24). Polish: 2 passes.
+After gen: prompts/_HOWTO.md §2; manifest "npc_mira" status→"final".
+Non-asset: scenes/npcs/Mira.tscn; storage-organizing dialog; late-game emotional reveal (Diadem-Bearer's older sister, lore-canonical Phase 16.12 thread).` },
+  { id: '9.7',  phase: 9, title: 'The Cantor of Five Bells (musician + name-song)',               tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — hero NPC]
+Prompt: prompts/npcs/npcs_merchants.txt (profile 3)
+Final: assets/sprites/npcs/cantor_of_five_bells.png (664×24). Polish: 2 passes.
+After gen: prompts/_HOWTO.md §2; manifest "npc_cantor_of_five_bells" status→"final".
+Non-asset: scenes/npcs/Cantor.tscn; tracks Walker respawn count + commentary ("Walker. The sun grows dim because of mercies like yours."); Sovereign-Naming sidequest (ticket 16.2); Five-Bells music puzzle (ticket 16.13).
+Lore: lore/07_echo_walkers_player.md §7.4 + lore/05_aeon_sovereigns_bosses.md (Sovereign-Naming section)` },
+  { id: '9.8',  phase: 9, title: 'Old Hask (fishing merchant)',                                   tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — hero NPC]
+Prompt: prompts/npcs/npcs_merchants.txt (profile 4)
+Final: assets/sprites/npcs/old_hask.png (664×24). Polish: 2 passes.
+After gen: prompts/_HOWTO.md §2; manifest "npc_old_hask" status→"final".
+Non-asset: scenes/npcs/OldHask.tscn; fishing-supply inventory; gifts player a small fishhook before Vol'thaar fight (ticket 10.13).
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-6` },
+  { id: '9.9',  phase: 9, title: 'The Veiled Buyer (random-spawn)',                               tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — hero NPC]
+Prompt: prompts/npcs/npcs_merchants.txt (profile 5)
+Final: assets/sprites/npcs/veiled_buyer.png (664×24). Polish: 2 passes.
+After gen: prompts/_HOWTO.md §2; manifest "npc_veiled_buyer" status→"final".
+Non-asset: random-spawn merchant logic (appears at Anchor occasionally); variable-price buy-only inventory; identity-ambiguous dialogue.` },
+  { id: '9.10', phase: 9, title: 'Inventory restock timer (30–45 min)',                           tags: ['parity'] },
+  { id: '9.11', phase: 9, title: 'NPC pathfinding (sleep → shop walk)',                           tags: ['parity'] },
+  { id: '9.12', phase: 9, title: 'Dialogue tree format (.tres or JSON) + branching',              tags: ['parity'] },
+  { id: '9.13', phase: 9, title: 'Paintings / canvases / signs with text input',                  tags: ['parity'] },
+  { id: '9.14', phase: 9, title: 'Doors auto-open on proximity (toggle per-door)',                tags: ['parity'] },
+  { id: '9.15', phase: 9, title: 'Pet feeding bowl + happiness tracking',                         tags: ['parity'] },
+  { id: '9.16', phase: 9, title: 'NPC mood / friendship level (Stardew-light)',                   tags: ['extension'] },
+  { id: '9.17', phase: 9, title: 'Quest log / objective tracker UI',                              tags: ['parity'] },
+  { id: '9.18', phase: 9, title: 'Daily quest reset on Aphelion-day boundary',                    tags: ['parity', 'lore'] },
+  { id: '9.19', phase: 9, title: 'Gift-giving to NPCs (favorite items per NPC)',                  tags: ['extension'] },
+  { id: '9.20', phase: 9, title: 'NPC pathfinding (sleep → shop walk → idle)',                    tags: ['parity'] },
+  { id: '9.21', phase: 9, title: 'NPC dialogue mood states (changes by world events)',            tags: ['parity'] },
+  { id: '9.22', phase: 9, title: 'Pet inventory carry (Charred Goat saddlebag, lore §6.4)',       tags: ['parity', 'lore'] },
+  { id: '9.23', phase: 9, title: 'Curious Egg → hatchable pet (warmth detection)',                tags: ['parity'] },
+  { id: '9.24', phase: 9, title: 'Decoration furniture sets (themed bundles per culture)',        tags: ['parity', 'lore'] },
+  { id: '9.25', phase: 9, title: 'Wallpaper / floor color variants for room dressing',            tags: ['parity'] },
+  { id: '9.26', phase: 9, title: 'Lighting brightness levels per light source',                   tags: ['parity'] },
+  { id: '9.27', phase: 9, title: 'NPC repair service (durability restore for fee)',               tags: ['parity'] },
+  { id: '9.28', phase: 9, title: 'NPC identify items service (random affix reveal)',              tags: ['parity'] },
+  { id: '9.29', phase: 9, title: 'NPC teleport-to-location service',                              tags: ['parity'] },
+  { id: '9.30', phase: 9, title: 'NPC seasonal special inventory',                                tags: ['parity'] },
+  { id: '9.31', phase: 9, title: 'Pet evolution / growth stages',                                 tags: ['parity'] },
+  { id: '9.32', phase: 9, title: 'Wandering Merchant random spawn (Cloaked Merchant analog)',     tags: ['parity', 'lore'] },
+  { id: '9.33', phase: 9, title: 'Window blocks (see-through walls)',                             tags: ['parity'] },
+  { id: '9.34', phase: 9, title: 'Carpet / rug tiles',                                            tags: ['parity'] },
+  { id: '9.35', phase: 9, title: 'Banner / flag placeables',                                      tags: ['parity'] },
+  { id: '9.36', phase: 9, title: 'Fence placeables (block pathing, decorative)',                  tags: ['parity'] },
+  { id: '9.37', phase: 9, title: 'Pillar / column structural decor',                              tags: ['parity'] },
+  { id: '9.38', phase: 9, title: 'Door tier upgrades (wood → metal → reinforced)',                tags: ['parity'] },
+  { id: '9.39', phase: 9, title: 'Indoor vs outdoor detection (for buffs / NPC mood)',            tags: ['parity'] },
+  { id: '9.40', phase: 9, title: 'Garden score (combined plants → bonus)',                        tags: ['parity'] },
+  { id: '9.41', phase: 9, title: 'Light-pollution scoring (NPC dislikes too bright)',             tags: ['parity'] },
+  { id: '9.42', phase: 9, title: 'NPC voice barks (idle, combat, weather, time-of-day)',          tags: ['parity'] },
+  { id: '9.43', phase: 9, title: 'NPC reaction to placed objects in room (positive / negative)',  tags: ['parity'] },
+  { id: '9.44', phase: 9, title: 'NPC favorite biome / discomfort in wrong biome',                tags: ['parity'] },
+  { id: '9.45', phase: 9, title: 'NPC pause-and-comment on world events (boss kill, etc.)',       tags: ['parity', 'lore'] },
+  { id: '9.46', phase: 9, title: 'Mailbox placeable (offline player-to-player item delivery)',    tags: ['parity', 'netcode'] },
+  { id: '9.47', phase: 9, title: 'Trading-block (player-to-player trade station)',                tags: ['netcode'] },
+  { id: '9.48', phase: 9, title: 'Player-built sign with custom text (lore-flavored frame)',      tags: ['parity'] },
+  { id: '9.49', phase: 9, title: 'Wedding / ceremony pact NPC dialogue (lore-stretched, not romance)', tags: ['extension', 'lore'] },
+  { id: '9.50', phase: 9, title: 'Brindle pendant gift sequence (pre-Skoldur)',                   tags: ['lore'] },
+  { id: '9.51', phase: 9, title: 'Old Hask fishhook gift (pre-Vol\'thaar)',                       tags: ['lore'] },
+  { id: '9.52', phase: 9, title: 'Cantor death-count commentary ("sun grows dim" line)',          tags: ['lore'] },
+  { id: '9.53', phase: 9, title: 'Mira-no-Last-Name family-name reveal sidequest',                tags: ['extension', 'lore'] },
+  { id: '9.54', phase: 9, title: 'Map auto-update when Wormbound peace made (lore §11.6)',        tags: ['extension', 'lore'] },
+  { id: '9.55', phase: 9, title: 'Synced lore-tablet reading (multiplayer broadcast)',            tags: ['lore', 'netcode'] },
+  { id: '9.56', phase: 9, title: 'Character-select idle-pose choice',                             tags: ['parity'] },
+  { id: '9.57', phase: 9, title: 'NPC happiness influences shop prices (mood ↔ discount)',        tags: ['parity'] },
+  { id: '9.58', phase: 9, title: 'Veiled Buyer variable-price negotiation logic',                 tags: ['lore'] },
+  { id: '9.59', phase: 9, title: 'Aelstren map-fragment hand-off as quest-item',                  tags: ['lore'] },
+  { id: '9.60', phase: 9, title: 'Faction reputation tracker (per-faction rep score)',            tags: ['parity', 'lore'] },
+  { id: '9.61', phase: 9, title: 'Reputation affects shop prices + dialogue tone',                tags: ['parity'] },
+  { id: '9.62', phase: 9, title: 'Walker dream-vision sequences (in-bed lore flashes)',           tags: ['extension', 'lore'] },
+  { id: '9.63', phase: 9, title: 'Walker Resonance-bound items (no-spoilage rule, multiplayer)',  tags: ['parity', 'lore'] },
+  { id: '9.64', phase: 9, title: 'Brindle Pyrenkin-accent speech mode in dialogue',               tags: ['extension', 'lore'] },
+  { id: '9.65', phase: 9, title: 'Per-NPC theme music layer when near (subtle)',                  tags: ['parity', 'art'] },
+
+  /* ---------- PHASE 10 ---------- */
+  { id: '10.1',  phase: 10, title: 'Vesari Necropolis biome data + tiles',                        tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — Antigravity-ready] + biome-data work.
+Asset:
+- Prompt: prompts/tiles/vesari_necropolis_atlas.txt
+- Final: assets/sprites/tiles/vesari_necropolis_atlas_16.png (256×256)
+- Model: gemini-2.5-flash-image. Polish: 1 pass. Source 1024×1024 → 4× downsample.
+- After gen: prompts/_HOWTO.md §2; manifest "tile_vesari_necropolis_atlas_16" status→"final".
+Non-asset work: resources/biomes/vesari_necropolis.tres, ore_saltbound_iron.tres (tier 3), Necropolis-specific salt-corrosion gear-wear hook (ticket 10.16).
+Lore: lore/04_biomes.md#stratum-3--the-vesari-necropolis
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '10.2',  phase: 10, title: 'Sunless Verdancy biome data + tiles',                         tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — Antigravity-ready] + biome-data work.
+Asset:
+- Prompt: prompts/tiles/sunless_verdancy_atlas.txt
+- Final: assets/sprites/tiles/sunless_verdancy_atlas_16.png (256×256)
+- Model: gemini-2.5-flash-image. Polish: 1 pass.
+- After gen: prompts/_HOWTO.md §2; manifest "tile_sunless_verdancy_atlas_16" status→"final".
+Non-asset work: resources/biomes/sunless_verdancy.tres, ore_heartwood.tres + ore_spore_iron.tres (tier 4), toxic-spore environmental hazard (ticket 10.15), Verdant soil placeable for crops.
+Lore: lore/04_biomes.md#stratum-4--the-sunless-verdancy
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '10.3',  phase: 10, title: 'Drowned Aphelion biome data + tiles',                         tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — Antigravity-ready] + biome-data work.
+Asset:
+- Prompt: prompts/tiles/drowned_aphelion_atlas.txt
+- Final: assets/sprites/tiles/drowned_aphelion_atlas_16.png (256×256)
+- Model: gemini-2.5-flash-image. Polish: 1 pass.
+- After gen: prompts/_HOWTO.md §2; manifest "tile_drowned_aphelion_atlas_16" status→"final".
+Non-asset work: resources/biomes/drowned_aphelion.tres, ore_tideglass.tres (tier 5), swim mechanic hook (ticket 10.7), breath-meter + Coral Veil item (ticket 10.8).
+Lore: lore/04_biomes.md#stratum-5--the-drowned-aphelion
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '10.4',  phase: 10, title: 'Salt-Bound Sailor (Resonance Echo mob)',                      tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSETS — covered by enemies_vesari_necropolis.txt]
+Assets: salt_bound_sailor, salt_bound_captain, coral_hollow + 2 friendlies all ship from one sheet.
+Non-asset: AI for Salt-Bound (slow formal posture, Resonance Echo not Hollowling); Captain rare-spawn logic.
+Lore: lore/06_creatures_and_enemies.md §6.2 (Stratum 3)` },
+  { id: '10.5',  phase: 10, title: 'Spore-Lurk, Vine-Stalker, Bloom-Hag (Verdancy mobs)',         tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSETS — covered by enemies_sunless_verdancy.txt]
+Assets: spore_lurk (poison-spore AOE), vine_stalker (camouflage stealth), bloom_hag (stationary ranged), + 2 friendlies.
+Non-asset: 3 AI scripts; toxic-spore environmental hazard (ticket 10.15) uses same VFX.` },
+  { id: '10.6',  phase: 10, title: 'Deep-Mawl, Hollow Coral, Wreck-Wraith (Drowned mobs)',        tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSETS — covered by enemies_drowned_aphelion.txt]
+Assets: deep_mawl, hollow_coral, wreck_wraith + 2 friendlies (lantern_squid, brinekin).
+Non-asset: underwater AI; ranged spore-cluster projectile for Hollow Coral; Wreck-Wraith Echo (not Hollowling, doesn't drop loot).` },
+  { id: '10.7',  phase: 10, title: 'Swimming mechanic',                                           tags: ['parity'] },
+  { id: '10.8',  phase: 10, title: 'Breath meter + Coral Veil item',                              tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — covered by items_relics_key.txt]
+Asset: coral_veil.png ships from prompts/items/items_relics_key.txt.
+Non-asset: HUD breath meter (depletes underwater); Coral Veil item extends breath duration; dropped by Spawnmother (ticket 10.10).
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-3` },
+  { id: '10.9',  phase: 10, title: 'Vorr\'kell boss',                                             tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — hero]
+Prompt: prompts/bosses/bosses_phase_10.txt (Boss 1 of 6 in sheet)
+Final: assets/sprites/bosses/vorrkell.png (64×64). Polish: 2 passes.
+After gen: prompts/_HOWTO.md §2; manifest "boss_vorrkell" status→"final".
+Non-asset: 3-phase fight (tunneling → segmented → singing); drops Vorr'kell's Lantern (ticket 10.x relic).
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-2` },
+  { id: '10.10', phase: 10, title: 'Spawnmother boss',                                            tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — hero]
+Prompt: prompts/bosses/bosses_phase_10.txt (Boss 2 of 6)
+Final: assets/sprites/bosses/spawnmother.png (64×64). Polish: 2 passes.
+Non-asset: stationary adds-heavy fight (Carrion Hatchling spawns from boss_minions.txt cell 0,2); drops Coral Veil.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-3` },
+  { id: '10.11', phase: 10, title: 'Sythrenn boss (with mercy-kill alt)',                         tags: ['parity', 'extension', 'lore', 'art'], desc: `[GEMINI ASSET — hero]
+Prompt: prompts/bosses/bosses_phase_10.txt (Boss 3 of 6)
+Final: assets/sprites/bosses/sythrenn.png (64×64). Polish: 2 passes.
+Non-asset: 3-phase fight with player choice at phase 3 — attack outer body (kill, standard drops) OR inner body (mercy-kill, drops Sythrenn's Last Petal from items_extensions.txt). Alters one piece of late-game dialogue.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-4` },
+  { id: '10.12', phase: 10, title: 'Auriax boss (Verdancy major)',                                tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — MEGA hero]
+Prompt: prompts/bosses/bosses_phase_10.txt (Boss 4 of 6, generated separately at 96×96)
+Final: assets/sprites/bosses/auriax.png (96×96). Polish: 2 passes.
+Non-asset: 4-phase fight including 4 siphon-roots to destroy; final phase = Auriax kneels and falls quietly; drops Verdant Heart (2nd Loom power-up); Wither-Root minions (boss_minions.txt cell 1,0).
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-5` },
+  { id: '10.13', phase: 10, title: 'Vol\'thaar boss with release-or-kill choice',                 tags: ['parity', 'extension', 'lore', 'art'], desc: `[GEMINI ASSET — hero]
+Prompt: prompts/bosses/bosses_phase_10.txt (Boss 5 of 6)
+Final: assets/sprites/bosses/volthaar.png (64×64). Polish: 2 passes.
+Non-asset: 4-phase underwater fight; phase 4 = Vol'thaar speaks "I asked for the long quiet"; player chooses kill or release. Release drops Vol'thaar's Promise (items_extensions.txt) with Act-6 consequences.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-6` },
+  { id: '10.14', phase: 10, title: 'Drowned Crown optional boss',                                 tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET — optional hero]
+Prompt: prompts/bosses/bosses_phase_10.txt (Boss 6 of 6)
+Final: assets/sprites/bosses/drowned_crown.png (64×64).
+Non-asset: optional ghost-fight; NOT Hollowling-corrupted (pure grief-given-form); ends with Crown laying down sword and walking into water; drops Drowned Diadem (vanity) + Sword of the Last Threnos King (tier-5+ weapon).
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-10` },
+  { id: '10.15', phase: 10, title: 'Verdancy toxic spore environmental hazard',                   tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by vfx_environmental.txt]
+Asset: env_toxic_spore.png ships from prompts/vfx/vfx_environmental.txt (4-frame strip).
+Non-asset: Verdancy tile-based hazard zones; poison-status apply (uses vfx_status_poison from vfx_status_effects.txt); Sythrenn's Crown relic enables passage.` },
+  { id: '10.16', phase: 10, title: 'Necropolis salt-corrosion gear wear',                         tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — covered by vfx_environmental.txt]
+Asset: env_salt_corrosion.png ships from prompts/vfx/vfx_environmental.txt.
+Non-asset: equipment-durability decay in Necropolis biome; corrosion VFX on damaged gear; repair available at any workbench.` },
+  { id: '10.17', phase: 10, title: 'Boss respawn timer / cooldown system',                        tags: ['parity'] },
+  { id: '10.18', phase: 10, title: 'Awakened boss variants (rematch with extra patterns)',        tags: ['parity'] },
+  { id: '10.19', phase: 10, title: 'Group-spawn pack AI (coordinated mob squads)',                tags: ['parity'] },
+  { id: '10.20', phase: 10, title: 'Underwater current / drift physics',                          tags: ['parity'] },
+  { id: '10.21', phase: 10, title: 'Underwater stamina / breath upgrade gear',                    tags: ['parity'] },
+  { id: '10.22', phase: 10, title: 'Boss arena lock-in (sealed gates during fight)',              tags: ['parity'] },
+  { id: '10.23', phase: 10, title: 'Verdant soil placement (planters in Verdancy)',               tags: ['parity', 'lore'] },
+  { id: '10.24', phase: 10, title: 'Slime-tile slip mechanic',                                    tags: ['parity'] },
+  { id: '10.25', phase: 10, title: 'Acid tile damage zone',                                       tags: ['parity'] },
+  { id: '10.26', phase: 10, title: 'Cobweb tile slow zone',                                       tags: ['parity'] },
+  { id: '10.27', phase: 10, title: 'Vines climb walls (vertical traversal in Verdancy)',          tags: ['parity', 'lore'] },
+  { id: '10.28', phase: 10, title: 'Mushroom propagation (Verdancy crop-like spread)',            tags: ['parity', 'lore'] },
+  { id: '10.29', phase: 10, title: 'Underwater goggles equip (vision clarity below water)',       tags: ['parity'] },
+  { id: '10.30', phase: 10, title: 'Lava boots (lava-tile walk resistance)',                      tags: ['parity'] },
+  { id: '10.31', phase: 10, title: 'Frost boots (cold-tile resistance)',                          tags: ['parity'] },
+  { id: '10.32', phase: 10, title: 'Gas mask / breath filter (poison resistance equip)',          tags: ['parity'] },
+  { id: '10.33', phase: 10, title: 'Pheromone trail mechanic (mob aggro propagates by scent)',    tags: ['parity'] },
+  { id: '10.34', phase: 10, title: 'Champion / rare-affix mob roll per biome',                    tags: ['parity'] },
+  { id: '10.35', phase: 10, title: 'Boss-arena ambient music distinct from biome',                tags: ['parity', 'art'] },
+  { id: '10.36', phase: 10, title: 'Verdancy single-named-tree time-triggered death event',       tags: ['lore'] },
+  { id: '10.37', phase: 10, title: 'Verdancy laughing-child Echo near Auriax approach',           tags: ['lore'] },
+  { id: '10.38', phase: 10, title: 'Necropolis Hall of First Names: 23s-wait reveal',             tags: ['lore'] },
+  { id: '10.39', phase: 10, title: 'Spawnmother child\'s wooden toy at threshold (no-pickup)',    tags: ['lore'] },
+  { id: '10.40', phase: 10, title: 'Sythrenn pacifist-children mural sequence (3 murals)',        tags: ['lore'] },
+  { id: '10.41', phase: 10, title: 'Auriax dying-forest progressive death timer (mid-Act 4)',     tags: ['lore'] },
+  { id: '10.42', phase: 10, title: 'Sunken Glyph fragment collection system (Drowned)',           tags: ['lore'] },
+  { id: '10.43', phase: 10, title: 'Underwater Resonance Echo sailors (ambient ghosts)',          tags: ['lore'] },
+  { id: '10.44', phase: 10, title: 'Larva-Trap analog placeable (slow-down trap for adds)',       tags: ['parity'] },
+  { id: '10.45', phase: 10, title: 'Pup-pet drop from Spawnmother / Verdancy mob clusters',       tags: ['parity'] },
+  { id: '10.46', phase: 10, title: 'Wandering Glow-Crane sub-quest (Brindle)',                    tags: ['lore'] },
+  { id: '10.47', phase: 10, title: 'Verdancy crop-survives-Auriax small mercy moment',            tags: ['lore'] },
+  { id: '10.48', phase: 10, title: 'Mid-fight environment shift (Sythrenn spore-spread zones)',   tags: ['parity'] },
+  { id: '10.49', phase: 10, title: 'Boss-specific cinematic camera angles (phase transitions)',   tags: ['parity', 'art'] },
+  { id: '10.50', phase: 10, title: 'Per-biome reverb zones (Necropolis hall echo, etc.)',         tags: ['parity', 'art'] },
+
+  /* ---------- PHASE 11 ---------- */
+  { id: '11.1',  phase: 11, title: 'Emberforge biome data + tiles',                               tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — Antigravity-ready] + biome-data work.
+Asset:
+- Prompt: prompts/tiles/emberforge_atlas.txt
+- Final: assets/sprites/tiles/emberforge_atlas_16.png (256×256)
+- Model: gemini-2.5-flash-image. Polish: 1 pass.
+- After gen: prompts/_HOWTO.md §2; manifest "tile_emberforge_atlas_16" status→"final".
+Non-asset work: resources/biomes/emberforge.tres, ore_ember_iron.tres (tier 6), heat-damage mechanic (ticket 11.4), heat-resist armor stat (ticket 11.7), Pyrenkin forge sub-quest hook (ticket 11.8).
+Lore: lore/04_biomes.md#stratum-6--the-emberforge-strata
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '11.2',  phase: 11, title: 'Salt Wastes biome data + tiles',                              tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — Antigravity-ready] + biome-data work.
+Asset:
+- Prompt: prompts/tiles/salt_wastes_atlas.txt
+- Final: assets/sprites/tiles/salt_wastes_atlas_16.png (256×256)
+- Model: gemini-2.5-flash-image. Polish: 1 pass.
+- After gen: prompts/_HOWTO.md §2; manifest "tile_salt_wastes_atlas_16" status→"final".
+Non-asset work: resources/biomes/salt_wastes.tres, ore_saltbound_steel.tres (tier 7), day/night temperature-swing mechanic (ticket 11.6) tied to the 23s Aphelion Beat, Wormbound encounter hook (ticket 11.9).
+Lore: lore/04_biomes.md#stratum-7--the-salt-wastes-of-dawning
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '11.3',  phase: 11, title: 'Auroric Veil biome data + tiles',                             tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — Antigravity-ready] + biome-data work.
+Asset:
+- Prompt: prompts/tiles/auroric_veil_atlas.txt
+- Final: assets/sprites/tiles/auroric_veil_atlas_16.png (256×256)
+- Model: gemini-2.5-flash-image. Polish: 1 pass.
+- After gen: prompts/_HOWTO.md §2; manifest "tile_auroric_veil_atlas_16" status→"final".
+Non-asset work: resources/biomes/auroric_veil.tres, ore_auroric_ice.tres (tier 8), cold-damage mechanic (ticket 11.5), cold-resist armor (ticket 11.7).
+Lore: lore/04_biomes.md#stratum-8--the-auroric-veil
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '11.4',  phase: 11, title: 'Heat-damage mechanic',                                        tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by vfx_environmental.txt]
+Assets: env_heat_shimmer.png (ambient) + env_heat_damage.png (player feedback)
+Non-asset: heat-zone tile-tagging in Emberforge; HP-tick when heat exposure > resist stat (ticket 11.7).` },
+  { id: '11.5',  phase: 11, title: 'Cold-damage mechanic',                                        tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by vfx_environmental.txt]
+Assets: env_cold_mist.png (ambient) + env_cold_damage.png (player feedback)
+Non-asset: cold-zone tile-tagging in Auroric Veil; HP-tick when cold exposure > resist stat (ticket 11.7).` },
+  { id: '11.6',  phase: 11, title: 'Day/night temperature swing (Salt Wastes, Aphelion-Beat-hooked)', tags: ['parity', 'lore'] },
+  { id: '11.7',  phase: 11, title: 'Heat-resist & cold-resist armor stats',                       tags: ['parity'] },
+  { id: '11.8',  phase: 11, title: 'Pyrenkin forge sub-quest chain',                              tags: ['lore'] },
+  { id: '11.9',  phase: 11, title: 'Wormbound encounter (non-hostile + ritual peace)',            tags: ['extension', 'lore'] },
+  { id: '11.10', phase: 11, title: 'Skoldur boss ("You came back" recognition)',                  tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — MEGA hero]
+Prompt: prompts/bosses/bosses_phase_11_12.txt (Boss 1 of 5)
+Final: assets/sprites/bosses/skoldur.png (96×96). Polish: 2 passes.
+Non-asset: 4-phase fight; phase 4 dialogue line "You came back" in Pyrenkin-accented Old Vesari (audio cue); drops Skoldur's Hammer + Brindle's pendant fused-into-chest detail at death.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-7 — pre-fight Brindle gives the player a matching pendant.` },
+  { id: '11.11', phase: 11, title: 'Naeren boss with peaceful-path alt',                          tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET — hero]
+Prompt: prompts/bosses/bosses_phase_11_12.txt (Boss 2 of 5)
+Final: assets/sprites/bosses/naeren.png (64×64). Polish: 2 passes.
+Non-asset: standard combat path (split-fight) OR Wormbound peace-path (ritual encounter, no combat). Peace path drops Naeren's Salt-Crown + Wormbound Covenant Scroll (items_extensions.txt). Wormbound friendship state required for peace path.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-8` },
+  { id: '11.12', phase: 11, title: 'Veyl-Aurora 7-spire collective boss',                         tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — MEGA hero]
+Prompt: prompts/bosses/bosses_phase_11_12.txt (Boss 3 of 5)
+Final: assets/sprites/bosses/veyl_aurora.png (96×96). Polish: 2 passes.
+Non-asset: collective 7-spire fight; harmony-mechanics in phase 2 (move to null-resonance zones); phase 3 ends with a brief perfect chord; drops Choir's Resonance + 7 Aurora-shards.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-9` },
+  { id: '11.13', phase: 11, title: 'Listeners-Below first appearance + trade',                    tags: ['lore', 'art'], desc: `[GEMINI ASSET]
+Prompt: prompts/npcs/npcs_misc.txt (Listener-Below profile)
+Final: assets/sprites/npcs/listener_below.png (664×24).
+After gen: prompts/_HOWTO.md §2; manifest "npc_listener_below" status→"final".
+Non-asset: scenes/npcs/ListenerBelow.tscn; obsidian mask + indigo robe; trade-only NPC; face reveal in Phase 16.9 extension.` },
+  { id: '11.14', phase: 11, title: 'Pyrenkin Compact NPC arrival (Brindle\'s pendant moment)',    tags: ['lore'] },
+  { id: '11.15', phase: 11, title: 'Frostlark three-part harmony singing system',                 tags: ['lore'] },
+  { id: '11.16', phase: 11, title: 'Sunken Diadem agent hostile NPC class (mortal humanoids)',    tags: ['parity', 'lore'] },
+  { id: '11.17', phase: 11, title: 'Heat-shimmer screen post-process (Emberforge)',               tags: ['parity', 'art'] },
+  { id: '11.18', phase: 11, title: 'Frostbite buildup meter (Auroric Veil)',                      tags: ['parity'] },
+  { id: '11.19', phase: 11, title: 'Mirage / quicksand patches (Salt Wastes)',                    tags: ['parity'] },
+  { id: '11.20', phase: 11, title: 'Salt-Crown Press station (tier-7 ritual crafting, lore §9.2)', tags: ['parity', 'lore'] },
+  { id: '11.21', phase: 11, title: 'Pyrenkin Bellows station (tier-6 Emberforge crafting)',       tags: ['parity', 'lore'] },
+  { id: '11.22', phase: 11, title: 'Auroric Anvil station (tier-8 Auroric Veil crafting)',        tags: ['parity', 'lore'] },
+  { id: '11.23', phase: 11, title: 'Heat-resistant container (Emberforge storage variant)',       tags: ['parity'] },
+  { id: '11.24', phase: 11, title: 'Emberforge previous-Walker journal pickup (Tablet EF-09)',    tags: ['lore'] },
+  { id: '11.25', phase: 11, title: 'Korya the Returned ambiguous-NPC encounter scaffold',         tags: ['lore'] },
+  { id: '11.26', phase: 11, title: 'Wormbound elder threshold encounter (non-hostile approach)',  tags: ['extension', 'lore'] },
+  { id: '11.27', phase: 11, title: 'Hymnal Vault musical-instrument interaction',                 tags: ['lore'] },
+  { id: '11.28', phase: 11, title: 'Skoldur post-fight pendant-fused-to-chest detail',            tags: ['lore'] },
+  { id: '11.29', phase: 11, title: 'Wormbound silent-ritual gesture-input minigame',              tags: ['extension', 'lore'] },
+  { id: '11.30', phase: 11, title: 'Veyl-Aurora pre-corruption chord audio (via Cantor bell)',    tags: ['lore', 'art'] },
+  { id: '11.31', phase: 11, title: 'Pyrenkin Forge-Compact tablet collection',                    tags: ['lore'] },
+  { id: '11.32', phase: 11, title: 'Pyrenkin Cricket fuel-pellet collection mechanic',            tags: ['parity', 'lore'] },
+  { id: '11.33', phase: 11, title: 'Forge-Cricket / Charred Goat friendly fauna spawns',          tags: ['parity', 'lore'] },
+  { id: '11.34', phase: 11, title: 'Singing-Frost ambient choral audio (Auroric Veil)',           tags: ['art', 'lore'] },
+
+  /* ---------- PHASE 12 ---------- */
+  { id: '12.1',  phase: 12, title: 'Final Spiral biome data + tiles',                             tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — Antigravity-ready] + biome-data work.
+Asset:
+- Prompt: prompts/tiles/final_spiral_atlas.txt
+- Final: assets/sprites/tiles/final_spiral_atlas_16.png (256×256)
+- Model: gemini-2.5-flash-image. Polish: 1 pass.
+- After gen: prompts/_HOWTO.md §2; manifest "tile_final_spiral_atlas_16" status→"final".
+Non-asset work: resources/biomes/final_spiral.tres, ore_diadem_gold.tres (tier 9), Diadem-script glyph data, Reader/Censer/Warden mob hooks (ticket 12.2), Aphelion-pulse VFX tile sync to 23s Beat.
+Lore: lore/04_biomes.md#stratum-9--the-final-spiral
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '12.2',  phase: 12, title: 'Diadem-Reader / Censer / Warden mobs',                        tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSETS — covered by enemies_final_spiral.txt]
+Assets: diadem_reader, diadem_censer, diadem_warden + Pure Hollowling Mote + Vacancy (5 sprites).
+Non-asset: 3 mob AI scripts (Reader = sword + Aphelion-shard projectiles; Censer = ranged + heal-allies aura; Warden = slow heavy tank); they are MORTAL not Hollowling-infected.
+Lore: lore/06_creatures_and_enemies.md §6.2 (Stratum 9)` },
+  { id: '12.3',  phase: 12, title: 'Pure Hollowling Mote + Mote Tide event',                      tags: ['lore', 'art'], desc: `[GEMINI ASSETS — covered]
+Assets: pure_hollowling_mote.png (16×16) ships from enemies_final_spiral.txt; env_hollowling_mote.png + env_mote_tide.png ship from vfx_environmental.txt.
+Non-asset: Mote Tide event (swarm-spawn of motes in Final Spiral); free-Hollowling AI (fast, soft, dangerous in numbers).
+Lore: lore/06_creatures_and_enemies.md §6.3` },
+  { id: '12.4',  phase: 12, title: 'Vacancy creature follower encounter',                         tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET — covered by enemies_final_spiral.txt]
+Asset: vacancy.png — silhouette with literal alpha-transparent pixels where the face/name would be (the "elided" hole).
+Non-asset: silent follower NPC; cannot reliably be attacked; never harms the Walker; appears once in the final corridor.
+Lore: lore/06_creatures_and_enemies.md §6.2 (Stratum 9) + lore/10_language_glyphs_writing.md (elision)` },
+  { id: '12.5',  phase: 12, title: 'Elision-Script recovery puzzle',                              tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSETS — covered]
+Assets: elision_puzzle.png (UI from ui_advanced.txt) + elision_script_fragment.png (item from items_extensions.txt).
+Non-asset: 3×3 glyph-rearrangement puzzle; correct arrangement reveals an elided word; tied to endgame lore.
+Lore: lore/10_language_glyphs_writing.md (elision-language)` },
+  { id: '12.6',  phase: 12, title: 'Diadem manifestos corridor (readable wall texts)',            tags: ['lore', 'art'], desc: `[GEMINI ASSET — partial; uses Final Spiral atlas]
+Asset: manifesto-plate wall tiles ship as part of prompts/tiles/final_spiral_atlas.txt (Row 11 mural fragments).
+Non-asset: long approach corridor scene; readable manifesto text triggers (8-10 manifestos); final one signed with Diadem-Bearer's pre-Diadem name (ties to ticket 16.12 + Mira 9.6).
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-11` },
+  { id: '12.7',  phase: 12, title: 'Resonance Loom\'s Twin discovery',                            tags: ['lore', 'art'], desc: `[GEMINI ASSET — reuses Loom sprite with shader-tint]
+Asset: prompts/structures/structures_anchor_base.txt's resonance_loom.png is reused for the Twin, rendered with a desaturated/cracked shader overlay; no new sprite required (or author a dedicated prompt at prompts/structures/loom_twin.txt if a distinct asset is desired).
+Non-asset: scenes/world/LoomTwin.tscn placed in Final Spiral; cracked-Loom variant; foreshadows the "third Become anchor" ending option.` },
+  { id: '12.8',  phase: 12, title: 'Diadem-Bearer boss (4 phases + Readers)',                     tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — MEGA hero]
+Prompt: prompts/bosses/bosses_phase_11_12.txt (Boss 4 of 5)
+Final: assets/sprites/bosses/diadem_bearer.png (96×96). Polish: 2 passes.
+Non-asset: 4-phase fight; phase 2 = 3v1 with First+Second Reader adds (from boss_minions.txt + enemies_final_spiral.txt); phase 4 = Bearer kneels, three lines of dialogue, then SELF-shatters the diadem; player does NOT strike the killing blow. Drops Shattered Diadem (chooses ending) + Diadem-gold ingots + the Bearer's pre-Diadem name.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-11. The pre-Diadem name connects to Mira (ticket 16.12).` },
+  { id: '12.9',  phase: 12, title: 'Ending A — Restore sequence',                                 tags: ['extension', 'lore'] },
+  { id: '12.10', phase: 12, title: 'Ending B — Break sequence + optional Aphelion fight',         tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET — optional]
+Prompt: prompts/bosses/bosses_phase_11_12.txt (Boss 5 of 5)
+Final: assets/sprites/bosses/aphelion.png (64×64; the Aphelion has no body — render as Sphere-interior icon).
+Non-asset: bullet-hell pattern fight INSIDE the Aphelion; death returns Walker to Loom; "win" condition = persuade the Sphere to crack; final dialogue is the elided figure's apology in elision-language.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-12 + lore/10_language_glyphs_writing.md` },
+  { id: '12.11', phase: 12, title: 'Ending C — Become sequence + unlock conditions',              tags: ['extension', 'lore'] },
+  { id: '12.12', phase: 12, title: 'Credits + run-stats screen',                                  tags: ['parity'] },
+  { id: '12.13', phase: 12, title: 'New Game+ option',                                            tags: ['parity'] },
+  { id: '12.14', phase: 12, title: 'Sunken Diadem manifesto reader UI (illuminated wall texts)',  tags: ['lore'] },
+  { id: '12.15', phase: 12, title: 'Ending-taken tracking per save slot (replayability map)',     tags: ['parity'] },
+  { id: '12.16', phase: 12, title: 'Final Spiral ambient hostile NPC density curve',              tags: ['parity'] },
+  { id: '12.17', phase: 12, title: 'Aphelion-chamber path-choice UI (three doors, lore-flavored)',tags: ['extension', 'lore'] },
+  { id: '12.18', phase: 12, title: 'Ending C unlock-gate validator (all conditions met check)',   tags: ['extension', 'lore'] },
+  { id: '12.19', phase: 12, title: 'Aphelion-shard reagent (rare endgame currency for upgrades)', tags: ['parity', 'lore'] },
+  { id: '12.20', phase: 12, title: 'Diadem Reliquary station (tier-9 Final Spiral crafting)',     tags: ['parity', 'lore'] },
+  { id: '12.21', phase: 12, title: 'Material conversion: lower-tier → higher-tier via shards',    tags: ['extension', 'lore'] },
+  { id: '12.22', phase: 12, title: 'Aphelion-Beat-synchronized mob spawn waves (Final Spiral)',   tags: ['parity', 'lore'] },
+  { id: '12.23', phase: 12, title: 'Diadem-Bearer pre-Diadem signed manifesto (FS-29)',           tags: ['lore'] },
+  { id: '12.24', phase: 12, title: 'Hall of First Names tablet "lamp before the lamp" reveal',    tags: ['lore'] },
+  { id: '12.25', phase: 12, title: 'Final Spiral "footstep echo" abnormal-audio shader',          tags: ['lore', 'art'] },
+  { id: '12.26', phase: 12, title: 'Diadem-Bearer self-shatter cinematic (no player-strike rule)',tags: ['lore'] },
+  { id: '12.27', phase: 12, title: 'Aphelion translated-apology phrase reveal (ending B only)',   tags: ['extension', 'lore'] },
+  { id: '12.28', phase: 12, title: 'Listeners-Below mask-reveal: Walker\'s own face moment',      tags: ['extension', 'lore'] },
+  { id: '12.29', phase: 12, title: 'Vacancy final-corridor encounter (silent follow)',            tags: ['extension', 'lore'] },
+  { id: '12.30', phase: 12, title: 'Elided-name spelling system (Vael-Iorrion reveal step)',      tags: ['extension', 'lore'] },
+  { id: '12.31', phase: 12, title: 'Final-act NPC commentary on Aphelion-dimming progress',       tags: ['lore'] },
+  { id: '12.32', phase: 12, title: 'Bearer pre-Diadem child memory tablet (RH-08-equivalent)',    tags: ['lore'] },
+  { id: '12.33', phase: 12, title: 'Endgame compendium completion reward (Cantor compass tie-in)',tags: ['lore'] },
+  { id: '12.34', phase: 12, title: 'Multi-ending shared-save state (replays don\'t reset world)', tags: ['parity'] },
+  { id: '12.35', phase: 12, title: 'Pre-fight Sovereign-Naming progress preview (Cantor song)',   tags: ['extension', 'lore'] },
+  { id: '12.36', phase: 12, title: 'Diadem-Bearer "Forgive me. — Joren-of-the-Lattice" reveal',   tags: ['extension', 'lore'] },
+  { id: '12.37', phase: 12, title: 'Mira-Bearer sibling-thread payoff (post-fight scene)',        tags: ['extension', 'lore'] },
+  { id: '12.38', phase: 12, title: 'Walker-finished epilogue silent emote (per-ending variant)',  tags: ['extension', 'lore'] },
+
+  /* ---------- PHASE 13 ---------- */
+  { id: '13.1',  phase: 13, title: 'Network architecture decision (ENet/Steam/WebRTC) — RFC',     tags: ['netcode'] },
+  { id: '13.2',  phase: 13, title: 'Authority model (host-driven; bosses on host)',               tags: ['netcode'] },
+  { id: '13.3',  phase: 13, title: 'Multi-Walker spawn at single Loom',                           tags: ['netcode', 'lore'] },
+  { id: '13.4',  phase: 13, title: 'Resonance-pulse multi-Walker flicker (cosmetic)',             tags: ['netcode', 'lore'] },
+  { id: '13.5',  phase: 13, title: 'Emote system (Walkers can\'t speak)',                         tags: ['netcode', 'lore'] },
+  { id: '13.6',  phase: 13, title: 'Multi-player NPC density bonus',                              tags: ['extension', 'lore'] },
+  { id: '13.7',  phase: 13, title: 'Shared chest sync',                                           tags: ['netcode'] },
+  { id: '13.8',  phase: 13, title: 'Player join / drop saves',                                    tags: ['netcode'] },
+  { id: '13.9',  phase: 13, title: 'Dedicated server stub',                                       tags: ['netcode'] },
+  { id: '13.10', phase: 13, title: 'Boss scaling per player count',                               tags: ['netcode'] },
+  { id: '13.11', phase: 13, title: 'Local split-screen co-op (2-4 player on one machine)',        tags: ['netcode'] },
+  { id: '13.12', phase: 13, title: 'Player slot color / name customization',                      tags: ['netcode'] },
+  { id: '13.13', phase: 13, title: 'PvP enable/disable world toggle',                             tags: ['netcode'] },
+  { id: '13.14', phase: 13, title: 'Trading interface between players (drag-and-accept)',         tags: ['netcode'] },
+  { id: '13.15', phase: 13, title: 'In-game text chat',                                           tags: ['netcode'] },
+  { id: '13.16', phase: 13, title: 'Voice chat stub (PTT key binding ready)',                     tags: ['netcode'] },
+  { id: '13.17', phase: 13, title: 'Steam Lobby / friend join flow',                              tags: ['netcode'] },
+  { id: '13.18', phase: 13, title: 'LAN discovery / direct-IP connect',                           tags: ['netcode'] },
+  { id: '13.19', phase: 13, title: 'World password protection',                                   tags: ['netcode'] },
+  { id: '13.20', phase: 13, title: 'Kick / ban admin commands (host-only)',                       tags: ['netcode'] },
+  { id: '13.21', phase: 13, title: 'Latency-compensation / lag UX (rubber-band, prediction)',     tags: ['netcode'] },
+  { id: '13.22', phase: 13, title: 'Dropped-item ownership / loot etiquette rules',               tags: ['netcode'] },
+  { id: '13.23', phase: 13, title: 'Spectator mode for dead / awaiting-respawn players',          tags: ['netcode'] },
+  { id: '13.24', phase: 13, title: 'Resurrection altar (revive other players)',                   tags: ['netcode'] },
+  { id: '13.25', phase: 13, title: 'Party UI showing all up-to-8 players\' HP',                   tags: ['netcode'] },
+  { id: '13.26', phase: 13, title: 'Player tracking arrows / off-screen indicators',              tags: ['netcode'] },
+  { id: '13.27', phase: 13, title: 'Tab-to-ping marker system',                                   tags: ['netcode'] },
+  { id: '13.28', phase: 13, title: 'Steam Rich Presence integration',                             tags: ['netcode', 'infra'] },
+  { id: '13.29', phase: 13, title: 'Whisper / private chat to one player',                        tags: ['netcode'] },
+  { id: '13.30', phase: 13, title: 'Chat log scrollback + history',                               tags: ['netcode'] },
+  { id: '13.31', phase: 13, title: 'Player profile / nickname customization',                     tags: ['netcode'] },
+  { id: '13.32', phase: 13, title: 'Cross-platform play hooks (Steam ↔ GOG ↔ EGS)',               tags: ['netcode', 'infra'] },
+  { id: '13.33', phase: 13, title: 'Server browser (find joinable worlds)',                       tags: ['netcode'] },
+  { id: '13.34', phase: 13, title: 'Server logs viewer (host-only)',                              tags: ['netcode'] },
+  { id: '13.35', phase: 13, title: 'Friend invite popup (Steam overlay integration)',             tags: ['netcode'] },
+  { id: '13.36', phase: 13, title: 'Multi-Walker shared death-flicker visual (lore §7.10)',       tags: ['netcode', 'lore'] },
+  { id: '13.37', phase: 13, title: 'Multiplayer NPC dialogue addressed to all Walkers',           tags: ['netcode', 'lore'] },
+  { id: '13.38', phase: 13, title: 'Player respawn countdown UI + ghost-cam while waiting',       tags: ['netcode'] },
+  { id: '13.39', phase: 13, title: 'Shared XP toggle (per-world setting)',                        tags: ['netcode'] },
+  { id: '13.40', phase: 13, title: 'Loot-roll vs FFA mode toggle',                                tags: ['netcode'] },
+  { id: '13.41', phase: 13, title: 'Mid-session join handler (player joins existing world)',      tags: ['netcode'] },
+  { id: '13.42', phase: 13, title: 'Synced boss-cutscene moments (fade-in dialogue all see)',     tags: ['netcode'] },
+  { id: '13.43', phase: 13, title: 'Network desync detection + recovery',                         tags: ['netcode'] },
+  { id: '13.44', phase: 13, title: 'Ping display + connection-quality icon',                      tags: ['netcode'] },
+  { id: '13.45', phase: 13, title: 'Gamepad cursor (stick-controlled UI pointer)',                tags: ['infra'] },
+  { id: '13.46', phase: 13, title: 'Gamepad menu navigation + glyph swap on disconnect',          tags: ['infra'] },
+  { id: '13.47', phase: 13, title: 'Player profile picture / portrait in multiplayer',            tags: ['netcode'] },
+  { id: '13.48', phase: 13, title: 'Networked particle / VFX broadcast (synced visuals)',         tags: ['netcode'] },
+  { id: '13.49', phase: 13, title: 'Resonance-pulse multi-Walker proximity hand-flicker (§7.6)',  tags: ['netcode', 'lore'] },
+  { id: '13.50', phase: 13, title: 'Multiplayer XP-share toggle (per-world setting)',             tags: ['netcode'] },
+  { id: '13.51', phase: 13, title: 'Multiplayer lobby UI (pre-game gathering)',                   tags: ['netcode'] },
+  { id: '13.52', phase: 13, title: 'Pre-game ready-check before world load',                      tags: ['netcode'] },
+
+  /* ---------- PHASE 14 ---------- */
+  { id: '14.1',  phase: 14, title: 'Conveyor belt placeable + direction',                         tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by items_automation.txt]
+Asset: conveyor_belt.png (16×16 icon) ships from items_automation.txt; per-direction belt-tile variants are a tile-atlas follow-up.
+Non-asset: Conveyor placeable .tscn; item-on-belt physics; direction rotation on placement.` },
+  { id: '14.2',  phase: 14, title: 'Drill tile-mining automation (tier-gated)',                   tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by items_automation.txt]
+Asset: drill.png ships from items_automation.txt.
+Non-asset: tier-gated mining-power; auto-mines forward tile every N Beats; consumes Aphelion-Tap power (ticket 14.4).` },
+  { id: '14.3',  phase: 14, title: 'Robotic arm item-pickup-and-place',                           tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by items_automation.txt]
+Asset: robotic_arm.png
+Non-asset: pickup-from-source + place-on-target tile; cycle on Beat.` },
+  { id: '14.4',  phase: 14, title: 'Power source: Aphelion-tap (Void & Voltage analog)',          tags: ['parity', 'lore', 'art'], desc: `[GEMINI ASSET — covered by items_automation.txt]
+Asset: aphelion_tap.png + power_storage_cell.png
+Non-asset: power-graph system; per-machine power-cost; lore-justified as drawing on Aphelion light through a Diadem-gold ring.
+Lore: docs/design/02_lore_to_mechanics_mapping.md — Aphelion-Tap = Core Keeper's Void & Voltage power-source analog.` },
+  { id: '14.5',  phase: 14, title: 'Wire system + circuit propagation',                           tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by items_automation.txt]
+Asset: wire.png (single cross-junction). Per-direction tile variants follow as a tile-atlas pass.
+Non-asset: wire-graph propagation; signal pulse animation on activation.` },
+  { id: '14.6',  phase: 14, title: 'Sensor / pressure-plate / button triggers',                   tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by items_automation.txt]
+Assets: pressure_plate, button, sensor.
+Non-asset: trigger emits wire-signal; sensor types (light/proximity/health).` },
+  { id: '14.7',  phase: 14, title: 'Logic gates (AND/OR/NOT/NAND)',                               tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered partial]
+Asset: logic_gate_and.png ships from items_automation.txt; the other gates (OR/NOT/NAND) use the same base sprite with a different glyph overlay (drawn in code or as 3 more variants in a follow-up gen pass).
+Non-asset: gate evaluation per wire-tick; 4 gate types.` },
+  { id: '14.8',  phase: 14, title: 'Storage container piping',                                    tags: ['parity', 'art'], desc: `[GEMINI ASSET — covered by items_automation.txt]
+Asset: storage_piping.png
+Non-asset: chest-to-machine input/output pipe; item-flow logic.` },
+  { id: '14.9',  phase: 14, title: 'Auto-farms (sprinkler + harvester)',                          tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered]
+Assets: auto_sprinkler.png + auto_harvester.png (items_automation.txt); sprinkler also in items_farming.txt
+Non-asset: auto-water + auto-harvest cycle on Beat; output piped via storage_piping (14.8).` },
+  { id: '14.10', phase: 14, title: 'Auto-furnaces / auto-smelters',                               tags: ['parity', 'art'], desc: `[GEMINI ASSETS — covered by items_automation.txt]
+Assets: auto_furnace, auto_smelter
+Non-asset: ore-in → ingot-out on Beat; power-cost via Aphelion-Tap.` },
+  { id: '14.11', phase: 14, title: 'Item filters on conveyors',                                   tags: ['parity'] },
+  { id: '14.12', phase: 14, title: 'Switches, buttons, pressure plates',                          tags: ['parity'] },
+  { id: '14.13', phase: 14, title: 'Battery / energy storage cells',                              tags: ['parity'] },
+  { id: '14.14', phase: 14, title: 'Power-cable visual sync (active / overload state)',           tags: ['parity'] },
+  { id: '14.15', phase: 14, title: 'Timer block (delay propagation, configurable)',               tags: ['parity'] },
+  { id: '14.16', phase: 14, title: 'Splitter / merger conveyor blocks',                           tags: ['parity'] },
+  { id: '14.17', phase: 14, title: 'Recipe / blueprint sharing between bases',                    tags: ['parity'] },
+  { id: '14.18', phase: 14, title: 'Auto-stocker / hopper item insert from storage',              tags: ['parity'] },
+  { id: '14.19', phase: 14, title: 'Mob farm (kill-zone for material drops)',                     tags: ['parity'] },
+  { id: '14.20', phase: 14, title: 'Wireless signal (logic without wires, LOS)',                  tags: ['parity'] },
+  { id: '14.21', phase: 14, title: 'Tile painting (recolor placed tile cosmetically)',            tags: ['parity'] },
+  { id: '14.22', phase: 14, title: 'Multiblock structure detection (multi-station room scoring)', tags: ['parity'] },
+  { id: '14.23', phase: 14, title: 'Wallpaper covering existing tile surface',                    tags: ['parity'] },
+  { id: '14.24', phase: 14, title: 'Bucket-of-X tile placement (water / lava as defensive tile)', tags: ['parity'] },
+  { id: '14.25', phase: 14, title: 'Mob-proof glass / placeable transparent barrier',             tags: ['parity'] },
+  { id: '14.26', phase: 14, title: 'Fence-gate (opens like door, blocks like fence)',             tags: ['parity'] },
+  { id: '14.27', phase: 14, title: 'Building blueprint save / load (per-room or per-area)',       tags: ['parity'] },
+  { id: '14.28', phase: 14, title: 'Demolition tool (faster un-place / area-demolish)',           tags: ['parity'] },
+  { id: '14.29', phase: 14, title: 'Place-on-grid snap toggle (per-tile vs free placement)',      tags: ['parity'] },
+  { id: '14.30', phase: 14, title: 'Auctioneer / mailbox economy node (multiplayer trade)',       tags: ['netcode'] },
+  { id: '14.31', phase: 14, title: 'Mod manager UI in-game (enable / disable / load order)',      tags: ['infra'] },
+  { id: '14.32', phase: 14, title: 'Mod loader API for recipes / items / mobs / biomes',          tags: ['infra'] },
+  { id: '14.33', phase: 14, title: 'Mod conflict warning UI',                                     tags: ['infra'] },
+  { id: '14.34', phase: 14, title: 'Mod compatibility version tag system',                        tags: ['infra'] },
+  { id: '14.35', phase: 14, title: 'Hot-reload of .tres data resources (dev mode)',               tags: ['infra'] },
+  { id: '14.36', phase: 14, title: 'Wireless redstone-equivalent (RF / signal transmitter)',      tags: ['parity'] },
+  { id: '14.37', phase: 14, title: 'Auto-cooking pot (recipe-input bus)',                         tags: ['parity'] },
+  { id: '14.38', phase: 14, title: 'Auto-fishing rig (passive hook over time)',                   tags: ['parity'] },
+  { id: '14.39', phase: 14, title: 'Robotic-arm crafting-input chain',                            tags: ['parity'] },
+  { id: '14.40', phase: 14, title: 'Place-and-rotate variants (4 rotations per object)',          tags: ['parity'] },
+  { id: '14.41', phase: 14, title: 'Color wheel for tile painting / banner pigments',             tags: ['parity'] },
+  { id: '14.42', phase: 14, title: 'Pattern paint tool (stamp repeating pattern)',                tags: ['parity'] },
+  { id: '14.43', phase: 14, title: 'In-game mod browser (mod.io integration)',                    tags: ['infra'] },
+  { id: '14.44', phase: 14, title: 'Modding SDK docs + sample mod scaffold',                      tags: ['infra'] },
+
+  /* ---------- PHASE 15 ---------- */
+  { id: '15.1',  phase: 15, title: 'Content audit pass vs core-keeper-mechanics.md',              tags: ['parity', 'test'] },
+  { id: '15.2',  phase: 15, title: 'Close all [VERIFY] items',                                    tags: ['parity', 'test'] },
+  { id: '15.3',  phase: 15, title: 'Bestiary screen full impl',                                   tags: ['parity'] },
+  { id: '15.4',  phase: 15, title: 'Achievement system (all categories)',                         tags: ['parity'] },
+  { id: '15.5',  phase: 15, title: 'World-settings UI (size, difficulty, creative, hardcore)',    tags: ['parity'] },
+  { id: '15.6',  phase: 15, title: 'Seasonal event content (Anniversary/Winter/Halloween)',       tags: ['parity'] },
+  { id: '15.7',  phase: 15, title: 'Sound design pass (per-biome ambient, combat, UI)',           tags: ['art'] },
+  { id: '15.8',  phase: 15, title: 'Performance pass (chunk pool, sprite batch, lighting)',       tags: ['infra'] },
+  { id: '15.9',  phase: 15, title: 'Localization scaffolding',                                    tags: ['infra'] },
+  { id: '15.10', phase: 15, title: 'Accessibility pass (colorblind, text size, remap)',           tags: ['infra'] },
+  { id: '15.11', phase: 15, title: 'Full controller / gamepad input + UI glyph swap',             tags: ['infra'] },
+  { id: '15.12', phase: 15, title: 'Cloud save support (Steam Cloud / EOS)',                      tags: ['infra'] },
+  { id: '15.13', phase: 15, title: 'Steam Workshop / mod.io integration scaffold',                tags: ['infra'] },
+  { id: '15.14', phase: 15, title: 'Hunter\'s Crown / earned-title cosmetic backend',             tags: ['parity'] },
+  { id: '15.15', phase: 15, title: 'In-world achievement toast popups',                           tags: ['parity'] },
+  { id: '15.16', phase: 15, title: 'Logbook / journal screen (separate from Bestiary/Tablets)',   tags: ['parity', 'lore'] },
+  { id: '15.17', phase: 15, title: 'Subtitle support for VO / ambient audio cues',                tags: ['infra'] },
+  { id: '15.18', phase: 15, title: 'Hold-vs-toggle input options',                                tags: ['infra'] },
+  { id: '15.19', phase: 15, title: 'LOD for off-screen entities + sprite culling',                tags: ['infra'] },
+  { id: '15.20', phase: 15, title: 'Chunk unloading + save streaming',                            tags: ['infra'] },
+  { id: '15.21', phase: 15, title: 'Crash reporter / error log uploader (opt-in)',                tags: ['infra'] },
+  { id: '15.22', phase: 15, title: 'Photo mode (pause + free camera + filters)',                  tags: ['parity'] },
+  { id: '15.23', phase: 15, title: 'Auto-save interval + manual save in-menu',                    tags: ['infra'] },
+  { id: '15.24', phase: 15, title: 'Save backup rotation (last 3 autosaves on disk)',             tags: ['infra'] },
+  { id: '15.25', phase: 15, title: 'Performance graph overlay (debug toggle)',                    tags: ['infra'] },
+  { id: '15.26', phase: 15, title: 'Console / dev command UI (toggle, cheats off by default)',    tags: ['infra'] },
+  { id: '15.27', phase: 15, title: 'Steam Trading Cards / Achievement images authored',           tags: ['art'] },
+  { id: '15.28', phase: 15, title: 'Speedrun timer UI + split-system',                            tags: ['parity'] },
+  { id: '15.29', phase: 15, title: 'Daily / weekly challenge mode (shared seed)',                 tags: ['parity'] },
+  { id: '15.30', phase: 15, title: 'Boss rush mode (all bosses back-to-back)',                    tags: ['parity'] },
+  { id: '15.31', phase: 15, title: 'Endless mode (infinite-depth dive)',                          tags: ['parity'] },
+  { id: '15.32', phase: 15, title: 'Steam Achievements API hookup + sync',                        tags: ['infra'] },
+  { id: '15.33', phase: 15, title: 'Multi-character per world support',                           tags: ['parity'] },
+  { id: '15.34', phase: 15, title: 'World template / preset starting kit (creative load)',        tags: ['parity'] },
+  { id: '15.35', phase: 15, title: 'Cheat-detection (disable achievements if console used)',      tags: ['infra'] },
+  { id: '15.36', phase: 15, title: 'Save thumbnail (screenshot at last save)',                    tags: ['infra'] },
+  { id: '15.37', phase: 15, title: 'Save metadata display (playtime, deaths, bosses)',            tags: ['infra'] },
+  { id: '15.38', phase: 15, title: 'Hardcore (permadeath) world mode toggle',                     tags: ['parity'] },
+  { id: '15.39', phase: 15, title: 'Casual / Normal / Hard / Hard+ difficulty preset bundles',    tags: ['parity'] },
+  { id: '15.40', phase: 15, title: 'Damage breakdown screen post-boss (DPS, dodges, hits taken)', tags: ['parity'] },
+  { id: '15.41', phase: 15, title: 'Hidden achievements (no tooltip until unlocked)',             tags: ['parity'] },
+  { id: '15.42', phase: 15, title: '"Visit all biomes" cumulative achievement',                   tags: ['parity'] },
+  { id: '15.43', phase: 15, title: '"Catch every fish" achievement gallery',                      tags: ['parity'] },
+  { id: '15.44', phase: 15, title: '"Cook every recipe" achievement',                             tags: ['parity'] },
+  { id: '15.45', phase: 15, title: '"Talk to every NPC" achievement',                             tags: ['parity'] },
+  { id: '15.46', phase: 15, title: '"Read every tablet" achievement',                             tags: ['parity', 'lore'] },
+  { id: '15.47', phase: 15, title: 'World statistics page (per-world tally screen)',              tags: ['parity'] },
+  { id: '15.48', phase: 15, title: 'Run history log (recent runs viewer)',                        tags: ['parity'] },
+  { id: '15.49', phase: 15, title: 'Daily login bonus / streak system',                           tags: ['parity'] },
+  { id: '15.50', phase: 15, title: 'Beta branch opt-in (Steam betas)',                            tags: ['infra'] },
+  { id: '15.51', phase: 15, title: 'Save corruption verify + auto-recover from backup',           tags: ['infra'] },
+  { id: '15.52', phase: 15, title: 'Save migration scripts between versions',                     tags: ['infra'] },
+  { id: '15.53', phase: 15, title: 'F3 debug info overlay (FPS, mem, coords, chunk id)',          tags: ['infra'] },
+  { id: '15.54', phase: 15, title: 'Free-cam debug mode',                                         tags: ['infra'] },
+  { id: '15.55', phase: 15, title: 'Wireframe / hitbox visualizer (debug overlay)',               tags: ['infra'] },
+  { id: '15.56', phase: 15, title: 'Settings preset bundles (FPS / Visual / Accessibility)',      tags: ['infra'] },
+  { id: '15.57', phase: 15, title: 'Easter eggs + hidden rooms (developer credits + secret loot)',tags: ['parity'] },
+  { id: '15.58', phase: 15, title: 'Anniversary content (yearly seasonal event)',                 tags: ['parity'] },
+  { id: '15.59', phase: 15, title: 'High-contrast accessibility mode',                            tags: ['infra'] },
+  { id: '15.60', phase: 15, title: 'Pause-on-focus-loss / auto-pause when minimized',             tags: ['infra'] },
+  { id: '15.61', phase: 15, title: 'Aim assist / auto-target nearest enemy option',               tags: ['infra'] },
+  { id: '15.62', phase: 15, title: 'Held-input toggle option (press-and-hold vs press)',          tags: ['infra'] },
+  { id: '15.63', phase: 15, title: 'One-handed control scheme preset',                            tags: ['infra'] },
+  { id: '15.64', phase: 15, title: 'Steam Anti-Cheat / sanity-check hooks',                       tags: ['infra'] },
+  { id: '15.65', phase: 15, title: 'Network bandwidth meter (debug toggle)',                      tags: ['infra'] },
+  { id: '15.66', phase: 15, title: 'Disconnect / reconnect grace handling',                       tags: ['netcode'] },
+  { id: '15.67', phase: 15, title: 'Friend list integration UI',                                  tags: ['netcode'] },
+  { id: '15.68', phase: 15, title: 'Tutorial completion reward + first-boss-kill reward',         tags: ['parity'] },
+  { id: '15.69', phase: 15, title: 'World seed sharing button (copy seed to clipboard / Steam)',  tags: ['parity'] },
+  { id: '15.70', phase: 15, title: 'Mob behavior re-balance pass (post-content-complete)',        tags: ['parity'] },
+  { id: '15.71', phase: 15, title: 'Final boss difficulty curve tuning pass',                     tags: ['parity'] },
+  { id: '15.72', phase: 15, title: 'Right-to-left text rendering for Old Vesari',                 tags: ['infra', 'lore'] },
+  { id: '15.73', phase: 15, title: 'Steam Deck verified UI scaling + input pass',                 tags: ['infra'] },
+  { id: '15.74', phase: 15, title: 'Translation editor / community localization pipeline',        tags: ['infra'] },
+  { id: '15.75', phase: 15, title: 'Locale auto-detect on first launch',                          tags: ['infra'] },
+  { id: '15.76', phase: 15, title: 'Texture atlas batch rendering verification',                  tags: ['infra'] },
+  { id: '15.77', phase: 15, title: 'Sprite frustum culling (don\'t draw off-screen)',             tags: ['infra'] },
+  { id: '15.78', phase: 15, title: 'Light culling (don\'t render off-screen Light2Ds)',           tags: ['infra'] },
+  { id: '15.79', phase: 15, title: 'Mob LOD (simpler AI when off-screen)',                        tags: ['infra'] },
+  { id: '15.80', phase: 15, title: 'Lazy chunk regen + memory budget per chunk',                  tags: ['infra'] },
+  { id: '15.81', phase: 15, title: 'GPU profiler integration / FPS report',                       tags: ['infra'] },
+  { id: '15.82', phase: 15, title: 'Crash report telemetry endpoint (opt-in)',                    tags: ['infra'] },
+  { id: '15.83', phase: 15, title: 'Bug-report in-game form (description + screenshot)',          tags: ['infra'] },
+  { id: '15.84', phase: 15, title: 'Demo / free-trial scope decision RFC',                        tags: ['parity'] },
+  { id: '15.85', phase: 15, title: 'Full parity-audit checklist run (vs core-keeper-mechanics.md)', tags: ['parity', 'test'] },
+  { id: '15.86', phase: 15, title: 'GDScript style enforcement (lint config in CI)',              tags: ['infra'] },
+  { id: '15.87', phase: 15, title: 'Touch / mobile input support (deferred until decided)',       tags: ['infra'] },
+  { id: '15.88', phase: 15, title: 'IDE config files (.editorconfig, gdscript.json)',             tags: ['infra'] },
+  { id: '15.89', phase: 15, title: 'Audio profile adapt to headphones vs speakers',               tags: ['infra'] },
+  { id: '15.90', phase: 15, title: 'Performance preset for low-end hardware',                     tags: ['infra'] },
+  { id: '15.91', phase: 15, title: 'Gameplay record / replay system (for bug reports)',           tags: ['infra'] },
+  { id: '15.92', phase: 15, title: 'Pre-release content-freeze + bug-bash week',                  tags: ['parity'] },
+  { id: '15.93', phase: 15, title: 'Pre-launch QA certification checklist (Steam, Steam Deck)',   tags: ['infra'] },
+  { id: '15.94', phase: 15, title: 'New-Game+ inheritance rules (what carries, what resets)',     tags: ['parity'] },
+  { id: '15.95', phase: 15, title: 'Promotional trailer + screenshot capture tools',              tags: ['infra'] },
+  { id: '15.96', phase: 15, title: 'Press kit + media assets bundle (logos, screenshots, gifs)',  tags: ['infra'] },
+
+  /* ---------- PHASE 16 — extensions ---------- */
+  { id: '16.1',  phase: 16, title: 'Aphelion-sliver finite mortality budget + Cantor commentary', tags: ['extension', 'lore'] },
+  { id: '16.2',  phase: 16, title: 'Sovereign-Naming sidequest + Cantor\'s Compass payoff',       tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSETS — covered]
+Assets: 9 sovereign_name_fragment_N scrolls (items_misc_phase5.txt) + cantor_of_five_bells NPC + cantors_compass (items_extensions.txt)
+Non-asset: collect 9 fragments → present to Cantor → unlock Sovereign-Naming song + Cantor's Compass cosmetic + small lore-text revelation.
+Lore: lore/05_aeon_sovereigns_bosses.md (Sovereign-Naming sidequest section)` },
+  { id: '16.3',  phase: 16, title: 'Resonance Echo system (60+ ghost-scenes)',                    tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET]
+Prompt: prompts/vfx/vfx_resonance_echo.txt
+Final: assets/sprites/vfx/resonance_echo.png (256×32, 8-frame fade-in/steady/fade-out)
+After gen: prompts/_HOWTO.md §2; manifest "vfx_resonance_echo" status→"final".
+Non-asset: scenes/vfx/Echo.tscn — generic Echo container, composites per-scene character art at runtime; 60+ specific echo definitions in resources/echoes/*.tres.
+Lore: lore/11_environmental_storytelling.md` },
+  { id: '16.4',  phase: 16, title: 'Aphelion Hymn assembly mini-quest',                           tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSETS — covered]
+Assets: aphelion_hymn_fragment_1..4 (items_extensions.txt) + aphelion_hymn_assembly UI (ui_advanced.txt)
+Non-asset: 9 hymn-fragment item drops scattered across biomes; assembly UI; full-hymn playback unlocks endgame audio cue.` },
+  { id: '16.5',  phase: 16, title: 'Three-ending consequences (extends 12.9–12.11)',              tags: ['extension', 'lore'] },
+  { id: '16.6',  phase: 16, title: 'Wormbound covenant + alt-Naeren ritual encounter',            tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSETS — covered]
+Assets: wormbound_elder (enemies_salt_wastes.txt) + wormbound_covenant_scroll + naerens_salt_crown (items_extensions.txt)
+Non-asset: Wormbound friendship state tracking; alt-Naeren ritual fight script (ticket 11.11 peace path); covenant-scroll alters one piece of late-game dialogue + unlocks a final-act NPC.
+Lore: lore/03_factions_and_civilizations.md (Wormbound) + lore/05_aeon_sovereigns_bosses.md#boss-8` },
+  { id: '16.7',  phase: 16, title: 'Vol\'thaar\'s Promise single-use summon item',                tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET — covered by items_extensions.txt]
+Asset: volthaars_promise.png
+Non-asset: single-use consumable; drops only from Vol'thaar mercy-release path (ticket 10.13); when used in Act Six, summons Vol'thaar to assist in one specific fight.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-6` },
+  { id: '16.8',  phase: 16, title: 'Vacancy creature companion mechanic',                         tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSETS — covered]
+Assets: vacancy (enemies_final_spiral.txt) + vacancys_token (items_extensions.txt)
+Non-asset: Vacancy as silent follower; companion-grade utility; passes the Walker an unmarked "Vacancy's Token" if stabilized for long enough.
+Lore: lore/06_creatures_and_enemies.md §6.2 (Stratum 9) — the Vacancy is a Resonance Echo of someone whose name has been elided.` },
+  { id: '16.9',  phase: 16, title: 'Second Listener face-reveal Echo',                            tags: ['extension', 'lore'] },
+  { id: '16.10', phase: 16, title: 'Sythrenn\'s Last Petal living memorial',                      tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET — covered by items_extensions.txt]
+Asset: sythrenns_last_petal.png
+Non-asset: drops only from Sythrenn mercy-kill path (ticket 10.11); when used at the Anchor, plants a single living Verdant flower that persists for the rest of the game — the Walker's only living memorial to a Sovereign.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-4` },
+  { id: '16.11', phase: 16, title: 'Per-Sovereign gold-thread visible cosmetic',                  tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET — Antigravity-ready] + character-select integration.
+Asset:
+- Prompt: prompts/vfx/gold_thread_cosmetic.txt
+- Final: assets/sprites/vfx/gold_thread_cosmetic.png (144×24, 9-frame horizontal strip — one per Sovereign)
+- Model: gemini-2.5-flash-image. Polish: 1 pass.
+- After gen: prompts/_HOWTO.md §2; manifest "vfx_gold_thread_cosmetic" status→"final".
+Non-asset work:
+- Wrap as SpriteFrames at resources/sprites/vfx_gold_thread.tres (9 frames, no animation).
+- Wire boss-defeat → thread-unlock state (tied to ending C "Become" unlock conditions, ticket 12.11).
+- Character-select UI overlay: composite per-defeated-Sovereign thread onto the Walker portrait at close-zoom.
+Lore: lore/07_echo_walkers_player.md#77-the-walkers-body-across-the-game
+Pipeline: docs/design/01_asset_pipeline.md` },
+  { id: '16.12', phase: 16, title: 'Diadem-Bearer\'s pre-Diadem name reveal + Mira thread',       tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET — covered by items_extensions.txt]
+Asset: pre_diadem_name_locket.png
+Non-asset: reveal-thread tying Mira-no-Last-Name (9.6) to the Diadem-Bearer (12.8); locket appears in Mira's room post-Diadem fight; unlocks final-act Mira dialogue.
+Lore: lore/05_aeon_sovereigns_bosses.md#boss-11` },
+  { id: '16.13', phase: 16, title: 'Cantor\'s Five Bells music puzzle mini-game',                 tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSET — covered by ui_advanced.txt]
+Asset: cantor_bells_puzzle.png (64×96)
+Non-asset: scenes/ui/CantorBellsPuzzle.tscn; rhythm-match minigame; success = unlock a Cantor-specific lore beat.` },
+  { id: '16.14', phase: 16, title: '[OPEN SLOT] User-provided extension goals — TBD',             tags: ['extension'] },
+  { id: '16.15', phase: 16, title: 'Lore-flavored tutorial: Aelstren leads through verb intro',   tags: ['extension', 'lore'] },
+  { id: '16.16', phase: 16, title: 'Hymnal Vault music room with playable Bell instrument',       tags: ['extension', 'lore'] },
+  { id: '16.17', phase: 16, title: 'Hard Walk mode — true permadeath, no Aphelion respin (§7.4)', tags: ['extension', 'lore'] },
+  { id: '16.18', phase: 16, title: 'Folded-paper bird memorial (Aelstren\'s after-first-kill gesture)',tags: ['extension', 'lore'] },
+  { id: '16.19', phase: 16, title: 'Pre-fight tablet murals replay (Glaur-em, Verdancy, etc.)',   tags: ['extension', 'lore'] },
+  { id: '16.20', phase: 16, title: 'Resonance-name tonal-signature display at character create',  tags: ['extension', 'lore'] },
+  { id: '16.21', phase: 16, title: 'Walker-template drift (skin variants per Loom-respin)',       tags: ['extension', 'lore'] },
+  { id: '16.22', phase: 16, title: 'Vesari salt-buildup visual on Walker after Necropolis time',  tags: ['extension', 'lore'] },
+  { id: '16.23', phase: 16, title: 'Glasswright Concord plural-pronoun NPC speech-mode',          tags: ['extension', 'lore'] },
+  { id: '16.24', phase: 16, title: 'Wormbound silent-NPC long-pause dialogue mode',               tags: ['extension', 'lore'] },
+  { id: '16.25', phase: 16, title: 'Old Vesari translator UI (incremental glossary unlock)',      tags: ['extension', 'lore'] },
+  { id: '16.26', phase: 16, title: 'Elision-Script visualization (gouge-marks restoration UI)',   tags: ['extension', 'lore'] },
+  { id: '16.27', phase: 16, title: 'Concord Script & Pyrenkin Forge-Glyph readable inscriptions', tags: ['extension', 'lore'] },
+  { id: '16.28', phase: 16, title: 'Hymnal Sheet-Glyph audio-playback system',                    tags: ['extension', 'lore'] },
+  { id: '16.29', phase: 16, title: 'Suncrack visible-damage progression on Aphelion sprite',      tags: ['extension', 'lore'] },
+  { id: '16.30', phase: 16, title: 'Aphelion sliver-cost NPC commentary thresholds (40/100/1000)',tags: ['extension', 'lore'] },
+  { id: '16.31', phase: 16, title: 'Counted-darkness foreshadowing audio cues (pre-Act-3)',       tags: ['extension', 'lore'] },
+  { id: '16.32', phase: 16, title: 'First-Vesari star-map tablets unlockable',                    tags: ['extension', 'lore'] },
+  { id: '16.33', phase: 16, title: 'Anchor accumulation memorials (Mira drawing, etc. lore §11.8)',tags: ['extension', 'lore'] },
+  { id: '16.34', phase: 16, title: 'Halloween event: Hollowling-outbreak themed',                 tags: ['extension', 'lore'] },
+  { id: '16.35', phase: 16, title: 'Winter event: Auroric Veil incursion themed',                 tags: ['extension', 'lore'] },
+  { id: '16.36', phase: 16, title: 'Bloom Treaty anniversary event (Verdancy reflowering)',       tags: ['extension', 'lore'] },
+  { id: '16.37', phase: 16, title: 'Anniversary event (yearly Aphelion-fragment cake-equivalent)',tags: ['extension', 'lore'] },
+  { id: '16.38', phase: 16, title: 'Pre-Inversion Open Palm Age echo event (one-night-only)',     tags: ['extension', 'lore'] },
+  { id: '16.39', phase: 16, title: 'Echo-Walker dream sequences in bed (lore vision-fragments)',  tags: ['extension', 'lore'] },
+  { id: '16.40', phase: 16, title: 'Walker template-drift skin unlocks per Sovereign defeat',     tags: ['extension', 'lore'] },
+  { id: '16.41', phase: 16, title: 'Lattice Survivor child-Echo (Aelstren\'s lost children ref)', tags: ['extension', 'lore'] },
+  { id: '16.42', phase: 16, title: 'Old Vesari pre-Inversion star-map placeable',                 tags: ['extension', 'lore'] },
+  { id: '16.43', phase: 16, title: 'Resonance-name unique tonal glow color per Walker',           tags: ['extension', 'lore'] },
+  { id: '16.44', phase: 16, title: 'Sovereign-Naming sidequest UI (collected fragments display)', tags: ['extension', 'lore'] },
+  { id: '16.45', phase: 16, title: 'Music-puzzle synced to Aphelion-Beat 23s cadence',            tags: ['extension', 'lore'] },
+  { id: '16.46', phase: 16, title: 'Bell-of-the-Necropolis Cantor instrument interaction',        tags: ['extension', 'lore'] },
+  { id: '16.47', phase: 16, title: 'Resonance-Loom Twin lore-puzzle (third-Become ending)',       tags: ['extension', 'lore'] },
+];
+
+/* ============================================================
+ *  STATE & PERSISTENCE
+ * ============================================================ */
+
+const STORAGE_KEY = 'tsv_kanban_v1';
+
+/* Bulk migrations: each entry marks a list of tickets done with a completion date.
+ * Runs once per migration `version`; tracked in localStorage under STORAGE_KEY+':migrations'.
+ * Add new entries; never edit a shipped one (would silently re-run for new users). */
+const MIGRATIONS = [
+  {
+    version: '2026-05-12-followup',
+    note: 'Follow-up close-out: boss HP bar, Loom power-up, more recipes, ' +
+          'Clearstone Forge, boss minions, farming MVP, merchant UI, talent tree shell, ' +
+          'ranged/magic/summon weapons wired, cooking loop, boss arena marker.',
+    completed: [
+      /* Phase 0 — pause menu + build pipeline */
+      '0.11','0.16',
+      /* Phase 3 */
+      '3.10','3.11',
+      /* Phase 4 — compass */
+      '4.11',
+      /* Phase 5 — boss arena, HP bar, minions, Loom flow, compendium, housing rules */
+      '5.1','5.3','5.4','5.6','5.10','5.12',
+      /* Phase 6 — gun/staff/summon now actually fire/cast/spawn */
+      '6.2','6.3','6.4',
+      /* Phase 7 — skill panel, talent points wired into combat, respec scroll */
+      '7.1','7.2','7.3','7.4','7.5','7.6','7.7',
+      /* Phase 8 — farming + cooking + cookbook + fishing */
+      '8.1','8.2','8.3','8.4','8.5','8.7','8.8','8.9','8.10','8.11','8.12',
+      /* Phase 9 — merchants + restock + housing rules */
+      '9.1','9.3','9.4','9.10',
+      /* Phase 10 — environmental hazards + Drowned Crown */
+      '10.14','10.15','10.16',
+      /* Phase 11 — heat / cold / day-night swing + resist armor */
+      '11.4','11.5','11.6','11.7',
+      /* Phase 12 — Diadem mob set + New Game+ */
+      '12.2','12.13',
+      /* Phase 15 — achievements */
+      '15.4',
+    ],
+  },
+  {
+    version: '2026-05-12-bootstrap',
+    note: 'Initial bulk close of tickets completed by Claude in the bootstrap session: ' +
+          'Phase 0-6 fully scaffolded, Phase 10-12 art + boss + endings, automation/multiplayer skeletons.',
+    completed: [
+      /* Phase 0 */
+      '0.2','0.3','0.4','0.5','0.6','0.8','0.9','0.21',
+      /* Phase 1 */
+      '1.1','1.2','1.3','1.4','1.5','1.6','1.7','1.8','1.9','1.10','1.11','1.12',
+      /* Phase 2 */
+      '2.1','2.2','2.3','2.4','2.5','2.6','2.7','2.8','2.9','2.10','2.11','2.12','2.13',
+      /* Phase 3 */
+      '3.1','3.2','3.3','3.5','3.6','3.7','3.8','3.9','3.12',
+      /* Phase 4 */
+      '4.1','4.2','4.3','4.4','4.5','4.6','4.7','4.8','4.10',
+      /* Phase 5 */
+      '5.2','5.5','5.7','5.8','5.9','5.11',
+      /* Phase 6 */
+      '6.1','6.5','6.6','6.7','6.8','6.9','6.10','6.11','6.12','6.13',
+      /* Phase 9 */
+      '9.2','9.5','9.6','9.7','9.8','9.9',
+      /* Phase 10 */
+      '10.1','10.2','10.3','10.9','10.10','10.11','10.12','10.13',
+      /* Phase 11 */
+      '11.1','11.2','11.3','11.10','11.11','11.12',
+      /* Phase 12 */
+      '12.1','12.8','12.9','12.10','12.11',
+      /* Phase 13 */
+      '13.1',
+      /* Phase 14 */
+      '14.1','14.2',
+      /* Phase 16 */
+      '16.1',
+    ],
+  },
+];
+
+const MIGRATIONS_KEY = STORAGE_KEY + ':migrations';
+
+let state = loadOrSeed();
+runPendingMigrations();
+
+function loadOrSeed() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed.tickets)) return parsed;
+    }
+  } catch (e) {
+    console.warn('Failed to load saved kanban; using seed.', e);
+  }
+  return { tickets: SEED_TICKETS.map(t => ({ status: 'backlog', desc: '', ...t })) };
+}
+
+function runPendingMigrations() {
+  let applied = [];
+  try {
+    const raw = localStorage.getItem(MIGRATIONS_KEY);
+    applied = raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    applied = [];
+  }
+  let dirty = false;
+  for (const mig of MIGRATIONS) {
+    if (applied.includes(mig.version)) continue;
+    const today = new Date().toISOString().slice(0, 10);
+    const idSet = new Set(mig.completed);
+    for (const t of state.tickets) {
+      if (idSet.has(t.id) && t.status !== 'done') {
+        t.status = 'done';
+        if (!t.completed_at) t.completed_at = today;
+      }
+    }
+    applied.push(mig.version);
+    dirty = true;
+    console.log(`Applied migration ${mig.version}: ${mig.completed.length} tickets marked done.`);
+  }
+  if (dirty) {
+    localStorage.setItem(MIGRATIONS_KEY, JSON.stringify(applied));
+    persist();
+  }
+}
+
+function persist() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  renderStats();
+}
+
+/* ============================================================
+ *  RENDER
+ * ============================================================ */
+
+const $phases = document.getElementById('phases');
+const $globalStats = document.getElementById('globalStats');
+
+function renderStats() {
+  const total = state.tickets.length;
+  const done = state.tickets.filter(t => t.status === 'done').length;
+  const inProg = state.tickets.filter(t => t.status === 'in_progress').length;
+  const pct = total === 0 ? 0 : Math.round(100 * done / total);
+  $globalStats.innerHTML =
+    `Total <span>${total}</span> · Done <span class="done">${done}</span> · ` +
+    `In-Progress <span class="progress">${inProg}</span> · <span>${pct}%</span> complete`;
+}
+
+function renderAll() {
+  $phases.innerHTML = '';
+
+  const filterText = (document.getElementById('filterText').value || '').toLowerCase().trim();
+  const filterTag = document.getElementById('filterTag').value;
+  const filterStatus = document.getElementById('filterStatus').value;
+
+  for (const phase of PHASES) {
+    const phaseTickets = state.tickets
+      .filter(t => t.phase === phase.id)
+      .filter(t => matchesFilter(t, filterText, filterTag, filterStatus));
+
+    const phaseEl = document.createElement('div');
+    phaseEl.className = 'phase';
+    if (loadCollapsed(phase.id)) phaseEl.classList.add('collapsed');
+
+    /* If filtering is active and no tickets match, hide the phase entirely. */
+    const filteringActive = filterText || filterTag || filterStatus;
+    const allPhaseTicketsCount = state.tickets.filter(t => t.phase === phase.id).length;
+    if (filteringActive && phaseTickets.length === 0 && allPhaseTicketsCount > 0) {
+      phaseEl.classList.add('empty-by-filter');
+    }
+
+    const done = phaseTickets.filter(t => t.status === 'done').length;
+
+    /* Header */
+    const header = document.createElement('div');
+    header.className = 'phase-header';
+    header.innerHTML =
+      `<span class="twist">▼</span>
+       <h2>${escapeHtml(phase.name)}</h2>
+       <span class="phase-desc">— ${escapeHtml(phase.desc)}</span>
+       <span class="phase-count"><span class="done">${done}</span> / ${phaseTickets.length} done</span>`;
+    header.addEventListener('click', () => {
+      phaseEl.classList.toggle('collapsed');
+      saveCollapsed(phase.id, phaseEl.classList.contains('collapsed'));
+    });
+    phaseEl.appendChild(header);
+
+    /* Body — 5 lanes */
+    const body = document.createElement('div');
+    body.className = 'phase-body';
+    for (const lane of LANES) {
+      const laneTickets = phaseTickets.filter(t => t.status === lane);
+      const laneEl = renderLane(phase.id, lane, laneTickets);
+      body.appendChild(laneEl);
+    }
+    phaseEl.appendChild(body);
+
+    $phases.appendChild(phaseEl);
+  }
+
+  renderStats();
+}
+
+function renderLane(phaseId, lane, tickets) {
+  const el = document.createElement('div');
+  el.className = 'lane';
+  el.innerHTML =
+    `<div class="lane-header lane-${lane}">${LANE_LABEL[lane]} <span class="lane-count">${tickets.length}</span></div>
+     <div class="lane-body" data-phase="${phaseId}" data-lane="${lane}"></div>`;
+  const body = el.querySelector('.lane-body');
+
+  if (tickets.length === 0) {
+    const hint = document.createElement('div');
+    hint.className = 'empty-hint';
+    hint.textContent = lane === 'backlog' ? '—' : '';
+    body.appendChild(hint);
+  } else {
+    for (const t of tickets) body.appendChild(renderCard(t));
+  }
+
+  /* Drop handlers */
+  body.addEventListener('dragover', e => {
+    e.preventDefault();
+    body.classList.add('drag-over');
+  });
+  body.addEventListener('dragleave', () => body.classList.remove('drag-over'));
+  body.addEventListener('drop', e => {
+    e.preventDefault();
+    body.classList.remove('drag-over');
+    const ticketId = e.dataTransfer.getData('text/plain');
+    const t = state.tickets.find(x => x.id === ticketId);
+    if (!t) return;
+    const newPhase = Number(body.dataset.phase);
+    const newLane = body.dataset.lane;
+    if (t.phase !== newPhase || t.status !== newLane) {
+      t.phase = newPhase;
+      t.status = newLane;
+      persist();
+      renderAll();
+    }
+  });
+
+  return el;
+}
+
+function renderCard(t) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.draggable = true;
+  card.dataset.status = t.status;
+  card.dataset.id = t.id;
+
+  const tagsHtml = (t.tags || []).map(tag =>
+    `<span class="tag ${tag}">${tag}</span>`
+  ).join('');
+
+  card.innerHTML =
+    `<span class="card-id">${escapeHtml(t.id)}</span>
+     <span class="card-title">${escapeHtml(t.title)}</span>
+     <div class="card-tags">${tagsHtml}</div>`;
+
+  card.addEventListener('click', () => openModal(t));
+  card.addEventListener('dragstart', e => {
+    e.dataTransfer.setData('text/plain', t.id);
+    card.classList.add('dragging');
+  });
+  card.addEventListener('dragend', () => card.classList.remove('dragging'));
+
+  return card;
+}
+
+function matchesFilter(t, filterText, filterTag, filterStatus) {
+  if (filterText) {
+    const hay = (t.id + ' ' + t.title + ' ' + (t.desc || '')).toLowerCase();
+    if (!hay.includes(filterText)) return false;
+  }
+  if (filterTag && !(t.tags || []).includes(filterTag)) return false;
+  if (filterStatus && t.status !== filterStatus) return false;
+  return true;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]
+  );
+}
+
+/* ============================================================
+ *  COLLAPSE PERSISTENCE
+ * ============================================================ */
+
+function loadCollapsed(phaseId) {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY + ':collapsed');
+    if (!raw) return false;
+    const set = new Set(JSON.parse(raw));
+    return set.has(phaseId);
+  } catch { return false; }
+}
+function saveCollapsed(phaseId, isCollapsed) {
+  let set;
+  try {
+    set = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY + ':collapsed') || '[]'));
+  } catch { set = new Set(); }
+  if (isCollapsed) set.add(phaseId); else set.delete(phaseId);
+  localStorage.setItem(STORAGE_KEY + ':collapsed', JSON.stringify(Array.from(set)));
+}
+
+/* ============================================================
+ *  MODAL (add / edit / delete)
+ * ============================================================ */
+
+const $modal = document.getElementById('modalBackdrop');
+let editingId = null;
+
+function openModal(t) {
+  editingId = t ? t.id : null;
+  document.getElementById('modalTitle').textContent = t ? `Edit ${t.id}` : 'New Card';
+  document.getElementById('m_id').value = t ? t.id : suggestNextId();
+  document.getElementById('m_title').value = t ? t.title : '';
+  document.getElementById('m_desc').value = t ? (t.desc || '') : '';
+  document.getElementById('m_status').value = t ? t.status : 'backlog';
+
+  const phaseSel = document.getElementById('m_phase');
+  phaseSel.innerHTML = '';
+  for (const p of PHASES) {
+    const opt = document.createElement('option');
+    opt.value = p.id;
+    opt.textContent = p.name;
+    phaseSel.appendChild(opt);
+  }
+  phaseSel.value = t ? t.phase : 0;
+
+  const tagRow = document.getElementById('m_tags');
+  tagRow.innerHTML = '';
+  const activeTags = new Set(t ? (t.tags || []) : []);
+  for (const tag of TAGS) {
+    const span = document.createElement('span');
+    span.className = 'tag-pick ' + (activeTags.has(tag) ? 'active' : '');
+    span.textContent = tag;
+    span.addEventListener('click', () => span.classList.toggle('active'));
+    tagRow.appendChild(span);
+  }
+
+  document.getElementById('m_delete').style.display = t ? '' : 'none';
+  $modal.classList.add('open');
+  setTimeout(() => document.getElementById('m_title').focus(), 30);
+}
+
+function closeModal() {
+  $modal.classList.remove('open');
+  editingId = null;
+}
+
+function suggestNextId() {
+  /* Find the highest within phase 0 by default */
+  const ids = state.tickets.map(t => t.id);
+  let n = 1;
+  while (ids.includes(`X.${n}`)) n++;
+  return `X.${n}`;
+}
+
+document.getElementById('m_save').addEventListener('click', () => {
+  const id = document.getElementById('m_id').value.trim();
+  const title = document.getElementById('m_title').value.trim();
+  if (!id || !title) { alert('ID and Title are required.'); return; }
+
+  const phase = Number(document.getElementById('m_phase').value);
+  const status = document.getElementById('m_status').value;
+  const desc = document.getElementById('m_desc').value;
+  const tags = Array.from(document.querySelectorAll('#m_tags .tag-pick.active')).map(el => el.textContent);
+
+  if (editingId === null) {
+    if (state.tickets.find(t => t.id === id)) { alert('That ID already exists.'); return; }
+    state.tickets.push({ id, phase, status, title, desc, tags });
+  } else {
+    const t = state.tickets.find(t => t.id === editingId);
+    if (id !== editingId && state.tickets.find(x => x.id === id)) {
+      alert('That ID already exists.'); return;
+    }
+    Object.assign(t, { id, phase, status, title, desc, tags });
+  }
+
+  persist();
+  renderAll();
+  closeModal();
+});
+
+document.getElementById('m_cancel').addEventListener('click', closeModal);
+
+document.getElementById('m_delete').addEventListener('click', () => {
+  if (editingId === null) return;
+  if (!confirm(`Delete ${editingId}?`)) return;
+  state.tickets = state.tickets.filter(t => t.id !== editingId);
+  persist();
+  renderAll();
+  closeModal();
+});
+
+$modal.addEventListener('click', e => { if (e.target === $modal) closeModal(); });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $modal.classList.contains('open')) closeModal();
+});
+
+/* ============================================================
+ *  TOOLBAR
+ * ============================================================ */
+
+document.getElementById('addBtn').addEventListener('click', () => openModal(null));
+document.getElementById('filterText').addEventListener('input', renderAll);
+document.getElementById('filterTag').addEventListener('change', renderAll);
+document.getElementById('filterStatus').addEventListener('change', renderAll);
+
+document.getElementById('collapseAllBtn').addEventListener('click', () => {
+  for (const p of PHASES) saveCollapsed(p.id, true);
+  renderAll();
+});
+document.getElementById('expandAllBtn').addEventListener('click', () => {
+  for (const p of PHASES) saveCollapsed(p.id, false);
+  renderAll();
+});
+
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `tsv_kanban_${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('importBtn').addEventListener('click', () => {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json,.json';
+  input.addEventListener('change', () => {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        if (!Array.isArray(parsed.tickets)) throw new Error('Invalid format — missing tickets array');
+        if (!confirm(`Import ${parsed.tickets.length} tickets, replacing current board?`)) return;
+        state = parsed;
+        persist();
+        renderAll();
+      } catch (e) {
+        alert('Import failed: ' + e.message);
+      }
+    };
+    reader.readAsText(file);
+  });
+  input.click();
+});
+
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!confirm('Reset to default seed? This wipes your local edits.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(STORAGE_KEY + ':collapsed');
+  localStorage.removeItem(MIGRATIONS_KEY);
+  state = loadOrSeed();
+  runPendingMigrations();
+  renderAll();
+});
+
+/* ============================================================
+ *  BOOT
+ * ============================================================ */
+
+renderAll();
+</script>
+</body>
+</html>

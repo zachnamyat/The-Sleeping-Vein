@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://bmt6r1nk2h7o0"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bosses/veyl_aurora.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"boss_veyl_aurora"
+display_name = "Veyl-Aurora, the Singing Choir"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(96, 96)
+max_health = 5000
+armor = 22
+contact_damage = 48
+move_speed = 12.0
+detection_radius = 300.0
+behavior = 4
+xp_skill = &"skill_melee"
+xp_value = 4500
+biome = &"auroric_veil"

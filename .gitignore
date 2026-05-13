@@ -1,0 +1,54 @@
+# Godot 4+ specific ignores
+.godot/
+.import/
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# System / Editor files
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.swp
+*.swo
+*~
+Thumbs.db
+desktop.ini
+
+# Build / export output
+build/
+export/
+exports/
+*.exe
+*.app
+
+# Asset pipeline intermediates — keep `assets/raw/` if you want to commit
+# Gemini sources; otherwise uncomment the next line to ignore them.
+# assets/raw/
+
+# Personal AI / API keys — NEVER commit
+*.env
+.env.local
+api_keys/
+secrets.json
+
+# Plugin temp / Gemini-generator cache (godot-ai-image-generator)
+addons/godot-ai-image-generator/cache/
+addons/godot-ai-image-generator/.tmp/
+
+# Logs
+*.log
+logs/
+
+# Save files (player saves should not be committed)
+saves/
+user://
+
+# Local Claude Code settings overrides
+.claude/settings.local.json

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://bl8iatx7yhhf0"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bosses/aphelion.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"boss_aphelion"
+display_name = "The Aphelion"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(64, 64)
+max_health = 9999
+armor = 32
+contact_damage = 64
+move_speed = 0.0
+detection_radius = 999.0
+behavior = 4
+xp_skill = &"skill_magic"
+xp_value = 10000
+biome = &"final_spiral"
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-12--the-aphelion"

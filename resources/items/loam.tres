@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://uqyahpem5k3h"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"loam"
+display_name = "Loam"
+description = "Soft warm earth from the Root Hollows. Building material and basic loot."
+max_stack = 999
+item_type = 0
+tier = 1
+rarity = 0
+pickaxe_tier = 0
+base_damage = 0
+attack_cooldown_seconds = 0.0
+lore_ref = "lore/04_biomes.md#stratum-1--the-root-hollows"

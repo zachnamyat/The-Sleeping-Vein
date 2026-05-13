@@ -1,0 +1,26 @@
+# Ticket 12.2 + 12.3 + 12.4 — Final Spiral bestiary (Diadem ranks + Hollowling Mote + Vacancy)
+
+SUBJECT: 5 creature sprites for the Final Spiral biome.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 16×16 strip of 5 cells, with two also generated as 24×24 for the Diadem heavy units. Primary final size: 80×16. Additional: separate 24×24 outputs for Reader/Censer/Warden full versions.
+
+Layout:
+- (0) Diadem Reader (16×16 mob form) — golden-masked mortal, dark-violet robes, Aphelion-shard sword. Mid-rank cult operative.
+- (1) Diadem Censer (16×16) — robed humanoid carrying a swinging thurible that emits golden smoke (healing for nearby Diadem agents). Ranged.
+- (2) Diadem Warden (16×16) — heavily armored mortal with Diadem-gold-laminated plate. Slow tank.
+- (3) Pure Hollowling Mote (8×8 — but render in 16×16 cell with 4-pixel padding) — a free Hollowling, soft amorphous gold particle, dangerous in numbers.
+- (4) Vacancy (16×16) — extremely rare. A Resonance Echo of someone whose name has been elided. Renders as a humanoid silhouette with a void where the face/name should be (a literal "absence" of pixels — render as a transparent face-hole surrounded by Diadem-gold rim).
+
+SIZE: Generate at 1280×256 source. Downsample 16× nearest-neighbor to 80×16 final.
+
+PALETTE: Final Spiral ramp for Diadem agents + AAP-64 cool-violet robes. Hollowling Motes use Final Spiral gold ramp only. Vacancy uses Final Spiral darks + an actual transparent pixel hole for the face area (Antigravity should ensure these pixels are alpha=0 in post-processing). Background #FF00FF.
+
+LORE: See lore/06_creatures_and_enemies.md §6.2 (Stratum 9). The Vacancy follows the Walker silently and never attacks; it cannot reliably be attacked. The Hollowling Mote is the only free, un-anchored Hollowling encounter in the game.
+
+POST-GENERATION:
+- Downsample 80×16 nearest-neighbor.
+- Crop 5 separate 16×16 PNGs at assets/sprites/enemies/final_spiral/.
+- Manifest entries: enemy_diadem_reader, enemy_diadem_censer, enemy_diadem_warden, enemy_pure_hollowling_mote, enemy_vacancy. Status "final".
+- Note: Diadem heavy units (24×24 versions) for the Phase 12 boss fight are in prompts/bosses/boss_diadem_bearer.txt (Readers used as adds).

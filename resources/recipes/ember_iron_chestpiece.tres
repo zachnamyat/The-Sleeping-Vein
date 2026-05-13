@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" load_steps=2 format=3 uid="uid://recipe0emberchst0"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_ember_iron_chestpiece"
+display_name = "Ember-Iron Chestpiece"
+inputs = [{ "item_id": "shaleseed", "count": 24 }, { "item_id": "loam", "count": 16 }]
+outputs = [{ "item_id": "ember_iron_chestpiece", "count": 1 }]
+stations = [&"clearstone_forge"]
+skill_xp_grant = 14
+skill_xp_id = &"skill_crafting"

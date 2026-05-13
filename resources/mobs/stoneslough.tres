@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://bmrmh3rivibuh"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/root_hollows/stone_hopper.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"stoneslough"
+display_name = "Stoneslough"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 10
+armor = 0
+contact_damage = 6
+contact_damage_type = &"physical"
+move_speed = 40.0
+detection_radius = 128.0
+behavior = 2
+xp_skill = &"skill_melee"
+xp_value = 2
+biome = &"root_hollows"
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-1--glaur-em-the-engorged-stone-father"

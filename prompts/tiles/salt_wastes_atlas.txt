@@ -1,0 +1,45 @@
+SUBJECT: A complete 16×16 pixel-art tile atlas for "The Salt Wastes of Dawning" biome — the seventh stratum, an arid salt-pan desert with shifting dunes, fossilized worm-tracks, crystalline salt formations, and pre-Inversion bone-cairns; day/night temperature swings hammer this stratum harder than any other.
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Inspired by Core Keeper / Stardew Valley / Songs of Conquest.
+
+COMPOSITION: 256×256, 16×16 grid of 16×16-pixel cells with no gaps.
+
+SIZE: Generate 1024×1024 source, downsample 4× nearest-neighbor to 256×256.
+
+ROW LAYOUT (see docs/design/00_tile_atlas_spec.md §2):
+- Row 0  : Floor variants — 8 base salt-pan tiles + 8 wear variants (wind-rippled sand, dune-edge patterns, bone-fragment scatters).
+- Rows 1–2: 47-tile Wang autotile (sand-pan to salt-pillar transitions).
+- Row 3  : Wall caps — dark silhouettes of salt-pillar overhangs and Wormbound bone-cairn crests.
+- Row 4  : Wall bases — crystalline salt-pillar bases, fossilized bone walls.
+- Row 5  : Ore tiles — Saltbound steel (tier-7, lore: "steel cured in the salt-light of dawning") in 8 mining sub-stages, plus 8 variants for raw salt-crystal clusters.
+- Row 6  : Small decoration tiles — wind-scoured stones, Wormbound bone-cairns, scattered salt clusters, dried Wormbound ritual feathers.
+- Row 7  : Small decoration tiles — pre-Inversion bone-cairns from before the Wormbound culture (older, weathered, slightly different geometry).
+- Row 8  : Liquid surface — rare oases of mineralized water, milky and pale.
+- Row 9  : Liquid edge transitions.
+- Row 10 : Hazard / trap tiles — sand-sinks, day/night-cycle thermal vents (cold cracks at night, sun-baked plates by day), wind-shear strips.
+- Row 11 : Mural fragments — 8 tiles forming one Wormbound mural of Naeren the Wandering Salt-Crown in pre-corruption procession (lore/05_aeon_sovereigns_bosses.md#boss-8).
+- Row 12 : Furniture & door components — bone-bound salt-block doors, low salt-pillar archways.
+- Row 13 : Built-by-player variants — clean salt-brick walls, regular Wormbound bone-inlay.
+- Row 14 : VFX overlay tiles — heat-shimmer (day), cold-frost (night), dust-wisps drifting across.
+- Row 15 : Reserved blank — solid #FF00FF.
+
+PALETTE: Restrict to the Salt Wastes ramp + black + magenta:
+  #1f1c1a  (deepest night-shadow)
+  #4a443f  (dark salt-stone)
+  #857d72  (mid salt-tan)
+  #bdb5a8  (lit salt-pale)
+  #e3dccf  (bright salt-white)
+  #fdfbf0  (brightest sun-bleached)
+  #000000  (outline only)
+  #FF00FF  (Row 15 only)
+
+LORE: A salt-pan desert with day/night temperature swings rather than the constant heat of Emberforge; the Wormbound culture lives here, ambiguously hostile-but-redeemable. Naeren the Wandering Salt-Crown is the Aeon Sovereign — her fight has a peaceful ritual-of-peace alternative unique to this game. See lore/04_biomes.md#stratum-7--the-salt-wastes-of-dawning.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, gaps between cells.
+
+POST-GENERATION:
+- Downsample 256×256 nearest-neighbor.
+- 16×16 grid alignment + palette check.
+- Save raw → assets/raw/tiles/salt_wastes_atlas_v1.png
+- Save final → assets/sprites/tiles/salt_wastes_atlas_16.png
+- Update manifest entry "tile_salt_wastes_atlas_16": status → "final".

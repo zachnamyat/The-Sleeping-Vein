@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="MobDef" load_steps=3 format=3 uid="uid://mobdef0drowncrown"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bosses/volthaar.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"boss_drowned_crown"
+display_name = "The Drowned Crown"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(64, 64)
+max_health = 2200
+armor = 12
+contact_damage = 28
+move_speed = 18.0
+detection_radius = 200.0
+behavior = 4
+xp_skill = &"skill_melee"
+xp_value = 1800
+biome = &"drowned_aphelion"
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-10--the-drowned-crown"

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwwqkr5qkpo7"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/staff.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"staff"
+display_name = "Resonance Staff"
+description = "Tier-0 magic. Costs 8 mana per cast."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 2
+tier = 0
+rarity = 1
+base_damage = 9
+damage_type = &"magic"
+attack_cooldown_seconds = 0.65
+mana_cost = 8
+weapon_class = &"magic"
+projectile_speed = 220.0

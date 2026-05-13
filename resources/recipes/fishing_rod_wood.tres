@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" load_steps=2 format=3 uid="uid://recipe0fishrod00"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_fishing_rod_wood"
+display_name = "Wooden Fishing Rod"
+inputs = [{ "item_id": "loam", "count": 10 }]
+outputs = [{ "item_id": "fishing_rod_wood", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 3
+skill_xp_id = &"skill_crafting"

@@ -1,0 +1,56 @@
+# Tickets 10.9 + 10.10 + 10.11 + 10.12 + 10.13 + 10.14 — Phase 10 bosses (Vorr'kell, Spawnmother, Sythrenn, Auriax, Vol'thaar, Drowned Crown)
+# 6 bosses — each is a hero asset (2 polish passes recommended).
+
+SUBJECT: A pixel-art sheet of 6 boss sprites for Phase 10. Each is a single static portrait (animation = Phase 6 polish later). Auriax is a mega-boss (96×96); others are medium (64×64).
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: For Auriax: separate 96×96 generation. For the other 5: a horizontal sheet of 5 cells × 64×64 each, totaling 320×64.
+
+Boss profiles:
+
+1. **Vorr'kell, the Tunnel Wyrm** (64×64) — Glasswright Reaches
+   - Massive serpentine creature, body of fused crystal shards + dead Glasswright masonry. Head is a twisted Glasswright lantern that glows wrong (gold-cracked rather than pale-blue). Tunneling pose: segments emerging from broken floor, head turned toward viewer.
+   - Palette: Glasswright Reaches ramp + Hollowling gold for corruption + Final Spiral gold for the twisted lantern.
+
+2. **The Spawnmother of Carrion Hollows** (64×64) — Vesari Necropolis
+   - Pale, almost-translucent stationary body, partly fossilized Vesari sailors fused into her flesh. Coral-pink with white skeletal patterns. Thick swarm of small Hollowling-spawn drifting around her body.
+   - Palette: Vesari Necropolis ramp + pale corals (#e8d5b7 nuance) + Hollowling gold.
+
+3. **Sythrenn, the Toxic Bloom** (64×64) — Sunless Verdancy (mid-boss)
+   - Massive flowering creature, half-vine half-flesh, petals like wings, crown of poison-bearing pistils. Beautiful even corrupted. Pose: in bloom, crown open partially showing the smaller inner body (which the player can choose to mercy-kill).
+   - Palette: Sunless Verdancy ramp + toxic luminous greens + Hollowling gold for corruption.
+
+4. **Auriax, the Verdant Tyrant** (96×96, MEGA-BOSS — generate SEPARATELY) — Sunless Verdancy
+   - Enormous tree-bodied creature walking on root-legs, flowering crown glowing wrong. Visible dying-forest aura. Pose: striding forward, crown tilted toward viewer.
+   - Palette: Sunless Verdancy full ramp + dying-forest greys (#4a5159 nuance) + Hollowling gold.
+   - Source: 6144×6144 → 64× to 96×96.
+
+5. **Vol'thaar, the Tide Sovereign** (64×64) — Drowned Aphelion
+   - Cephalopod-like creature, body of woven seawater and shadow. 8 major tentacles each ending in a different luminescent organ (lantern, chiming-bell, wound-bleeding-light, etc.). Submerged pose, tentacles spread.
+   - Palette: Drowned Aphelion ramp + AAP-64 abyssal blacks + Final Spiral gold for one lantern-organ.
+
+6. **The Drowned Crown** (64×64, optional ghost-boss) — Drowned Aphelion
+   - Spectral figure in waterlogged regalia, holding a Vesari ceremonial sword, surrounded by ghostly drowned subjects. Translucent. NOT Hollowling-corrupted (it's pure grief-given-form).
+   - Palette: Drowned Aphelion ramp lighter end (#6cd3e1, #cdf7f3) + Vesari Necropolis pale grey for the regalia + AAP-64 ghostly white.
+
+SIZES:
+- Bosses 1-3, 5, 6 (64×64): generate at 4096×4096 each → 64× to 64×64.
+- Auriax (96×96): generate at 6144×6144 → 64× to 96×96. Separate output file.
+
+PALETTE per boss above. Outline #000000. Background #FF00FF.
+
+LORE: See lore/05_aeon_sovereigns_bosses.md §Boss 2 through Boss 6 + Boss 10 for full backstory and fight phases.
+
+POST-GENERATION:
+- Downsample each to its target size.
+- Save raws → assets/raw/bosses/<name>_v1.png.
+- Save finals → assets/sprites/bosses/<name>.png:
+  - vorrkell.png (64×64)
+  - spawnmother.png (64×64)
+  - sythrenn.png (64×64)
+  - auriax.png (96×96)
+  - volthaar.png (64×64)
+  - drowned_crown.png (64×64)
+- Manifest entries: boss_vorrkell, boss_spawnmother, boss_sythrenn, boss_auriax (size [96,96]), boss_volthaar, boss_drowned_crown. Status "final".
+- Phase animations and per-phase visual variants are deferred to a polish ticket; this ships static single-pose portraits.

@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://bmghi5ribthf1"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/root_hollows/stone_hopper.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/stone_hopper_loot.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"stone_hopper"
+display_name = "Stone-Hopper"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 18
+armor = 0
+contact_damage = 4
+contact_damage_type = &"physical"
+move_speed = 32.0
+detection_radius = 96.0
+behavior = 2
+xp_skill = &"skill_melee"
+xp_value = 5
+loot_table = ExtResource("3_loot")
+biome = &"root_hollows"
+lore_ref = "lore/06_creatures_and_enemies.md"

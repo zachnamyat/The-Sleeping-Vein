@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwwffwrckpo7"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"hoe"
+display_name = "Hoe"
+description = "Breaks loam into soil ready for seeding."
+max_stack = 1
+item_type = 1
+tier = 0
+rarity = 0

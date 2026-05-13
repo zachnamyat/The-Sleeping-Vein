@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bloambench0scene01"]
+
+[ext_resource type="Script" path="res://scripts/structures/workstation.gd" id="1_ws"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/loam_bench.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lb"]
+size = Vector2(28, 28)
+
+[node name="LoamBench" type="Area2D"]
+script = ExtResource("1_ws")
+station_id = &"loam_bench"
+display_name = "Loam Bench"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_lb")

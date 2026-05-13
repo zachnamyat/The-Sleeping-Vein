@@ -1,0 +1,35 @@
+# Ticket 0.9 — Game Icon (hero asset — 2 polish passes)
+#
+# This replaces the default Godot icon.svg with a pixel-art game icon for The Sleeping Vein.
+
+SUBJECT: The game icon for "The Sleeping Vein" — a pixel-art emblem showing a single luminous golden Aphelion Sphere fragment (a "sliver") suspended at the center of a stylized circular hollow earth cross-section. Concentric strata rings spiral inward toward the sliver, each ring colored to evoke one of the nine biomes (warm browns, pale blue, salt grey, green, sea-blue, ember red, salt-tan, aurora violet, gold). A single small silhouette of an Echo-Walker stands on the outermost ring, looking inward toward the sliver.
+
+STYLE: 16-bit pixel art, with a slight 3/4 lean and a faint inner-glow effect on the Aphelion sliver. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps. The icon should read clearly at 128×128 (its in-game/launcher size) and still feel composed at 1024×1024 (the source).
+
+COMPOSITION: A circular composition centered in a square frame. The Aphelion sliver is dead-center; concentric biome rings spiral outward; the Echo-Walker silhouette is at the 6 o'clock position on the outermost ring, scale ~12 pixels tall in the final 128×128. The image background outside the circle is solid magenta (#FF00FF) to be keyed out (icon is presented on transparent background in launcher contexts).
+
+SIZE: Generate at 1024×1024 source. Downsample 8× nearest-neighbor to 128×128 final.
+
+PALETTE: Use the global AAP-64 palette plus selected biome accents. Hero colors:
+  - Aphelion sliver: #f8e088 → #dab14a → #a87f24 (Final Spiral ramp; the sliver IS Aphelion-light)
+  - Outermost ring (Root Hollows): #6b5036, #a4854f, #d4a857
+  - Inner rings (one band each, picking one accent hex from each biome's ramp — see docs/design/00_tile_atlas_spec.md §6)
+  - Echo-Walker silhouette: #000000 outline + #d4a857 hand-glow pixel
+  - Background: #FF00FF (will be keyed out)
+  - Outlines: #000000 sparingly
+
+LORE: An Echo-Walker is a being spun from a sliver of the Aphelion Sphere, anchored at the Resonance Loom, given purpose by the dying captive sun. They descend through nine strata to vanquish or redeem the corrupted Aeon Sovereigns and uncover the truth of the Inversion. The icon depicts the entire arc in a single emblem: the sliver at the center, the journey inward, the Walker on the outermost ring at the threshold of descent. See lore/07_echo_walkers_player.md and lore/01_cosmology_and_universe.md.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels (no "The Sleeping Vein" wordmark in the icon itself), frame, border (the icon IS the composition, no extra framing), isometric perspective, more than one figure (single Walker only).
+
+POLISH PASSES: 2 (this is a hero asset).
+
+POST-GENERATION:
+- Downsample 128×128 nearest-neighbor.
+- Key out magenta background.
+- Palette check.
+- Save raw → assets/raw/ui/game_icon_v1.png
+- Save final → assets/sprites/ui/game_icon.png
+- Update project.godot to point config/icon to res://assets/sprites/ui/game_icon.png (was res://icon.svg).
+- Update manifest entry "ui_game_icon": status → "final".
+- Note: the original `icon.svg` and `icon.svg.import` at the project root can be removed in a follow-up after the new icon is verified.

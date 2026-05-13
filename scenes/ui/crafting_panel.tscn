@@ -1,0 +1,45 @@
+[gd_scene format=3 uid="uid://c4qu7vxav1toa"]
+
+[ext_resource type="Script" path="res://scripts/ui/crafting_panel.gd" id="1_craft"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_craft"]
+bg_color = Color(0.03, 0.03, 0.04, 0.95)
+border_color = Color(0.85, 0.66, 0.34, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="CraftingPanel" type="Control"]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -132.0
+offset_top = -68.0
+offset_right = 132.0
+offset_bottom = 68.0
+mouse_filter = 0
+script = ExtResource("1_craft")
+
+[node name="Panel" type="Panel" parent="."]
+offset_right = 264.0
+offset_bottom = 132.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_craft")
+
+[node name="Title" type="Label" parent="Panel"]
+offset_left = 6.0
+offset_top = 2.0
+offset_right = 260.0
+offset_bottom = 14.0
+modulate = Color(0.95, 0.84, 0.5, 1)
+text = "Station"
+
+[node name="Scroll" type="ScrollContainer" parent="Panel"]
+offset_left = 6.0
+offset_top = 14.0
+offset_right = 258.0
+offset_bottom = 128.0
+
+[node name="RecipeList" type="VBoxContainer" parent="Panel/Scroll"]
+custom_minimum_size = Vector2(250, 110)

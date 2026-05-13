@@ -1,0 +1,46 @@
+# Tickets 9.5 + 9.6 + 9.7 + 9.8 + 9.9 — Five named merchant NPCs
+# Each is a hero NPC — 2 polish passes recommended per character.
+
+SUBJECT: Five named Lattice Survivor merchant NPCs. Each is a unique character with distinct silhouette and role.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: For each NPC, generate a sprite sheet matching the structure of npc_aelstren.txt: idle (4-dir × 4 frames) + walk (4-dir × 6 frames) + 1 portrait frame. Per-NPC final: 664×24. All five characters share the same sheet structure for easy integration.
+
+NPC profiles:
+
+1. **Brindle Quench-of-Coals** (Smith merchant, Emberforge-aligned):
+   - Stocky, dark-skinned, soot-marked. Heavy leather apron over forge-clothes. Iron tools on her belt, gold-plated Pyrenkin pendant at her throat. Salt-and-pepper hair braided back. Hands strong, scarred. Walks with a slight forge-burn limp.
+   - Palette: AAP-64 dark cloth/leather, Emberforge red-orange accents (#c44a1d, #f08a2e) on apron stitching, Final Spiral gold on pendant.
+   - File: assets/sprites/npcs/brindle.png
+
+2. **Mira-no-Last-Name** (Storage clerk):
+   - Slim, pale, asymmetrical haircut (left side shaved short, right side longer braid). Practical clothes — neutral linen tunic over slim trousers, leather belt with many small pouches. Quiet expressive face. Wears a single small Aphelion-gold pendant.
+   - Palette: AAP-64 neutral linen/wood tones, Final Spiral gold pendant.
+   - File: assets/sprites/npcs/mira.png
+
+3. **The Cantor of Five Bells** (Musician + Sovereign-Naming sidequest):
+   - Tall, slender, ageless-looking. Long flowing robes in five colors corresponding to the Aeon Sovereigns' bells — patches of Root Hollows gold, Glasswright blue, Verdancy green, Drowned cyan, Emberforge red sewn into a single long coat. Carries a small set of five bells on a chest-harness. Hair pure white, tied back with a salt-cord.
+   - Palette: AAP-64 + 5 biome accent ramps used as patch-colors.
+   - File: assets/sprites/npcs/cantor_of_five_bells.png
+
+4. **Old Hask** (Fishing merchant, Drowned Aphelion-aligned):
+   - Weather-beaten old man. Salt-grey beard, heavy fisher's coat in dark Drowned-blue, leather waders, wide-brimmed waxed hat. Carries a small lantern at his belt. One eye milky from a salt-blinding decades ago. Walks slow.
+   - Palette: AAP-64 + Drowned Aphelion accents (#15527a, #2c8fb8, #6cd3e1) on coat.
+   - File: assets/sprites/npcs/old_hask.png
+
+5. **The Veiled Buyer** (Random-spawn cloaked merchant):
+   - Tall, fully cloaked figure. Black hood pulled forward; no face visible — only a faint Aphelion-gold gleam where the eyes would be. Robe layered with small Vesari ship-tokens (he buys curios). Voice/identity is canonically ambiguous.
+   - Palette: AAP-64 deep blacks/dark greys + Final Spiral gold gleam. Vesari salt-pale accents on tokens.
+   - File: assets/sprites/npcs/veiled_buyer.png
+
+SIZE: Per NPC, generate at 10624×384 source → 16× downsample to 664×24.
+
+LORE: Each NPC's history is in lore/03_factions_and_civilizations.md and lore/11_environmental_storytelling.md. The Cantor tracks Walker respawns out loud ("Walker. The sun grows dim because of mercies like yours.") — lore/07_echo_walkers_player.md §7.4. Mira-no-Last-Name has the late-game emotional reveal (she is the Diadem-Bearer's older sister; the Bearer is the "Lattice Survivor child" referenced in lore/05_aeon_sovereigns_bosses.md#boss-11).
+
+POST-GENERATION (per NPC):
+- Downsample 664×24 nearest-neighbor.
+- Key out magenta + palette check.
+- Save raw → assets/raw/npcs/<name>_v1.png; final → assets/sprites/npcs/<name>.png.
+- Wrap each as SpriteFrames at resources/sprites/npc_<name>.tres (idle_<dir> 4f@8fps, walk_<dir> 6f@10fps, portrait 1f).
+- Manifest entries: npc_brindle, npc_mira, npc_cantor_of_five_bells, npc_old_hask, npc_veiled_buyer. Status "final".

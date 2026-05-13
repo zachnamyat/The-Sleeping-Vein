@@ -1,0 +1,50 @@
+# Phase 16 extension items — Sythrenn's Last Petal + Vol'thaar's Promise + Wormbound Covenant + Aphelion Hymn fragments + Cantor's Compass
+
+SUBJECT: A pixel-art sheet of small Phase 16 extension items — moral-choice rewards and lore-special items.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 6×2 grid of 16×16 cells. Final: 96×32. Layout:
+
+Row 0:
+- (0,0) Sythrenn's Last Petal — small pressed luminous flower (mercy-kill alternative drop, ticket 16.10)
+- (0,1) Vol'thaar's Promise — small fluid-filled glass orb with one floating tentacle-tip (mercy-release alternative drop, ticket 16.7)
+- (0,2) Wormbound Covenant Scroll — bone-bound parchment with worm-glyph seal (peace path drop, ticket 16.6)
+- (0,3) Naeren's Salt-Crown — small salt-crystal crown miniature (peace path key item, ticket 11.11)
+- (0,4) Aphelion Hymn Fragment 1 — small parchment scroll with golden musical notation (1 of N, ticket 16.4)
+- (0,5) Cantor's Compass — small wooden compass with five-bell engravings (Sovereign-Naming sidequest reward, ticket 16.2)
+
+Row 1:
+- (1,0) Elision-Script Tablet Fragment — a chunk of stone with one elided glyph visible as a void (ticket 12.5 + 16.x)
+- (1,1) Pre-Diadem Name Locket — small locket containing the Diadem-Bearer's pre-Diadem name (Mira's family heirloom; ticket 16.12)
+- (1,2) Vacancy's Token — a tiny faceless coin that the Vacancy passes to the Walker (ticket 16.8)
+- (1,3) Aphelion Hymn Fragment 2
+- (1,4) Aphelion Hymn Fragment 3
+- (1,5) Aphelion Hymn Fragment 4
+
+SIZE: Generate at 1536×512 source. Downsample 16× nearest-neighbor to 96×32 final.
+
+PALETTE: Item-specific:
+- Sythrenn's Petal: Verdancy ramp + soft luminous pink.
+- Vol'thaar's Promise: Drowned Aphelion ramp + AAP-64 glass.
+- Wormbound Covenant: Salt Wastes ramp + AAP-64 bone.
+- Naeren's Salt-Crown: Salt Wastes + AAP-64 crystal whites.
+- Aphelion Hymn: Final Spiral gold + parchment.
+- Cantor's Compass: AAP-64 wood + Final Spiral gold engravings.
+- Elision-Script Fragment: Vesari Necropolis pale + a literal alpha-transparent pixel for the elided glyph.
+- Pre-Diadem Name Locket: AAP-64 brass + Final Spiral gold.
+- Vacancy's Token: AAP-64 dim metals.
+Background #FF00FF.
+
+LORE: These items are the rewards of moral-choice paths and extension content. See:
+- Sythrenn's Last Petal — lore/05_aeon_sovereigns_bosses.md#boss-4 (mercy-kill).
+- Vol'thaar's Promise — boss-6 mercy-release.
+- Wormbound Covenant — Naeren peace-path, lore/03 §Wormbound.
+- Aphelion Hymn — Phase 16.4 extension.
+- Cantor's Compass — Sovereign-Naming sidequest, lore/05.
+- Pre-Diadem Name Locket — Phase 16.12 extension; Mira-no-Last-Name's family heirloom.
+
+POST-GENERATION:
+- Downsample 96×32 nearest-neighbor.
+- Crop 12 separate 16×16 PNGs into assets/sprites/items/extensions/.
+- Manifest entries: item_sythrenns_last_petal, item_volthaars_promise, item_wormbound_covenant_scroll, item_naerens_salt_crown, item_aphelion_hymn_fragment_1..4, item_cantors_compass, item_elision_script_fragment, item_pre_diadem_name_locket, item_vacancys_token. Status "final".

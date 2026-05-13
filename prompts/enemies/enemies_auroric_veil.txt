@@ -1,0 +1,22 @@
+# Phase 11 — Auroric Veil bestiary + Sunken Diadem first appearance
+
+SUBJECT: 5 creature sprites for the Auroric Veil. 3 hostile (including the first Sunken Diadem agent) + 2 friendly.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: 16×16 strip of 5 cells. Final 80×16. Layout:
+- (0) Aurora-Wisp (hostile, Echo) — floating violet wisp with trailing aurora-ribbon. Ranged.
+- (1) Cold Hollow (hostile, infected) — slow ice-creature, heavy-hitting, glacial-blue body with gold-vein corruption.
+- (2) Sunken Diadem Agent (hostile, MORTAL — not Hollowling-infected) — humanoid in golden mask + dark cool-violet robe + Aphelion-shard sword. The first Diadem appearance in the game.
+- (3) Frostlark (friendly) — small bird with three-part-harmony song (Phase 6 audio). Pale ice-blue plumage.
+- (4) Aurora-Vole (friendly, ambient) — small burrower with shimmering fur.
+
+SIZE: Generate at 1280×256 source. Downsample 16× nearest-neighbor to 80×16 final.
+
+PALETTE: Auroric Veil ramp + Hollowling gold (where applicable; NOT on Diadem agents, they're mortal). Diadem agents use Final Spiral gold for masks. Background #FF00FF.
+
+LORE: Aurora-Wisps are Echoes (no Hollowling infection). Cold Hollows are infected. Diadem Agents are mortal humans — first cult sighting. See lore/06_creatures_and_enemies.md §6.2 (Stratum 8) + lore/05_aeon_sovereigns_bosses.md (Diadem context).
+
+POST-GENERATION:
+- Downsample, crop 5 separate 16×16 PNGs at assets/sprites/enemies/auroric_veil/.
+- Manifest entries: enemy_aurora_wisp, enemy_cold_hollow, enemy_sunken_diadem_agent, enemy_frostlark, enemy_aurora_vole. Status "final".

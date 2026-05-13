@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwv7et8o7jo6"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"ancient_coin"
+display_name = "Ancient Coin"
+description = "Vesari currency. Still cold to the touch."
+max_stack = 9999
+item_type = 0
+tier = 1
+rarity = 1
+lore_ref = "lore/03_factions_and_civilizations.md"

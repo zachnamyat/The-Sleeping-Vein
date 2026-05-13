@@ -1,0 +1,23 @@
+# Ticket 5.3 — Boss HP bar UI
+
+SUBJECT: A pixel-art UI sprite — a large boss HP bar with phase markers, displayed at the top of the screen during boss fights.
+
+STYLE: (see prompts/_STYLE.txt) — UI on 8-pixel grid.
+
+COMPOSITION: A single horizontal sprite, 256×24 final. Layout:
+- Left edge (0..15 × 0..23): boss-portrait frame slot (16×16 + 8-pixel padding).
+- Center (16..239 × 0..23): horizontal HP bar. Outer dark metal frame. Inner fill is a deep crimson (#7a2814) with brighter red highlight (#c44a1d). Phase markers are small vertical golden notches at the 66%, 50%, and 33% marks (some bosses use different thresholds; show all four boundaries to support generic use).
+- Right edge (240..255 × 0..23): boss-name plate (lore: this is where the boss's resonance-name will display, including translated form). Thin Aphelion-gold border.
+
+SIZE: Generate at 4096×384 source. Downsample 16× nearest-neighbor to 256×24 final.
+
+PALETTE: AAP-64 dark UI greys + deep red HP fill + Aphelion gold accents. Background #FF00FF.
+
+LORE: When a Sovereign's HP bar appears, the screen briefly dims; their resonance-name speaks softly in the audio mix (see audio brief in 4.9 / 15.7). The player learns the boss's name from environmental storytelling before the fight; the name plate displays it.
+
+POST-GENERATION:
+- Downsample 256×24 nearest-neighbor.
+- Key out magenta.
+- Save raw → assets/raw/ui/boss_hp_bar_v1.png
+- Save final → assets/sprites/ui/boss_hp_bar.png
+- Manifest entry "ui_boss_hp_bar": status → "final".

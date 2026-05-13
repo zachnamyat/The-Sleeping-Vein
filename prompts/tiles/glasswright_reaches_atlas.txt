@@ -1,0 +1,46 @@
+SUBJECT: A complete 16×16 pixel-art tile atlas for "The Glasswright Reaches" biome — the second stratum, a crystal-and-pale-clay civilization-ruin where the Glasswright Concord shaped crystallized starlight; pale clay walls run with crystal veins, sunken modular cities glitter, and the Quiet Forge still works behind a sealed gate. The atlas contains floor tiles, autotile set, capped walls, ore tiles, and decoration tiles arranged on a 16×16 grid.
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows, no per-tile perspective. Inspired visually by Core Keeper, Stardew Valley, and Songs of Conquest pixel-art density.
+
+COMPOSITION: A 256×256 pixel image, 16×16 grid of 16×16-pixel cells with no gaps or padding.
+
+SIZE: Generate at 1024×1024. Downsample 4× nearest-neighbor to 256×256.
+
+ROW LAYOUT (see docs/design/00_tile_atlas_spec.md §2):
+- Row 0  : Floor variants — 8 base pale-clay tiles + 8 wear variants (chipped, dust-streaked, crystal-shard scatters).
+- Rows 1–2: 47-tile Wang autotile set (clay-floor-to-crystal-wall transitions; final 2 cells of row 2 blank).
+- Row 3  : Wall caps — top 16×8. Dark silhouette with thin crystal-vein highlights along the edge.
+- Row 4  : Wall bases — bottom 16×16. Pale clay with embedded crystal veins glinting in cool blue. Match cap variants 1-for-1.
+- Row 5  : Ore tiles — Clearstone (tier-2 pale-blue crystal) in 8 mining sub-stages, plus 8 variants for Veinglass shards (used for early ranged ammunition, faceted shard clusters).
+- Row 6  : Small decoration tiles — Concord prayer-stones, modular brick remnants, small crystal clusters, prismatic light-puddles on the floor.
+- Row 7  : Small decoration tiles — intact Concord murals (geometric, modular, oriented to catch light), broken light-collectors, terrace plant-pots with dead foliage.
+- Row 8  : Liquid surface — cool clear groundwater pooled in low spots, very still and reflective.
+- Row 9  : Liquid edge transitions.
+- Row 10 : Hazard / trap tiles — crystal spike floors, sound-puzzle tile glyphs (the Concord encoded warnings in chime-glyphs).
+- Row 11 : Mural fragments — 8 tiles forming one Concord mural depicting the harvest of starlight (lore in lore/03_factions_and_civilizations.md#glasswright-concord).
+- Row 12 : Furniture & door components — modular clay-brick doors, narrow window frames, terraced workshop benches.
+- Row 13 : Built-by-player variants — clean geometric clay-brick tiles, regular crystal-inlay variants.
+- Row 14 : VFX overlay tiles — prismatic light shafts, crystal-vein glow halos, suspended dust catching light.
+- Row 15 : Reserved blank — solid #FF00FF.
+
+PALETTE: Restrict to the Glasswright Reaches ramp plus black for outlines and magenta for row-15:
+  #0e1626  (deepest crystal-shadow)
+  #1c2c4a  (deep clay-blue)
+  #3d5b8a  (mid clay-blue)
+  #6e8fc4  (lit pale clay)
+  #a5c2e8  (crystal-light)
+  #dfeefb  (brightest prismatic highlight)
+  #000000  (outline only)
+  #FF00FF  (Row 15 only)
+
+LORE: The Glasswright Reaches is the crown jewel of post-Inversion civilization — pale clay walls run with crystal veins, modular sunken cities still mostly intact, foundries that have not been cold in three thousand Beats because the Quiet Forge still works. The architecture is geometric, modular, and obsessive about catching the diffuse Aphelion glow on a specific surface at a specific Beat. The Suppression Wars devastated the lower Reaches; the Quiet Forge has been sealed for 3,000 Beats. See lore/04_biomes.md#stratum-2--the-glasswright-reaches.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, per-tile 3D rendering, mismatched cell sizes, gaps between cells, color bleed across cell boundaries.
+
+POST-GENERATION:
+- Downsample 256×256 nearest-neighbor.
+- Verify 16×16 grid alignment.
+- Palette check.
+- Save raw → assets/raw/tiles/glasswright_reaches_atlas_v1.png
+- Save final → assets/sprites/tiles/glasswright_reaches_atlas_16.png
+- Update manifest entry "tile_glasswright_reaches_atlas_16": status → "final".

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://cfkvlvetcoph3"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_shaleseed_pickaxe"
+display_name = "Shaleseed Pickaxe"
+inputs = [{ "item_id": "shaleseed", "count": 8 }, { "item_id": "loam", "count": 4 }]
+outputs = [{ "item_id": "shaleseed_pickaxe", "count": 1 }]
+stations = [&"clearstone_forge"]
+skill_xp_grant = 6
+skill_xp_id = &"skill_crafting"
+description = "Tier 2 mining."

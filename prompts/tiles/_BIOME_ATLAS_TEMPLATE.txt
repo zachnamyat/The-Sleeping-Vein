@@ -1,0 +1,52 @@
+# BIOME ATLAS PROMPT TEMPLATE
+# Fill in the bracketed <PLACEHOLDERS> for a specific biome.
+# Resulting file goes at prompts/tiles/<biome_id>_atlas.txt.
+# Reference: docs/design/00_tile_atlas_spec.md §2 (row layout) and §6 (palettes).
+
+SUBJECT: A complete 16×16 pixel-art tile atlas for the "<BIOME_DISPLAY_NAME>" biome — <ONE_SENTENCE_BIOME_DESCRIPTION>. The atlas contains floor tiles, an autotile transition set, capped wall tiles, ore tiles, and decoration tiles arranged on a 16×16 grid (256 total cells).
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows, no per-tile perspective. Inspired visually by Core Keeper, Stardew Valley, and Songs of Conquest pixel-art density.
+
+COMPOSITION: A 256×256 pixel image divided into a 16×16 grid; each cell is exactly 16×16 pixels with no gaps, padding, or borders between cells. Each cell is a self-contained tile whose content fills its 16×16 bounding box.
+
+SIZE: Generate at 1024×1024 source resolution. Final asset is 256×256 (4× nearest-neighbor downsample). Compose so the 16×16 grid is exactly preserved after downsample — each tile is 64×64 in the source image.
+
+ROW LAYOUT (canonical — match exactly, see docs/design/00_tile_atlas_spec.md §2):
+- Row 0  : Floor variants (8 base + 8 wear/debris variants)
+- Row 1  : 47-tile Wang autotile set, part 1 (16 cells)
+- Row 2  : 47-tile Wang autotile set, part 2 + part 3 (31 cells; final 2 cells blank/unused)
+- Row 3  : Wall caps — top 16×8 half. Mostly dark silhouette implying the 3/4 lean overhang. 8 cap variants + 8 corner/end-cap variants.
+- Row 4  : Wall bases — bottom 16×16. Vertical texture in biome material. Match cap variants 1-for-1.
+- Row 5  : Ore tiles — <ORE_NAME> in 8 visible mining sub-stages (intact → cracked → 50% broken → near-destroyed → empty), plus 8 variants for a secondary lore-named material.
+- Row 6  : Small decoration tiles (16×16) — biome-flavor props.
+- Row 7  : Small decoration tiles — biome-specific cultural / lore-flavor props (artifacts, debris, etc.).
+- Row 8  : Liquid surface (water/lava/slime/acid as appropriate to biome).
+- Row 9  : Liquid edge transitions (4-direction blends + corners).
+- Row 10 : Hazard / trap tiles (spikes, vents, glyphs).
+- Row 11 : Mural fragments — 8 tiles forming 1 narrative mural relevant to this biome's lore.
+- Row 12 : Furniture & door 16×16 components (doors, frames, surfaces).
+- Row 13 : Built-by-player tile variants (cleaner cuts, more regular, slightly brighter — distinct from natural placement).
+- Row 14 : VFX overlay tiles — light glow halos, dust motes, magic shimmers.
+- Row 15 : Reserved blank/debug — leave as solid magenta (#FF00FF).
+
+PALETTE: Restrict to the <BIOME_DISPLAY_NAME> accent ramp ONLY plus pure black for outlines and pure magenta for the row-15 blank cells:
+  <HEX_DARKEST>  (deepest shadow)
+  <HEX_DARK>
+  <HEX_MID_DARK>
+  <HEX_MID>
+  <HEX_ACCENT>
+  <HEX_BRIGHTEST>
+  #000000 (outline only — sparingly, never as a full fill)
+  #FF00FF (Row 15 reserved cells only; never inside any tile's content)
+
+LORE: <2–3 sentences anchored to lore/04_biomes.md#<biome_anchor>. Mood + dominant cultural-archaeological hints + how Aphelion light or biome corruption shows visually. End with a link to the lore section.>
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, per-tile 3D rendering, mismatched cell sizes, gaps between cells, JPG compression artifacts, color bleed across cell boundaries.
+
+POST-GENERATION:
+- Downsample to 256×256 with nearest-neighbor.
+- Verify each cell is exactly 16×16 by gridding the output at 16px intervals.
+- Run palette check: every non-magenta pixel must match one of the ramp hex values or pure black.
+- Save raw to assets/raw/tiles/<biome_id>_atlas_v1.png.
+- Save final to assets/sprites/tiles/<biome_id>_atlas_16.png.
+- Update manifest entry tile_<biome_id>_atlas_16: status → "final".

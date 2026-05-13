@@ -1,0 +1,46 @@
+# Ticket 16.11 — Per-Sovereign gold-thread visible cosmetic
+#
+# This is a set of 9 small overlay sprites, one per Aeon Sovereign defeated. Each is a hairline
+# gold thread appearing somewhere on the Walker's body, visible only at character-select close
+# zoom. By endgame, the Walker has all 9 threads. The threads are lore-canonical signs that the
+# Walker is becoming less Aphelion and more Hollow — woven from descent.
+# See lore/07_echo_walkers_player.md §7.7.
+
+SUBJECT: A set of 9 horizontal sprite strips (one per Aeon Sovereign), each strip showing a single hairline gold-thread overlay drawn over the Echo-Walker's body silhouette. The thread is a single 1-pixel-wide curving line of golden Aphelion-light, placed in a different body region per Sovereign:
+  1. Glaur-em       → left forearm (Root Hollows)
+  2. Vorr'kell      → right calf (Glasswright Reaches)
+  3. Spawnmother    → across the sternum (Vesari Necropolis)
+  4. Sythrenn       → right shoulder (Sunless Verdancy mid)
+  5. Auriax         → spiraling up the spine, visible at the upper back (Sunless Verdancy boss)
+  6. Vol'thaar      → left ribcage (Drowned Aphelion)
+  7. Skoldur        → right palm (Emberforge)
+  8. Naeren         → crown of the head, faint halo strand (Salt Wastes)
+  9. Veyl-Aurora    → looped around the throat like a thin choker (Auroric Veil)
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling. Each thread overlay is drawn on a neutral Walker silhouette (a simple bald, plain-attire Echo-Walker — Aphelion-template default outfit per lore/07_echo_walkers_player.md §7.9). The Walker is shown standing front-facing.
+
+COMPOSITION: Each of the 9 sprites is a 16×24 pixel image (Walker character size per docs/design/00_tile_atlas_spec.md §1: feet at row 23). All 9 overlay sprites pack into a single 144×24 horizontal strip (9 frames × 16 pixels wide). The thread is the ONLY content drawn over the default Walker silhouette — everything else is identical across all 9 frames. Background magenta.
+
+SIZE: Generate at 1024×1536 source per frame (one frame at a time is OK if 9-up composition is challenging); or 9216×1536 source for the full strip. Downsample 64× nearest-neighbor to 144×24 final.
+
+PALETTE: Restrict to AAP-64 base for the Walker silhouette (skin tones, default-outfit muted earth tones), plus the Aphelion-gold ramp for the thread itself:
+  Thread highlight:  #f8e088
+  Thread mid:        #dab14a
+  Thread shadow:     #a87f24
+  Outline:           #000000
+  Background:        #FF00FF (keyed out)
+
+LORE: After defeating each Sovereign, a hairline gold thread appears somewhere on the Walker's body — visible only at character-select close zoom. By endgame, the Walker has nine gold threads, one per Sovereign. They are lore-canonical signs that the Walker is becoming less Aphelion and more Hollow — leaving the Aphelion's template behind and acquiring resonance from the strata they have walked. This is the foundation of the third "Become" ending. See lore/07_echo_walkers_player.md#77-the-walkers-body-across-the-game.
+
+ANIMATION: Not animated; one frame per Sovereign-state.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, multiple thread strands per frame (each frame shows ONLY that Sovereign's thread, no accumulation), thread thicker than 1 pixel in the final downsampled image.
+
+POST-GENERATION:
+- Downsample to 144×24 nearest-neighbor.
+- Verify each 16-pixel column slice = one Sovereign's thread overlay.
+- Key out magenta.
+- Palette check.
+- Save raw → assets/raw/vfx/gold_thread_strip_v1.png
+- Save final → assets/sprites/vfx/gold_thread_cosmetic.png
+- Manifest entry "vfx_gold_thread_cosmetic": status → "final".

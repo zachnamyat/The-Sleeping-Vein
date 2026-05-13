@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://batimp8ptdlyd"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/ammo/arrow_wood.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"arrow_wood"
+display_name = "Wooden Arrow"
+description = "Basic ammunition for tier-0 bows."
+icon = ExtResource("2_icon")
+max_stack = 999
+item_type = 6
+tier = 0
+rarity = 0
+base_damage = 2
+damage_type = &"physical"

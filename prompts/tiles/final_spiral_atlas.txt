@@ -1,0 +1,45 @@
+SUBJECT: A complete 16×16 pixel-art tile atlas for "The Final Spiral" biome — the innermost stratum, the Sunken Diadem stronghold wrapped tight against the Aphelion Sphere; gold-veined obsidian floors, Diadem-script glyph walls, suspended star-shard fragments, and the closest visible distance to the captive sun.
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Inspired by Core Keeper / Stardew Valley / Songs of Conquest.
+
+COMPOSITION: 256×256, 16×16 grid of 16×16-pixel cells with no gaps.
+
+SIZE: Generate 1024×1024 source, downsample 4× nearest-neighbor to 256×256.
+
+ROW LAYOUT (see docs/design/00_tile_atlas_spec.md §2):
+- Row 0  : Floor variants — 8 base obsidian-gold-vein floor + 8 wear variants (scorch marks, Diadem-script glyph residue, star-shard impressions).
+- Rows 1–2: 47-tile Wang autotile (gold-vein-floor to glyph-wall transitions).
+- Row 3  : Wall caps — dark silhouettes of Diadem-script archways with thin gold inner glow.
+- Row 4  : Wall bases — obsidian walls with running Diadem-script glyphs etched in gold inlay.
+- Row 5  : Ore tiles — Diadem-gold (tier-9, lore: "the metal of the Sunken Diadem; refined Aphelion-light") in 8 mining sub-stages, plus 8 variants for raw star-shard fragments (lore item — fragments of the Aphelion Sphere itself).
+- Row 6  : Small decoration tiles — suspended star-shards, Diadem-script glyph tiles, ritual altars, scattered Reader-Censer thuribles.
+- Row 7  : Small decoration tiles — Sunken Diadem cultural artifacts (manifesto plates, broken Diadem-Bearer mask fragments, ritual-circuit braziers).
+- Row 8  : Liquid surface — molten gold pools (very thick, almost stilled, faintly pulsing with the Aphelion Beat).
+- Row 9  : Liquid edge transitions.
+- Row 10 : Hazard / trap tiles — manifesto-circle glyph activations, star-shard burst-fields, Beat-cycle pulse tiles.
+- Row 11 : Mural fragments — 8 tiles forming one mural of the Diadem-Bearer's pre-Diadem name (the player learns this in the corridor; lore/12_endings).
+- Row 12 : Furniture & door components — Diadem-script obsidian doors, gold-inlay frames, manifesto-plate surfaces.
+- Row 13 : Built-by-player variants — clean Diadem-gold-inlay obsidian, regular glyph-script cuts.
+- Row 14 : VFX overlay tiles — Aphelion-pulse halos (sync to the 23s Beat), gold-dust motes, Diadem-script shimmer.
+- Row 15 : Reserved blank — solid #FF00FF.
+
+PALETTE: Restrict to the Final Spiral ramp + black + magenta:
+  #1a1407  (deepest obsidian shadow)
+  #3e2e0e  (dark gold-vein)
+  #6e521a  (mid gold-vein)
+  #a87f24  (lit Diadem-gold)
+  #dab14a  (bright gold)
+  #f8e088  (brightest Aphelion-gold highlight)
+  #000000  (outline only)
+  #FF00FF  (Row 15 only)
+
+LORE: The Sunken Diadem stronghold wraps the captive Aphelion. Gold-veined obsidian, running glyph-script walls in Diadem-script (an Aphelion-corrupted glyph language), suspended star-shard fragments orbit slowly. This is where the Walker reaches the Diadem-Bearer and the three-ending choice. See lore/04_biomes.md#stratum-9--the-final-spiral.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, gaps between cells.
+
+POST-GENERATION:
+- Downsample 256×256 nearest-neighbor.
+- 16×16 grid alignment + palette check.
+- Save raw → assets/raw/tiles/final_spiral_atlas_v1.png
+- Save final → assets/sprites/tiles/final_spiral_atlas_16.png
+- Update manifest entry "tile_final_spiral_atlas_16": status → "final".

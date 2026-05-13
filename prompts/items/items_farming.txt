@@ -1,0 +1,47 @@
+# Tickets 8.1–8.4 + 8.13 — Farming tools + crop sprites
+
+SUBJECT: A pixel-art sheet of farming tools and the first 6 canonical crops (Root Hollows-tier farming).
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 8×3 grid of 16×16 cells. Final sheet: 128×48. Layout:
+
+Row 0 (tools):
+- (0,0) Hoe (already in items_tools_basic.txt — included here for completeness if generated separately; otherwise omit)
+- (0,1) Watering Can (already in basic)
+- (0,2) Sprinkler (placeable, tier-1 metal frame with brass valve)
+- (0,3) Verdant Sprinkler (placeable, tier-4, living-wood + heartwood)
+- (0,4) Tilled Soil placeable (for inventory icon)
+- (0,5) Verdant Soil placeable (tier-4 Verdancy soil for crops)
+- (0,6) Bag of Seeds — generic seed pouch
+- (0,7) Watering Can (Tideglass) — tier-5 upgrade
+
+Row 1 (crops — fully grown):
+- (1,0) Pale Cap — small white-capped mushroom (Root Hollows)
+- (1,1) Memory Root — rare gnarled root with inner pulse
+- (1,2) Salt-Wort — Vesari coastal plant (Vesari Necropolis)
+- (1,3) Verdant Sprout — bright green sprout (Sunless Verdancy)
+- (1,4) Glow-Cap — bioluminescent mushroom (Verdancy)
+- (1,5) Brinevine — kelp-like crop (Drowned Aphelion)
+
+Row 2 (growth-stage tiles for Pale Cap as canonical example):
+- (2,0) Stage 1 — tiny sprout
+- (2,1) Stage 2 — young stem
+- (2,2) Stage 3 — half-grown
+- (2,3) Stage 4 — fully grown harvestable
+- (2,4) Harvested stub
+(Additional crops' growth stages are a later polish pass.)
+
+SIZE: Generate at 2048×768 source. Downsample 16× nearest-neighbor to 128×48 final.
+
+PALETTE: AAP-64 + per-crop biome accents. Background #FF00FF.
+
+LORE: Pale Cap and Memory Root are the Root Hollows starter crops (lore/04_biomes.md#stratum-1). Higher-tier crops require biome-appropriate placeable soil. The "10-minute real-time growth" cycle (ticket 8.3) is the canonical growth speed.
+
+POST-GENERATION:
+- Downsample 128×48 nearest-neighbor.
+- Crop into 21 separate 16×16 PNGs (8 tools + 6 crops + 5 growth stages + 2 omitted):
+  - assets/sprites/items/farming/sprinkler.png, verdant_sprinkler.png, tilled_soil_icon.png, verdant_soil_icon.png, bag_of_seeds.png, watering_can_tideglass.png
+  - assets/sprites/items/crops/pale_cap.png, memory_root.png, salt_wort.png, verdant_sprout.png, glow_cap.png, brinevine.png
+  - assets/sprites/items/crops/pale_cap_stage_1..4.png, pale_cap_harvested.png
+- Manifest entries: tool_sprinkler, tool_verdant_sprinkler, item_tilled_soil_icon, item_verdant_soil_icon, item_bag_of_seeds, tool_watering_can_tideglass, crop_pale_cap, crop_memory_root, crop_salt_wort, crop_verdant_sprout, crop_glow_cap, crop_brinevine, crop_pale_cap_stage_1..4, crop_pale_cap_harvested. Status "final".

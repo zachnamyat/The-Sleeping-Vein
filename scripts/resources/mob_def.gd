@@ -1,0 +1,26 @@
+extends Resource
+class_name MobDef
+
+## Data-driven mob/enemy definition. Saved as .tres in resources/mobs/.
+
+enum Behavior { IDLE, WANDER, CHASE, RANGED, BOSS_SCRIPTED }
+
+@export var id: StringName = &""
+@export var display_name: String = ""
+@export var sprite: Texture2D
+@export var sprite_size: Vector2i = Vector2i(16, 16)
+@export var max_health: int = 10
+@export var armor: int = 0
+@export var contact_damage: int = 5
+@export var contact_damage_type: StringName = &"physical"
+@export var move_speed: float = 30.0
+@export var detection_radius: float = 96.0
+@export var behavior: Behavior = Behavior.CHASE
+@export var xp_skill: StringName = &"skill_melee"
+@export var xp_value: int = 5
+@export var loot_table: LootTable
+@export var biome: StringName = &"root_hollows"
+@export var lore_ref: String = ""
+
+# Resistances dictionary {StringName: float -1..1}
+@export var resistances: Dictionary = {}

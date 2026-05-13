@@ -1,0 +1,46 @@
+# Tickets 11.10 + 11.11 + 11.12 + 12.8 + 12.10 — Phase 11–12 bosses (Skoldur, Naeren, Veyl-Aurora, Diadem-Bearer, Aphelion)
+# 5 bosses — all hero assets. Skoldur, Veyl-Aurora, Diadem-Bearer are mega-bosses (96×96). Naeren is medium (64×64). The Aphelion has a non-traditional pattern arena.
+
+SUBJECT: A pixel-art set of 5 boss sprites for the deepest Phase 11–12 fights.
+
+STYLE: (see prompts/_STYLE.txt)
+
+Per-boss profiles:
+
+1. **Skoldur, the Forge-Forsaken** (96×96, MEGA) — Emberforge Strata
+   - Massive humanoid figure of fused magma + hardened slag + ember-iron plate. His face is the only Sovereign face that resembles a person's — eyes too still, mouth fixed in a smile. Forge-hammer in right hand. The face is THE asset's emotional weight: lore says he recognizes the Walker. Pose: standing, hammer at his side, face turned slightly toward viewer.
+   - Palette: Emberforge ramp + AAP-64 metals + Final Spiral gold accents at the smile-corners.
+   - Output: assets/sprites/bosses/skoldur.png
+
+2. **Naeren, the Wandering Salt-Crown** (64×64) — Salt Wastes
+   - Tall slow salt-crystal humanoid, crown of sharp salt-blades, trailing salt-glitter. Partial corruption visible but the figure is upright and dignified. Pose: mid-stride, salt-blade crown catching light.
+   - Palette: Salt Wastes ramp + AAP-64 crystalline whites + faint Hollowling gold at fingertips only (lore: least corrupted Sovereign).
+   - Output: assets/sprites/bosses/naeren.png
+
+3. **Veyl-Aurora, the Singing Choir** (96×96, MEGA) — Auroric Veil
+   - Composite of 7 thin tall aurora-spires arranged in a semicircle. Each spire is an indigo-violet crystal column with a tiny humanoid silhouette suspended at its peak (the 7 trapped Sovereign-singers). The arena IS the boss — render as a chamber-view with the 7 spires.
+   - Palette: Auroric Veil ramp + AAP-64 indigo nights + pale violet glow.
+   - Output: assets/sprites/bosses/veyl_aurora.png
+
+4. **The Diadem-Bearer** (96×96, MEGA) — Final Spiral
+   - Humanoid antagonist, taller than the player. Robed in deep wine-violet + Diadem-gold trim. Mask is gold and seamless except for two cracks across the eyes. Armor laminated Aphelion-shard. Sword raised. Cracked rusted golden circlet visible on the head behind the mask.
+   - Palette: Final Spiral gold ramp + AAP-64 wine-violet robe + Diadem-gold accents.
+   - Output: assets/sprites/bosses/diadem_bearer.png
+
+5. **The Aphelion** (optional ending-locked) — Final Spiral, the Sphere itself
+   - The Aphelion has no body. Render as a 64×64 "fight icon" — a featureless gold void with patterns of light arranged as bullet-hell pattern hints. Background is the Sphere's interior — pure gold with floating geometric pattern fragments. Used as the boss-card icon during the ending-B encounter.
+   - Palette: Final Spiral gold ramp ONLY (#1a1407 → #f8e088), no other colors.
+   - Output: assets/sprites/bosses/aphelion.png
+
+SIZES:
+- Skoldur, Veyl-Aurora, Diadem-Bearer: 6144×6144 source → 96×96.
+- Naeren, Aphelion: 4096×4096 source → 64×64.
+
+PALETTE per boss above. Outline #000000 (sparingly). Background #FF00FF.
+
+LORE: See lore/05_aeon_sovereigns_bosses.md §Boss 7, 8, 9, 11, 12. Skoldur says "You came back" to the Walker. The Diadem-Bearer ends themselves at phase 4 — the player does not strike the killing blow. The Aphelion does not have a body; the fight is persuading the Sphere to crack.
+
+POST-GENERATION:
+- Downsample each to target size.
+- Save raw + final per the paths above.
+- Manifest entries: boss_skoldur (size [96,96]), boss_naeren, boss_veyl_aurora (size [96,96]), boss_diadem_bearer (size [96,96]), boss_aphelion. Status "final".

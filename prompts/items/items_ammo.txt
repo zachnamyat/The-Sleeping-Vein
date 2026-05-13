@@ -1,0 +1,29 @@
+# Tickets 6.1 + 6.2 — Ammunition (arrows, bullets) inventory icons
+
+SUBJECT: A pixel-art sheet of ammo types across tiers and ranged-weapon variants: arrows for bows (5 tiers/variants), bullets for guns (5 tiers/variants), and special ammo (Veinglass arrow, Hollowling-pierce bullet, etc.).
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A horizontal 16×16 sheet, 12 cells. Final: 192×16. Layout left-to-right:
+- (0) Wood Arrow (tier 0 standard)
+- (1) Iron Arrow (tier 1–2 standard)
+- (2) Veinglass Arrow (Glasswright special — fragments on impact for AOE)
+- (3) Heartwood Arrow (tier 3+ standard)
+- (4) Tideglass Arrow (tier 5+, resonance-piercing)
+- (5) Lead Bullet (tier 0 standard)
+- (6) Iron Bullet (tier 1–2 standard)
+- (7) Ember-iron Bullet (tier 5+ heat-piercing)
+- (8) Saltbound Bullet (tier 7+ salt-corrosive)
+- (9) Diadem-gold Bullet (tier 9, endgame)
+- (10) Hollowling-pierce Bullet (special — gold tip, infection-banishing)
+- (11) Soft Echo Arrow (special — for stunning Resonance Echoes)
+
+SIZE: Generate at 3072×256 source. Downsample 16× nearest-neighbor to 192×16 final.
+
+PALETTE: AAP-64 + per-tier biome accent. Background #FF00FF.
+
+POST-GENERATION:
+- Downsample 192×16 nearest-neighbor.
+- Crop 12 separate 16×16 PNGs:
+  - assets/sprites/items/ammo/arrow_wood.png, arrow_iron.png, arrow_veinglass.png, arrow_heartwood.png, arrow_tideglass.png, bullet_lead.png, bullet_iron.png, bullet_ember_iron.png, bullet_saltbound.png, bullet_diadem_gold.png, bullet_hollowling_pierce.png, arrow_soft_echo.png
+- Manifest entries: item_arrow_wood through item_arrow_soft_echo. Status "final".

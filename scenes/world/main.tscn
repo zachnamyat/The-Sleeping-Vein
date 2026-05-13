@@ -1,0 +1,127 @@
+[gd_scene load_steps=23 format=3 uid="uid://bmain0scene000001"]
+
+[ext_resource type="TileSet" path="res://resources/tilesets/biomes.tres" id="1_tileset"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://scripts/world/world_bootstrap.gd" id="3_bootstrap"]
+[ext_resource type="Script" path="res://scripts/world/day_night_cycle.gd" id="4_daynight"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hotbar.tscn" id="5_hotbar"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/stone_hopper.tscn" id="6_mob"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="7_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/inventory_panel.tscn" id="8_inv"]
+[ext_resource type="PackedScene" path="res://scenes/ui/crafting_panel.tscn" id="9_craft"]
+[ext_resource type="PackedScene" path="res://scenes/ui/tooltip.tscn" id="10_tooltip"]
+[ext_resource type="PackedScene" path="res://scenes/structures/loam_bench.tscn" id="11_lb"]
+[ext_resource type="PackedScene" path="res://scenes/structures/chest.tscn" id="12_chest"]
+[ext_resource type="PackedScene" path="res://scenes/structures/resonance_loom.tscn" id="13_loom"]
+[ext_resource type="Script" path="res://scripts/world/world_gen.gd" id="14_gen"]
+[ext_resource type="PackedScene" path="res://scenes/ui/minimap.tscn" id="15_mm"]
+[ext_resource type="Script" path="res://scripts/world/anchor_plateau.gd" id="16_anchor"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dialogue_panel.tscn" id="17_dlg"]
+[ext_resource type="PackedScene" path="res://scenes/ui/endings_panel.tscn" id="19_endings"]
+[ext_resource type="PackedScene" path="res://scenes/ui/boss_hp_bar.tscn" id="20_hpbar"]
+[ext_resource type="PackedScene" path="res://scenes/ui/loom_panel.tscn" id="21_loompanel"]
+[ext_resource type="PackedScene" path="res://scenes/ui/merchant_panel.tscn" id="22_merchant"]
+[ext_resource type="PackedScene" path="res://scenes/ui/talent_panel.tscn" id="23_talent"]
+[ext_resource type="PackedScene" path="res://scenes/ui/cookbook_panel.tscn" id="24_cookbook"]
+[ext_resource type="PackedScene" path="res://scenes/ui/compendium_panel.tscn" id="25_compendium"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="26_pause"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("3_bootstrap")
+spawn_player_scene = ExtResource("2_player")
+stone_hopper_scene = ExtResource("6_mob")
+world_gen_path = NodePath("WorldGen")
+entity_layer_path = NodePath("WorldGen/YSortRoot/Entities")
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color(1, 0.92, 0.75, 1)
+
+[node name="WorldGen" type="Node2D" parent="."]
+script = ExtResource("14_gen")
+floor_layer_path = NodePath("Floor")
+wall_base_layer_path = NodePath("YSortRoot/WallBase")
+wall_cap_layer_path = NodePath("YSortRoot/WallCap")
+ore_layer_path = NodePath("Ore")
+entity_layer_path = NodePath("YSortRoot/Entities")
+stone_hopper_scene = ExtResource("6_mob")
+view_chunk_radius = 2
+
+[node name="Floor" type="TileMapLayer" parent="WorldGen"]
+texture_filter = 1
+tile_set = ExtResource("1_tileset")
+
+[node name="Ore" type="TileMapLayer" parent="WorldGen"]
+texture_filter = 1
+tile_set = ExtResource("1_tileset")
+
+[node name="YSortRoot" type="Node2D" parent="WorldGen"]
+y_sort_enabled = true
+
+[node name="WallBase" type="TileMapLayer" parent="WorldGen/YSortRoot"]
+texture_filter = 1
+y_sort_enabled = true
+tile_set = ExtResource("1_tileset")
+
+[node name="Entities" type="Node2D" parent="WorldGen/YSortRoot"]
+y_sort_enabled = true
+
+[node name="StaticStructures" type="Node2D" parent="WorldGen/YSortRoot"]
+y_sort_enabled = true
+
+[node name="LoamBench" parent="WorldGen/YSortRoot/StaticStructures" instance=ExtResource("11_lb")]
+position = Vector2(48, 16)
+
+[node name="Chest" parent="WorldGen/YSortRoot/StaticStructures" instance=ExtResource("12_chest")]
+position = Vector2(-48, 16)
+
+[node name="ResonanceLoom" parent="WorldGen/YSortRoot/StaticStructures" instance=ExtResource("13_loom")]
+position = Vector2(0, -20)
+
+[node name="WallCap" type="TileMapLayer" parent="WorldGen/YSortRoot"]
+texture_filter = 1
+y_sort_enabled = true
+tile_set = ExtResource("1_tileset")
+
+[node name="AnchorPlateau" type="Node2D" parent="."]
+script = ExtResource("16_anchor")
+clear_radius_tiles = 6
+floor_layer_path = NodePath("../WorldGen/Floor")
+wall_base_layer_path = NodePath("../WorldGen/YSortRoot/WallBase")
+wall_cap_layer_path = NodePath("../WorldGen/YSortRoot/WallCap")
+ore_layer_path = NodePath("../WorldGen/Ore")
+
+[node name="DayNightCycle" type="Node" parent="."]
+script = ExtResource("4_daynight")
+canvas_modulate_path = NodePath("../CanvasModulate")
+
+[node name="HUD" parent="." instance=ExtResource("7_hud")]
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="Hotbar" parent="UI" instance=ExtResource("5_hotbar")]
+
+[node name="InventoryPanel" parent="UI" instance=ExtResource("8_inv")]
+
+[node name="CraftingPanel" parent="UI" instance=ExtResource("9_craft")]
+
+[node name="Minimap" parent="UI" instance=ExtResource("15_mm")]
+
+[node name="Tooltip" parent="UI" instance=ExtResource("10_tooltip") groups=["tooltip"]]
+
+[node name="DialoguePanel" parent="UI" instance=ExtResource("17_dlg") groups=["dialogue_ui"]]
+
+[node name="EndingsPanel" parent="UI" instance=ExtResource("19_endings") groups=["endings_ui"]]
+
+[node name="BossHpBar" parent="." instance=ExtResource("20_hpbar")]
+
+[node name="LoomPanel" parent="." instance=ExtResource("21_loompanel") groups=["loom_panel"]]
+
+[node name="MerchantPanel" parent="." instance=ExtResource("22_merchant") groups=["merchant_ui"]]
+
+[node name="TalentPanel" parent="." instance=ExtResource("23_talent") groups=["talent_panel"]]
+
+[node name="CookbookPanel" parent="." instance=ExtResource("24_cookbook") groups=["cookbook_panel"]]
+
+[node name="CompendiumPanel" parent="." instance=ExtResource("25_compendium") groups=["compendium_panel"]]
+
+[node name="PauseMenu" parent="." instance=ExtResource("26_pause") groups=["pause_menu"]]

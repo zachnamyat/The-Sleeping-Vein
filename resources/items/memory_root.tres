@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwwj45iy8jo6"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"memory_root"
+display_name = "Memory Root"
+description = "Crafting + cooking ingredient. Rare."
+max_stack = 99
+item_type = 0
+tier = 1
+rarity = 2

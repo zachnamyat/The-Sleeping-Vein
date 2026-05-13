@@ -1,0 +1,45 @@
+SUBJECT: A complete 16×16 pixel-art tile atlas for "The Drowned Aphelion" biome — the fifth stratum, a submerged stratum where the Aphelion's reflection ripples through coral-encrusted ruins; ancient Aphelion Warden architecture lies beneath the waves, tide-glass deposits gleam, and the player swims through cooled-light corridors.
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Inspired by Core Keeper / Stardew Valley / Songs of Conquest.
+
+COMPOSITION: 256×256, 16×16 grid of 16×16-pixel cells with no gaps.
+
+SIZE: Generate 1024×1024 source, downsample 4× nearest-neighbor to 256×256.
+
+ROW LAYOUT (see docs/design/00_tile_atlas_spec.md §2):
+- Row 0  : Floor variants — 8 base sand-and-coral seafloor + 8 wear variants (shell scatters, kelp patches, sunken-stone fragments).
+- Rows 1–2: 47-tile Wang autotile (seafloor to coral-wall transitions).
+- Row 3  : Wall caps — dark silhouettes of overhanging coral fans and submerged Warden architecture.
+- Row 4  : Wall bases — coral-encrusted Warden masonry, half-grown over with reef life.
+- Row 5  : Ore tiles — Tideglass (tier-5 crystalline material, lore: "glass formed by Aphelion-light passing through ancient water") in 8 sub-stages, plus 8 variants for Hollow Coral (defensive/decorative).
+- Row 6  : Small decoration tiles — coral fans, anemones, scattered shells, sunken Warden glyphs, swaying kelp.
+- Row 7  : Small decoration tiles — Aphelion Warden cultural artifacts (engraved bell-stones, ritual coral arrangements, broken submersible bell-divers).
+- Row 8  : Liquid surface — deep submerged water with shimmer overlay; cells indicate "this is underwater" (very subtle blue tint, with light ripples).
+- Row 9  : Liquid edge transitions — water-surface meets dry-tile borders.
+- Row 10 : Hazard / trap tiles — pressure vents, Wreck-Wraith spawn points (passive glyphs), strong-current arrow tiles.
+- Row 11 : Mural fragments — 8 tiles forming one Aphelion Warden mural of the sun's reflection in tidewater (see lore/03_factions_and_civilizations.md).
+- Row 12 : Furniture & door components — Warden coral-arches, brass-fitting doors, bell-stone surfaces.
+- Row 13 : Built-by-player variants — clean tideglass-inlay planks, regular coral-block cuts.
+- Row 14 : VFX overlay tiles — caustic-light ripples, drifting bubble strings, faint blue Aphelion-shimmers.
+- Row 15 : Reserved blank — solid #FF00FF.
+
+PALETTE: Restrict to the Drowned Aphelion ramp + black + magenta:
+  #03101a  (deepest sea-shadow)
+  #0a2640  (dark abyssal blue)
+  #15527a  (mid sea-blue)
+  #2c8fb8  (lit cyan)
+  #6cd3e1  (bright cyan shimmer)
+  #cdf7f3  (brightest tideglass highlight)
+  #000000  (outline only)
+  #FF00FF  (Row 15 only)
+
+LORE: A submerged stratum where the Aphelion's reflection ripples through coral-encrusted Warden ruins; the player descends through cooled-light corridors and swims through Warden architecture. The Coral Veil is required to traverse here, granted by the boss Spawnmother (Vesari Necropolis). The Aphelion Wardens tended the captive sun here in the Bright Aeon. See lore/04_biomes.md#stratum-5--the-drowned-aphelion.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, gaps between cells, JPEG artifacts.
+
+POST-GENERATION:
+- Downsample 256×256 nearest-neighbor.
+- 16×16 grid alignment + palette check.
+- Save raw → assets/raw/tiles/drowned_aphelion_atlas_v1.png
+- Save final → assets/sprites/tiles/drowned_aphelion_atlas_16.png
+- Update manifest entry "tile_drowned_aphelion_atlas_16": status → "final".

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://bl8nkxnobthf1"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/bosses/auriax.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"boss_auriax"
+display_name = "Auriax the Verdant Tyrant"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(96, 96)
+max_health = 2500
+armor = 12
+contact_damage = 30
+move_speed = 14.0
+detection_radius = 260.0
+behavior = 4
+xp_skill = &"skill_melee"
+xp_value = 2000
+biome = &"sunless_verdancy"

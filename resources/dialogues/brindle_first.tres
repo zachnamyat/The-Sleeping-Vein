@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="DialogueTree" load_steps=2 format=3 uid="uid://bdialbrindle00001"]
+
+[ext_resource type="Script" path="res://scripts/resources/dialogue.gd" id="1_dlg"]
+
+[resource]
+script = ExtResource("1_dlg")
+entry_node_id = "start"
+nodes = {
+	"start": {
+		"speaker": "Brindle Quench-of-Coals",
+		"text": "\"Hello, Walker. I felt your hand-glow from a long way off — drew me out from the bench. Need anything forged? Shaleseed up, you're set for tier-two work. I can take coin or barter.\"",
+		"responses": [
+			{ "label": "(browse her wares)", "goto": "shop" },
+			{ "label": "(silently nod and step back)", "goto": "end" },
+		],
+	},
+	"shop": {
+		"speaker": "Brindle Quench-of-Coals",
+		"text": "\"Most of my best pieces won't unlock 'til you bring me an ingot. Mine some shaleseed and come back — I'll show you a real edge.\"",
+		"responses": [
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+}

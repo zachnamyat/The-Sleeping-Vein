@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwwt1c42uyc6"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"watering_can"
+display_name = "Watering Can"
+description = "Aim at a crop to halve its growth time."
+max_stack = 1
+item_type = 1
+tier = 0
+rarity = 0

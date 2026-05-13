@@ -1,0 +1,41 @@
+# Tickets 14.1 – 14.10 — Automation & electricity placeable items
+
+SUBJECT: A pixel-art sheet of automation / electricity placeable structures and items. Covers Phase 14 content.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 5×3 grid of 16×16 cells (some items occupy 24×24 — render at 16×16 here for inventory icon, with a note that 24×24 placement variants are a follow-up). Final sheet: 80×48. Layout:
+
+Row 0 (basic conveyors/transport):
+- (0,0) Conveyor Belt (placeable; renders with directional arrow)
+- (0,1) Drill (tile-mining automation; tier-1)
+- (0,2) Robotic Arm (item pickup/place)
+- (0,3) Aphelion-Tap power source (Diadem-gold ring with gold-pulse interior)
+- (0,4) Wire (placeable; 4-direction connection variants — render the cross-junction here)
+
+Row 1 (sensors/logic):
+- (1,0) Pressure Plate
+- (1,1) Button
+- (1,2) Logic-Gate AND (4 logic gates total — show one canonical AND here; rest are derived in code)
+- (1,3) Sensor (light/proximity)
+- (1,4) Storage piping (one segment of an auto-feed pipe)
+
+Row 2 (advanced automation):
+- (2,0) Auto-Sprinkler (Verdant farming automation)
+- (2,1) Auto-Harvester
+- (2,2) Auto-Furnace
+- (2,3) Auto-Smelter
+- (2,4) Power-storage cell (gold-pulse battery)
+
+SIZE: Generate at 1280×768 source. Downsample 16× nearest-neighbor to 80×48 final.
+
+PALETTE: AAP-64 metal/wood for placeables. Power-related items use Final Spiral gold (#a87f24 → #f8e088) for the "lore-canonical" Aphelion-tap power source. Wires + circuits use AAP-64 copper/dark grey. Background #FF00FF.
+
+LORE: Phase 14 automation is a Core Keeper parity feature; lore-flavor uses the Aphelion-Tap as the power source (per docs/design/02_lore_to_mechanics_mapping.md — the Aphelion-Tap is the Void & Voltage power-source analog).
+
+POST-GENERATION:
+- Downsample 80×48 nearest-neighbor.
+- Crop 15 separate 16×16 PNGs:
+  - assets/sprites/items/automation/conveyor_belt.png, drill.png, robotic_arm.png, aphelion_tap.png, wire.png, pressure_plate.png, button.png, logic_gate_and.png, sensor.png, storage_piping.png, auto_sprinkler.png, auto_harvester.png, auto_furnace.png, auto_smelter.png, power_storage_cell.png
+- Manifest entries: item_conveyor_belt through item_power_storage_cell. Category "structure" or "item", status "final".
+- Note: per-direction conveyor/wire variants (corners, tees, etc.) are a tile-atlas follow-up — this ticket ships icon-only.

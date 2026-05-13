@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=2 format=3 uid="uid://itemdef0auroricchst"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"auroric_ice_chestpiece"
+display_name = "Auroric-Ice Chestpiece"
+description = "+24 armor. Halves Auroric Veil cold damage while held."
+max_stack = 1
+item_type = 3
+tier = 8
+rarity = 3
+armor_value = 24

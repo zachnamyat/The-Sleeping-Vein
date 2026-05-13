@@ -1,0 +1,22 @@
+# Phase 11 — Salt Wastes bestiary
+
+SUBJECT: 5 creature sprites for the Salt Wastes of Dawning. 3 hostile + 1 friendly + 1 Wormbound neutral.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: 16×16 strip of 5 cells. Final 80×16. Layout:
+- (0) Salt-Hopper (hostile, infected) — long-legged jumper, salt-crystal exoskeleton, gold-vein corruption.
+- (1) Dawning Predator (hostile, infected) — sand-shark-equivalent, sand-cloak texture, fin breaking the salt.
+- (2) Wormbound Stalker (hostile, tragic) — a fallen Wormbound — humanoid with worm-symbiosis gone wrong, gold-cracked skin, ritual scars.
+- (3) Salt-Cat (friendly, ambient) — small skittish desert cat, pale salt-bleached fur.
+- (4) Wormbound elder (NEUTRAL — render distinct from Stalker) — humanoid with healthy worm-symbiosis (small worm-companion visible on shoulder), ritual robes, calm posture.
+
+SIZE: Generate at 1280×256 source. Downsample 16× nearest-neighbor to 80×16 final.
+
+PALETTE: Salt Wastes ramp + AAP-64 character tones + Hollowling gold on Stalker/Hopper/Predator. Background #FF00FF.
+
+LORE: See lore/06_creatures_and_enemies.md §6.2 (Stratum 7). Wormbound are non-hostile unless attacked; they have a peace-path with Naeren (ticket 11.11). The Stalker is canonically a Wormbound who refused symbiosis.
+
+POST-GENERATION:
+- Downsample, crop 5 separate 16×16 PNGs at assets/sprites/enemies/salt_wastes/.
+- Manifest entries: enemy_salt_hopper, enemy_dawning_predator, enemy_wormbound_stalker, enemy_salt_cat, npc_wormbound_elder. Status "final".

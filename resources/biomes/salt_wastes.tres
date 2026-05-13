@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="BiomeDef" format=3 uid="uid://c04k4x4t02l7m"]
+
+[ext_resource type="Script" path="res://scripts/resources/biome_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"salt_wastes"
+display_name = "The Salt Wastes of Dawning"
+stratum_index = 7
+distance_from_anchor_tiles = 480.0
+ring_thickness_tiles = 80.0
+floor_source_id = 18
+wall_source_id = 19
+ore_source_id = 20
+ore_id = &"saltbound_steel"
+ore_required_pickaxe_tier = 7
+ore_density_per_chunk = 5
+wall_density_per_chunk = 14
+ambient_high_color = Color(0.97, 0.92, 0.78, 1)
+ambient_low_color = Color(0.20, 0.18, 0.16, 1)
+mob_spawn_table = [&"stone_hopper"]
+mobs_per_chunk = 1
+hazard_id = &"dawning_swing"
+hazard_damage_per_second = 2
+hazard_damage_type = &"fire"
+lore_ref = "lore/04_biomes.md#stratum-7--the-salt-wastes-of-dawning"

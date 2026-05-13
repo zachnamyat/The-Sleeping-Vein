@@ -1,0 +1,45 @@
+SUBJECT: A complete 16×16 pixel-art tile atlas for "The Sunless Verdancy" biome — the fourth stratum, a folded forest preserved in arrested vitality by the Aeon Sovereign Auriax; trees grow without true sunlight, sustained by the Resonance Field, massive root systems form bridges, and bioluminescent fungi replace canopy light.
+
+STYLE: 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Inspired by Core Keeper / Stardew Valley / Songs of Conquest.
+
+COMPOSITION: 256×256, 16×16 grid of 16×16-pixel cells with no gaps.
+
+SIZE: Generate 1024×1024 source, downsample 4× nearest-neighbor to 256×256.
+
+ROW LAYOUT (see docs/design/00_tile_atlas_spec.md §2):
+- Row 0  : Floor variants — 8 base moss-covered earth tiles + 8 wear variants (matted leaves, exposed root patches, spore-dust patches).
+- Rows 1–2: 47-tile Wang autotile (moss-floor to root-wall transitions).
+- Row 3  : Wall caps — dark silhouettes of arching root systems and hanging vines.
+- Row 4  : Wall bases — towering tree-bark and dense root-systems forming walls.
+- Row 5  : Ore tiles — Spore-iron (tier-4 metal, forms in mushroom-colony roots) in 8 mining sub-stages, plus 8 variants for Heartwood (tier-4 organic material, used in living tools and bows).
+- Row 6  : Small decoration tiles — bioluminescent fungi clusters, hanging vines, fallen leaves, glowing mushroom caps.
+- Row 7  : Small decoration tiles — Vesari Bloom Treaty artifacts (pacifist-era stone markers, half-overgrown ritual stones, Auriax's Tear shards).
+- Row 8  : Liquid surface — verdant pools with floating spore particles, faintly bioluminescent.
+- Row 9  : Liquid edge transitions.
+- Row 10 : Hazard / trap tiles — toxic spore vents, Sythrenn's bloom patches (poisonous flowers), creeping vine snares.
+- Row 11 : Mural fragments — 8 tiles forming one mural of the Bloom Treaty signing (Vesari pacifists + Auriax; lore lore/04_biomes.md#stratum-4--the-sunless-verdancy).
+- Row 12 : Furniture & door components — wooden bark-doors, root-archways, woven-vine surfaces.
+- Row 13 : Built-by-player variants — clean shaped-heartwood planks, regular spore-iron inlays.
+- Row 14 : VFX overlay tiles — soft green glow halos, drifting spore motes, faint Auriax-blessing light.
+- Row 15 : Reserved blank — solid #FF00FF.
+
+PALETTE: Restrict to the Sunless Verdancy ramp + black + magenta:
+  #0c1a0f  (deepest forest shadow)
+  #1f4022  (dark green)
+  #3e7a3b  (mid forest green)
+  #7bbf64  (lit verdant)
+  #c0e08a  (yellow-green highlight)
+  #f3f6c2  (brightest spore-glow)
+  #000000  (outline only)
+  #FF00FF  (Row 15 only)
+
+LORE: A folded forest preserved in arrested vitality by Auriax's pre-corruption guardianship — breathtaking and dying. Wide swaths are still vibrant, but Auriax's corruption has begun to twist the forest slowly; the Walker may witness a single tree dying mid-game as an emotional beat. Settled briefly by Vesari pacifists under the Bloom Treaty (~7,300 B); the settlement was overrun within decades of Auriax's fall. See lore/04_biomes.md#stratum-4--the-sunless-verdancy.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, isometric perspective, gaps between cells.
+
+POST-GENERATION:
+- Downsample 256×256 nearest-neighbor.
+- 16×16 grid alignment + palette check.
+- Save raw → assets/raw/tiles/sunless_verdancy_atlas_v1.png
+- Save final → assets/sprites/tiles/sunless_verdancy_atlas_16.png
+- Update manifest entry "tile_sunless_verdancy_atlas_16": status → "final".

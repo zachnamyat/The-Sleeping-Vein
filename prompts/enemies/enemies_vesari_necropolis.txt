@@ -1,0 +1,25 @@
+# Ticket 10.4 — Vesari Necropolis bestiary sprite set
+
+SUBJECT: 5 creature sprites for the Vesari Necropolis biome. 3 hostile (Resonance Echo / infected) + 2 friendly.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A horizontal 16×16 strip of 5 cells. Final: 80×16. Layout:
+- (0) Salt-Bound Sailor (hostile, Echo) — slow, formal posture; Vesari fossil animated by Resonance Echo. Salt-encrusted bones, faded ceremonial coat.
+- (1) Salt-Bound Captain (hostile, rare) — larger Salt-Bound (render as 24×24 if cell allows; otherwise scale down to 16×16 here and reserve a 24×24 file for the captain). Carries Echo-sword.
+- (2) Coral-Hollow (hostile, Hollowling-infected) — fast spider-form spawned by the Spawnmother boss but also wanders nearby. Coral-pink carapace with gold-vein cracks.
+- (3) Tideglass Cricket (friendly) — small jumping insect, faint sea-green glow.
+- (4) Salt-Fox (friendly) — descendant of Pale Foxes; skittish, salt-bleached fur.
+
+SIZE: Generate at 1280×256 source. Downsample 16× nearest-neighbor to 80×16 final.
+
+PALETTE: Vesari Necropolis ramp + AAP-64 character tones. Background #FF00FF.
+
+LORE: Salt-Bound are not undead — they are Resonance Echoes animating their own fossils. See lore/06_creatures_and_enemies.md §6.2 (Stratum 3).
+
+POST-GENERATION:
+- Downsample 80×16 nearest-neighbor.
+- Crop 5 separate 16×16 PNGs:
+  - assets/sprites/enemies/vesari_necropolis/salt_bound_sailor.png, salt_bound_captain.png, coral_hollow.png, tideglass_cricket.png, salt_fox.png
+- For Salt-Bound Captain at full 24×24 size: generate a separate solo prompt later if needed; for now ship 16×16 version.
+- Manifest entries: enemy_salt_bound_sailor through enemy_salt_fox. Biome "vesari_necropolis", status "final".

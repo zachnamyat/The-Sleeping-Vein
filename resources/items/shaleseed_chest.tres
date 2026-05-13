@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bat1b746v0fe6"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"shaleseed_chest"
+display_name = "Shaleseed Chestpiece"
+description = "+5 armor. Tier-1 chest slot."
+max_stack = 1
+item_type = 3
+tier = 1
+rarity = 1
+armor_value = 5

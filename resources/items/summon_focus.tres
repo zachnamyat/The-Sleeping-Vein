@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bat1pk6hkoxme"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/summon_focus.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"summon_focus"
+display_name = "Carved Focus"
+description = "Tier-0 summon. Spends 12 mana to call a Stoneslough ally for 30s."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 2
+tier = 0
+rarity = 2
+base_damage = 0
+damage_type = &"summon"
+attack_cooldown_seconds = 1.2
+mana_cost = 12
+weapon_class = &"summon"
+summon_mob_path = "res://resources/mobs/stoneslough.tres"

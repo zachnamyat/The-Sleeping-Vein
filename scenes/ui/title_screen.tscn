@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://cuh1uab8nq833"]
+
+[ext_resource type="Script" path="res://scripts/ui/title_screen.gd" id="1_title"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/game_icon.png" id="2_icon"]
+
+[node name="TitleScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 0
+script = ExtResource("1_title")
+
+[node name="BG" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.03, 0.02, 0.02, 1)
+
+[node name="Icon" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -64.0
+offset_top = 16.0
+offset_right = 64.0
+offset_bottom = 144.0
+texture_filter = 1
+texture = ExtResource("2_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Title" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = 150.0
+offset_right = 120.0
+offset_bottom = 170.0
+modulate = Color(0.97, 0.85, 0.5, 1)
+text = "The Sleeping Vein"
+horizontal_alignment = 1
+
+[node name="Sub" type="Label" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -160.0
+offset_top = 168.0
+offset_right = 160.0
+offset_bottom = 184.0
+modulate = Color(0.7, 0.6, 0.4, 1)
+text = "AETHERDEEP — The Sunken Aeon"
+horizontal_alignment = 1
+
+[node name="Menu" type="VBoxContainer" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -90.0
+offset_top = 190.0
+offset_right = 90.0
+offset_bottom = 270.0
+
+[node name="SinglePlayer" type="Button" parent="Menu"]
+text = "Start (Single Player)"
+
+[node name="Host" type="Button" parent="Menu"]
+text = "Host Multiplayer"
+
+[node name="JoinInput" type="LineEdit" parent="Menu"]
+placeholder_text = "Host IP (default 127.0.0.1)"
+
+[node name="Join" type="Button" parent="Menu"]
+text = "Join Host"
+
+[node name="Quit" type="Button" parent="Menu"]
+text = "Quit"
+
+[node name="Status" type="Label" parent="Menu"]
+modulate = Color(0.85, 0.75, 0.5, 1)
+text = ""
+horizontal_alignment = 1

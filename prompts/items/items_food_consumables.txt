@@ -1,0 +1,40 @@
+# Tickets 8.5 + 8.6 + 8.7 — Cooked food + consumable icons (first 20 recipes)
+
+SUBJECT: A pixel-art sheet of cooked food items and consumables. Each is an inventory icon.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A 5×4 grid of 16×16 cells. Final sheet: 80×64. The 20 food items, each in a small bowl/plate/skewer/loaf form factor:
+- (0,0) Mushroom Broth (Pale Cap + water)
+- (0,1) Hollow Skillet (Pale Cap + Loam-Wax, fried)
+- (0,2) Memory Tea (Memory Root + water)
+- (0,3) Loam Bread (loaf, basic carb)
+- (0,4) Foxberry Tart (small tart)
+- (1,0) Glow-Cap Stew (cyan-tinted bowl)
+- (1,1) Salt-Wort Cured Fish (small grilled fish + greens)
+- (1,2) Brinevine Wrap (rolled green wrap)
+- (1,3) Verdant Sprout Salad
+- (1,4) Heartwood Bark Tea (warm cup)
+- (2,0) Ember-Roast Meat (skewer with charred meat)
+- (2,1) Tideglass-Cured Fish (raw fish style)
+- (2,2) Pyrenkin Soup (red-orange broth)
+- (2,3) Salt-Glazed Loaf (bread with salt crystals on top)
+- (2,4) Auroric Frost Cake (small layered cake, violet hint)
+- (3,0) Cantor's Bell Cookies (bell-shaped biscuits)
+- (3,1) Aphelion Honey Drop (small golden lozenge)
+- (3,2) Walker's Pocket Meal (compact bento-style)
+- (3,3) Hollowling-Pure Tonic (vial of clear gold liquid — endgame food)
+- (3,4) Diadem-Gold Glazed Bun (luxurious endgame food)
+
+Each food has a small steam-wisp or glow accent matching its tier's biome.
+
+SIZE: Generate at 1280×1024 source. Downsample 16× nearest-neighbor to 80×64 final.
+
+PALETTE: AAP-64 + per-food biome accent. Background #FF00FF.
+
+LORE: Food buffs in The Sleeping Vein are mechanically 1:1 with Core Keeper but lore-flavored. Cantor's Bell Cookies are sold by the Cantor at the Anchor; Diadem-Gold Glazed Bun is endgame Final Spiral cooking. See docs/reference/core-keeper-mechanics.md cooking section.
+
+POST-GENERATION:
+- Downsample 80×64 nearest-neighbor.
+- Crop 20 separate 16×16 PNGs into assets/sprites/items/food/ with snake_case names (mushroom_broth.png, hollow_skillet.png, memory_tea.png, ...).
+- Manifest entries: food_mushroom_broth through food_diadem_gold_glazed_bun. Category "consumable", status "final".

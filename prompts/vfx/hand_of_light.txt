@@ -1,0 +1,24 @@
+# Ticket 1.9 — Hand-of-light idle glow VFX overlay
+
+SUBJECT: A small VFX overlay sprite — a soft golden Aphelion-light glow with drifting motes — drawn at the Walker's right-hand position. Used as an additive overlay when the Walker is unarmed.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: Single horizontal sprite strip of 6 frames, each 8×8 pixels. The glow gently breathes — softer/smaller on frames 0 and 3, peak brightness on frame 1 and 4. Drifting motes are 1-pixel specks that rise slowly. Final sheet: 48×8.
+
+SIZE: Generate at 768×128 source. Downsample 16× nearest-neighbor to 48×8 final.
+
+PALETTE: Final Spiral gold ramp only (#a87f24 → #dab14a → #f8e088). Background #FF00FF (keyed out). No outline.
+
+LORE: A Walker's empty hand emits a soft golden glow — the visible signature of their Aphelion-sliver. The glow brightens slightly near other Walkers, when stabilizing an Echo, or when chipping tier-0 tiles. See lore/07_echo_walkers_player.md §7.6.
+
+ANIMATION: 6 frames at sync to Aphelion Beat (effective 12 fps per cycle; runs 2 cycles per Beat). Frame 1 and 4 = peak. Loops.
+
+POST-GENERATION:
+- Downsample 48×8 nearest-neighbor.
+- Key out magenta.
+- Palette check (only the gold ramp).
+- Save raw → assets/raw/vfx/hand_of_light_v1.png
+- Save final → assets/sprites/vfx/hand_of_light.png
+- Wrap as SpriteFrames at resources/sprites/vfx_hand_of_light.tres ("idle_glow", 6 frames, fps 12, looping).
+- Manifest entry "vfx_hand_of_light": status → "final".

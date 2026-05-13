@@ -1,0 +1,49 @@
+# Tickets 2.6 — Root Hollows bestiary sprite set
+#
+# Generates 6 enemy types in one sheet for the Root Hollows biome. Each takes a small portion
+# of the sheet. Layout below.
+
+SUBJECT: Six pixel-art creatures inhabiting the Root Hollows biome (outermost stratum). All Hollowling-infected variants show three visual markers: (1) gold-vein patterns in skin/shell, (2) too-still or jittering posture, (3) eye-glow on the Aphelion Beat.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: A single vertical-stacked sprite sheet with 6 sub-strips (top to bottom). Total final: 64×128. Each sub-strip is laid out left-to-right.
+
+Sub-strip A (rows 0–15, 16×16-character):
+- Stone-Hopper — infected small lizard. Quick, low HP. 4-frame walk-cycle: 64×16. Hopping motion, gold-veined granite carapace, glowing eye-dots.
+
+Sub-strip B (rows 16–31, 16×16):
+- Loambeetle (friendly) — large slow beetle with loam-wax dome. 4-frame walk: 64×16. Earthy brown, no infection markers.
+
+Sub-strip C (rows 32–47, 16×16):
+- Pale Fox (friendly) — small skittish canid, ash-cream coat. 4-frame walk: 64×16. Will not attack unless attacked. Precursor to a tameable companion.
+
+Sub-strip D (rows 48–79, 32×32):
+- Mossback — sluggish infected mound-creature, high HP. 4-frame idle/walk: 128×32 — but we trim to 64×16-aligned frames within the 32×32 cell. Actually: 4 frames at 16×16 (showing mossy boulder with infection cracks).
+
+Sub-strip E (rows 80–95, 16×16):
+- Cracked One — infected Lattice Survivor (humanoid, tragic). 4-frame walk: 64×16. Wears tattered farmer clothes, gold cracks across skin, gold eye-glow.
+
+Sub-strip F (rows 96–111, 16×16):
+- The Listener (Resonance Echo, rare) — silent observer apparition. Single frame: 16×16. Cloaked silhouette, slight transparency, no infection markers (it's an Echo, not Hollowling-touched).
+
+Actually, simpler layout: produce ONE 96×64 sheet with all 6 species as 16×16 single static portraits in a 6×1 grid (animation can be added later in a follow-up pass).
+
+SIZE: Generate at 1536×1024 source. Downsample 16× nearest-neighbor to 96×64 final.
+
+PALETTE: Root Hollows ramp (#1c130d, #3a2a1c, #6b5036, #a4854f, #d4a857, #f0d27d) for biome elements, AAP-64 base skin/cloth for the Cracked One. Infected creatures show gold-vein highlights using #d4a857 / #f0d27d. Listener is a translucent grey-black using #2a2e34 with cloak edges in #4a5159. Background #FF00FF.
+
+LORE: See lore/06_creatures_and_enemies.md §6.2 (Stratum 1). Stone-Hoppers swarm. Mossbacks are walls-of-flesh. Cracked Ones are the player's first emotional gut-punch — once a person, now a vessel. The Listener foreshadows the Listeners-Below.
+
+POST-GENERATION:
+- Downsample 96×64 nearest-neighbor.
+- Crop into 6 separate 16×16 PNGs (one per species), saved as:
+  - assets/sprites/enemies/root_hollows/stone_hopper.png
+  - assets/sprites/enemies/root_hollows/loambeetle.png
+  - assets/sprites/enemies/root_hollows/pale_fox.png
+  - assets/sprites/enemies/root_hollows/mossback.png
+  - assets/sprites/enemies/root_hollows/cracked_one.png
+  - assets/sprites/enemies/root_hollows/the_listener.png
+- Manifest entries (one per species, all category "enemy", biome "root_hollows", size [16,16], status "final"):
+  - enemy_stone_hopper, enemy_loambeetle, enemy_pale_fox, enemy_mossback, enemy_cracked_one, enemy_the_listener
+- Note: 4-frame walk-cycle animations are a Phase 6 polish pass; this ticket ships single-frame portraits sufficient for AI logic.

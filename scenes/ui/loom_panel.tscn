@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://br0q03jajw4em"]
+
+[ext_resource type="Script" path="res://scripts/ui/loom_panel.gd" id="1_loom"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_loom"]
+bg_color = Color(0.04, 0.03, 0.03, 0.96)
+border_color = Color(0.95, 0.84, 0.5, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="LoomPanel" type="CanvasLayer"]
+layer = 80
+script = ExtResource("1_loom")
+
+[node name="Root" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -110.0
+offset_right = 220.0
+offset_bottom = 110.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_loom")
+
+[node name="Title" type="Label" parent="Root"]
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 432.0
+offset_bottom = 18.0
+modulate = Color(0.97, 0.85, 0.5, 1)
+text = "The Resonance Loom"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="Root"]
+offset_left = 8.0
+offset_top = 198.0
+offset_right = 432.0
+offset_bottom = 212.0
+modulate = Color(0.7, 0.6, 0.4, 1)
+text = ""
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Root"]
+offset_left = 8.0
+offset_top = 22.0
+offset_right = 432.0
+offset_bottom = 192.0
+
+[node name="List" type="VBoxContainer" parent="Root/Scroll"]
+custom_minimum_size = Vector2(420, 160)

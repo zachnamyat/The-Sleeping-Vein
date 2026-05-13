@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://batxpkc6woxme"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/relics/stone_fathers_pulse.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"stone_fathers_pulse"
+display_name = "Stone-Father's Pulse"
+description = "A chunk of pale stone that beats softly in your hand. Insert into the Resonance Loom to unlock the Glasswright Reaches descent."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 7
+tier = 1
+rarity = 4
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-1--glaur-em-the-engorged-stone-father"

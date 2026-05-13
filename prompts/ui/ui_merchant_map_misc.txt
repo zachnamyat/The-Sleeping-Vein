@@ -1,0 +1,37 @@
+# Tickets 4.10 + 4.11 + 8.8 + 9.3 + various — Map + merchant + cookbook + buff/debuff icons + minor UI
+
+SUBJECT: A pixel-art UI sprite sheet covering minor screen elements: full-screen map frame, mini-map widget, compass to Loom, merchant buy/sell tabs, cookbook page, buff/debuff icon set, currency display.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: Composite sheet 256×256. Layout:
+
+Panel A — Full-screen map frame (top-left, 128×128): rendered as an open Vesari nautical map on parchment, with Aphelion-gold ring markers for known Anchor / Loom / boss-arena positions, biome-color shading for revealed chunks.
+
+Panel B — Mini-map widget (top-right, 64×64): compact circular minimap frame with thin gold border. Center marker for the Walker. Edge ticks for cardinal directions.
+
+Panel C — Compass to Loom (just below mini-map, 16×16): a small gold compass-arrow icon that points toward the Loom regardless of orientation. Single frame.
+
+Panel D — Merchant buy/sell tabs (bottom-left half, 128×64): a two-tab UI panel — "BUY" tab (left) and "SELL" tab (right), with the active tab highlighted in Aphelion gold. Below tabs, a 6×3 cell grid for items (placeholder).
+
+Panel E — Cookbook page (bottom-right half, 128×64): an open-book UI showing left page = recipe list, right page = selected recipe (ingredients + buff effect). Warm parchment with gold accents.
+
+Panel F — Buff/debuff icon set (4×2 grid at 8×8 each, 32×16 total — fits in bottom-strip 192..223 × 240..255): small status icons for HUD strip. 8 icons: Burn (flame), Poison (skull), Cold (snowflake), Freeze (ice block), Stun (lightning bolt), Heal-over-time (green plus), Speed (boot), Strength (arm). Each 8×8.
+
+Panel G — Currency display (224..255 × 240..255, 32×16): a small frame showing the Ancient Coin icon + a number-area for the player's coin count.
+
+SIZE: Generate at 4096×4096 source. Downsample 16× nearest-neighbor to 256×256 final.
+
+PALETTE: AAP-64 UI greys + parchment whites + Aphelion gold accents. Each buff/debuff icon uses an appropriate single accent color (red for Burn/Strength, green for Poison/HoT, cyan for Cold/Freeze, gold for Speed/Stun). Background #FF00FF.
+
+POST-GENERATION:
+- Downsample 256×256 nearest-neighbor.
+- Crop:
+  - assets/sprites/ui/map_fullscreen.png (128×128)
+  - assets/sprites/ui/minimap_widget.png (64×64)
+  - assets/sprites/ui/compass_to_loom.png (16×16)
+  - assets/sprites/ui/merchant_tabs.png (128×64)
+  - assets/sprites/ui/cookbook_page.png (128×64)
+  - assets/sprites/ui/buff_debuff_icons.png (32×16, sliced to 8 sub-icons by Antigravity post-process)
+  - assets/sprites/ui/currency_display.png (32×16)
+- Manifest entries: ui_map_fullscreen, ui_minimap_widget, ui_compass_to_loom, ui_merchant_tabs, ui_cookbook_page, ui_buff_debuff_icons, ui_currency_display. Status "final".

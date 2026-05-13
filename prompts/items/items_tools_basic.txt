@@ -1,0 +1,42 @@
+# Tickets 3.10 (first 12 recipes) + Phase 1 placeables — basic tools and placeables
+
+SUBJECT: A pixel-art inventory-icon sheet of basic tier-0/tier-1 tools and placeables for The Sleeping Vein. Top-down/3-quarter pixel-art icons.
+
+STYLE: (see prompts/_STYLE.txt)
+
+COMPOSITION: 8×2 grid of 16×16 icons. Final sheet: 128×32. Layout left-to-right, top row then bottom row:
+- Row 0:
+  - 0,0: Wooden Pickaxe (tier 0) — diagonal pick with wooden haft
+  - 0,1: Wooden Sword (tier 0) — short blade, wooden hilt
+  - 0,2: Torch — wooden stick with golden flame tip
+  - 0,3: Loam Floor (placeable) — small stack of warm-brown loam tiles
+  - 0,4: Loam Wall (placeable) — stack of upright dark-shale wall blocks
+  - 0,5: Hoe — wooden haft + curved iron head (Phase 8.1)
+  - 0,6: Watering Can — copper can with handle (Phase 8.2)
+  - 0,7: Cooking Pot (placeable) — black iron pot on a tiny brazier (Phase 8.5)
+- Row 1:
+  - 1,0: Shaleseed Pickaxe (tier 1) — pick with pale-gold metal head
+  - 1,1: Shaleseed Sword (tier 1) — broader blade, pale-gold edge
+  - 1,2: Shaleseed Helmet (tier 1) — simple capped helm
+  - 1,3: Shaleseed Chest (tier 1) — basic chest armor
+  - 1,4: Shaleseed Legs (tier 1)
+  - 1,5: Shaleseed Boots (tier 1)
+  - 1,6: Small Healing Potion — corked glass vial with red-orange contents
+  - 1,7: Small Mana Potion — corked glass vial with cyan-blue contents
+
+Each icon is centered with 1-pixel padding in its 16×16 cell. Subjects sit on top of solid magenta background.
+
+SIZE: Generate at 2048×512 source. Downsample 16× nearest-neighbor to 128×32 final.
+
+PALETTE: AAP-64 base. Tools use natural wood + steel-grey + Shaleseed gold (#d4a857). Walker default-attire palette for armor. Background #FF00FF (keyed out).
+
+LORE: Wooden tools are the player's tier-0 starting kit. Shaleseed metal (lore-named "shaleseed" because it grows in shale veins like seeds) is the tier-1 metal, mined in the Root Hollows. The Walker can chip soft tiles bare-handed via the hand-of-light (lore/07_echo_walkers_player.md §7.6) — pickaxe is for harder shale. See docs/design/02_lore_to_mechanics_mapping.md §4 for the tier ladder.
+
+POST-GENERATION:
+- Downsample 128×32 nearest-neighbor.
+- Crop into 16 separate 16×16 PNGs:
+  - assets/sprites/items/tools/wooden_pickaxe.png, wooden_sword.png, torch.png, loam_floor.png, loam_wall.png, hoe.png, watering_can.png, cooking_pot.png
+  - assets/sprites/items/armor/shaleseed_pickaxe.png, shaleseed_sword.png, shaleseed_helmet.png, shaleseed_chest.png, shaleseed_legs.png, shaleseed_boots.png
+  - assets/sprites/items/consumables/small_healing_potion.png, small_mana_potion.png
+- Manifest entries (16 total): item_wooden_pickaxe through item_small_mana_potion, category "item", size [16,16], status "final".
+- Note: armor display sprites (worn on Walker) are a separate asset — this ticket ships only inventory icons.

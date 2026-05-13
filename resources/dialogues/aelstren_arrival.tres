@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="DialogueTree" load_steps=2 format=3 uid="uid://bdialaelstren00001"]
+
+[ext_resource type="Script" path="res://scripts/resources/dialogue.gd" id="1_dlg"]
+
+[resource]
+script = ExtResource("1_dlg")
+entry_node_id = "start"
+nodes = {
+	"start": {
+		"speaker": "Aelstren the Cartographer",
+		"text": "[i]The old cartographer says nothing. She lays a half-burnt scroll of vellum at your feet — a partial map of the Root Hollows. Lines drawn in faded ink point toward the Loam Bench, the Glasswright descent, the place where Glaur-em fell.[/i]",
+		"responses": [
+			{ "label": "(touch the scroll)", "goto": "scroll" },
+			{ "label": "(nod and turn away)", "goto": "end" },
+		],
+	},
+	"scroll": {
+		"speaker": "Aelstren the Cartographer",
+		"text": "[i]Aelstren's eyes brighten — she taps a small symbol near the bottom of the map, where the corruption-tendrils thicken. Then her fingers trace a long winding line down and inward. \"Find what was broken,\" she seems to say without speaking.[/i]",
+		"responses": [
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+}

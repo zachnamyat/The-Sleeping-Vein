@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="MobDef" load_steps=3 format=3 uid="uid://mobdef0diadcenser"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/final_spiral/diadem_reader.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"diadem_censer"
+display_name = "Diadem Censer"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 80
+armor = 6
+contact_damage = 18
+contact_damage_type = &"void"
+move_speed = 24.0
+detection_radius = 140.0
+behavior = 2
+xp_skill = &"skill_magic"
+xp_value = 25
+biome = &"final_spiral"
