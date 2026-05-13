@@ -1,5 +1,5 @@
 extends StaticBody2D
-class_name Tree
+class_name WorldTree
 
 ## Phase 2.14 / 2.15 — placeable, axe-fellable tree. Has a HealthComponent +
 ## HurtboxComponent so it lives in the same combat pipeline as mobs. Only

@@ -1837,6 +1837,44 @@ const STORAGE_KEY = 'tsv_kanban_v1';
  * Add new entries; never edit a shipped one (would silently re-run for new users). */
 const MIGRATIONS = [
   {
+    version: '2026-05-13-phase2-extended-closure',
+    note: 'Phase 2 extended parity-audit closure. 37 tickets (2.14-2.50) inherited from ' +
+          'the 2026-05-12 7-round parity audit were sitting in backlog after Phase 2 ' +
+          'critical-path closed. Split them three ways: (A) 15 actually-Phase-2 implemented ' +
+          'this session; (B) 21 reassigned to their natural phases via the seedTickets phase ' +
+          'field — 2.22/2.27/2.32/2.33/2.47→7 (talent-era), 2.30/2.40/2.42/2.46/2.49→6 ' +
+          '(combat depth), 2.35/2.36/2.48→3 (inventory/crafting), 2.34→5 (compendium), ' +
+          '2.24/2.26/2.37/2.38/2.39/2.43→15 (polish), 2.44→16 (extension); (C) 2.50 ' +
+          'fall-damage RFC decided no (flat 2D world has no Z-axis). Implemented this ' +
+          'session: 2.14 wooden_axe ItemDef + axe_tier field; 2.15 WorldTree scene + ' +
+          'StaticBody2D with HealthComponent that resists physical (1.0) and accepts axe ' +
+          '(0.0), fall animation, wood+heartwood drop table, 8-tree starter ring at the ' +
+          'Anchor; 2.16 DeathCorpse Area2D drops non-starter inventory on player death and ' +
+          'reclaims on walkover; 2.17 Bomb scene with 1.5s fuse, 32px AoE, lobs in arc, ' +
+          'damages hurtboxes via direct space query + chunks adjacent tiles, granted 3 ' +
+          'starter bombs in world_bootstrap; 2.18 CRITTER_FLEE behavior in mob.gd that runs ' +
+          'AWAY from player within detection_radius; 2.19/2.28 leash_radius field on MobDef ' +
+          '+ aggro-acquire-only-in-range + 1.5x hysteresis de-aggro + leash-walk-home; ' +
+          '2.20 DamageNumber Node2D drawing floating text via ThemeDB.fallback_font with ' +
+          'outline, spawned by DamageNumberSpawner on EventBus.damage_floated; 2.21 mob ' +
+          'death tween (modulate.a 0 + scale 1.2 over 0.4s) + collider disarm before ' +
+          'queue_free; 2.23 TileDamageOverlay Node2D drawing crack lines proportional to ' +
+          'damage_ratio with 0.12s shake-on-hit, MiningSystem owns the overlay lifecycle ' +
+          '(spawn on first hit, bump on subsequent, free on break); 2.25 rarity-keyed ' +
+          'pickup SFX (pickup_common through pickup_legendary); 2.29 crit roll in ' +
+          'HitboxComponent driven by player_combat using CombatMath.player_crit_chance(), ' +
+          'is_crit travels with damage_floated, DamageNumberSpawner triggers screen pulse ' +
+          '+ camera shake; 2.31 mob_class enum (MELEE/RANGED/CASTER/TANK/CRITTER); 2.41 ' +
+          'tool-use SFX wired in player_combat._play_tool_sfx routing by pickaxe_tier / ' +
+          'axe_tier / weapon_class; 2.45 melee_range_pixels now data-driven from ItemDef ' +
+          'instead of fixed swing_offset. Event bus signal damage_floated added. Tree ' +
+          'class_name avoided Godot native Tree collision via WorldTree. 34/34 GUT pass.',
+    completed: [
+      '2.14','2.15','2.16','2.17','2.18','2.19','2.20','2.21','2.23','2.25',
+      '2.28','2.29','2.31','2.41','2.45','2.50',
+    ],
+  },
+  {
     version: '2026-05-13-phase2-playtest-fixes',
     note: 'Phase 2 playtest gap-closure — user F5 session surfaced 5 user-visible bugs ' +
           'that the bootstrap migration had silently shipped: (1) Inventory I/Tab toggle ' +

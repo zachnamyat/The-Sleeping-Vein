@@ -138,11 +138,67 @@ New Phase 2 tests added this session:
 
 ---
 
+## E. Extended parity-audit tickets (closed 2026-05-13)
+
+### E.1 Axe + Tree felling (**2.14, 2.15**)
+- Hotbar slot 3 holds a Wooden Axe at spawn.
+- A ring of 8 trees surrounds the Anchor at ~96px radius.
+- Swap to the axe. Left-click a tree: each swing emits `swing_axe` SFX and chips a crack overlay; tree drops in 7-8 swings.
+- On fell: tree rotates + fades, drops 1-4 Wood plus a 25% chance of 1 Heartwood.
+- Try the **sword** on a tree — it does 0 damage (trees resist physical 100%). Only the axe (damage_type = &"axe") gets through.
+- The axe also works against mobs (no axe resistance) as a regular melee weapon.
+
+### E.2 Bombs (**2.17**)
+- Hotbar slot 4 holds 3 Bombs at spawn.
+- Click to lob — bomb arcs toward the cursor, lands, 1.5s fuse with flickering spark, then explodes.
+- Explosion: camera shake + screen pulse + `bomb_explode` SFX, expanding ring VFX.
+- Hurtboxes within 32px take 35 explosive damage (most mobs die in one).
+- Tiles within ~1 cell take 40 mining damage — useful for chunking through weak walls.
+- Explosives skill XP +2 per throw.
+
+### E.3 Death corpse + reclaim (**2.16**)
+- Die with non-starter items in inventory (e.g. Loambeetle, Shaleseed).
+- A pulsing purple-gold rune marker appears at the death position.
+- Respawn at the Loom (starter pickaxe/sword/axe/torch retained).
+- Walk back to the corpse — `corpse_reclaim` SFX + "Stash reclaimed." toast — all stashed items restored.
+- Starter tools (`wooden_pickaxe`, `wooden_sword`, `wooden_axe`, `torch`) stay in inventory; only the surplus drops.
+
+### E.4 Damage numbers + crits (**2.20, 2.29**)
+- Every hit (player → mob OR mob → player) spawns a white floating number that rises and fades over 0.75s.
+- Roll on each player melee swing for a crit (base 5% from `CombatMath.player_crit_chance`). Crits render larger and warm-gold.
+- A crit also triggers screen pulse + camera shake.
+- Each Melee talent point in Phase 7 increments the crit chance.
+
+### E.5 Tile damage states (**2.23**)
+- Hit an ore tile partially (don't break it). A faint crack overlay appears, and the cracks visibly shake on each swing.
+- Crack density scales with damage taken (more hits = more cracks).
+- On tile break, overlay self-destroys; on full HP refresh, overlay also clears.
+
+### E.6 Mob behavior depth (**2.18, 2.19, 2.21, 2.28, 2.31**)
+- **Aggro range** (2.19): Stone-Hopper only chases if you enter `detection_radius = 96px`. Outside that, it stays idle.
+- **Hysteresis de-aggro** (2.28): once aggro'd, the hopper holds target until you exceed `1.5 × detection_radius` (~144px). No flicker at the edge.
+- **Leash** (2.19/2.28): if you drag a hopper > `leash_radius = 160px` from its spawn, it drops aggro and walks home.
+- **Critter flee** (2.18): mobs whose `behavior` is `CRITTER_FLEE` run AWAY from the player. No critter mob ships in Phase 2 art, but the field is wired.
+- **Mob class** (2.31): every MobDef now has a `mob_class` (MELEE / RANGED / CASTER / TANK / CRITTER). Stone-Hopper is MELEE. Used by future AI selection + UI tooltips.
+- **Death animation** (2.21): mob fades to 0 alpha and scales 1.2× over 0.4s before despawn; collider disabled at death so the player can walk through.
+
+### E.7 Audio palette (**2.25, 2.41**)
+- **Tool SFX**: pickaxe / axe / magic / ranged / summon / melee each produce a distinct swing tone via `_play_tool_sfx`.
+- **Pickup SFX**: rarity-keyed — common (white) / uncommon (green) / rare (blue) / epic (purple) / legendary (gold). You'll hear the bump in tone when picking up a Heartwood (rarity 1) vs Loam (rarity 0).
+
+### E.8 Reach per weapon (**2.45**)
+- Hit the SwingHitbox position now uses `ItemDef.melee_range_pixels` instead of a fixed `swing_offset`. Wood Sword + Wood Axe both report 18 in their .tres. Editing the .tres in Godot live-changes reach without a code change.
+
+### E.9 Fall-damage RFC (**2.50**)
+- Decided: **no fall damage**. The Sleeping Vein is a flat 2D top-down world with no Z-axis. Ticket closed by decision, not code.
+
+---
+
 ## How to report results
 
 Walk top-to-bottom. For each fail:
-- Quote the section number (e.g. `B.4 melee XP didn't fire`).
+- Quote the section number (e.g. `B.4 melee XP didn't fire`, `E.3 corpse not reclaiming`).
 - Paste the visible error / screenshot if any.
 - Note your Godot version.
 
-Phase 2 is **green** when sections **A**, **B.1–B.9**, **C**, and **D** all pass.
+Phase 2 is **green** when sections **A**, **B.1–B.9**, **C**, **D**, and **E.1–E.9** all pass.

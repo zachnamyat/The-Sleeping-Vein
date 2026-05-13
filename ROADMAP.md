@@ -72,7 +72,24 @@
 - 2.12 First dropped-item rarity tier coloring (white / green / blue / purple / yellow)
 - 2.13 Aphelion-sliver display in HUD (lore §1.7 — visible on respawn)
 
-**Exit criterion.** Mine a tile → get loam. Hit a Stone-Hopper → it dies → drops a loambeetle. Pick it up. Skill XP gain visible. Die → respawn at Loom → sliver count decrements. ✅ Met (2026-05-13) — gap-closure pass landed mining-damage talent bonus, ItemDrop rarity propagation, Stone-Hopper DamageFlash, hit-SFX hooks, mob ContactHitbox repeat. Playtest pass fixed item-drop sprite fallback, HUD slivers width, inventory I/Tab via `_input`, save format v2 (player+inventory+skills), mining XP cadence. GUT 34/34 pass. Manual checklist at `docs/PHASE_2_TEST_CHECKLIST.md`.
+**Extended parity tickets (from 2026-05-12 audit):**
+- 2.14 Axe tool + tree-felling verb (drops Wood / Heartwood)
+- 2.15 Tree object with HP + biome variants
+- 2.16 Death corpse + drop-on-death recovery
+- 2.17 Bombs as throwable items (fuse + AoE)
+- 2.18 Critter / passive wildlife flee behavior
+- 2.19 / 2.28 Mob aggro range + leash + de-aggro hysteresis
+- 2.20 / 2.29 Damage-number floating-text VFX + crit color + screen pulse
+- 2.21 Mob death animation (fade + scale)
+- 2.23 Tile damage states (shake + crack overlay)
+- 2.25 Pickup SFX per rarity
+- 2.31 Mob class data (melee / ranged / caster / tank / critter)
+- 2.41 Tool-use SFX per tool (pickaxe vs axe vs sword)
+- 2.45 Reach radius per melee weapon (data-driven)
+- 2.50 Fall-damage RFC — **decided: no** (flat 2D world)
+- Twenty-one further tickets (2.22, 2.24, 2.26, 2.27, 2.30, 2.32–2.40, 2.42–2.44, 2.46–2.49) reassigned to their natural phase (3/5/6/7/15/16) — see kanban migration `2026-05-13-phase2-extended-closure`.
+
+**Exit criterion.** Mine a tile → get loam. Hit a Stone-Hopper → it dies → drops a loambeetle. Pick it up. Skill XP gain visible. Die → respawn at Loom → sliver count decrements. ✅ Met (2026-05-13) — gap-closure pass landed mining-damage talent bonus, ItemDrop rarity propagation, Stone-Hopper DamageFlash, hit-SFX hooks, mob ContactHitbox repeat. Playtest pass fixed item-drop sprite fallback, HUD slivers width, inventory I/Tab via `_input`, save format v2 (player+inventory+skills), mining XP cadence. Extended-closure pass shipped 15 parity-audit tickets (axe + trees, bombs, death-corpse, damage numbers, crits, tile cracks, mob leash/aggro/death-anim/critter-flee, tool/pickup SFX, reach radius, mob_class). GUT 34/34 pass. Manual checklist at `docs/PHASE_2_TEST_CHECKLIST.md`.
 
 ---
 

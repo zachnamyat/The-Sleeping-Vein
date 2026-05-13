@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://btreescn01vein"]
+[gd_scene format=3 uid="uid://di224lpqo80np"]
 
 [ext_resource type="Script" path="res://scripts/world/tree.gd" id="1_tree"]
 [ext_resource type="Script" path="res://scripts/components/health_component.gd" id="2_health"]

@@ -238,8 +238,54 @@ func _on_died(killer: Node) -> void:
 	is_dead = true
 	EventBus.player_died.emit(self)
 	GameState.consume_sliver()
+	# Ticket 2.16 — drop a stash corpse the player can walk back to. The
+	# starter tools stay in inventory; everything else moves to the corpse.
+	_drop_stash_corpse()
 	var timer := get_tree().create_timer(1.5)
 	timer.timeout.connect(_respawn)
+
+
+const _STARTER_KEEP_IDS: Array[StringName] = [
+	&"wooden_pickaxe", &"wooden_sword", &"wooden_axe", &"torch",
+]
+
+
+func _drop_stash_corpse() -> void:
+	var stash: Array = []
+	for i in range(Inventory.slots.size()):
+		var s = Inventory.slots[i]
+		if s == null:
+			continue
+		var item_id := StringName(s.get("item_id", ""))
+		var count: int = int(s.get("count", 0))
+		if item_id == &"" or count <= 0:
+			continue
+		if item_id in _STARTER_KEEP_IDS:
+			continue
+		stash.append({"item_id": String(item_id), "count": count})
+		Inventory.try_remove(item_id, count)
+	if stash.is_empty():
+		return
+	var corpse := DeathCorpse.new()
+	corpse.stashed_slots = stash
+	corpse.global_position = global_position
+	var entities := _entity_layer_parent()
+	if entities:
+		entities.add_child(corpse)
+
+
+func _entity_layer_parent() -> Node:
+	# Walk up to Main and read its `entity_layer_path` if available. Falls back
+	# to current_scene root.
+	var n: Node = self
+	while n:
+		if n.has_method("get") and n.get("entity_layer_path") is NodePath:
+			var ep: NodePath = n.get("entity_layer_path")
+			var resolved := n.get_node_or_null(ep)
+			if resolved:
+				return resolved
+		n = n.get_parent()
+	return get_tree().current_scene
 
 
 func _respawn() -> void:
