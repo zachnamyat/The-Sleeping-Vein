@@ -295,9 +295,11 @@ func _on_hit_landed(victim: Node, dealt: int) -> void:
 		EventBus.skill_xp_gained.emit(&"skill_melee", 1)
 
 
+const PICKAXE_MAX_REACH_PIXELS: float = 28.0  ## ~1.75 tiles; CK parity is short reach.
+
+
 func _resolve_mining(player: PlayerController, pick: ItemDef, dir: Vector2) -> void:
 	_spawn_swing_visual(player, dir)
-	# Find the ore layer in the current scene by group.
 	var ore_layers := get_tree().get_nodes_in_group("ore_layer")
 	var wall_layers := get_tree().get_nodes_in_group("wall_layer")
 	var target_pos: Vector2 = player.global_position + dir * 16.0
@@ -305,10 +307,23 @@ func _resolve_mining(player: PlayerController, pick: ItemDef, dir: Vector2) -> v
 		var cam := player.get_viewport().get_camera_2d()
 		if cam:
 			target_pos = cam.get_global_mouse_position()
+	# Clamp reach so the mouse can't whiff a click across half the screen and
+	# end up hitting a wall the player isn't standing next to.
+	var to_target: Vector2 = target_pos - player.global_position
+	if to_target.length() > PICKAXE_MAX_REACH_PIXELS:
+		target_pos = player.global_position + to_target.normalized() * PICKAXE_MAX_REACH_PIXELS
 	var mining_skill: int = SkillSystem.get_level(&"skill_mining")
 	var damage: int = CombatMath.mining_damage(pick.base_damage, mining_skill)
+	# One swing damages one tile. Prefer ore over wall when both share a cell
+	# (random world-gen sometimes co-locates them) so a single click can't
+	# silently chunk two stacked blocks at once.
 	var hit: bool = false
 	for layer in ore_layers:
-		hit = MiningSystem.swing_on_tile(layer as TileMapLayer, target_pos, pick.pickaxe_tier, damage) or hit
-	for layer in wall_layers:
-		hit = MiningSystem.swing_on_tile(layer as TileMapLayer, target_pos, pick.pickaxe_tier, damage) or hit
+		if MiningSystem.swing_on_tile(layer as TileMapLayer, target_pos, pick.pickaxe_tier, damage):
+			hit = true
+			break
+	if not hit:
+		for layer in wall_layers:
+			if MiningSystem.swing_on_tile(layer as TileMapLayer, target_pos, pick.pickaxe_tier, damage):
+				hit = true
+				break

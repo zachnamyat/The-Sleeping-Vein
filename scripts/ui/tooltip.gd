@@ -47,6 +47,16 @@ func show_for_item(item_id: StringName) -> void:
 	_pending_delay = delay
 
 
+## Rarity colors keep tooltip name in sync with item-drop / slot border.
+const RARITY_NAME_COLORS := [
+	Color(1.0, 1.0, 1.0),       # 0 common
+	Color(0.7, 1.0, 0.6),       # 1 uncommon
+	Color(0.55, 0.78, 1.0),     # 2 rare
+	Color(0.85, 0.55, 1.0),     # 3 epic
+	Color(1.0, 0.95, 0.5),      # 4 legendary
+]
+
+
 func _show_now(item_id: StringName) -> void:
 	_pending_item = &""
 	_pending_delay = 0.0
@@ -55,17 +65,31 @@ func _show_now(item_id: StringName) -> void:
 		visible = false
 		return
 	name_label.text = defn.display_name
+	# Phase 3.67 — name color reflects rarity tier.
+	var rarity_idx: int = clamp(defn.rarity, 0, RARITY_NAME_COLORS.size() - 1)
+	name_label.modulate = RARITY_NAME_COLORS[rarity_idx]
 	var detail: String = defn.description
 	if defn.base_damage > 0:
 		detail += "\nDamage: %d" % defn.base_damage
 	if defn.pickaxe_tier > 0:
 		detail += "\nMining tier: %d" % defn.pickaxe_tier
+	if defn.axe_tier > 0:
+		detail += "\nAxe tier: %d" % defn.axe_tier
 	if defn.armor_value > 0:
 		detail += "\nArmor: %d" % defn.armor_value
 	if defn.heal_amount > 0:
 		detail += "\nHeals: %d HP" % defn.heal_amount
+	if defn.mana_restore > 0:
+		detail += "\nRestores: %d Mana" % defn.mana_restore
+	if defn.melee_range_pixels > 0 and defn.base_damage > 0:
+		detail += "\nReach: %d px" % defn.melee_range_pixels
+	if defn.equipment_slot != &"":
+		detail += "\nSlot: %s" % String(defn.equipment_slot).capitalize()
 	if defn.tier > 0:
 		detail += "\nTier %d" % defn.tier
+	# Phase 3.59 — show lore-text excerpt for relics / key items.
+	if defn.lore_text != "":
+		detail += "\n\n\"%s\"" % defn.lore_text
 	detail_label.text = detail
 	visible = true
 

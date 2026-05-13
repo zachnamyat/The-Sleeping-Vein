@@ -32,7 +32,12 @@ func swing_on_tile(layer: TileMapLayer, world_position: Vector2, pickaxe_tier: i
 	var ore_id: StringName = StringName(data.get_custom_data("ore_id"))
 	var key: String = "%s|%d,%d" % [layer.get_path(), cell.x, cell.y]
 	var hp: int = _tile_health.get(key, DEFAULT_TILE_HP)
-	hp -= maxi(1, mining_damage)
+	var damage_dealt: int = maxi(1, mining_damage)
+	hp -= damage_dealt
+	var cell_world: Vector2 = layer.map_to_local(cell) + layer.global_position
+	# Ticket 2.20 — float a damage number on the tile so the player gets the
+	# same feedback chunking a wall as they do whacking a mob.
+	EventBus.damage_floated.emit(cell_world, damage_dealt, false, &"physical")
 	if hp <= 0:
 		_tile_health.erase(key)
 		_clear_overlay(key)
@@ -42,7 +47,7 @@ func swing_on_tile(layer: TileMapLayer, world_position: Vector2, pickaxe_tier: i
 		# from Phase 7 talent balance work.
 		EventBus.skill_xp_gained.emit(&"skill_mining", 10 * tier)
 		EventBus.tile_changed.emit(cell, source_id, -1)
-		_spawn_drop(ore_id, layer.map_to_local(cell) + layer.global_position)
+		_spawn_drop(ore_id, cell_world)
 		tile_mined.emit(cell, ore_id, null)
 		return true
 	_tile_health[key] = hp

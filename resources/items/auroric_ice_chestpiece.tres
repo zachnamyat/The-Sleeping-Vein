@@ -12,3 +12,4 @@ item_type = 3
 tier = 8
 rarity = 3
 armor_value = 24
+equipment_slot = &"chest"

@@ -16,30 +16,54 @@ anchor_right = 0.5
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = -132.0
-offset_top = -68.0
+offset_top = -76.0
 offset_right = 132.0
-offset_bottom = 68.0
+offset_bottom = 76.0
 mouse_filter = 0
 script = ExtResource("1_craft")
 
 [node name="Panel" type="Panel" parent="."]
 offset_right = 264.0
-offset_bottom = 132.0
+offset_bottom = 152.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_craft")
 
 [node name="Title" type="Label" parent="Panel"]
 offset_left = 6.0
 offset_top = 2.0
-offset_right = 260.0
+offset_right = 130.0
 offset_bottom = 14.0
 modulate = Color(0.95, 0.84, 0.5, 1)
 text = "Station"
 
+[node name="SearchBox" type="LineEdit" parent="Panel"]
+offset_left = 134.0
+offset_top = 2.0
+offset_right = 200.0
+offset_bottom = 14.0
+placeholder_text = "filter..."
+
+[node name="FavoritesOnly" type="CheckButton" parent="Panel"]
+offset_left = 202.0
+offset_top = 0.0
+offset_right = 258.0
+offset_bottom = 16.0
+text = "Faves"
+tooltip_text = "Show only favorites"
+
 [node name="Scroll" type="ScrollContainer" parent="Panel"]
 offset_left = 6.0
-offset_top = 14.0
+offset_top = 18.0
 offset_right = 258.0
-offset_bottom = 128.0
+offset_bottom = 138.0
 
 [node name="RecipeList" type="VBoxContainer" parent="Panel/Scroll"]
-custom_minimum_size = Vector2(250, 110)
+custom_minimum_size = Vector2(250, 118)
+
+[node name="Hint" type="Label" parent="Panel"]
+offset_left = 6.0
+offset_top = 140.0
+offset_right = 258.0
+offset_bottom = 152.0
+text = "Shift+Craft = craft all you can afford"
+modulate = Color(0.65, 0.6, 0.5, 1)
+horizontal_alignment = 1

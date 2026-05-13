@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bat1b746yboot"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/shaleseed_boots.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"shaleseed_boots"
+icon = ExtResource("2_icon")
+display_name = "Shaleseed Boots"
+description = "+2 armor. Tier-1 boots slot."
+max_stack = 1
+item_type = 3
+tier = 1
+rarity = 1
+armor_value = 2
+equipment_slot = &"boots"

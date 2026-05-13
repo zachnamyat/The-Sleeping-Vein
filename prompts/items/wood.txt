@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Wood material drop in The Sleeping Vein. Single 16×16 icon of a small bundle of cut wood.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows.
+
+COMPOSITION: A short stack of three or four cut logs lying horizontally, viewed from a 3/4 angle so the ring-grain end-circles are slightly visible on the right side. Centered with 1 pixel of padding. The wood is warm earthy brown with two-pixel-wide darker bands along each log for shading. Solid magenta background (#FF00FF) which we will key out.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Restrict to the root_hollows accent ramp (#1c130d #3a2a1c #6b5036 #a4854f #d4a857). Pure black (#000000) for outline only. Pure magenta (#FF00FF) for the keyed background.
+
+LORE: Wood is dropped by felled Root Hollows trees. It's a tier-1 material used in crafting basic tools, walls, and workstations. See lore/04_biomes.md#stratum-1--the-root-hollows.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, leaves, branches, single log, isometric perspective.

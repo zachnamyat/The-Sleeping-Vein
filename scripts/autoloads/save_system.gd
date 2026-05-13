@@ -11,7 +11,10 @@ extends Node
 ## Save format version is bumped any time a save-affecting field changes.
 
 const SAVE_ROOT: String = "user://saves/"
-const SAVE_VERSION: int = 2
+## Save format version. Bumped to 3 in Phase 3 to add chest persistence
+## (placed-structure positions + contents). Older v1/v2 saves load with empty
+## chest array — pre-existing pre-placed world chests just spawn empty.
+const SAVE_VERSION: int = 3
 
 signal save_started(slot_name: String)
 signal save_completed(slot_name: String)
@@ -150,6 +153,7 @@ func _dump_game_state() -> Dictionary:
 		"player": _dump_player(),
 		"inventory": _dump_inventory(),
 		"skills": _dump_skills(),
+		"chests": _dump_chests(),
 	}
 
 
@@ -165,6 +169,7 @@ func _restore_game_state(state: Dictionary) -> void:
 	GameState.allocated_talents = _stringname_keys(state.get("allocated_talents", {}))
 	_restore_inventory(state.get("inventory", {}))
 	_restore_skills(state.get("skills", {}))
+	_pending_chests_restore = state.get("chests", [])
 	# Player restore is signal-driven: when SaveSystem holds pending state, it
 	# subscribes once to EventBus.player_spawned. The next player to spawn
 	# (either the existing one re-detected, or a fresh one after scene change)
@@ -273,6 +278,30 @@ func _restore_inventory(data: Dictionary) -> void:
 	for k in (data.get("equipment", {}) as Dictionary).keys():
 		Inventory.equip(StringName(String(k)), StringName(String(data["equipment"][k])))
 	EventBus.inventory_changed.emit()
+
+
+## Phase 3.6 — Persist every Chest in the scene tree.
+func _dump_chests() -> Array:
+	var out: Array = []
+	if get_tree() == null:
+		return out
+	for c in get_tree().get_nodes_in_group("chest"):
+		if not is_instance_valid(c):
+			continue
+		if c.has_method("dump_state"):
+			out.append(c.call("dump_state"))
+	return out
+
+
+var _pending_chests_restore: Array = []
+
+
+## Restore chest contents into the scene. Called by world_bootstrap after the
+## main world finishes spawning placeable chests; matches by unique_id.
+func consume_pending_chests() -> Array:
+	var out: Array = _pending_chests_restore.duplicate(true)
+	_pending_chests_restore = []
+	return out
 
 
 func _dump_skills() -> Dictionary:

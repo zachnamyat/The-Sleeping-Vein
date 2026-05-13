@@ -41,4 +41,20 @@ enum ItemType { MATERIAL, TOOL, WEAPON, ARMOR, CONSUMABLE, PLACEABLE, AMMO, KEY 
 @export var buff_duration_seconds: float = 0.0
 @export var armor_value: int = 0
 
+## Phase 3.4 — which equipment slot this item occupies when equipped.
+## Empty StringName means "not equippable" (most weapons, tools, materials).
+## Values match Inventory.EQUIPMENT_SLOTS: helmet / chest / legs / boots / off_hand /
+## necklace / ring_1 / ring_2 / bracelet / belt / pet.
+@export var equipment_slot: StringName = &""
+
+## Phase 3.59 — short flavor text shown under the item description on tooltip
+## for relics, key items, and rare drops. Optional; falls back to nothing.
+@export var lore_text: String = ""
+
+## Phase 3.74 — tool durability. 0 = unbreakable. Above 0, each use decrements;
+## hits 0 = breaks. Decrement logic in player_combat once a per-instance
+## durability tracker lands (Phase 16+); the field exists now so resource files
+## are forward-compatible.
+@export var max_durability: int = 0
+
 @export var lore_ref: String = ""

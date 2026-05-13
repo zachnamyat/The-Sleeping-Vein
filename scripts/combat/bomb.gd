@@ -65,19 +65,36 @@ func _explode() -> void:
 	var params := PhysicsShapeQueryParameters2D.new()
 	params.shape = shape
 	params.transform = Transform2D(0.0, global_position)
-	params.collision_mask = 4  # hurtbox layer
-	var hits: Array = space.intersect_shape(params, 16)
+	# Hurtboxes are Area2D nodes — by default `intersect_shape` only returns
+	# physics bodies, so without these two flags the explosion sees nothing.
+	params.collide_with_areas = true
+	params.collide_with_bodies = false
+	params.collision_mask = 4  # hurtbox layer (bit 3)
+	var hits: Array = space.intersect_shape(params, 32)
 	for h in hits:
-		var hurtbox := h.get("collider") as HurtboxComponent
+		var collider = h.get("collider")
+		var hurtbox: HurtboxComponent = null
+		if collider is HurtboxComponent:
+			hurtbox = collider
 		if hurtbox == null:
 			continue
 		hurtbox.receive_hit(self, base_damage, DamageType.EXPLOSIVE, &"player")
-	# Mining damage to any underlying ore/wall tile within ~1 tile of the
-	# explosion (so bombs can chunk through soft walls).
-	for layer in get_tree().get_nodes_in_group("ore_layer"):
-		MiningSystem.swing_on_tile(layer as TileMapLayer, global_position, 99, TILE_MINING_DAMAGE)
-	for layer in get_tree().get_nodes_in_group("wall_layer"):
-		MiningSystem.swing_on_tile(layer as TileMapLayer, global_position, 99, TILE_MINING_DAMAGE)
+	# Mining damage to ore/wall tiles within the blast radius (so bombs can
+	# chunk through soft walls AND any ore embedded in them). Scan a square of
+	# cells around the bomb and call swing_on_tile per cell whose center sits
+	# inside the explosion circle.
+	var radius_in_tiles: int = int(ceil(explosion_radius / 16.0))
+	var ore_layers := get_tree().get_nodes_in_group("ore_layer")
+	var wall_layers := get_tree().get_nodes_in_group("wall_layer")
+	for dy in range(-radius_in_tiles, radius_in_tiles + 1):
+		for dx in range(-radius_in_tiles, radius_in_tiles + 1):
+			var cell_world: Vector2 = global_position + Vector2(dx * 16, dy * 16)
+			if cell_world.distance_to(global_position) > explosion_radius:
+				continue
+			for layer in ore_layers:
+				MiningSystem.swing_on_tile(layer as TileMapLayer, cell_world, 99, TILE_MINING_DAMAGE)
+			for layer in wall_layers:
+				MiningSystem.swing_on_tile(layer as TileMapLayer, cell_world, 99, TILE_MINING_DAMAGE)
 	# Feedback: shake + flash + sfx.
 	EventBus.camera_shake_requested.emit(4.0, 0.25)
 	EventBus.screen_pulse_requested.emit(0.25, 0.15)

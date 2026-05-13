@@ -33,30 +33,6 @@ func _ready() -> void:
 		hurtbox.team = &"world"
 		hurtbox.health_component = health
 		hurtbox.knockback_resistance = 1.0
-	# Procedural placeholder sprite — a tall green diamond. Real tree art lands
-	# with the Root Hollows asset pass.
-	if sprite and sprite.texture == null:
-		sprite.texture = _placeholder_tree_texture()
-
-
-static func _placeholder_tree_texture() -> Texture2D:
-	var img := Image.create(16, 24, false, Image.FORMAT_RGBA8)
-	img.fill(Color(0, 0, 0, 0))
-	# Trunk
-	for y in range(16, 24):
-		for x in range(7, 9):
-			img.set_pixel(x, y, Color(0.32, 0.20, 0.10))
-	# Leaves — diamond
-	for y in range(0, 16):
-		var half: int = mini(y + 1, 16 - y) * 8 / 16
-		for x in range(8 - half - 2, 8 + half + 2):
-			if x < 0 or x >= 16:
-				continue
-			img.set_pixel(x, y, Color(0.20, 0.42, 0.18))
-	# Highlight
-	for y in range(2, 8):
-		img.set_pixel(6, y, Color(0.35, 0.60, 0.30))
-	return ImageTexture.create_from_image(img)
 
 
 func _on_died(_killer: Node) -> void:

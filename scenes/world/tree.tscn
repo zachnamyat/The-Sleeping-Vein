@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://scripts/world/tree.gd" id="1_tree"]
 [ext_resource type="Script" path="res://scripts/components/health_component.gd" id="2_health"]
 [ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="3_hurtbox"]
+[ext_resource type="Texture2D" path="res://assets/sprites/world/tree_root_hollows.png" id="4_sprite"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_trunk"]
 size = Vector2(8, 6)
@@ -20,6 +21,7 @@ tree_tier = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
+texture = ExtResource("4_sprite")
 offset = Vector2(0, -12)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

@@ -64,6 +64,25 @@ func start_new_game_plus() -> void:
 	world_seed = int(Time.get_unix_time_from_system())
 
 
+## Called by WorldBootstrap when starting a fresh world (i.e. not loading a
+## save). Autoloads persist across scene changes, so without this reset the
+## second New Game in a session would inherit the previous run's slivers,
+## XP, talents, and inventory. Distinct from start_new_game_plus, which
+## preserves threads + compendium as legacy.
+func reset_for_new_game() -> void:
+	aphelion_slivers_remaining = APHELION_STARTING_SLIVERS
+	defeated_bosses.clear()
+	collected_relics.clear()
+	arrived_npcs.clear()
+	unlocked_recipes.clear()
+	unlocked_compendium.clear()
+	sovereign_threads = 0
+	unallocated_talent_points = 0
+	allocated_talents.clear()
+	ng_plus = false
+	ng_plus_cycles = 0
+
+
 func has_defeated_boss(boss_id: StringName) -> bool:
 	return defeated_bosses.has(boss_id)
 

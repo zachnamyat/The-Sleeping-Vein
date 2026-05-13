@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://cimkfi0o4n6vk"]
+
+[ext_resource type="Script" path="res://scripts/ui/equipment_slot_ui.gd" id="1_eslot"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eslot"]
+bg_color = Color(0.03, 0.03, 0.04, 0.85)
+border_color = Color(0.55, 0.46, 0.28, 1)
+border_width_left = 1
+border_width_right = 1
+border_width_top = 1
+border_width_bottom = 1
+
+[node name="EquipmentSlotUI" type="Control"]
+custom_minimum_size = Vector2(20, 20)
+script = ExtResource("1_eslot")
+
+[node name="Panel" type="Panel" parent="."]
+offset_right = 20.0
+offset_bottom = 20.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_eslot")
+
+[node name="Icon" type="TextureRect" parent="Panel"]
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 18.0
+offset_bottom = 18.0
+mouse_filter = 2
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Hint" type="Label" parent="Panel"]
+offset_left = 1.0
+offset_top = 5.0
+offset_right = 19.0
+offset_bottom = 15.0
+mouse_filter = 2
+horizontal_alignment = 1
+text = ""
+modulate = Color(0.55, 0.48, 0.32, 1)

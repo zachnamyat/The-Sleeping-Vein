@@ -1,10 +1,12 @@
 [gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bpfpoe2tdkox1"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bomb.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"bomb"
+icon = ExtResource("2_icon")
 display_name = "Bomb"
 description = "Throwable explosive. 1.5s fuse, ~32px AoE. Mines weak tiles in a radius too."
 max_stack = 99

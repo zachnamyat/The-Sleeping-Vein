@@ -1,10 +1,12 @@
 [gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwwt1c42uyc6"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/watering_can.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"watering_can"
+icon = ExtResource("2_icon")
 display_name = "Watering Can"
 description = "Aim at a crop to halve its growth time."
 max_stack = 1

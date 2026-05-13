@@ -18,13 +18,34 @@ func _ready() -> void:
 	if world:
 		_register_layer_group(world.ore_layer_path, "ore_layer")
 		_register_layer_group(world.wall_base_layer_path, "wall_layer")
+		# The cap is a separate group so player_combat can redirect cap-clicks
+		# to the base cell south of them, instead of treating the cap as its own
+		# mineable wall (which would silently damage a different wall whose
+		# base happens to sit in the cap's cell).
+		_register_layer_group(world.wall_cap_layer_path, "wall_cap_layer")
 	# If we got here via Load, the SaveSystem already restored Inventory + Skills
 	# and queued a position fix-up. Skip the starter-grant so we don't double-stack.
 	var loading_save: bool = SaveSystem.consume_pending_load()
+	if not loading_save:
+		# Autoloads persist across scene changes — without this reset, a second
+		# New Game in the same session would inherit the prior run's inventory,
+		# skills, slivers, and talents. Reset before spawning so the player
+		# always wakes with the starter kit alone.
+		_reset_world_state()
 	_spawn_player()
 	if not loading_save:
 		_grant_starting_inventory()
 		_spawn_starter_trees()
+	else:
+		_restore_chests_from_save()
+
+
+func _reset_world_state() -> void:
+	Inventory.clear()
+	GameState.reset_for_new_game()
+	for s in SkillSystem.ALL_SKILLS:
+		SkillSystem._xp[s] = 0
+		SkillSystem._level[s] = 0
 
 
 func _spawn_starter_trees() -> void:
@@ -77,3 +98,25 @@ func _register_layer_group(path: NodePath, group_name: String) -> void:
 	var node := world.get_node_or_null(path)
 	if node:
 		node.add_to_group(group_name)
+
+
+## Phase 3.6 — Match saved chest blobs to the chests currently in the scene
+## tree. unique_id is the primary key; if a saved chest has no live match
+## (e.g. user broke the chest pre-save), it's ignored. Future placeable-chest
+## work (Phase 4+) will need to spawn missing ones.
+func _restore_chests_from_save() -> void:
+	var saved: Array = SaveSystem.consume_pending_chests()
+	if saved.is_empty():
+		return
+	var live := get_tree().get_nodes_in_group("chest")
+	for entry in saved:
+		if not (entry is Dictionary):
+			continue
+		var uid := String(entry.get("unique_id", ""))
+		if uid == "":
+			continue
+		for c in live:
+			if String(c.unique_id) == uid:
+				if c.has_method("restore_state"):
+					c.call("restore_state", entry)
+				break

@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Bomb throwable item in The Sleeping Vein. Single 16×16 icon, classic round bomb silhouette.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows.
+
+COMPOSITION: Classic round black bomb body roughly 10×10 pixels, centered with 1 pixel of padding. A short fuse rises from the top with a single bright gold spark at the tip (one or two pixels glowing). The bomb body has a single highlight pixel on its upper-left to give round-volume read. A 2-pixel collar where the fuse meets the body is a darker grey. Solid magenta background (#FF00FF) which we will key out.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Restrict to vesari_necropolis dark grey ramp (#161616 #2a2e34 #4a5159) for the bomb body, plus emberforge bright tones (#c44a1d #f08a2e #f8d167) for the fuse spark. Pure black (#000000) for outline only. Pure magenta (#FF00FF) for the keyed background.
+
+LORE: Bombs are an early-tier explosive throwable used by Echo-Walkers to clear soft tile walls and stun packed mobs. Crafted at the Loam Bench from wood and ember-iron. The 1.5-second fuse lets a careful thrower step back; a careless one ends up at the Loom again. See docs/reference/core-keeper-mechanics.md#3-combat.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, multiple bombs, isometric perspective, dynamite stick shape, TNT logo.

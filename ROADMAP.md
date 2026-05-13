@@ -110,7 +110,9 @@
 - 3.11 Shaleseed ore → Clearstone Forge upgrade path (Tier 1)
 - 3.12 Crafting skill XP source
 
-**Exit criterion.** Open inventory. Craft a Wood Pickaxe. Place it in hotbar. Mine 3× faster. Stash extra in a chest. Reload save — chest contents persist.
+**Parity-audit extras (closed 2026-05-13):** 3.13 quick-stack-to-nearest-chest, 3.14 loot-all-nearby, 3.16 recipe favorites + filter, 3.18 multi-craft (shift-click), 3.25 trash slot, 3.26/3.45 sort by rarity/name/type, 3.35 stack split (shift-drag), 3.50 drag-to-ground drop, 3.52 right-click context, 3.59 lore-text tooltip excerpt, 3.60 inventory search box, 3.67 rarity-tinted slot borders + tooltip names; plus 2.36 held-item visual on Walker and 2.48 placeable ghost-tile preview.
+
+**Exit criterion.** Open inventory. Craft a Wood Pickaxe. Place it in hotbar. Mine 3× faster. Stash extra in a chest. Reload save — chest contents persist. ✅ Met (2026-05-13) — Gemini-generated 16-icon tools sheet, 3-panel UI sheet, and Clearstone Forge sprite shipped through tools/process_phase3_assets.py; `equipment_slot` field added to ItemDef + Inventory.equip_from_slot validates target slot; HeldItemVisual + PlaceablePreview attached as Player children; Chest dump/restore_state with unique_id keying; SaveSystem bumped v2→v3 with chests array; CraftingPanel adds multi-craft, favorites star, search, and recipe-unlock toast. 50/50 GUT tests pass (test_crafting, test_equipment, test_chest, test_inventory_phase3 added).
 
 ---
 

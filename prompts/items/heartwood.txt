@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Heartwood rare material drop in The Sleeping Vein. Single 16×16 icon of a dense rare wood chunk.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows.
+
+COMPOSITION: A single thick log cross-section, viewed slightly from above to show a few concentric growth rings. Centered with 1 pixel of padding. Darker, richer brown than common wood, with a glowing gold-vein highlight running through the rings (one or two pixels of the Final Spiral gold). Subtle, not garish. Solid magenta background (#FF00FF) which we will key out.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Restrict to root_hollows ramp deep tones (#1c130d #3a2a1c #6b5036) plus Final Spiral gold accents (#a87f24 #dab14a) for the vein. Pure black (#000000) for outline only. Pure magenta (#FF00FF) for the keyed background.
+
+LORE: Heartwood is the dense core wood found at the center of large Root Hollows trees. It carries faint traces of Aphelion gold-thread, hinting at the world's deep light. Used in higher-tier crafting and certain ritual structures. See lore/04_biomes.md#stratum-1--the-root-hollows.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, multiple logs, isometric perspective, modern logo, decorative scrollwork.

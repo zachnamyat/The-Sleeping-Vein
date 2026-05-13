@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art Root Hollows tree, top-down 3/4 view, for placement in the Root Hollows biome of The Sleeping Vein.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows. Visually inspired by Core Keeper / Stardew Valley tree silhouettes.
+
+COMPOSITION: Single tree centered in a tall 16×24 cell. The trunk sits in the bottom 8 rows (16×8 footprint), warm-brown bark with two darker bark-rings. The canopy fills the upper 16×16 area, a rounded mass of warm-amber Root Hollows foliage with three or four highlight pixels suggesting clumps of leaves. A small drop of Aphelion-gold catches light at the canopy's upper-left as a single one-or-two-pixel accent. Solid magenta background (#FF00FF) which we will key out. The trunk base aligns to the bottom edge so the sprite Y-sorts cleanly into a tile.
+
+SIZE: Output 1024×1536 source (2:3 aspect to match 16×24). Downsample 64× nearest-neighbor to 16×24 final.
+
+PALETTE: Restrict to root_hollows ramp (#1c130d #3a2a1c #6b5036 #a4854f #d4a857 #f0d27d), with optional small final_spiral gold accent (#dab14a) on the canopy highlight. Pure black (#000000) for outline only. Pure magenta (#FF00FF) for the keyed background.
+
+LORE: The trees of the Root Hollows are short, warm-brown saplings clinging to the loam between shale outcrops. Their wood is soft enough that a stone-shale axe fells one in seven or eight chops. Felled trees rarely yield Heartwood — a dense core with faint Aphelion-gold threads. See lore/04_biomes.md#stratum-1--the-root-hollows.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, multiple trees, isometric perspective, pine/conifer shape, dark spooky tree, snowy tree, leafless tree, dead tree, autumn red leaves, anime style.

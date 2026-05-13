@@ -7,6 +7,8 @@ class_name ItemDrop
 @export var item_id: StringName = &""
 @export var count: int = 1
 @export var rarity: int = 0
+## Phase 3.50 — pickup-immunity window so player-dropped items don't snap back.
+@export var pickup_delay: float = 0.0
 
 const POP_DURATION: float = 0.35
 const POP_RANGE: float = 12.0
@@ -46,9 +48,24 @@ func _process(delta: float) -> void:
 func _on_body_entered(body: Node) -> void:
 	if not body.is_in_group("player"):
 		return
+	if pickup_delay > 0.0:
+		var age: float = float(Time.get_ticks_msec()) / 1000.0 - _spawn_time
+		if age < pickup_delay:
+			return
 	if Inventory.try_add(item_id, count):
 		EventBus.item_picked_up.emit(item_id, count)
 		queue_free()
+
+
+## Phase 3.14 — Loot all: when the player presses the loot key, every drop
+## within MAGNET_RADIUS calls this. Returns true if it was successfully picked
+## up.
+func try_force_pickup() -> bool:
+	if Inventory.try_add(item_id, count):
+		EventBus.item_picked_up.emit(item_id, count)
+		queue_free()
+		return true
+	return false
 
 
 func _nearest_player() -> Node2D:

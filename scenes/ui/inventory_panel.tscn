@@ -1,6 +1,8 @@
-[gd_scene format=3 uid="uid://bb4iinxxxlndg"]
+[gd_scene load_steps=4 format=3 uid="uid://bb4iinxxxlndg"]
 
 [ext_resource type="Script" path="res://scripts/ui/inventory_panel.gd" id="1_inv"]
+[ext_resource type="Script" path="res://scripts/ui/trash_slot.gd" id="2_trash"]
+[ext_resource type="PackedScene" path="res://scenes/ui/equipment_panel.tscn" id="3_eqpanel"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_invpanel"]
 bg_color = Color(0.03, 0.03, 0.04, 0.95)
@@ -19,25 +21,57 @@ anchor_left = 0.5
 anchor_right = 0.5
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = -120.0
-offset_top = -50.0
-offset_right = 120.0
-offset_bottom = 50.0
+offset_left = -170.0
+offset_top = -70.0
+offset_right = 170.0
+offset_bottom = 70.0
 mouse_filter = 0
 script = ExtResource("1_inv")
 
 [node name="Panel" type="Panel" parent="."]
-offset_right = 234.0
-offset_bottom = 88.0
+offset_right = 340.0
+offset_bottom = 140.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_invpanel")
 
 [node name="Title" type="Label" parent="Panel"]
 offset_left = 6.0
 offset_top = 2.0
-offset_right = 232.0
+offset_right = 240.0
 offset_bottom = 12.0
 modulate = Color(0.95, 0.84, 0.5, 1)
 text = "Walker's Pouch"
+
+[node name="SearchBox" type="LineEdit" parent="Panel"]
+offset_left = 132.0
+offset_top = 2.0
+offset_right = 230.0
+offset_bottom = 12.0
+placeholder_text = "search..."
+clear_button_enabled = true
+
+[node name="SortRarity" type="Button" parent="Panel"]
+offset_left = 232.0
+offset_top = 2.0
+offset_right = 268.0
+offset_bottom = 12.0
+text = "Sort R"
+tooltip_text = "Sort by rarity"
+
+[node name="SortName" type="Button" parent="Panel"]
+offset_left = 268.0
+offset_top = 2.0
+offset_right = 304.0
+offset_bottom = 12.0
+text = "Sort A"
+tooltip_text = "Sort A-Z"
+
+[node name="SortType" type="Button" parent="Panel"]
+offset_left = 304.0
+offset_top = 2.0
+offset_right = 332.0
+offset_bottom = 12.0
+text = "Type"
+tooltip_text = "Group by item type"
 
 [node name="Grid" type="Control" parent="Panel"]
 offset_left = 6.0
@@ -45,3 +79,41 @@ offset_top = 14.0
 offset_right = 230.0
 offset_bottom = 86.0
 mouse_filter = 1
+
+[node name="LootAll" type="Button" parent="Panel"]
+offset_left = 6.0
+offset_top = 92.0
+offset_right = 68.0
+offset_bottom = 104.0
+text = "Loot All"
+tooltip_text = "Pick up nearby drops"
+
+[node name="QuickStack" type="Button" parent="Panel"]
+offset_left = 70.0
+offset_top = 92.0
+offset_right = 152.0
+offset_bottom = 104.0
+text = "Quick Stack"
+tooltip_text = "Deposit matching items to nearest chest"
+
+[node name="Trash" type="Control" parent="Panel"]
+offset_left = 200.0
+offset_top = 90.0
+offset_right = 220.0
+offset_bottom = 110.0
+script = ExtResource("2_trash")
+
+[node name="EquipmentPanel" parent="Panel" instance=ExtResource("3_eqpanel")]
+offset_left = 236.0
+offset_top = 14.0
+offset_right = 314.0
+offset_bottom = 114.0
+
+[node name="Hint" type="Label" parent="Panel"]
+offset_left = 6.0
+offset_top = 124.0
+offset_right = 332.0
+offset_bottom = 136.0
+text = "Shift+drag=split  Right-click=drop  I/Tab=close"
+modulate = Color(0.65, 0.6, 0.5, 1)
+horizontal_alignment = 1

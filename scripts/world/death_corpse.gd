@@ -7,6 +7,11 @@ class_name DeathCorpse
 ## reclaimed; one corpse per death.
 
 const PICKUP_RADIUS: float = 16.0
+## Block reclaim for this long after spawn. The player's body overlaps the
+## corpse at the moment of death (we spawn at their position) and again until
+## they respawn 1.5s later. Without this gate, body_entered fires instantly and
+## the stash is auto-restored before the player ever leaves the death site.
+const RECLAIM_ARM_DELAY: float = 2.0
 
 @export var stashed_slots: Array = []  ## Each entry: {item_id: String, count: int}
 
@@ -32,10 +37,27 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	_t += delta
 	queue_redraw()
+	# body_entered only fires on transition. If the player respawns ON TOP of
+	# the corpse (death and respawn point are the same — common at the Anchor),
+	# the signal never re-fires after the player un-dies. Poll for overlap so
+	# the reclaim still triggers in that case.
+	if _t >= RECLAIM_ARM_DELAY:
+		for b in get_overlapping_bodies():
+			if b.is_in_group("player") and b.get("is_dead") != true:
+				_on_body_entered(b)
+				return
 
 
 func _on_body_entered(body: Node) -> void:
 	if not body.is_in_group("player"):
+		return
+	# Skip while the player is still in their death animation — the corpse spawned
+	# at their corpse position and they haven't been teleported to the respawn
+	# point yet, so this body_entered would auto-reclaim before the player even
+	# moves.
+	if body.get("is_dead") == true:
+		return
+	if _t < RECLAIM_ARM_DELAY:
 		return
 	_reclaim_stash()
 	if AudioBus:

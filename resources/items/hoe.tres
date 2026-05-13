@@ -1,10 +1,12 @@
 [gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwwffwrckpo7"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/hoe.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"hoe"
+icon = ExtResource("2_icon")
 display_name = "Hoe"
 description = "Breaks loam into soil ready for seeding."
 max_stack = 1

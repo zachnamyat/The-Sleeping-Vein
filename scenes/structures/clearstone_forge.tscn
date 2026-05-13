@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://18ir2owyo01n"]
+[gd_scene load_steps=4 format=3 uid="uid://18ir2owyo01n"]
 
 [ext_resource type="Script" path="res://scripts/structures/workstation.gd" id="1_ws"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/clearstone_forge.png" id="2_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_cf"]
 size = Vector2(28, 28)
@@ -12,8 +13,8 @@ display_name = "Clearstone Forge"
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
+texture = ExtResource("2_tex")
 offset = Vector2(0, -8)
-modulate = Color(0.7, 0.85, 1.0, 1)
 
 [node name="InteractShape" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_cf")

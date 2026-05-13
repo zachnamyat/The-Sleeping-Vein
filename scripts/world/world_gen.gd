@@ -64,7 +64,6 @@ func _generate_chunk(chunk: Vector2i) -> void:
 	rng.seed = _hash_chunk(chunk)
 	var fl := _layer(floor_layer_path)
 	var wb := _layer(wall_base_layer_path)
-	var wc := _layer(wall_cap_layer_path)
 	var ol := _layer(ore_layer_path)
 	if fl == null:
 		return
@@ -83,8 +82,10 @@ func _generate_chunk(chunk: Vector2i) -> void:
 			continue
 		if wb:
 			wb.set_cell(coord, biome.wall_source_id, Vector2i(0, 0), 0)
-		if wc:
-			wc.set_cell(coord + Vector2i(0, -1), biome.wall_source_id, Vector2i(0, 0), 0)
+		# Walls are single-cell entities. The earlier two-layer base+cap design
+		# made the cap of an isolated wall look like a separate mineable block —
+		# clicking the base broke the wall and the cap vanished too, so the
+		# player saw "two blocks break from one click" with only one drop.
 	for _i in range(biome.ore_density_per_chunk):
 		var ox: int = rng.randi_range(0, CHUNK_TILES - 1)
 		var oy: int = rng.randi_range(0, CHUNK_TILES - 1)

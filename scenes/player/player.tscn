@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bplayer0scene00001"]
+[gd_scene load_steps=15 format=3 uid="uid://bplayer0scene00001"]
 
 [ext_resource type="Script" path="res://scripts/player/player_controller.gd" id="1_player"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/walker_default_idle_down_frame0.png" id="2_sprite"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="5_hurtbox"]
 [ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="6_hitbox"]
 [ext_resource type="Script" path="res://scripts/player/player_combat.gd" id="7_combat"]
+[ext_resource type="Script" path="res://scripts/player/held_item_visual.gd" id="8_held"]
+[ext_resource type="Script" path="res://scripts/player/placeable_preview.gd" id="9_preview"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 radius = 4.0
@@ -101,6 +103,12 @@ shape = SubResource("CircleShape2D_swing")
 script = ExtResource("7_combat")
 player_path = NodePath("..")
 hitbox_path = NodePath("../SwingHitbox")
+
+[node name="HeldItemVisual" type="Node2D" parent="."]
+script = ExtResource("8_held")
+
+[node name="PlaceablePreview" type="Node2D" parent="."]
+script = ExtResource("9_preview")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(2, 2)

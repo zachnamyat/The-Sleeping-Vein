@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Wooden Axe (tier-0 starter tool) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing, no gradient ramps, no soft shadows.
+
+COMPOSITION: Single axe centered with 1 pixel of padding. Diagonal orientation, blade at top-left, wooden haft trailing toward bottom-right. The head is a small chunky wedge of dull grey-iron (one or two pixels for the cutting edge). The haft is warm brown wood with a single highlight pixel along its length. Solid magenta background (#FF00FF) which we will key out.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Restrict to the root_hollows accent ramp for wood (#1c130d #3a2a1c #6b5036 #a4854f) and a small touch of cool grey-iron (#4a5159 #7d8492 from vesari_necropolis) for the blade. Pure black (#000000) for outline only. Pure magenta (#FF00FF) for the keyed background.
+
+LORE: Tier-0 starter axe — used by newly-woken Echo-Walkers to fell the soft brown trees of the Root Hollows. The blade is "stone-shale" iron grit pressed into a slot — not real forged metal, more a heavy chip with a handle. See lore/04_biomes.md#stratum-1--the-root-hollows.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient skies, sub-pixel detail, watermark, signature, text labels, frame, border, multiple axes, isometric perspective.
