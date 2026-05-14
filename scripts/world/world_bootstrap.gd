@@ -46,6 +46,9 @@ func _reset_world_state() -> void:
 	for s in SkillSystem.ALL_SKILLS:
 		SkillSystem._xp[s] = 0
 		SkillSystem._level[s] = 0
+	# reset_for_new_game cleared GameState.unlocked_recipes, so the Loam Bench
+	# would otherwise have zero recipes until app restart.
+	CraftingSystem.unlock_starter_recipes()
 
 
 func _spawn_starter_trees() -> void:

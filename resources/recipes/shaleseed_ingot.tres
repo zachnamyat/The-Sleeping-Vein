@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://cb3me0mkrb75q"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_shaleseed_ingot"
+display_name = "Shaleseed Ingot"
+inputs = [{ "item_id": "shaleseed", "count": 2 }]
+outputs = [{ "item_id": "shaleseed_ingot", "count": 1 }]
+stations = [&"furnace"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_crafting"
+description = "Smelt 2 shaleseed ore into 1 ingot."

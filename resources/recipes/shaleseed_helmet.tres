@@ -8,6 +8,6 @@ id = &"craft_shaleseed_helmet"
 display_name = "Shaleseed Helmet"
 inputs = [{ "item_id": "shaleseed", "count": 6 }]
 outputs = [{ "item_id": "shaleseed_helmet", "count": 1 }]
-stations = [&"clearstone_forge"]
+stations = [&"loam_bench", &"clearstone_forge"]
 skill_xp_grant = 4
 skill_xp_id = &"skill_crafting"

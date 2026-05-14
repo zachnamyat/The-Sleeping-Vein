@@ -124,8 +124,13 @@ def run_snap_palette(target: Path, biome: str | None = None) -> None:
         print(f"     {line}")
 
 
-def process_items_grid(src_rel: str, dst_dir_rel: str, names: list[str], cols: int, rows: int) -> list[Path]:
-    """Items sheet is a regular grid; crop top 70% of each cell to skip Gemini-added text labels."""
+def process_items_grid(src_rel: str, dst_dir_rel: str, names: list[str], cols: int, rows: int, icon_h_frac: float = 0.70) -> list[Path]:
+    """Items sheet is a regular grid; crop top icon_h_frac of each cell.
+
+    Defaults to 0.70 because the original Gemini items_tools_basic_set sheet
+    rendered visible text labels in the bottom 30% of each cell. Newer prompts
+    that don't include text labels can pass icon_h_frac=1.0.
+    """
     src = REPO / src_rel
     dst_dir = REPO / dst_dir_rel
     dst_dir.mkdir(parents=True, exist_ok=True)
@@ -133,8 +138,6 @@ def process_items_grid(src_rel: str, dst_dir_rel: str, names: list[str], cols: i
     sw, sh = img.size
     cell_w = sw // cols
     cell_h = sh // rows
-    # Top 70% of cell — bottom contains Gemini's text label.
-    icon_h_frac = 0.70
     outputs = []
     print(f"[items_grid] {src.relative_to(REPO)} ({sw}x{sh}) -> {cols}x{rows} cells of {cell_w}x{cell_h}")
     for i, name in enumerate(names):
@@ -213,6 +216,28 @@ ITEM_NAMES = [
     "shaleseed_legs", "shaleseed_boots", "small_healing_potion", "small_mana_potion",
 ]
 
+# Phase 3 extended-closure follow-up — sheet of 8 reagent / station-icon items
+# generated separately. 4×2 grid; row 0 = plank/ingot/bottle/aphelion_fragment;
+# row 1 = glow_tube/coupler/furnace_icon/sawmill_icon. The two _icon entries
+# are unused (structures use their own 32x32 sprites) but the cells need names.
+PHASE3_EXTRA_NAMES = [
+    "plank", "shaleseed_ingot", "bottle_empty", "aphelion_fragment",
+    "glow_tube", "station_tier_upgrade", "_furnace_icon_unused", "_sawmill_icon_unused",
+]
+
+# Phase 3 missing-icon backfill — Phase 1/2 materials and miscellaneous drops
+# the player encounters before Phase 8/9 content is implemented.
+PHASE12_BASIC_NAMES = [
+    "loam", "loambeetle", "ancient_coin", "lantern_glint",
+    "respec_scroll", "pale_cap", "memory_root", "fishing_rod_wood",
+]
+
+# Phase 8 farming + cooking + fishing icons.
+PHASE8_FOOD_NAMES = [
+    "pale_cap_seed", "memory_root_seed", "pale_cap_stew", "memory_root_broth",
+    "loam_loaf", "cave_guppy", "salt_minnow", "sovereign_name_fragment_1",
+]
+
 
 def main() -> int:
     # 1) Items grid -> 16 icons
@@ -241,6 +266,70 @@ def main() -> int:
     )
     run_clean_alpha(forge)
     run_snap_palette(forge, "glasswright_reaches")
+
+    # 4) Phase 3 extras item sheet -> 6 useful icons (2 unused cells)
+    # No text labels in this sheet — use full cell height.
+    extras_outputs = process_items_grid(
+        "assets/raw/items/items_phase3_extras_v1.png",
+        "assets/sprites/items",
+        PHASE3_EXTRA_NAMES,
+        cols=4,
+        rows=2,
+        icon_h_frac=1.0,
+    )
+    for path in extras_outputs:
+        # Skip the two _unused stub files we only wrote to fill the grid.
+        if "_unused" in path.stem:
+            try:
+                path.unlink()
+            except OSError:
+                pass
+            continue
+        run_clean_alpha(path)
+        run_snap_palette(path, None)
+
+    # 5) Sawmill + Furnace structure sprites (32x32 each, solo)
+    sawmill = process_single(
+        "assets/raw/structures/structure_sawmill_v1.png",
+        "assets/sprites/structures/sawmill.png",
+        32, 32,
+    )
+    run_clean_alpha(sawmill)
+    run_snap_palette(sawmill, "root_hollows")
+
+    furnace = process_single(
+        "assets/raw/structures/structure_furnace_v1.png",
+        "assets/sprites/structures/furnace.png",
+        32, 32,
+    )
+    run_clean_alpha(furnace)
+    run_snap_palette(furnace, None)
+
+    # 6) Phase 1/2 missing-icon backfill (8 icons) — no text labels.
+    p12_outputs = process_items_grid(
+        "assets/raw/items/items_phase1_2_basics_v1.png",
+        "assets/sprites/items",
+        PHASE12_BASIC_NAMES,
+        cols=4,
+        rows=2,
+        icon_h_frac=1.0,
+    )
+    for path in p12_outputs:
+        run_clean_alpha(path)
+        run_snap_palette(path, None)
+
+    # 7) Phase 8 food/farming icons (8 icons) — no text labels.
+    p8_outputs = process_items_grid(
+        "assets/raw/items/items_phase8_food_v1.png",
+        "assets/sprites/items",
+        PHASE8_FOOD_NAMES,
+        cols=4,
+        rows=2,
+        icon_h_frac=1.0,
+    )
+    for path in p8_outputs:
+        run_clean_alpha(path)
+        run_snap_palette(path, None)
 
     return 0
 

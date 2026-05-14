@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemDef" load_steps=2 format=3 uid="uid://itemdef0caveguppy"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/cave_guppy.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
+icon = ExtResource("2_icon")
 id = &"cave_guppy"
 display_name = "Cave Guppy"
 description = "Common Root-Hollows fish. Restores 18 HP."

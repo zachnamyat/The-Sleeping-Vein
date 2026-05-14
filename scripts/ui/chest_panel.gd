@@ -25,6 +25,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_grid()
+	set_process_unhandled_input(true)
 
 
 func _build_grid() -> void:
@@ -52,17 +53,50 @@ func _build_grid() -> void:
 
 
 func open_for_chest(chest: Chest) -> void:
+	if _chest != null and _chest != chest and _chest.contents_changed.is_connected(_on_active_chest_changed):
+		_chest.contents_changed.disconnect(_on_active_chest_changed)
 	_chest = chest
+	# Phase 3.15 — auto-deposit + Quick Stack target the most recently opened
+	# container. Tracked on Inventory so other systems (HUD hotkey, panel) can
+	# read it without grabbing this scene.
+	if Inventory:
+		Inventory.last_used_container = chest
 	if title:
 		title.text = "Chest"
 	visible = true
+	if not chest.contents_changed.is_connected(_on_active_chest_changed):
+		chest.contents_changed.connect(_on_active_chest_changed)
 	_refresh()
+	# Show the player's pouch alongside so they can drag-deposit without
+	# fumbling for the inventory key.
+	get_tree().call_group("inventory_ui", "force_open")
 
 
 func close_if_for_chest(chest: Chest) -> void:
 	if _chest == chest:
-		visible = false
-		_chest = null
+		_close_active()
+
+
+func _close_active() -> void:
+	if _chest and _chest.contents_changed.is_connected(_on_active_chest_changed):
+		_chest.contents_changed.disconnect(_on_active_chest_changed)
+	visible = false
+	_chest = null
+
+
+func _on_active_chest_changed() -> void:
+	# Chest mutated via any code path (drag-drop, quick-stack, save-restore).
+	# A direct refresh keeps the open panel in sync without each caller having
+	# to remember to ping notify_chest_change().
+	_refresh()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+	if event.is_action_pressed("ui_cancel") or event.is_action_pressed("open_inventory"):
+		_close_active()
+		get_viewport().set_input_as_handled()
 
 
 func get_active_chest() -> Chest:

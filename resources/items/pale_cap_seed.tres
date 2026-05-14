@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwwm034mtfhj"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/pale_cap_seed.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
+icon = ExtResource("2_icon")
 id = &"pale_cap_seed"
 display_name = "Pale Cap Spore"
 description = "Plant on loam. Grows in ~60s real time. Watering halves the time."

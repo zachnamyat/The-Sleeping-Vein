@@ -92,6 +92,13 @@ func _try_swing() -> void:
 		_cooldown_timer = defn.attack_cooldown_seconds
 		return
 
+	# Placement branch: held item is a placeable. Spawn the matching scene at
+	# the snapped target tile, consume one from inventory.
+	if defn and defn.item_type == ItemDef.ItemType.PLACEABLE:
+		if _resolve_place(player, defn, aim_target):
+			_cooldown_timer = 0.25
+		return
+
 	# Ranged / Magic / Summon / Fishing / Bomb branch
 	if defn and defn.weapon_class != &"":
 		if defn.weapon_class == &"fishing":
@@ -327,3 +334,95 @@ func _resolve_mining(player: PlayerController, pick: ItemDef, dir: Vector2) -> v
 			if MiningSystem.swing_on_tile(layer as TileMapLayer, target_pos, pick.pickaxe_tier, damage):
 				hit = true
 				break
+
+
+## Phase 3 — placement commit. Snaps to the 16-grid, validates against the
+## PlaceablePreview's 48 px range, instantiates the matching scene from
+## PLACEABLE_SCENES, consumes 1 from inventory.
+const PLACEMENT_RADIUS_PIXELS: float = 48.0
+
+const PLACEABLE_SCENES: Dictionary = {
+	&"loam_bench_placeable":      "res://scenes/structures/loam_bench.tscn",
+	&"clearstone_forge_placeable":"res://scenes/structures/clearstone_forge.tscn",
+	&"furnace_placeable":         "res://scenes/structures/furnace.tscn",
+	&"sawmill_placeable":         "res://scenes/structures/sawmill.tscn",
+	&"cooking_pot_placeable":     "res://scenes/structures/cooking_pot.tscn",
+}
+
+## Items that don't have a dedicated scene get spawned as a generic
+## PlacedDecor (sprite + optional Light2D). Maps id -> {with_light, light_color}.
+const PLACEABLE_DECOR: Dictionary = {
+	&"torch":      {"with_light": true,  "color": Color(1.0, 0.78, 0.45)},
+	&"glow_tube":  {"with_light": true,  "color": Color(0.55, 0.95, 1.0)},
+	&"loam_floor": {"with_light": false, "color": Color(1, 1, 1)},
+	&"loam_wall":  {"with_light": false, "color": Color(1, 1, 1)},
+}
+
+
+func _resolve_place(player: PlayerController, defn: ItemDef, raw_target: Vector2) -> bool:
+	# Snap to 16-grid, mirroring the PlaceablePreview ghost.
+	var snapped := Vector2(
+		floor(raw_target.x / 16.0) * 16.0 + 8.0,
+		floor(raw_target.y / 16.0) * 16.0 + 8.0,
+	)
+	var dist: float = snapped.distance_to(player.global_position)
+	if dist > PLACEMENT_RADIUS_PIXELS:
+		EventBus.ui_toast.emit("Too far to place.", 1.0)
+		return false
+	var iid: StringName = defn.id
+	var node: Node2D = null
+	if PLACEABLE_SCENES.has(iid):
+		var scn := load(PLACEABLE_SCENES[iid]) as PackedScene
+		if scn == null:
+			EventBus.ui_toast.emit("Missing scene for %s." % defn.display_name, 1.5)
+			return false
+		node = scn.instantiate() as Node2D
+	elif PLACEABLE_DECOR.has(iid):
+		node = _build_decor_placement(defn, PLACEABLE_DECOR[iid])
+	else:
+		EventBus.ui_toast.emit("No placement defined for %s." % defn.display_name, 1.5)
+		return false
+	if node == null:
+		return false
+	node.global_position = snapped
+	# Drop into the same parent the player lives in (the entities y-sort layer)
+	# so the placement participates in y-sort + persistence.
+	var parent := player.get_parent()
+	if parent == null:
+		node.queue_free()
+		return false
+	parent.add_child(node)
+	Inventory.try_remove(iid, 1)
+	if AudioBus:
+		AudioBus.play_sfx(&"place_item")
+	return true
+
+
+func _build_decor_placement(defn: ItemDef, opts: Dictionary) -> Node2D:
+	var root := Node2D.new()
+	root.add_to_group("placed_decor")
+	var sprite := Sprite2D.new()
+	sprite.texture = defn.icon
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.centered = true
+	sprite.offset = Vector2(0, -4)
+	root.add_child(sprite)
+	if bool(opts.get("with_light", false)):
+		var light := PointLight2D.new()
+		light.color = Color(opts.get("color", Color.WHITE))
+		light.energy = 0.9
+		# Tiny gradient texture so the light has actual shape.
+		var grad := Gradient.new()
+		grad.offsets = PackedFloat32Array([0.0, 1.0])
+		grad.colors = PackedColorArray([Color(1, 1, 1, 1), Color(1, 1, 1, 0)])
+		var tex := GradientTexture2D.new()
+		tex.gradient = grad
+		tex.width = 64
+		tex.height = 64
+		tex.fill = GradientTexture2D.FILL_RADIAL
+		tex.fill_from = Vector2(0.5, 0.5)
+		tex.fill_to = Vector2(1.0, 0.5)
+		light.texture = tex
+		light.texture_scale = 0.6
+		root.add_child(light)
+	return root

@@ -10,6 +10,11 @@ class_name Chest
 
 signal opened(chest: Chest)
 signal closed
+## Fires whenever slots change (deposit/withdraw/restore). ChestPanel subscribes
+## to the *active* chest's signal so any path that mutates contents — drag-drop,
+## quick-stack, programmatic, save-restore — refreshes the open UI without
+## needing each call site to remember to ping it manually.
+signal contents_changed
 
 const SLOT_COUNT: int = 18
 
@@ -60,6 +65,7 @@ func deposit(item_id: StringName, count: int) -> int:
 		s["count"] = int(s["count"]) + added
 		remaining -= added
 		if remaining <= 0:
+			contents_changed.emit()
 			return count
 	for i in range(SLOT_COUNT):
 		if slots[i] != null:
@@ -69,6 +75,8 @@ func deposit(item_id: StringName, count: int) -> int:
 		remaining -= added
 		if remaining <= 0:
 			break
+	if count - remaining > 0:
+		contents_changed.emit()
 	return count - remaining
 
 
@@ -95,6 +103,7 @@ func withdraw_slot(index: int, count: int = -1) -> int:
 	s["count"] = have - moved
 	if int(s["count"]) <= 0:
 		slots[index] = null
+	contents_changed.emit()
 	return moved
 
 

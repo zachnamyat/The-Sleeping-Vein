@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://bxv1k0mkrb75q"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_glow_tube"
+display_name = "Glow Tube"
+inputs = [{ "item_id": "torch", "count": 1 }, { "item_id": "bottle_empty", "count": 1 }]
+outputs = [{ "item_id": "glow_tube", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_crafting"
+description = "Combine torch + bottle into a long-burning placeable marker."

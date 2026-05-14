@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://cb4yg0mkrb75q"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_station_tier_upgrade"
+display_name = "Resonance Coupler"
+inputs = [{ "item_id": "shaleseed_ingot", "count": 3 }, { "item_id": "aphelion_fragment", "count": 1 }]
+outputs = [{ "item_id": "station_tier_upgrade", "count": 1 }]
+stations = [&"clearstone_forge"]
+skill_xp_grant = 5
+skill_xp_id = &"skill_crafting"
+description = "One-shot upgrade for a placed crafting station (+1 tier)."

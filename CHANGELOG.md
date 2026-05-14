@@ -9,6 +9,57 @@ project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Bump
 ## [Unreleased]
 
 ### Added
+- **Placement commit (2026-05-13 follow-up)** — `player_combat._resolve_place`
+  spawns the placeable's matching scene at the snapped grid cell when the
+  player left-clicks while holding a placeable. Workstations (loam_bench,
+  clearstone_forge, furnace, sawmill, cooking_pot) instantiate their full
+  scene; decorative placeables (torch, glow_tube) spawn as a sprite +
+  PointLight2D via `_build_decor_placement`. Range-validated against the same
+  48 px radius as the PlaceablePreview ghost. The 2.48 ticket previously
+  shipped only the visual ghost; this completes the click-to-place loop.
+- **Phase 3 extended-closure (2026-05-13)** — every Phase 3 ticket is now either
+  done or reassigned to its natural phase. Zero Phase 3 backlog remains.
+  - 20 implemented this session: 3.15 last-used-container tracking; 3.17
+    equipped-comparison overlay in tooltip; 3.19 sequential crafting queue
+    (Ctrl-click queues 5×); 3.28 Furnace placeable + scene + smelting recipe
+    cascade (shaleseed_ingot, bottle_empty unlock on placement); 3.30 Sawmill
+    placeable + scene + plank recipe; 3.32 workstation adjacency-detection
+    (open one bench, see recipes from every adjacent station within 48 px);
+    3.33 auto-equip-best-armor button; 3.42 cancel-from-queue button on every
+    queued recipe; 3.43 middle-click slot lock with extra-thick gold border,
+    locked slots refuse swap/sort/drop; 3.44 double-click an armor piece to
+    equip-swap into its target slot; 3.46 `ItemDef.two_handed` field + bow
+    marked true + tooltip displays "Two-handed (locks off-hand)"; 3.51 Q swaps
+    active hotbar with saved layout (Shift+Q saves); 3.53 ConfirmationDialog
+    for trash discards above threshold; 3.57 station_tier_upgrade Resonance
+    Coupler item + recipe (3 ingot + 1 aphelion fragment); 3.58 bottle_empty
+    glass container + furnace recipe; 3.61 set-bonus tooltip preview shows
+    Shaleseed (n/4) + 2pc/4pc bonus rules; 3.66 sort_storage_recency by
+    latest acquisition; 3.71 craft_complete SFX cue; 3.85 aphelion_fragment
+    cross-tier reagent ItemDef + lore_text; 3.86 glow_tube combo placeable
+    (torch + bottle).
+  - 33 reassigned to natural phases via `seedTickets.phase` field — affixes/
+    reforging/salvage/enchant/durability/star-rating to Phase 16 extensions;
+    set bonuses/anvil/luck stat to Phase 7 talents; tannery to Phase 8 life
+    sim; bag-in-bag to Phase 9 (Mira); bucket+liquid placement to Phase 14
+    automation; cosmetics + worn visuals to Phase 15 polish; soulbound items
+    to Phase 13 multiplayer; recipe scrolls + boss trinkets to Phase 5;
+    place-multiple + crystal cluster to Phase 4; new weapon classes + dual
+    wield + reload anim to Phase 6 combat depth.
+  - 3 closed as duplicates of already-shipped work — 3.48 trinket slot
+    (necklace/ring_1/ring_2/bracelet exist), 3.49 belt slot (already in
+    EQUIPMENT_SLOTS), 3.84 reach/range stat in tooltip (shipped earlier).
+  - 8 new ItemDef resources: furnace_placeable, sawmill_placeable, plank,
+    shaleseed_ingot, bottle_empty, aphelion_fragment, glow_tube,
+    station_tier_upgrade. 7 new recipes for them. 2 new station scenes
+    (furnace.tscn, sawmill.tscn).
+  - `Inventory` extended with `last_used_container`, `locked_slots`,
+    `_acquired_seq` counter, `toggle_lock`, `is_locked`, `auto_equip_best`,
+    `sort_storage_recency`. `Workstation` adds `nearby_station_ids` +
+    `add_to_group("workstation")` so `CraftingPanel.open_for_adjacent` can
+    pull recipes from every station within 48 px.
+  - `ItemDef` adds `two_handed: bool` field.
+  - 7 new GUT tests across lock toggle, auto-equip, recency sort. 57/57 pass.
 - **Phase 3 closure (2026-05-13)** — inventory, crafting, equipment, chest persistence.
   - 20 finalized sprites via Gemini MCP + `tools/process_phase3_assets.py`:
     16 tool/armor/potion icons (wooden_pickaxe / wooden_sword / torch / loam_floor /

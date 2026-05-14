@@ -20,7 +20,7 @@ const SKILL_LABELS: Dictionary = {
 	&"skill_explosives": "Bursting",
 }
 
-@onready var grid: GridContainer = $Root/Grid
+@onready var list: VBoxContainer = $Root/Scroll/List
 
 
 func _ready() -> void:
@@ -55,14 +55,14 @@ func _on_xp_gained(_skill_id: StringName, _amount: int) -> void:
 
 
 func _rebuild() -> void:
-	if grid == null:
+	if list == null:
 		return
 	_rebuild_header()
-	for child in grid.get_children():
+	for child in list.get_children():
 		child.queue_free()
 	for skill in SkillSystem.ALL_SKILLS:
 		var row := _build_row(skill)
-		grid.add_child(row)
+		list.add_child(row)
 
 
 func _rebuild_header() -> void:
@@ -72,32 +72,50 @@ func _rebuild_header() -> void:
 
 
 func _build_row(skill_id: StringName) -> Control:
-	var col := VBoxContainer.new()
-	col.custom_minimum_size = Vector2(150, 50)
-	var label := Label.new()
+	# Single-line row: name | Lv N | T:k | progress bar | + Allocate button.
+	# Previous grid layout overflowed both axes — content wider than its
+	# column on the X, and only 3 of 4 rows visible on the Y. The new layout
+	# uses ScrollContainer + VBoxContainer so any number of skills fits.
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", 6)
+	row.custom_minimum_size = Vector2(430, 16)
 	var lv: int = SkillSystem.get_level(skill_id)
 	var xp: int = SkillSystem.get_xp(skill_id)
 	var allocated: int = int(GameState.allocated_talents.get(skill_id, 0))
 	var lore_name: String = SKILL_LABELS.get(skill_id, String(skill_id))
-	label.text = "%s — Lv %d   (talents: %d)" % [lore_name, lv, allocated]
-	label.modulate = Color(0.97, 0.85, 0.5, 1) if lv > 0 else Color(0.7, 0.6, 0.4, 1)
-	col.add_child(label)
+	var name_lbl := Label.new()
+	name_lbl.text = lore_name
+	name_lbl.custom_minimum_size = Vector2(120, 14)
+	name_lbl.clip_text = true
+	name_lbl.modulate = Color(0.97, 0.85, 0.5, 1) if lv > 0 else Color(0.78, 0.68, 0.45, 1)
+	row.add_child(name_lbl)
+	var lv_lbl := Label.new()
+	lv_lbl.text = "Lv %d" % lv
+	lv_lbl.custom_minimum_size = Vector2(38, 14)
+	lv_lbl.modulate = Color(0.86, 0.82, 0.70, 1)
+	row.add_child(lv_lbl)
+	var tal_lbl := Label.new()
+	tal_lbl.text = "T:%d" % allocated
+	tal_lbl.custom_minimum_size = Vector2(32, 14)
+	tal_lbl.modulate = Color(0.70, 0.95, 0.65, 1) if allocated > 0 else Color(0.55, 0.55, 0.45, 1)
+	row.add_child(tal_lbl)
 	var bar := ProgressBar.new()
-	bar.custom_minimum_size = Vector2(140, 8)
+	bar.custom_minimum_size = Vector2(120, 8)
+	bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	var need_next: int = SkillSystem.xp_required_for_level(lv + 1) if lv < SkillSystem.SKILL_CAP_LEVEL else 1
 	var prev_need: int = SkillSystem.xp_required_for_level(lv)
 	bar.max_value = float(maxi(1, need_next - prev_need))
 	bar.value = float(clampi(xp - prev_need, 0, int(bar.max_value)))
 	bar.show_percentage = false
 	bar.modulate = Color(0.85, 0.66, 0.34, 1)
-	col.add_child(bar)
+	row.add_child(bar)
 	var btn := Button.new()
 	btn.text = "+ Allocate"
-	btn.custom_minimum_size = Vector2(140, 14)
+	btn.custom_minimum_size = Vector2(72, 14)
 	btn.disabled = GameState.unallocated_talent_points <= 0
 	btn.pressed.connect(func() -> void:
 		if GameState.allocate_talent(skill_id):
 			_rebuild()
 	)
-	col.add_child(btn)
-	return col
+	row.add_child(btn)
+	return row

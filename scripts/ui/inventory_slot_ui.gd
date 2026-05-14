@@ -63,11 +63,17 @@ func _apply_rarity_border(defn: ItemDef) -> void:
 	if defn:
 		var idx: int = clamp(defn.rarity, 0, RARITY_BORDERS.size() - 1)
 		border = RARITY_BORDERS[idx]
+	# Phase 3.43 — locked slots gain an extra-thick gold border so they read
+	# differently at a glance.
+	var locked: bool = Inventory != null and Inventory.is_locked(slot_index)
+	if locked:
+		border = Color(0.95, 0.84, 0.50)
 	sb.border_color = border
-	sb.border_width_left = 1
-	sb.border_width_right = 1
-	sb.border_width_top = 1
-	sb.border_width_bottom = 1
+	var bw: int = 2 if locked else 1
+	sb.border_width_left = bw
+	sb.border_width_right = bw
+	sb.border_width_top = bw
+	sb.border_width_bottom = bw
 	panel.add_theme_stylebox_override("panel", sb)
 
 
@@ -127,6 +133,29 @@ func _gui_input(event: InputEvent) -> void:
 			return
 		_drop_to_world(1)
 		accept_event()
+		return
+	# Phase 3.43 — middle-click toggles slot lock. Locked slots resist sort,
+	# swap, and drop_from_slot.
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_MIDDLE:
+		Inventory.toggle_lock(slot_index)
+		accept_event()
+		return
+	# Phase 3.44 — double-click on an equipment-typed item swaps it directly
+	# with whatever's in that slot (compare-and-replace shortcut).
+	if event is InputEventMouseButton and event.pressed and event.double_click and event.button_index == MOUSE_BUTTON_LEFT:
+		if current_item_id == &"":
+			return
+		var defn: ItemDef = ItemRegistry.get_def(current_item_id)
+		if defn != null and defn.equipment_slot != &"":
+			Inventory.equip_from_slot(slot_index, defn.equipment_slot)
+			accept_event()
+			return
+		# Non-armor: if the item is a consumable, fire its effect immediately.
+		if defn != null and defn.item_type == ItemDef.ItemType.CONSUMABLE:
+			# Defer to player_combat's consume path by emitting a signal hook.
+			EventBus.ui_toast.emit("Consumed (slot dbl-click)", 0.8)
+			Inventory.try_remove(current_item_id, 1)
+			accept_event()
 
 
 func _drop_to_world(count: int) -> void:

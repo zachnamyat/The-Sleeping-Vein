@@ -21,11 +21,44 @@ const EQUIPMENT_SLOTS: Array[StringName] = [
 var slots: Array = []   ## Each entry: {"item_id": StringName, "count": int} or null
 var equipment: Dictionary = {}
 
+## Phase 3.43 — locked slot indices won't be sorted, dropped, trashed, or
+## quick-stacked. Toggle via Inventory.toggle_lock(idx).
+var locked_slots: Dictionary = {}
+
+## Phase 3.66 — monotonic counter assigned every try_add so we can sort by
+## "most recently acquired". Slot index -> int sequence number.
+var _acquired_seq: Dictionary = {}
+var _acquired_counter: int = 0
+
+## Phase 3.15 — most recent chest the player interacted with. ChestPanel sets
+## this on open. Auto-deposit + Quick Stack target this when present.
+var last_used_container: Node = null
+
 
 func _ready() -> void:
 	_resize(DEFAULT_ROWS * DEFAULT_COLS)
 	for s in EQUIPMENT_SLOTS:
 		equipment[s] = &""
+
+
+## Phase 3.43 — toggle a locked slot. Returns the new locked state.
+func toggle_lock(idx: int) -> bool:
+	if idx < 0 or idx >= slots.size():
+		return false
+	var new_state: bool = not bool(locked_slots.get(idx, false))
+	if new_state:
+		locked_slots[idx] = true
+	else:
+		locked_slots.erase(idx)
+	slot_changed.emit(idx,
+		StringName(slots[idx].get("item_id", "")) if slots[idx] != null else &"",
+		int(slots[idx].get("count", 0)) if slots[idx] != null else 0,
+	)
+	return new_state
+
+
+func is_locked(idx: int) -> bool:
+	return bool(locked_slots.get(idx, false))
 
 
 func _resize(new_count: int) -> void:
@@ -69,6 +102,8 @@ func try_add(item_id: StringName, count: int) -> bool:
 		var added: int = mini(max_stack, remaining)
 		slots[i] = {"item_id": item_id, "count": added}
 		remaining -= added
+		_acquired_counter += 1
+		_acquired_seq[i] = _acquired_counter
 		slot_changed.emit(i, item_id, added)
 		if remaining <= 0:
 			EventBus.inventory_changed.emit()
@@ -108,6 +143,9 @@ func count_of(item_id: StringName) -> int:
 
 func swap(a: int, b: int) -> void:
 	if a < 0 or b < 0 or a >= slots.size() or b >= slots.size() or a == b:
+		return
+	# Phase 3.43 — locked slots refuse swap. Either party locked = no-op.
+	if is_locked(a) or is_locked(b):
 		return
 	var tmp = slots[a]
 	slots[a] = slots[b]
@@ -248,8 +286,11 @@ func split_stack(source_index: int, target_index: int, take_count: int) -> bool:
 ## Phase 3.25 — Drop / trash. Removes a count from a specific slot index. The
 ## item entity creation is the caller's responsibility (drag-to-ground spawns
 ## an ItemDrop; trash slot deletes outright).
+## Phase 3.43 — locked slots refuse drops via this path.
 func drop_from_slot(slot_index: int, count: int = -1) -> Dictionary:
 	if slot_index < 0 or slot_index >= slots.size():
+		return {}
+	if is_locked(slot_index):
 		return {}
 	var s = slots[slot_index]
 	if s == null:
@@ -261,6 +302,7 @@ func drop_from_slot(slot_index: int, count: int = -1) -> Dictionary:
 		return {}
 	if taken >= have:
 		slots[slot_index] = null
+		_acquired_seq.erase(slot_index)
 		slot_changed.emit(slot_index, &"", 0)
 	else:
 		s["count"] = have - taken
@@ -269,26 +311,102 @@ func drop_from_slot(slot_index: int, count: int = -1) -> Dictionary:
 	return {"item_id": item_id, "count": taken}
 
 
+## Phase 3.33 — for every armor piece in the bag, equip the highest-armor one
+## of each slot type. Returns the number of pieces equipped.
+func auto_equip_best() -> int:
+	var equipped_count: int = 0
+	# Group by slot.
+	var by_slot: Dictionary = {}
+	for i in range(slots.size()):
+		var s = slots[i]
+		if s == null:
+			continue
+		var iid := StringName(s.get("item_id", ""))
+		var defn: ItemDef = ItemRegistry.get_def(iid)
+		if defn == null or defn.equipment_slot == &"":
+			continue
+		var slot_id: StringName = defn.equipment_slot
+		var current_best = by_slot.get(slot_id, null)
+		if current_best == null or defn.armor_value > current_best.armor:
+			by_slot[slot_id] = {"index": i, "armor": defn.armor_value, "id": iid}
+	for slot_id in by_slot.keys():
+		var pick = by_slot[slot_id]
+		# If something better is already equipped, skip.
+		var equipped: StringName = StringName(equipment.get(slot_id, &""))
+		if equipped != &"":
+			var ed: ItemDef = ItemRegistry.get_def(equipped)
+			if ed != null and ed.armor_value >= pick.armor:
+				continue
+		if equip_from_slot(int(pick.index), slot_id):
+			equipped_count += 1
+	return equipped_count
+
+
+## Phase 3.66 — sort by acquisition recency (latest first), preserving hotbar.
+func sort_storage_recency() -> void:
+	var start: int = HOTBAR_SIZE
+	if start >= slots.size():
+		return
+	var bag := []
+	for i in range(start, slots.size()):
+		var s = slots[i]
+		if s == null:
+			continue
+		bag.append({"slot": s, "seq": int(_acquired_seq.get(i, 0))})
+	bag.sort_custom(func(a, b) -> bool: return a.seq > b.seq)
+	var write := start
+	var new_seq: Dictionary = {}
+	# Preserve hotbar acquisition seq.
+	for i in range(start):
+		if _acquired_seq.has(i):
+			new_seq[i] = _acquired_seq[i]
+	for entry in bag:
+		slots[write] = entry.slot
+		new_seq[write] = entry.seq
+		var iid := StringName(entry.slot["item_id"])
+		slot_changed.emit(write, iid, int(entry.slot["count"]))
+		write += 1
+	while write < slots.size():
+		slots[write] = null
+		slot_changed.emit(write, &"", 0)
+		write += 1
+	_acquired_seq = new_seq
+	EventBus.inventory_changed.emit()
+
+
 ## Phase 3.26 / 3.45 — Sort the inventory using a comparison criterion. The
 ## hotbar row (0..9) is NOT touched (preserve player's selected layout).
+## Phase 3.43 — locked slots stay in place (skipped from the sort pool).
 ## Criteria: "rarity" (high→low), "name" (A→Z), "type" (groups by item_type).
 func sort_storage(criterion: String = "rarity") -> void:
 	var start: int = HOTBAR_SIZE  # leave hotbar alone
 	if start >= slots.size():
 		return
 	var bag := []
+	var fixed: Dictionary = {}  # locked positions to preserve
 	for i in range(start, slots.size()):
+		if is_locked(i):
+			fixed[i] = slots[i]
+			continue
 		var s = slots[i]
 		if s != null:
 			bag.append(s)
 	bag.sort_custom(func(a, b) -> bool: return _compare_for_sort(a, b, criterion))
 	var write := start
 	for entry in bag:
+		# Skip over any locked slot positions while writing.
+		while fixed.has(write):
+			write += 1
+		if write >= slots.size():
+			break
 		slots[write] = entry
 		var iid := StringName(entry["item_id"])
 		slot_changed.emit(write, iid, int(entry["count"]))
 		write += 1
 	while write < slots.size():
+		if fixed.has(write):
+			write += 1
+			continue
 		slots[write] = null
 		slot_changed.emit(write, &"", 0)
 		write += 1

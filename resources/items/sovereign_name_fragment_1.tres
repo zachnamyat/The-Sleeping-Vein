@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://batnl70fbcrme"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/sovereign_name_fragment_1.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
+icon = ExtResource("2_icon")
 id = &"sovereign_name_fragment_1"
 display_name = "Name Fragment I"
 description = "A glyph that pulses warm to the touch. The first of Glaur-em's true name."

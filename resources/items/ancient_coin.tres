@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwv7et8o7jo6"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/ancient_coin.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
+icon = ExtResource("2_icon")
 id = &"ancient_coin"
 display_name = "Ancient Coin"
 description = "Vesari currency. Still cold to the touch."

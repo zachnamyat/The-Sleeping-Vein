@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://batkgctkcbtle"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bottle_empty.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bottle_empty"
+icon = ExtResource("2_icon")
+display_name = "Glass Bottle"
+description = "Empty corkable bottle. Hold a single liquid serving."
+max_stack = 50
+item_type = 0
+tier = 0
+rarity = 0

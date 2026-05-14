@@ -60,10 +60,25 @@ func _drop_data(_at_position: Vector2, data: Variant) -> void:
 
 
 func _show_confirmation(item_id: StringName, count: int) -> void:
-	# Defer to a global dialog to confirm. For now just discard with a notice;
-	# a dedicated modal would land in Phase 15 polish.
+	# Phase 3.53 — proper modal confirmation. Uses Godot's ConfirmationDialog
+	# so the player has to acknowledge before a stack disappears.
 	var defn: ItemDef = ItemRegistry.get_def(item_id)
 	var name: String = defn.display_name if defn else String(item_id)
-	Inventory.drop_from_slot(int(_pending_delete["index"]), count)
-	EventBus.ui_toast.emit("Discarded %d %s." % [count, name], 1.5)
-	_pending_delete = {}
+	var dlg := ConfirmationDialog.new()
+	dlg.title = "Discard?"
+	dlg.dialog_text = "Discard %d %s?" % [count, name]
+	dlg.ok_button_text = "Discard"
+	dlg.cancel_button_text = "Keep"
+	dlg.process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().root.add_child(dlg)
+	dlg.confirmed.connect(func() -> void:
+		Inventory.drop_from_slot(int(_pending_delete["index"]), count)
+		EventBus.ui_toast.emit("Discarded %d %s." % [count, name], 1.5)
+		_pending_delete = {}
+		dlg.queue_free()
+	)
+	dlg.canceled.connect(func() -> void:
+		_pending_delete = {}
+		dlg.queue_free()
+	)
+	dlg.popup_centered()

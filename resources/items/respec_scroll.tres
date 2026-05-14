@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://uqyanfwpiv3h"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/respec_scroll.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
+icon = ExtResource("2_icon")
 id = &"respec_scroll"
 display_name = "Respec Scroll"
 description = "Right-click to refund all allocated talent points."

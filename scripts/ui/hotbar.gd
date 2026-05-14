@@ -107,11 +107,103 @@ func _unhandled_input(event: InputEvent) -> void:
 		if event.is_action_pressed(action_name):
 			set_selected(i)
 			return
+	# Phase 3.51 — hotbar swap-sets. Q swaps the active hotbar row with a saved
+	# copy. Shift+Q saves the current row over the slot. Two slots tracked
+	# (active <-> saved) so the player has a "loadout A / loadout B" pair.
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.physical_keycode == KEY_Q or event.keycode == KEY_Q:
+			if event.shift_pressed:
+				_save_hotbar_layout()
+			else:
+				_swap_hotbar_layout()
+			get_viewport().set_input_as_handled()
+			return
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			set_selected((selected_index - 1 + SLOT_COUNT) % SLOT_COUNT)
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 			set_selected((selected_index + 1) % SLOT_COUNT)
+
+
+var _saved_hotbar_layout: Array = []  # parallel to Inventory.slots[0..9]
+
+
+func _save_hotbar_layout() -> void:
+	_saved_hotbar_layout = []
+	for i in range(SLOT_COUNT):
+		var s = Inventory.slots[i]
+		_saved_hotbar_layout.append(s.duplicate(true) if s != null else null)
+	EventBus.ui_toast.emit("Hotbar layout saved.", 1.2)
+
+
+func _swap_hotbar_layout() -> void:
+	# Phase 3.51 — restore the saved hotbar arrangement WITHOUT duplicating
+	# items the player may have moved out into storage between Save and Swap.
+	# Items are physical (each one lives in exactly one slot at a time): rather
+	# than copying snapshot data into the hotbar, this swap PULLS each saved
+	# item out of wherever it currently sits in the inventory. Anything that
+	# was in the hotbar but isn't in the saved layout gets stashed back into
+	# free storage. The previous active hotbar becomes the new saved set.
+	if _saved_hotbar_layout.is_empty():
+		EventBus.ui_toast.emit("No saved hotbar — Shift+Q to save first.", 1.5)
+		return
+	# 1) Snapshot current hotbar — this becomes the new saved layout B.
+	var snapshot_b: Array = []
+	for i in range(SLOT_COUNT):
+		var s = Inventory.slots[i]
+		snapshot_b.append(s.duplicate(true) if s != null else null)
+	# 2) Pull every current hotbar item out into a temporary `displaced` list
+	# so storage-search in step 3 doesn't re-grab items we just emptied.
+	var displaced: Array = []
+	for i in range(SLOT_COUNT):
+		if Inventory.slots[i] != null:
+			displaced.append(Inventory.slots[i])
+			Inventory.slots[i] = null
+			Inventory.slot_changed.emit(i, &"", 0)
+	# 3) For each saved layout entry, find a matching item in displaced first
+	# (zero-cost), then in storage. Move it into the hotbar slot.
+	for i in range(SLOT_COUNT):
+		var target = _saved_hotbar_layout[i]
+		if target == null:
+			continue
+		var tid: StringName = StringName(target.get("item_id", ""))
+		if tid == &"":
+			continue
+		var found: bool = false
+		for k in range(displaced.size()):
+			var d = displaced[k]
+			if d != null and StringName(d.get("item_id", "")) == tid:
+				Inventory.slots[i] = d
+				Inventory.slot_changed.emit(i, tid, int(d["count"]))
+				displaced[k] = null
+				found = true
+				break
+		if found:
+			continue
+		# Search storage (slots 10+).
+		for j in range(SLOT_COUNT, Inventory.slots.size()):
+			var s = Inventory.slots[j]
+			if s != null and StringName(s.get("item_id", "")) == tid:
+				Inventory.slots[i] = s
+				Inventory.slots[j] = null
+				Inventory.slot_changed.emit(j, &"", 0)
+				Inventory.slot_changed.emit(i, tid, int(s["count"]))
+				break
+		# If we found nothing, the saved item was consumed; leave the slot empty.
+	# 4) Anything still in `displaced` was in the active hotbar but isn't in the
+	# saved layout — push it back into the inventory. try_add will fill the
+	# first free slot, which is normally storage now that hotbar is partially
+	# repopulated by step 3.
+	for d in displaced:
+		if d == null:
+			continue
+		var iid: StringName = StringName(d.get("item_id", ""))
+		var cnt: int = int(d.get("count", 0))
+		if iid != &"" and cnt > 0:
+			Inventory.try_add(iid, cnt)
+	_saved_hotbar_layout = snapshot_b
+	EventBus.inventory_changed.emit()
+	EventBus.ui_toast.emit("Swapped hotbar layouts.", 1.2)
 
 
 func set_selected(idx: int) -> void:

@@ -38,11 +38,24 @@ func _process(delta: float) -> void:
 		var arc: float = sin(fraction * PI) * POP_RANGE
 		global_position = _spawn_position + Vector2(0, -arc)
 		return
+	# Player-dropped items spawn inside the player's body. body_entered fires
+	# instantly and gets rejected by pickup_delay, then never re-fires because
+	# the drop never exits the area. Don't magnet while the delay is active
+	# (so the drop visibly sits in front of the player) and once it expires,
+	# poll for direct overlap to trigger pickup.
+	if pickup_delay > 0.0 and t < pickup_delay:
+		return
 	var player := _nearest_player()
 	if player != null:
 		var to_player: Vector2 = player.global_position - global_position
 		if to_player.length() < MAGNET_RADIUS:
 			global_position += to_player.normalized() * MAGNET_SPEED * delta
+	for b in get_overlapping_bodies():
+		if b.is_in_group("player"):
+			if Inventory.try_add(item_id, count):
+				EventBus.item_picked_up.emit(item_id, count)
+				queue_free()
+			return
 
 
 func _on_body_entered(body: Node) -> void:

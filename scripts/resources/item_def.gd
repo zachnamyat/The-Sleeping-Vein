@@ -57,4 +57,8 @@ enum ItemType { MATERIAL, TOOL, WEAPON, ARMOR, CONSUMABLE, PLACEABLE, AMMO, KEY 
 ## are forward-compatible.
 @export var max_durability: int = 0
 
+## Phase 3.46 — two-handed weapons occupy the off_hand slot when equipped, so
+## arrows / shields can't fit alongside. UI checks this when rendering tooltips.
+@export var two_handed: bool = false
+
 @export var lore_ref: String = ""

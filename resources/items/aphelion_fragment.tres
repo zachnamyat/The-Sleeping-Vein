@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://batkgctkcaphf"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/aphelion_fragment.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"aphelion_fragment"
+icon = ExtResource("2_icon")
+display_name = "Aphelion Fragment"
+description = "A sliver of the Aphelion's resonance. Cross-tier crafting reagent."
+max_stack = 99
+item_type = 0
+tier = 5
+rarity = 3
+lore_text = "It hums. The Loom listens."
+lore_ref = "lore/01_cosmology_and_universe.md"

@@ -18,6 +18,7 @@ var _search_filter: String = ""
 
 
 func _ready() -> void:
+	add_to_group("inventory_ui")
 	visible = false
 	# Stop mouse events from passing through the panel while it's open so the
 	# player can't accidentally swing through inventory UI. When invisible,
@@ -66,12 +67,18 @@ func _wire_controls() -> void:
 	var sort_type := $Panel/SortType as Button
 	if sort_type:
 		sort_type.pressed.connect(func() -> void: Inventory.sort_storage("type"))
+	var sort_recent := $Panel/SortRecent as Button
+	if sort_recent:
+		sort_recent.pressed.connect(func() -> void: Inventory.sort_storage_recency())
 	var loot_all := $Panel/LootAll as Button
 	if loot_all:
 		loot_all.pressed.connect(_on_loot_all)
 	var quick_stack := $Panel/QuickStack as Button
 	if quick_stack:
 		quick_stack.pressed.connect(_on_quick_stack)
+	var auto_equip := $Panel/AutoEquip as Button
+	if auto_equip:
+		auto_equip.pressed.connect(_on_auto_equip)
 	var trash := $Panel/Trash as TrashSlot
 	if trash == null:
 		# Older scene without explicit trash slot — create one programmatically.
@@ -80,6 +87,15 @@ func _wire_controls() -> void:
 		tslot.size = Vector2(20, 20)
 		tslot.name = "Trash"
 		$Panel.add_child(tslot)
+
+
+## Called by external openers (e.g. ChestPanel.open_for_chest) so the player
+## can see and drag from their pouch as soon as a container opens. Idempotent.
+func force_open() -> void:
+	if visible:
+		return
+	visible = true
+	UIAudio.play_panel_open()
 
 
 func _on_search_changed(text: String) -> void:
@@ -106,10 +122,20 @@ func _apply_search_filter() -> void:
 			slot.modulate = Color(0.4, 0.4, 0.4, 0.6)
 
 
+func _on_auto_equip() -> void:
+	# Phase 3.33 — equip the highest-armor piece in inventory for each slot.
+	var n: int = Inventory.auto_equip_best()
+	if n > 0:
+		EventBus.ui_toast.emit("Equipped %d pieces." % n, 1.5)
+	else:
+		EventBus.ui_toast.emit("Nothing better to wear.", 1.2)
+
+
 func _on_quick_stack() -> void:
 	# Phase 3.13 — deposit player items into the nearest chest if it already
 	# contains that item type. Starter items stay put.
-	var chest := _nearest_chest()
+	# Phase 3.15 — prefer the last-used container if still in range.
+	var chest := _last_or_nearest_chest()
 	if chest == null:
 		EventBus.ui_toast.emit("No chest in range.", 1.2)
 		return
@@ -184,6 +210,21 @@ func _nearest_chest() -> Node:
 	return nearest
 
 
+## Phase 3.15 — auto-deposit prefers the last-used chest if it's still nearby,
+## then falls back to whichever chest is closest. Lets the player open a chest,
+## stash a few items, then bind a "QuickStack" hotkey to keep dumping into it
+## while running back to it.
+func _last_or_nearest_chest() -> Node:
+	if Inventory.last_used_container != null and is_instance_valid(Inventory.last_used_container):
+		var luc := Inventory.last_used_container as Node2D
+		var players := get_tree().get_nodes_in_group("player")
+		if not players.is_empty() and luc != null:
+			var p := players[0] as Node2D
+			if p and luc.global_position.distance_to(p.global_position) < 64.0:
+				return Inventory.last_used_container
+	return _nearest_chest()
+
+
 func _input(event: InputEvent) -> void:
 	# Use _input (highest-priority phase) instead of _unhandled_input so the
 	# Tab key beats Godot's built-in ui_focus_next handler, and so a focused
@@ -203,9 +244,23 @@ func _input(event: InputEvent) -> void:
 	visible = not visible
 	if visible:
 		UIAudio.play_panel_open()
+		# 480×270 viewport can't host inventory + crafting + chest at once.
+		# Hide them so the inventory grid is readable; the chest auto-reopens
+		# when you press E next to it again, and crafting same.
+		for n in get_tree().get_nodes_in_group("crafting_ui"):
+			n.visible = false
+		for n in get_tree().get_nodes_in_group("chest_ui"):
+			n.visible = false
 	else:
 		UIAudio.play_panel_close()
 	get_viewport().set_input_as_handled()
+
+
+## Called by ChestPanel + CraftingPanel when they need to swap us off-screen.
+func force_close() -> void:
+	if visible:
+		visible = false
+		UIAudio.play_panel_close()
 
 
 func _on_slot_changed(slot_index: int, item_id: StringName, count: int) -> void:

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://cbk1d0mkrb75q"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_sawmill"
+display_name = "Sawmill"
+inputs = [{ "item_id": "wood", "count": 8 }]
+outputs = [{ "item_id": "sawmill_placeable", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 3
+skill_xp_id = &"skill_crafting"
+description = "Saw raw wood into planks (1 wood -> 2 planks)."

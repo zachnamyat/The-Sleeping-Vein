@@ -20,3 +20,4 @@ melee_range_pixels = 0
 weapon_class = &"ranged_bow"
 ammo_id = &"arrow_wood"
 projectile_speed = 260.0
+two_handed = true

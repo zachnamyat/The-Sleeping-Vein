@@ -85,13 +85,47 @@ func _show_now(item_id: StringName) -> void:
 		detail += "\nReach: %d px" % defn.melee_range_pixels
 	if defn.equipment_slot != &"":
 		detail += "\nSlot: %s" % String(defn.equipment_slot).capitalize()
+	if defn.two_handed:
+		detail += "\nTwo-handed (locks off-hand)"
 	if defn.tier > 0:
 		detail += "\nTier %d" % defn.tier
+	# Phase 3.17 — equipped-comparison overlay. If the hovered item is an
+	# armor piece, show the +/- delta vs whatever currently sits in that slot.
+	if defn.equipment_slot != &"":
+		var equipped: StringName = StringName(Inventory.equipment.get(defn.equipment_slot, &""))
+		if equipped != &"" and equipped != item_id:
+			var ed: ItemDef = ItemRegistry.get_def(equipped)
+			if ed:
+				var delta: int = defn.armor_value - ed.armor_value
+				if delta > 0:
+					detail += "\nvs equipped: +%d armor" % delta
+				elif delta < 0:
+					detail += "\nvs equipped: %d armor" % delta
+				else:
+					detail += "\nvs equipped: same armor"
+	# Phase 3.61 — set-bonus tooltip preview. Hardcoded shaleseed-set tier-1
+	# bonus until a data-driven set system lands in Phase 7.
+	if String(defn.id).begins_with("shaleseed_") and defn.equipment_slot != &"":
+		var pieces: int = _count_equipped_set("shaleseed")
+		detail += "\nSet: Shaleseed (%d/4)" % pieces
+		if pieces >= 2:
+			detail += "\n  (2) +5%% mining speed"
+		if pieces >= 4:
+			detail += "\n  (4) +10%% loot drops"
 	# Phase 3.59 — show lore-text excerpt for relics / key items.
 	if defn.lore_text != "":
 		detail += "\n\n\"%s\"" % defn.lore_text
 	detail_label.text = detail
 	visible = true
+
+
+func _count_equipped_set(prefix: String) -> int:
+	var n: int = 0
+	for slot in Inventory.equipment.keys():
+		var iid: StringName = StringName(Inventory.equipment[slot])
+		if iid != &"" and String(iid).begins_with(prefix + "_"):
+			n += 1
+	return n
 
 
 func hide_tooltip() -> void:

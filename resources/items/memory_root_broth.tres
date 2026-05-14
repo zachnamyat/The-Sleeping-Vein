@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://batt8k8kuypft"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/memory_root_broth.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
+icon = ExtResource("2_icon")
 id = &"memory_root_broth"
 display_name = "Memory-Root Broth"
 description = "Restores 30 HP + 20 mana. Buff: +10% magic damage for 90s."

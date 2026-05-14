@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://b7vrb0mkrb75q"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_plank"
+display_name = "Plank"
+inputs = [{ "item_id": "wood", "count": 1 }]
+outputs = [{ "item_id": "plank", "count": 2 }]
+stations = [&"sawmill"]
+skill_xp_grant = 1
+skill_xp_id = &"skill_crafting"
+description = "Saw 1 wood into 2 planks."

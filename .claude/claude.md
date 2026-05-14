@@ -91,25 +91,92 @@ These must stay set. If you change them, ask first.
 
 ## Asset Pipeline (How Gemini Output Gets Into The Game)
 
-1. Feature scoped in `/docs/design/<feature>.md`. Include the asset list.
-2. For each asset, write a spec: name, target pixel dimensions, frame count, lore reference, palette notes.
-3. Generate in Gemini 2.5 Flash Image at high res (1024x1024). Save to `assets/raw/<category>/`.
-4. In Aseprite (or via Pillow script), downsample with **nearest-neighbor** to target size (e.g. 16x16, 32x32). Clean stray pixels and reduce to project palette.
-5. Save the final sprite to `assets/sprites/<category>/<name>.png`.
-6. Add an entry to `assets/manifest.json`:
-   ```json
-   {
-     "id": "enemy_sunken_priest",
-     "path": "assets/sprites/enemies/sunken_priest.png",
-     "size": [32, 32],
-     "frames": 4,
-     "lore_ref": "lore_bible.md#sunken-order",
-     "source_prompt": "prompts/enemies/sunken_priest.txt",
-     "status": "final"
-   }
-   ```
-7. Import into Godot. Verify `Filter = Nearest` on the texture import.
-8. Reference in code via `const` or `preload()`.
+Full spec lives at [docs/design/01_asset_pipeline.md](../docs/design/01_asset_pipeline.md). This is the operational quick-reference for what we actually run.
+
+### Step 1 — Spec the asset
+Open the relevant feature doc under `/docs/design/`. Each asset needs: `id`, target pixel size, frame count, lore ref, palette notes, prompt path (`prompts/<category>/<id>.txt`).
+
+### Step 2 — Generate via Gemini MCP
+Use `mcp__gemini-image__generate_image`. Save raw to `assets/raw/<category>/<id>_v<N>.png`. Prompt **must** request `#FF00FF` magenta background with ~8px of padding on all four sides at final pixel size. For single structures: request "A SINGLE structure CENTERED in the image with magenta padding on all four sides. NO grid, NO labels."
+
+### Step 3 — Downsample (crop + nearest-neighbor resize)
+Use `mcp__gemini-image__process_image` (sharp under the hood — nearest-neighbor resize, deterministic, free). Two-step in a single call:
+
+```jsonc
+{
+  "imagePath": "assets/raw/<cat>/<id>_v<N>.png",
+  "crop":   { "left": L, "top": T, "width": W, "height": H },  // square, contains structure + small magenta margin
+  "resize": { "width": TARGET, "height": TARGET },             // final px (16/24/32/48/64...)
+  "filename": "<id>",
+  "outputDir": "assets/sprites/<category>"
+}
+```
+
+**Crop math** — what L/T/W/H to use:
+
+1. `Read` the raw PNG to see where the structure actually sits. Gemini outputs at 1024×1024 by default.
+2. Find a square region that contains the full structure with 1-3% of the source as breathing room on each side (so ~10-20px at 1024 source).
+3. The crop must be **square** (W == H), otherwise the resize warps the sprite.
+4. Reference points used in past work: a 1024² source with a centered structure → crop `(left:100, top:80, width:824, height:824)` gave correct 48×48 output for resonance_loom.
+
+If the crop is too tight, the structure clips at edges. If too loose, the structure shrinks below the target size. When unsure, prefer slightly loose — the magenta margin is removed in step 5.
+
+### Step 4 — Promote to canonical path
+`mcp__gemini-image__process_image` auto-versions to `<id>-v2.png` if the canonical file already exists. Rename the new output over the canonical filename:
+
+```powershell
+mv "assets/sprites/<cat>/<id>-v2.png" "assets/sprites/<cat>/<id>.png"
+```
+
+### Step 5 — Chroma-key + binary alpha threshold
+Run `tools/clean_alpha.ps1` (PowerShell + ImageMagick). This is the **only** chroma-key path we use — sharp's `removeBackground` is unreliable across Gemini's bg-color variance. The PS script:
+
+1. Samples the corners; skips the file if it's already alpha-clean.
+2. Runs `magick -fuzz 22% -transparent` against five known magenta variants (`#FF00FF`, `#E84080`, `#FB2D83`, `#FF1493`, `#C70066`).
+3. Thresholds alpha to binary (`-threshold 30%`) — pixel art demands fully-opaque or fully-transparent pixels, never partial alpha at edges.
+
+```powershell
+# single file (typical after promoting one asset):
+powershell -ExecutionPolicy Bypass -File tools\clean_alpha.ps1 -Path "absolute\path\to\<id>.png"
+
+# batch every PNG under assets/sprites/:
+powershell -ExecutionPolicy Bypass -File tools\clean_alpha.ps1
+```
+
+### Step 6 — Update manifest
+Edit `assets/manifest.json`. Set `status: "final"`, record `raw_versions` and `chosen_version`, leave a `notes:` line if there's a non-obvious reason for the chosen version.
+
+```jsonc
+{
+  "id": "structure_resonance_loom",
+  "path": "assets/sprites/structures/resonance_loom.png",
+  "size": [48, 48],
+  "category": "structure",
+  "lore_ref": "lore/01_cosmology_and_universe.md",
+  "source_prompt": "prompts/structures/structures_anchor_base.txt",
+  "raw_versions": ["assets/raw/structures/resonance_loom_solo_v1.png"],
+  "chosen_version": "solo_v1",
+  "ticket": "4.5",
+  "status": "final",
+  "notes": "Regenerated as dedicated single-asset image after grid-cropped version clipped."
+}
+```
+
+### Step 7 — Force Godot reimport (when overwriting an existing asset)
+**Critical gotcha**: Godot caches imports at `.godot/imported/<filename>.png-<hash>.ctex` + matching `.md5`. Overwriting the source PNG does NOT invalidate the cache unless something triggers a reimport scan. `godot --headless --quit-after N` does NOT scan — only `--import` does.
+
+```powershell
+# 1. Delete the stale cache files
+rm ".godot/imported/<filename>.png-*.ctex" ".godot/imported/<filename>.png-*.md5"
+
+# 2. Force a reimport
+& "<godot-path>" --headless --path "<project-root>" --import
+```
+
+Then verify the new `.ctex` mtime is current. **Skip this step on first-time imports** (when the canonical file didn't exist before) — Godot's first-launch scan picks those up automatically.
+
+### Step 8 — Wire into scenes / code
+Reference via `res://assets/sprites/<category>/<id>.png` in `.tscn` files, or `preload()` the wrapped `.tres` resource. Always confirm `Filter = Nearest` on the texture import (default in project settings).
 
 ## Do
 

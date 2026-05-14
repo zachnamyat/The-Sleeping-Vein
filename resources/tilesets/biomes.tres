@@ -1,28 +1,27 @@
 [gd_resource type="TileSet" format=3 uid="uid://c3o8sv4b4ixym"]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/root_hollows_floor.png" id="t0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/root_hollows_wall.png" id="t1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/smoke_test_shaleseed.png" id="t2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/glasswright_reaches_floor.png" id="t3"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/glasswright_reaches_wall.png" id="t4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/vesari_necropolis_floor.png" id="t6"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/vesari_necropolis_wall.png" id="t7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/sunless_verdancy_floor.png" id="t9"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/sunless_verdancy_wall.png" id="t10"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/drowned_aphelion_floor.png" id="t12"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/drowned_aphelion_wall.png" id="t13"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/emberforge_floor.png" id="t15"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/emberforge_wall.png" id="t16"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/salt_wastes_floor.png" id="t18"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/salt_wastes_wall.png" id="t19"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/auroric_veil_floor.png" id="t21"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/auroric_veil_wall.png" id="t22"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/final_spiral_floor.png" id="t24"]
-[ext_resource type="Texture2D" path="res://assets/sprites/tiles/final_spiral_wall.png" id="t25"]
+[ext_resource type="Texture2D" uid="uid://drmajdvvjkkqi" path="res://assets/sprites/tiles/root_hollows_floor.png" id="t0"]
+[ext_resource type="Texture2D" uid="uid://bywwydke5t3ww" path="res://assets/sprites/tiles/root_hollows_wall.png" id="t1"]
+[ext_resource type="Texture2D" uid="uid://bk1ek4y1v5ecb" path="res://assets/sprites/tiles/smoke_test_shaleseed.png" id="t2"]
+[ext_resource type="Texture2D" uid="uid://onfiyu70r0nm" path="res://assets/sprites/tiles/glasswright_reaches_floor.png" id="t3"]
+[ext_resource type="Texture2D" uid="uid://yip6yn8bdpff" path="res://assets/sprites/tiles/glasswright_reaches_wall.png" id="t4"]
+[ext_resource type="Texture2D" uid="uid://crf8tevusq5hx" path="res://assets/sprites/tiles/vesari_necropolis_floor.png" id="t6"]
+[ext_resource type="Texture2D" uid="uid://16wbokecvaju" path="res://assets/sprites/tiles/vesari_necropolis_wall.png" id="t7"]
+[ext_resource type="Texture2D" uid="uid://ip482kd0nqq4" path="res://assets/sprites/tiles/sunless_verdancy_floor.png" id="t9"]
+[ext_resource type="Texture2D" uid="uid://ciw0uwito6nvv" path="res://assets/sprites/tiles/sunless_verdancy_wall.png" id="t10"]
+[ext_resource type="Texture2D" uid="uid://c4la708h0vb8f" path="res://assets/sprites/tiles/drowned_aphelion_floor.png" id="t12"]
+[ext_resource type="Texture2D" uid="uid://cr6xunwqmkcph" path="res://assets/sprites/tiles/drowned_aphelion_wall.png" id="t13"]
+[ext_resource type="Texture2D" uid="uid://drvw853xnmhr1" path="res://assets/sprites/tiles/emberforge_floor.png" id="t15"]
+[ext_resource type="Texture2D" uid="uid://bqwa36umrbxcl" path="res://assets/sprites/tiles/emberforge_wall.png" id="t16"]
+[ext_resource type="Texture2D" uid="uid://benqqu347ewfh" path="res://assets/sprites/tiles/salt_wastes_floor.png" id="t18"]
+[ext_resource type="Texture2D" uid="uid://2la5t41tna1l" path="res://assets/sprites/tiles/salt_wastes_wall.png" id="t19"]
+[ext_resource type="Texture2D" uid="uid://qwc2bekjvbnl" path="res://assets/sprites/tiles/auroric_veil_floor.png" id="t21"]
+[ext_resource type="Texture2D" uid="uid://dxtqwt0m4dagl" path="res://assets/sprites/tiles/auroric_veil_wall.png" id="t22"]
+[ext_resource type="Texture2D" uid="uid://c708fi2kjmemp" path="res://assets/sprites/tiles/final_spiral_floor.png" id="t24"]
+[ext_resource type="Texture2D" uid="uid://2wr2tp8d2ska" path="res://assets/sprites/tiles/final_spiral_wall.png" id="t25"]
 
 [sub_resource type="TileSetAtlasSource" id="s_rh_floor"]
 texture = ExtResource("t0")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="s_rh_wall"]
@@ -32,61 +31,6 @@ texture_region_size = Vector2i(16, 24)
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:0/0/custom_data_0 = 1
 0:0/0/custom_data_1 = "loam"
-
-[sub_resource type="TileSetAtlasSource" id="s_rh_ore"]
-texture = ExtResource("t2")
-texture_region_size = Vector2i(16, 16)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-0:0/0/custom_data_0 = 1
-0:0/0/custom_data_1 = "shaleseed"
-
-[sub_resource type="TileSetAtlasSource" id="s_gr_floor"]
-texture = ExtResource("t3")
-texture_region_size = Vector2i(16, 16)
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="s_gr_wall"]
-texture = ExtResource("t4")
-texture_region_size = Vector2i(16, 24)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-0:0/0/custom_data_0 = 2
-0:0/0/custom_data_1 = "loam"
-
-[sub_resource type="TileSetAtlasSource" id="s_gr_ore"]
-texture = ExtResource("t2")
-texture_region_size = Vector2i(16, 16)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-0:0/0/custom_data_0 = 2
-0:0/0/custom_data_1 = "clearstone"
-
-[sub_resource type="TileSetAtlasSource" id="s_vn_floor"]
-texture = ExtResource("t6")
-texture_region_size = Vector2i(16, 16)
-0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="s_vn_wall"]
-texture = ExtResource("t7")
-texture_region_size = Vector2i(16, 24)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-0:0/0/custom_data_0 = 3
-0:0/0/custom_data_1 = "loam"
-
-[sub_resource type="TileSetAtlasSource" id="s_vn_ore"]
-texture = ExtResource("t2")
-texture_region_size = Vector2i(16, 16)
-0:0/0 = 0
-0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
-0:0/0/custom_data_0 = 3
-0:0/0/custom_data_1 = "saltbound_iron"
-
-[sub_resource type="TileSetAtlasSource" id="s_sv_floor"]
-texture = ExtResource("t9")
-texture_region_size = Vector2i(16, 16)
-0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="s_sv_wall"]
 texture = ExtResource("t10")
@@ -98,7 +42,6 @@ texture_region_size = Vector2i(16, 24)
 
 [sub_resource type="TileSetAtlasSource" id="s_sv_ore"]
 texture = ExtResource("t2")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:0/0/custom_data_0 = 4
@@ -106,7 +49,6 @@ texture_region_size = Vector2i(16, 16)
 
 [sub_resource type="TileSetAtlasSource" id="s_da_floor"]
 texture = ExtResource("t12")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="s_da_wall"]
@@ -119,7 +61,6 @@ texture_region_size = Vector2i(16, 24)
 
 [sub_resource type="TileSetAtlasSource" id="s_da_ore"]
 texture = ExtResource("t2")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:0/0/custom_data_0 = 5
@@ -127,7 +68,6 @@ texture_region_size = Vector2i(16, 16)
 
 [sub_resource type="TileSetAtlasSource" id="s_ef_floor"]
 texture = ExtResource("t15")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="s_ef_wall"]
@@ -140,7 +80,6 @@ texture_region_size = Vector2i(16, 24)
 
 [sub_resource type="TileSetAtlasSource" id="s_ef_ore"]
 texture = ExtResource("t2")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:0/0/custom_data_0 = 6
@@ -148,7 +87,6 @@ texture_region_size = Vector2i(16, 16)
 
 [sub_resource type="TileSetAtlasSource" id="s_sw_floor"]
 texture = ExtResource("t18")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="s_sw_wall"]
@@ -159,9 +97,15 @@ texture_region_size = Vector2i(16, 24)
 0:0/0/custom_data_0 = 7
 0:0/0/custom_data_1 = "loam"
 
+[sub_resource type="TileSetAtlasSource" id="s_rh_ore"]
+texture = ExtResource("t2")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:0/0/custom_data_0 = 1
+0:0/0/custom_data_1 = "shaleseed"
+
 [sub_resource type="TileSetAtlasSource" id="s_sw_ore"]
 texture = ExtResource("t2")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:0/0/custom_data_0 = 7
@@ -169,7 +113,6 @@ texture_region_size = Vector2i(16, 16)
 
 [sub_resource type="TileSetAtlasSource" id="s_av_floor"]
 texture = ExtResource("t21")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="s_av_wall"]
@@ -182,7 +125,6 @@ texture_region_size = Vector2i(16, 24)
 
 [sub_resource type="TileSetAtlasSource" id="s_av_ore"]
 texture = ExtResource("t2")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:0/0/custom_data_0 = 8
@@ -190,7 +132,6 @@ texture_region_size = Vector2i(16, 16)
 
 [sub_resource type="TileSetAtlasSource" id="s_fs_floor"]
 texture = ExtResource("t24")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="s_fs_wall"]
@@ -203,16 +144,55 @@ texture_region_size = Vector2i(16, 24)
 
 [sub_resource type="TileSetAtlasSource" id="s_fs_ore"]
 texture = ExtResource("t2")
-texture_region_size = Vector2i(16, 16)
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 0:0/0/custom_data_0 = 9
 0:0/0/custom_data_1 = "diadem_gold"
 
+[sub_resource type="TileSetAtlasSource" id="s_gr_floor"]
+texture = ExtResource("t3")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="s_gr_wall"]
+texture = ExtResource("t4")
+texture_region_size = Vector2i(16, 24)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:0/0/custom_data_0 = 2
+0:0/0/custom_data_1 = "loam"
+
+[sub_resource type="TileSetAtlasSource" id="s_gr_ore"]
+texture = ExtResource("t2")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:0/0/custom_data_0 = 2
+0:0/0/custom_data_1 = "clearstone"
+
+[sub_resource type="TileSetAtlasSource" id="s_vn_floor"]
+texture = ExtResource("t6")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="s_vn_wall"]
+texture = ExtResource("t7")
+texture_region_size = Vector2i(16, 24)
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:0/0/custom_data_0 = 3
+0:0/0/custom_data_1 = "loam"
+
+[sub_resource type="TileSetAtlasSource" id="s_vn_ore"]
+texture = ExtResource("t2")
+0:0/0 = 0
+0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+0:0/0/custom_data_0 = 3
+0:0/0/custom_data_1 = "saltbound_iron"
+
+[sub_resource type="TileSetAtlasSource" id="s_sv_floor"]
+texture = ExtResource("t9")
+0:0/0 = 0
+
 [resource]
-tile_size = Vector2i(16, 16)
 physics_layer_0/collision_layer = 1
-physics_layer_0/collision_mask = 1
 custom_data_layer_0/name = "tile_tier"
 custom_data_layer_0/type = 2
 custom_data_layer_1/name = "ore_id"
