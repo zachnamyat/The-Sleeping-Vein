@@ -8,7 +8,113 @@ project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html). Bump
 
 ## [Unreleased]
 
+### Changed
+- **4.6 retracted 2026-05-14** — the cardinal corridor-tunnel carving shipped
+  earlier the same day was anti-parity. Core Keeper gates biome rings with
+  progressively-harder walls (the parity-mechanics doc line 16 calls them
+  "border zones … mob density and ore tier scale roughly with distance from
+  The Core"), and the player mines their own path with tier-appropriate
+  pickaxes. Pre-cleared corridors trivialised that. Removed
+  `CORRIDOR_HALF_WIDTH` + `_is_corridor_tile` from `scripts/world/world_gen.gd`,
+  stripped corridor checks from every placement site, and rewrote the
+  `test_world_gen.test_corridor_carving_covers_world_axes` case to verify the
+  Anchor plateau is now the **only** always-clear zone (7-tile circle at
+  origin). Kanban ticket 4.6 flagged `[RETRACTED 2026-05-14]` with the
+  `retracted` tag.
+
 ### Added
+- **Phase 4 full backlog closure (2026-05-14)** — all 4.13–4.65 tickets either
+  implemented or reassigned. **Zero Phase 4 backlog remains.**
+  - **Reassignments** (kanban moves only): 4.27 / 4.35 / 4.36 → Phase 14
+    (automation/liquids); 4.45 → Phase 15 (polish shader); 4.56 / 4.57 /
+    4.58 → Phase 11 (weather lives with the Auroric / Ember / Salt biomes);
+    4.65 → Phase 15 (first-run wizard is polish).
+  - **Gemini MCP asset generation** — 17 new sprites generated end-to-end
+    through `mcp__gemini-image__generate_image` (1024×1024 source) +
+    `mcp__gemini-image__process_image` (nearest-neighbour downsample) +
+    `tools/clean_alpha.ps1` (chroma-key). All flipped `status:"final"` in
+    [assets/manifest.json](assets/manifest.json):
+    items/`bound_compass`, `skeleton_key`, `treasure_map`, `world_scanner`,
+    `anchor_portable`; structures/`mob_spawner`, `wishing_well`, `glow_shroom`,
+    `locked_door`, `boss_altar`, `statue`, `lore_tablet`; tiles/`water_tile`,
+    `sticky_tile`, `bridge_tile`, `trapdoor`, `scatter_decor`.
+  - **WorldGen procedural extensions:** per-chunk mob budget + wall/light
+    suppression (4.15/4.16/4.51); elite mob spawners scaled with biome stratum
+    (4.17/4.59); carved unique rooms with treasure-chest / wishing-well /
+    lore-tablet / boss-altar centerpieces (4.18/4.50); procedural lakes
+    (4.20); abandoned camps with statue + chest (4.21); free-standing treasure
+    chests with key-locked variants (4.23/4.25); one lore-tablet per biome
+    ring (4.24); hidden-wall flag (4.29); sub-biome detection via cellular
+    noise (4.44); finite world border at 1600 tiles (4.48); floor scatter
+    decals (4.55); night-Beat density bonus (4.61).
+  - **Player utility items:** `bound_compass` (4.14 recall to bound Loom,
+    60-beat cd), `skeleton_key` (4.25, consumed by locked doors),
+    `treasure_map` (4.30 places minimap marker on nearest treasure_chest),
+    `world_scanner` (4.38 12-beat cd, reveals 5-chunk radius),
+    `anchor_portable` (4.49 sets respawn point in place). All wired through
+    `player_combat._try_consume` id-dispatch.
+  - **New world systems** (autoloads): `WorldEvents` (4.32 random world
+    events, 4.42 Suncrack damage event, 4.43 Hollowling-swarm intensifier);
+    `CrystalRegrowth` (4.34 Clearstone tiles regrow after 16 beats in
+    Glasswright Reaches only).
+  - **Scene-level VFX:** `HollowlingMotes` Node2D — procedural drifting gold
+    sparkles around the player; intensifies during a `hollowling_swarm`
+    world event (4.43).
+  - **DayNightCycle 4.46 world clock** — 24-minute dawn/day/dusk/night phase
+    runs independently of the 23s Aphelion Beat; `skip_time` API consumed by
+    bed sleep. `PlayerController.try_sleep_in_bed` gated by hostile-mob
+    proximity (4.64) + 8-beat cooldown (4.52); waking skips 8 minutes of the
+    world clock (4.63) and restores 25% HP.
+  - **DeathCorpse** pings the minimap with a Tombstone marker on spawn
+    (4.62). **Minimap** gained `add_marker(world_pos, label, color)` +
+    `death_compass_active` toggle (4.19/4.39). **CompassToLoom** widget polls
+    the toggle and retargets to the most recent Tombstone marker. **HUD**
+    shows live tile + chunk coordinates under the compass (4.31).
+  - **WorldGen helpers**: `is_under_roof(world_pos)` (4.33),
+    `temperature_intensity_at(world_pos)` (4.47), `chunks_in_radius` and
+    `nearest_treasure_chest` (feed 4.30 / 4.38 items).
+  - **TileSet bump**: sources 27 (water), 28 (sticky), 29 (bridge).
+  - **New input action**: `toggle_death_compass` (default J).
+  - 66/66 GUT pass holds.
+- **Phase 4 critical-path (2026-05-14)** — procedural Root Hollows + Glasswright
+  Reaches playable. `WorldGen` rewritten:
+  - 4.1 `CHUNK_TILES` bumped 32→64 for CK parity; `view_chunk_radius` lowered
+    2→1 so live tile count stays bounded. `Minimap` and `FogOfWar` synced to the
+    new constant.
+  - 4.2 Wall placement driven by `FastNoiseLite` Perlin sampling against a
+    threshold + per-chunk shuffle. Soft per-biome budget caps still apply, so
+    dense biomes don't seal the player in.
+  - 4.3 Ore placed via BFS-grown clusters: 2–4 seed points per chunk, each
+    cluster grows 3–6 cells outward with distance-falloff probability so veins
+    read as clumps rather than scattered pips.
+  - 4.4 Anchor prefab clean-up: plateau clearing widened, Loom + LoamBench +
+    Chest pre-placed at world origin. (The earlier "axes always corridor-clear"
+    note from this entry was reversed by the 4.6 retraction — see Changed.)
+  - 4.5 `LoomPanel` adds an Aphelion-sliver readout (count + %) and a
+    "Set Respawn Here" button bound to the *interacted* Loom's world position.
+    `GameState.respawn_point` holds the binding; `PlayerController._respawn`
+    honours it on death. New signal `EventBus.respawn_point_set`.
+  - 4.6 ~~Cardinal corridor carving~~ — **RETRACTED same day** (see the
+    Changed section above). The corridor predicate has been removed; the
+    Anchor plateau is the only always-clear zone.
+  - 4.7 / 4.8 `root_hollows.tres` and `glasswright_reaches.tres` retuned for the
+    bigger chunks (densities × ~4) and given `ambient_track_id` fields.
+  - 4.9 `AudioBus._on_biome_changed` listens for `EventBus.biome_changed` and
+    swaps the ambient stream to the entering biome's track (placeholder
+    procedural drone until real audio assets land).
+  - 4.10 Minimap reveal state moved into `GameState.explored_chunks`
+    (`Dictionary` keyed by `"x,y"`) + `SaveSystem` bumped v3→v4 to persist
+    explored chunks and the respawn point. `FogOfWar` and `Minimap` hydrate
+    from this dictionary on `_ready`.
+  - 4.11 Existing `CompassToLoom` widget retargets via the same
+    respawn-point binding (was previously hardcoded to world origin).
+  - New `EventBus` signals: `biome_changed`, `chunk_visited`,
+    `respawn_point_set`.
+  - New tests: `test_world_gen` (chunk constant, anchor-plateau predicate,
+    hash determinism, world-to-chunk math) and `test_explored_chunks`
+    (mark + idempotency + save round-trip + new-game reset). 66/66 GUT pass.
+  - Phase 4 backlog (4.12–4.65) intentionally left open for Phase 4.x polish
+    work (treasure rooms, weather, day/night, etc.).
 - **Placement commit (2026-05-13 follow-up)** — `player_combat._resolve_place`
   spawns the placeable's matching scene at the snapped grid cell when the
   player left-clicks while holding a placeable. Workstations (loam_bench,

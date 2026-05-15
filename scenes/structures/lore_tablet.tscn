@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://cnmkvsaiocsnw"]
+
+[ext_resource type="Script" path="res://scripts/structures/lore_tablet.gd" id="1_lt"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/lore_tablet.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lt"]
+size = Vector2(16, 20)
+
+[node name="LoreTablet" type="Area2D"]
+script = ExtResource("1_lt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -4)
+
+[node name="GlowLight" type="PointLight2D" parent="."]
+color = Color(0.97, 0.85, 0.5, 1)
+energy = 0.4
+texture_scale = 1.0
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_lt")

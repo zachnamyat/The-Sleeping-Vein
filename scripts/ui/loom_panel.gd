@@ -2,10 +2,14 @@ extends CanvasLayer
 class_name LoomPanel
 
 ## Resonance Loom interaction UI.
+##   - Header shows the player's current Aphelion sliver budget (lore §1.7) and
+##     the active respawn point.
+##   - Phase 4.5 "Set Respawn Here" button binds the player's respawn target to
+##     the Loom's world position — defaults to (0,0) for the world's first Loom,
+##     but Phase 9 will let the player place additional Looms elsewhere.
 ##   - Lists every boss relic, with its insertion status.
 ##   - If the player has the relic in inventory, shows an "Insert" button that
 ##     consumes it and marks the next stratum descent as unlocked in GameState.
-##   - Inserted relics are stored in GameState.collected_relics (StringName -> bool).
 
 const RELICS: Array[Dictionary] = [
 	{ "item_id": &"stone_fathers_pulse",       "stratum_unlocks": 2, "label": "Stone-Father's Pulse" },
@@ -22,14 +26,22 @@ const RELICS: Array[Dictionary] = [
 @onready var list_root: VBoxContainer = $Root/Scroll/List
 @onready var title: Label = $Root/Title
 @onready var hint: Label = $Root/Hint
+@onready var slivers_label: Label = $Root/SliversLabel
+@onready var set_respawn_btn: Button = $Root/SetRespawnButton
+
+var _active_loom_position: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
 	add_to_group("loom_panel")
 	visible = false
+	if set_respawn_btn:
+		set_respawn_btn.pressed.connect(_on_set_respawn_pressed)
+	EventBus.aphelion_dimmed.connect(_on_slivers_changed)
 
 
-func open() -> void:
+func open(loom_pos: Vector2 = Vector2.ZERO) -> void:
+	_active_loom_position = loom_pos
 	visible = true
 	_refresh()
 
@@ -55,6 +67,48 @@ func _refresh() -> void:
 		if GameState.collected_relics.get(entry.item_id, false):
 			inserted_count += 1
 	hint.text = "Inserted: %d / %d   ·   Threads: %d" % [inserted_count, RELICS.size(), GameState.sovereign_threads]
+	_refresh_slivers_label()
+	_refresh_respawn_button()
+
+
+func _refresh_slivers_label() -> void:
+	if slivers_label == null:
+		return
+	# Phase 4.5 — the player consults the Loom both to spend slivers (respawn
+	# cost) and to gauge how many runs of "die-and-pop-back" they still have.
+	var pct: float = float(GameState.aphelion_slivers_remaining) / float(GameState.APHELION_STARTING_SLIVERS) * 100.0
+	slivers_label.text = "Aphelion Slivers: %d  (%.0f%%)" % [GameState.aphelion_slivers_remaining, pct]
+
+
+func _refresh_respawn_button() -> void:
+	if set_respawn_btn == null:
+		return
+	var is_active: bool = GameState.respawn_point.distance_to(_active_loom_position) < 1.0
+	if is_active:
+		set_respawn_btn.text = "Respawn Bound (Here)"
+		set_respawn_btn.disabled = true
+	else:
+		set_respawn_btn.text = "Set Respawn Here"
+		set_respawn_btn.disabled = false
+
+
+func _on_set_respawn_pressed() -> void:
+	GameState.set_respawn_point(_active_loom_position)
+	# Player's respawn position is consulted on death; mirror to the live
+	# PlayerController so a death between now and the next scene reload also
+	# returns to this Loom.
+	for p in get_tree().get_nodes_in_group("player"):
+		if p.has_method("set_respawn_position"):
+			p.call("set_respawn_position", _active_loom_position)
+	EventBus.ui_toast.emit("The Loom binds your thread. You will wake here.", 2.5)
+	if AudioBus:
+		AudioBus.play_sfx(&"loom_bind")
+	_refresh_respawn_button()
+
+
+func _on_slivers_changed(_slivers: int) -> void:
+	if visible:
+		_refresh_slivers_label()
 
 
 func _build_row(entry: Dictionary) -> Control:

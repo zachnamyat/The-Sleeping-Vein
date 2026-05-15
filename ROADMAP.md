@@ -127,14 +127,26 @@
 - 4.3 Ore vein placement (Perlin or Poisson-disk)
 - 4.4 Anchor structure prefab (pre-placed; player wakes here)
 - 4.5 Resonance Loom interactable (set spawn / view sliver count)
-- 4.6 Biome boundary transitions (corridor tunnels)
+- 4.6 ~~Biome boundary transitions (corridor tunnels)~~ — **RETRACTED 2026-05-14** as anti-parity (CK uses pickaxe-tier wall gating)
 - 4.7 Root Hollows biome data resource + ore tiers (Shaleseed)
 - 4.8 Glasswright Reaches biome data resource + ore tiers (Clearstone)
 - 4.9 Biome-specific ambient music swap on cross
 - 4.10 Map (mini + full-screen) revealing chunks as visited
 - 4.11 Compass to Loom (lore swap for "compass to Core")
 
-**Exit criterion.** Spawn on Anchor. Walk in any direction → eventually cross into Glasswright Reaches → palette shifts → music shifts → ore tier changes.
+**Exit criterion.** Spawn on Anchor. Walk in any direction → eventually cross into Glasswright Reaches → palette shifts → music shifts → ore tier changes. ✅ Met (2026-05-14) — WorldGen rewritten for 64×64 chunks, FastNoiseLite-based wall fields, BFS-grown ore veins. (**4.6 retracted same day** — the corridor-tunnel carving was anti-parity. CK gates biome rings with progressively-harder walls the player must mine through; the corridor predicate has been removed. Only the 7-tile Anchor plateau stays clear.) LoomPanel adds Set-Respawn binding + Aphelion-sliver readout; the bound Loom drives both PlayerController death-respawn and the Compass arrow. Minimap + FogOfWar synced to the new chunk size and hydrated from `GameState.explored_chunks`, persisted via SaveSystem v4. AudioBus now listens for `EventBus.biome_changed` and swaps the ambient placeholder drone on cross. Root Hollows + Glasswright Reaches biome resources tuned (density × 4 to match the bigger chunks, explicit ambient track ids). 66/66 GUT pass with two new suites (`test_world_gen`, `test_explored_chunks`).
+
+**Phase 4 full backlog closed (2026-05-14 full-closure pass).** All 4.13–4.65 tickets implemented or reassigned. Reassignments: 4.27 / 4.35 / 4.36 → Phase 14 (liquid mechanics belong with the automation/electricity layer); 4.45 → Phase 15 (biome-blending shader is polish); 4.56 / 4.57 / 4.58 → Phase 11 (weather belongs to the Auroric Veil / Emberforge / Salt Wastes biome work); 4.65 → Phase 15 (first-run wizard is polish). Implementations shipped this pass:
+
+- 17 new sprites generated end-to-end via the Gemini MCP — `mcp__gemini-image__generate_image` for the 1024×1024 source, `mcp__gemini-image__process_image` for nearest-neighbour downsample, `tools/clean_alpha.ps1` for the magenta chroma-key. All sprites flipped `status:"final"` in [assets/manifest.json](assets/manifest.json).
+- WorldGen procedural extensions: per-chunk mob budget + wall/light suppression (4.15/4.16/4.51), mob spawners with elite tiers (4.17/4.59), carved unique rooms with treasure-chest / wishing-well / lore-tablet / boss-altar centerpieces (4.18/4.50), water lakes (4.20), abandoned camps with statue + chest (4.21), free-standing treasure chests with key-locked variants (4.23/4.25), one lore-tablet per biome ring (4.24), hidden-wall flag (4.29), sub-biome detection via cellular noise (4.44), finite world border at 1600 tiles (4.48), floor scatter decals (4.55), night-Beat density bonus (4.61).
+- Player utility items: bound_compass (4.14 recall, 60-beat cd), skeleton_key (4.25), treasure_map (4.30 nearest-chest marker), world_scanner (4.38 12-beat cd, 5-chunk reveal), anchor_portable (4.49 in-place respawn anchor). All wired through `player_combat._try_consume` id-dispatch.
+- New systems: `WorldEvents` autoload (4.32 random world events, 4.42 Suncrack damage event, 4.43 Hollowling swarm intensifier), `CrystalRegrowth` autoload (4.34 Clearstone tiles regrow after 16 beats), `HollowlingMotes` scene-level VFX (4.43).
+- `DayNightCycle` extended with a 24-min world clock independent of the Aphelion Beat (4.46) + `skip_time` API consumed by bed sleep (4.63). `PlayerController.try_sleep_in_bed` gated by hostile-mob proximity (4.64) + 8-beat cooldown (4.52).
+- `DeathCorpse` pings the minimap with a Tombstone marker on spawn (4.62). Minimap gained `add_marker` + `death_compass_active` toggle (4.19/4.39). HUD shows live tile + chunk coords (4.31). WorldGen.is_under_roof (4.33) and temperature_intensity_at (4.47) helpers exposed.
+- TileSet bumped with sources 27 (water), 28 (sticky), 29 (bridge). New autoloads: `WorldEvents`, `CrystalRegrowth`. New input action: `toggle_death_compass` (default J).
+
+66/66 GUT pass holds. **Zero Phase 4 backlog remains.**
 
 ---
 

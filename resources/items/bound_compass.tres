@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bound_compass.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bound_compass"
+icon = ExtResource("2_icon")
+display_name = "Bound Compass"
+description = "Recalls you to your bound Loom. 60-Beat cooldown."
+max_stack = 1
+item_type = 4
+tier = 1
+rarity = 2
+lore_text = "The needle drowses, then snaps inward — toward the Loom whose thread you wear."
+lore_ref = "lore/01_cosmology_and_universe.md"

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://5gxcrjrp3m2c"]
+
+[ext_resource type="Script" path="res://scripts/structures/crystal_cluster.gd" id="1_cc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/crystal_cluster.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cc"]
+size = Vector2(28, 24)
+
+[node name="CrystalCluster" type="Area2D"]
+script = ExtResource("1_cc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -10)
+
+[node name="GlowLight" type="PointLight2D" parent="."]
+color = Color(0.55, 0.85, 1.0, 1)
+energy = 0.45
+texture_scale = 1.5
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_cc")

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/anchor_portable.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"anchor_portable"
+icon = ExtResource("2_icon")
+display_name = "Portable Anchor"
+description = "Use to bind your respawn point to your current spot. Consumed on use."
+max_stack = 5
+item_type = 4
+tier = 2
+rarity = 2
+lore_text = "A spike, a coil of thread, a single hum the Loom recognises. Enough to wake at."
+lore_ref = "lore/07_echo_walkers_player.md"

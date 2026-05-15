@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cbbbaprnmi83m"]
+
+[ext_resource type="Script" path="res://scripts/structures/glow_shroom.gd" id="1_gs"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/glow_shroom.png" id="2_tex"]
+
+[node name="GlowShroom" type="Node2D"]
+script = ExtResource("1_gs")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -6)
+
+[node name="GlowLight" type="PointLight2D" parent="."]
+color = Color(0.42, 0.83, 0.95, 1)
+energy = 0.7
+texture_scale = 1.6

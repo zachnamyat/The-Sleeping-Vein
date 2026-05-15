@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bmain0scene000001"]
+[gd_scene load_steps=41 format=3 uid="uid://bmain0scene000001"]
 
 [ext_resource type="TileSet" path="res://resources/tilesets/biomes.tres" id="1_tileset"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
@@ -34,6 +34,16 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/letterbox.tscn" id="30_letter"]
 [ext_resource type="PackedScene" path="res://scenes/ui/loading_screen.tscn" id="31_loading"]
 [ext_resource type="PackedScene" path="res://scenes/ui/emote_wheel.tscn" id="32_emote"]
+[ext_resource type="PackedScene" path="res://scenes/structures/treasure_chest.tscn" id="34_tchest"]
+[ext_resource type="PackedScene" path="res://scenes/structures/wishing_well.tscn" id="35_well"]
+[ext_resource type="PackedScene" path="res://scenes/structures/lore_tablet.tscn" id="36_tablet"]
+[ext_resource type="PackedScene" path="res://scenes/structures/mob_spawner.tscn" id="37_spawner"]
+[ext_resource type="PackedScene" path="res://scenes/structures/boss_altar.tscn" id="38_altar"]
+[ext_resource type="PackedScene" path="res://scenes/structures/statue.tscn" id="39_statue"]
+[ext_resource type="PackedScene" path="res://scenes/structures/locked_door.tscn" id="40_door"]
+[ext_resource type="PackedScene" path="res://scenes/structures/glow_shroom.tscn" id="41_shroom"]
+[ext_resource type="Script" path="res://scripts/fx/hollowling_motes.gd" id="42_motes"]
+[ext_resource type="PackedScene" path="res://scenes/structures/crystal_cluster.tscn" id="43_crystal"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("3_bootstrap")
@@ -54,7 +64,16 @@ wall_cap_layer_path = NodePath("YSortRoot/WallCap")
 ore_layer_path = NodePath("Ore")
 entity_layer_path = NodePath("YSortRoot/Entities")
 stone_hopper_scene = ExtResource("6_mob")
-view_chunk_radius = 2
+treasure_chest_scene = ExtResource("34_tchest")
+wishing_well_scene = ExtResource("35_well")
+lore_tablet_scene = ExtResource("36_tablet")
+mob_spawner_scene = ExtResource("37_spawner")
+boss_altar_scene = ExtResource("38_altar")
+statue_scene = ExtResource("39_statue")
+locked_door_scene = ExtResource("40_door")
+glow_shroom_scene = ExtResource("41_shroom")
+crystal_cluster_scene = ExtResource("43_crystal")
+view_chunk_radius = 1
 
 [node name="Floor" type="TileMapLayer" parent="WorldGen"]
 texture_filter = 1
@@ -107,6 +126,9 @@ canvas_modulate_path = NodePath("../CanvasModulate")
 
 [node name="FogOfWar" type="Node2D" parent="."]
 script = ExtResource("27_fog")
+
+[node name="HollowlingMotes" type="Node2D" parent="."]
+script = ExtResource("42_motes")
 
 [node name="ScreenPulse" type="CanvasLayer" parent="."]
 script = ExtResource("28_pulse")

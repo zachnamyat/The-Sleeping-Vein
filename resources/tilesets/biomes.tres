@@ -1,5 +1,8 @@
 [gd_resource type="TileSet" format=3 uid="uid://c3o8sv4b4ixym"]
 
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles/water_tile.png" id="t_water"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles/sticky_tile.png" id="t_sticky"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles/bridge_tile.png" id="t_bridge"]
 [ext_resource type="Texture2D" uid="uid://drmajdvvjkkqi" path="res://assets/sprites/tiles/root_hollows_floor.png" id="t0"]
 [ext_resource type="Texture2D" uid="uid://bywwydke5t3ww" path="res://assets/sprites/tiles/root_hollows_wall.png" id="t1"]
 [ext_resource type="Texture2D" uid="uid://bk1ek4y1v5ecb" path="res://assets/sprites/tiles/smoke_test_shaleseed.png" id="t2"]
@@ -191,6 +194,18 @@ texture = ExtResource("t2")
 texture = ExtResource("t9")
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="s_water"]
+texture = ExtResource("t_water")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="s_sticky"]
+texture = ExtResource("t_sticky")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="s_bridge"]
+texture = ExtResource("t_bridge")
+0:0/0 = 0
+
 [resource]
 physics_layer_0/collision_layer = 1
 custom_data_layer_0/name = "tile_tier"
@@ -224,3 +239,6 @@ sources/23 = SubResource("s_av_ore")
 sources/24 = SubResource("s_fs_floor")
 sources/25 = SubResource("s_fs_wall")
 sources/26 = SubResource("s_fs_ore")
+sources/27 = SubResource("s_water")
+sources/28 = SubResource("s_sticky")
+sources/29 = SubResource("s_bridge")

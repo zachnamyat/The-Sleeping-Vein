@@ -36,7 +36,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact"):
 		interacted.emit(self)
 		if station_id == &"resonance_loom":
-			get_tree().call_group("loom_panel", "open")
+			# Phase 4.5 — pass our world position so the panel can bind respawn
+			# to *this* Loom rather than always the world origin. Multi-Loom
+			# networks (Phase 4.13 / 9.x) ride the same code path.
+			get_tree().call_group("loom_panel", "open", global_position)
 		else:
 			# Phase 3.32 — pass adjacent station ids so the panel can show all
 			# of their recipes in one list.

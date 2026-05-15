@@ -18,6 +18,7 @@ ore_density_per_chunk = 5
 wall_density_per_chunk = 15
 ambient_high_color = Color(0.85, 0.88, 0.92, 1)
 ambient_low_color = Color(0.20, 0.22, 0.26, 1)
+ambient_track_id = &"ambient_vesari_necropolis"
 mob_spawn_table = [&"stone_hopper"]
 mobs_per_chunk = 1
 hazard_id = &"salt_corrosion"

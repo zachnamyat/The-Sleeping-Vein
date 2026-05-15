@@ -22,17 +22,59 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if _cooldown_timer > 0.0:
 		_cooldown_timer = maxf(0.0, _cooldown_timer - delta)
+	# Phase 3.41 — place-multiple drag-tool. While the player holds the primary
+	# attack button and the held item is a placeable, every time the cursor
+	# moves to a new 16-grid tile we attempt to drop one. Initial click on the
+	# tile is handled by the normal _try_swing path; this drag adds the rest.
+	_tick_drag_place()
 
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("attack_secondary"):
 		_try_consume()
 		return
+	if event.is_action_released("attack_primary"):
+		_last_drag_tile = Vector2i(99999, 99999)
+		return
 	if not event.is_action_pressed("attack_primary"):
 		return
 	if _cooldown_timer > 0.0:
 		return
 	_try_swing()
+
+
+var _last_drag_tile: Vector2i = Vector2i(99999, 99999)
+
+
+func _tick_drag_place() -> void:
+	if not Input.is_action_pressed("attack_primary"):
+		_last_drag_tile = Vector2i(99999, 99999)
+		return
+	var player := get_node_or_null(player_path) as PlayerController
+	if player == null or player.is_dead:
+		return
+	var held_id: StringName = _held_item_id()
+	if held_id == &"":
+		return
+	var defn: ItemDef = ItemRegistry.get_def(held_id)
+	if defn == null or defn.item_type != ItemDef.ItemType.PLACEABLE:
+		return
+	if Inventory.count_of(held_id) <= 0:
+		return
+	var target: Vector2 = _aim_target(player)
+	var tile: Vector2i = Vector2i(
+		int(floor(target.x / 16.0)),
+		int(floor(target.y / 16.0)),
+	)
+	if tile == _last_drag_tile:
+		return
+	if _cooldown_timer > 0.0:
+		return
+	_last_drag_tile = tile
+	if _resolve_place(player, defn, target):
+		# Drag-place cooldown is shorter than the click cooldown so the player
+		# can lay a row of bridge tiles smoothly without stalling.
+		_cooldown_timer = 0.08
 
 
 func _try_consume() -> void:
@@ -45,6 +87,26 @@ func _try_consume() -> void:
 	var defn: ItemDef = ItemRegistry.get_def(held_id)
 	if defn == null or defn.item_type != ItemDef.ItemType.CONSUMABLE:
 		return
+	# Phase 4 utility items — dispatch by id BEFORE the consume so cooldowned
+	# items (bound_compass, world_scanner) don't lose a charge when they're
+	# locked out.
+	match held_id:
+		&"bound_compass":
+			_use_bound_compass(player)
+			return
+		&"world_scanner":
+			_use_world_scanner(player)
+			return
+		&"treasure_map":
+			if Inventory.try_remove(held_id, 1) <= 0:
+				return
+			_use_treasure_map(player)
+			return
+		&"anchor_portable":
+			if Inventory.try_remove(held_id, 1) <= 0:
+				return
+			_use_anchor_portable(player)
+			return
 	if Inventory.try_remove(held_id, 1) <= 0:
 		return
 	# Phase 7 — respec scroll refunds all allocated talent points.
@@ -347,15 +409,20 @@ const PLACEABLE_SCENES: Dictionary = {
 	&"furnace_placeable":         "res://scenes/structures/furnace.tscn",
 	&"sawmill_placeable":         "res://scenes/structures/sawmill.tscn",
 	&"cooking_pot_placeable":     "res://scenes/structures/cooking_pot.tscn",
+	&"glow_shroom_seed":          "res://scenes/structures/glow_shroom.tscn",
+	&"trapdoor_placeable":        "res://scenes/structures/trapdoor.tscn",
+	&"statue_placeable":          "res://scenes/structures/statue.tscn",
 }
 
 ## Items that don't have a dedicated scene get spawned as a generic
 ## PlacedDecor (sprite + optional Light2D). Maps id -> {with_light, light_color}.
 const PLACEABLE_DECOR: Dictionary = {
-	&"torch":      {"with_light": true,  "color": Color(1.0, 0.78, 0.45)},
-	&"glow_tube":  {"with_light": true,  "color": Color(0.55, 0.95, 1.0)},
-	&"loam_floor": {"with_light": false, "color": Color(1, 1, 1)},
-	&"loam_wall":  {"with_light": false, "color": Color(1, 1, 1)},
+	&"torch":       {"with_light": true,  "color": Color(1.0, 0.78, 0.45)},
+	&"glow_tube":   {"with_light": true,  "color": Color(0.55, 0.95, 1.0)},
+	&"loam_floor":  {"with_light": false, "color": Color(1, 1, 1)},
+	&"loam_wall":   {"with_light": false, "color": Color(1, 1, 1)},
+	&"bridge_tile": {"with_light": false, "color": Color(1, 1, 1)},
+	&"sticky_tile": {"with_light": false, "color": Color(1, 1, 1)},
 }
 
 
@@ -426,3 +493,84 @@ func _build_decor_placement(defn: ItemDef, opts: Dictionary) -> Node2D:
 		light.texture_scale = 0.6
 		root.add_child(light)
 	return root
+
+
+# ============================================================================
+# Phase 4 utility-item handlers (bound_compass, world_scanner, treasure_map,
+# anchor_portable). Each is invoked from _try_consume after id-dispatch.
+# ============================================================================
+
+const _COMPASS_COOLDOWN_BEATS: int = 60
+const _SCANNER_COOLDOWN_BEATS: int = 12
+const _SCANNER_RADIUS_CHUNKS: int = 5
+
+var _compass_ready_beat: int = -999999
+var _scanner_ready_beat: int = -999999
+
+
+func _current_beat() -> int:
+	if AudioBus == null:
+		return 0
+	# AudioBus._phase_index increments every beat — use that as a global clock.
+	return AudioBus.get("_phase_index") if AudioBus else 0
+
+
+func _use_bound_compass(player: PlayerController) -> void:
+	var now: int = _current_beat()
+	if now < _compass_ready_beat:
+		EventBus.ui_toast.emit("Compass still drowsing.", 1.5)
+		return
+	# 60 beats * ~23s = 23 minutes. Tweak via _COMPASS_COOLDOWN_BEATS.
+	_compass_ready_beat = now + _COMPASS_COOLDOWN_BEATS
+	var target: Vector2 = GameState.respawn_point
+	player.global_position = target
+	EventBus.ui_toast.emit("The thread snaps you home.", 2.0)
+	if AudioBus:
+		AudioBus.play_sfx(&"loom_bind")
+
+
+func _use_world_scanner(player: PlayerController) -> void:
+	var now: int = _current_beat()
+	if now < _scanner_ready_beat:
+		EventBus.ui_toast.emit("Scanner cooling.", 1.5)
+		return
+	_scanner_ready_beat = now + _SCANNER_COOLDOWN_BEATS
+	# Reveal CHUNK_TILES around the player.
+	var wg: Node = _find_world_gen()
+	if wg == null or not wg.has_method("chunks_in_radius"):
+		return
+	var chunks: Array = wg.call("chunks_in_radius", player.global_position, _SCANNER_RADIUS_CHUNKS)
+	for c in chunks:
+		var coord: Vector2i = c
+		var b: BiomeDef = wg.call("biome_for_chunk", coord) as BiomeDef
+		if b:
+			GameState.mark_chunk_visited(coord, b.id)
+	EventBus.ui_toast.emit("Scanner pings %d chunks." % chunks.size(), 2.0)
+
+
+func _use_treasure_map(player: PlayerController) -> void:
+	var wg: Node = _find_world_gen()
+	if wg == null or not wg.has_method("nearest_treasure_chest"):
+		EventBus.ui_toast.emit("Nothing answers.", 1.5)
+		return
+	var chest: Node2D = wg.call("nearest_treasure_chest", player.global_position) as Node2D
+	if chest == null:
+		EventBus.ui_toast.emit("No chest within range.", 2.0)
+		return
+	# Phase 4.19 — place a map marker at the chest's chunk.
+	get_tree().call_group("minimap", "add_marker", chest.global_position, "Treasure", Color(1.0, 0.85, 0.4, 1.0))
+	EventBus.ui_toast.emit("Marker set. The map remembers.", 2.5)
+
+
+func _use_anchor_portable(player: PlayerController) -> void:
+	GameState.set_respawn_point(player.global_position)
+	EventBus.ui_toast.emit("Anchor planted. The Loom will wake you here.", 2.5)
+	if AudioBus:
+		AudioBus.play_sfx(&"loom_bind")
+
+
+func _find_world_gen() -> Node:
+	var tree := get_tree()
+	if tree == null or tree.current_scene == null:
+		return null
+	return tree.current_scene.get_node_or_null("WorldGen")

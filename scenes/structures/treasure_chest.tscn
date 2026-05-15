@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://hv0xq661t2u3"]
+
+[ext_resource type="Script" path="res://scripts/structures/treasure_chest.gd" id="1_tc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/chest.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tc"]
+size = Vector2(24, 24)
+
+[node name="TreasureChest" type="Area2D"]
+script = ExtResource("1_tc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)
+modulate = Color(1.05, 0.95, 0.6, 1)
+
+[node name="GlowLight" type="PointLight2D" parent="."]
+color = Color(0.97, 0.85, 0.5, 1)
+energy = 0.35
+texture_scale = 1.0
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_tc")

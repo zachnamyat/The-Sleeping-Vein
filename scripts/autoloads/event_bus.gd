@@ -7,7 +7,10 @@ extends Node
 # --- World / generation ---
 signal world_seeded(seed_value: int)
 signal chunk_generated(chunk_coord: Vector2i)
+signal chunk_visited(chunk_coord: Vector2i, biome_id: StringName)
 signal tile_changed(tile_coord: Vector2i, old_id: int, new_id: int)
+signal biome_changed(old_biome_id: StringName, new_biome_id: StringName)
+signal respawn_point_set(world_pos: Vector2)
 
 # --- Player ---
 signal player_spawned(player: Node)

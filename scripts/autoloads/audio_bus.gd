@@ -30,6 +30,31 @@ func _ready() -> void:
 	_beat_timer.autostart = true
 	_beat_timer.timeout.connect(_emit_beat)
 	add_child(_beat_timer)
+	# Phase 4.9 — biome music swap. When the player crosses a biome boundary
+	# WorldGen emits biome_changed; we pick the new biome's ambient_track_id and
+	# fall through to a default per-biome key if the resource didn't specify one.
+	EventBus.biome_changed.connect(_on_biome_changed)
+
+
+func _on_biome_changed(_old_biome_id: StringName, new_biome_id: StringName) -> void:
+	if new_biome_id == &"":
+		return
+	var track_id: StringName = new_biome_id
+	# Allow biome resources to override via ambient_track_id, but most resources
+	# will leave it blank and rely on the biome id as the cache key.
+	var dir := DirAccess.open("res://resources/biomes/")
+	if dir:
+		dir.list_dir_begin()
+		var entry := dir.get_next()
+		while entry != "":
+			if entry.ends_with(".tres"):
+				var res := load("res://resources/biomes/" + entry) as BiomeDef
+				if res and res.id == new_biome_id and res.ambient_track_id != &"":
+					track_id = res.ambient_track_id
+					break
+			entry = dir.get_next()
+		dir.list_dir_end()
+	play_ambient(track_id)
 
 
 func _emit_beat() -> void:

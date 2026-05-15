@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://de1wknn04wnoy"]
+
+[ext_resource type="Script" path="res://scripts/structures/wishing_well.gd" id="1_ww"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/wishing_well.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ww"]
+size = Vector2(28, 28)
+
+[node name="WishingWell" type="Area2D"]
+script = ExtResource("1_ww")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)
+
+[node name="GlowLight" type="PointLight2D" parent="."]
+color = Color(0.45, 0.85, 1.0, 1)
+energy = 0.35
+texture_scale = 1.4
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ww")

@@ -16,6 +16,11 @@ class_name HUD
 @onready var time_label: Label = $TopRight/TimeLabel
 @onready var toast_label: Label = $Center/Toast
 @onready var skill_toast: Label = $Center/SkillToast
+## Phase 4.31 — coord readout under the time label. Updates every 0.25s with
+## the player's chunk + tile coordinates. Building this as a Label child of
+## the existing TopRight container means the rest of the HUD layout is unchanged.
+var coord_label: Label = null
+var _coord_accum: float = 0.0
 
 const PHASE_DISPLAY: Dictionary = {
 	0: "High Light",
@@ -132,6 +137,25 @@ func _apply_pixel_sizes() -> void:
 		time_label.position = Vector2(0, 58)
 		time_label.size = Vector2(116, 10)
 		time_label.add_theme_font_size_override("font_size", 6)
+	# Phase 4.31 — coord readout. Anchored bottom-right of the viewport so the
+	# 96-tall minimap widget at top-right doesn't overlap it. Kept as a
+	# top-level HUD child (not inside TopRight) for that reason.
+	if coord_label == null:
+		coord_label = Label.new()
+		coord_label.name = "CoordLabel"
+		coord_label.anchor_left = 1.0
+		coord_label.anchor_right = 1.0
+		coord_label.anchor_top = 1.0
+		coord_label.anchor_bottom = 1.0
+		coord_label.offset_left = -132.0
+		coord_label.offset_right = -4.0
+		coord_label.offset_top = -50.0
+		coord_label.offset_bottom = -40.0
+		coord_label.add_theme_font_size_override("font_size", 6)
+		coord_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		coord_label.modulate = Color(0.7, 0.65, 0.55, 0.9)
+		coord_label.text = "@ 0,0 (0,0)"
+		add_child(coord_label)
 	# Center toast labels — small, centered horizontally
 	if toast_label:
 		toast_label.add_theme_font_size_override("font_size", 6)
@@ -148,6 +172,28 @@ func _process(delta: float) -> void:
 		_skill_toast_timer -= delta
 		if _skill_toast_timer <= 0.0:
 			skill_toast.visible = false
+	# Phase 4.31 — refresh coords throttled to 0.25s. Keeps the label readable
+	# without thrashing the layout on every tick.
+	_coord_accum += delta
+	if _coord_accum >= 0.25 and coord_label:
+		_coord_accum = 0.0
+		_refresh_coords()
+
+
+func _refresh_coords() -> void:
+	if coord_label == null:
+		return
+	var players := get_tree().get_nodes_in_group("player")
+	if players.is_empty():
+		return
+	var p := players[0] as Node2D
+	if p == null:
+		return
+	var tile_x: int = int(p.global_position.x / 16.0)
+	var tile_y: int = int(p.global_position.y / 16.0)
+	var chunk_x: int = floori(float(tile_x) / 64.0)
+	var chunk_y: int = floori(float(tile_y) / 64.0)
+	coord_label.text = "@ %d,%d  (%d,%d)" % [tile_x, tile_y, chunk_x, chunk_y]
 
 
 func _on_player_spawned(player: Node) -> void:

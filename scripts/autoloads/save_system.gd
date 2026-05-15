@@ -11,10 +11,12 @@ extends Node
 ## Save format version is bumped any time a save-affecting field changes.
 
 const SAVE_ROOT: String = "user://saves/"
-## Save format version. Bumped to 3 in Phase 3 to add chest persistence
-## (placed-structure positions + contents). Older v1/v2 saves load with empty
-## chest array — pre-existing pre-placed world chests just spawn empty.
-const SAVE_VERSION: int = 3
+## Save format version.
+##   v2 — Phase 2: player/inventory/skills.
+##   v3 — Phase 3: chest persistence.
+##   v4 — Phase 4: explored_chunks + respawn_point. Older saves load with an
+##        empty exploration log; the map just appears fresh.
+const SAVE_VERSION: int = 4
 
 signal save_started(slot_name: String)
 signal save_completed(slot_name: String)
@@ -154,6 +156,11 @@ func _dump_game_state() -> Dictionary:
 		"inventory": _dump_inventory(),
 		"skills": _dump_skills(),
 		"chests": _dump_chests(),
+		# Phase 4 — exploration + respawn anchor. Both already string-keyed /
+		# JSON-safe; no per-key conversion needed.
+		"explored_chunks": GameState.explored_chunks.duplicate(),
+		"respawn_point_x": GameState.respawn_point.x,
+		"respawn_point_y": GameState.respawn_point.y,
 	}
 
 
@@ -167,6 +174,11 @@ func _restore_game_state(state: Dictionary) -> void:
 	GameState.sovereign_threads = int(state.get("sovereign_threads", 0))
 	GameState.unallocated_talent_points = int(state.get("unallocated_talent_points", 0))
 	GameState.allocated_talents = _stringname_keys(state.get("allocated_talents", {}))
+	GameState.explored_chunks = state.get("explored_chunks", {})
+	GameState.respawn_point = Vector2(
+		float(state.get("respawn_point_x", 0.0)),
+		float(state.get("respawn_point_y", 0.0)),
+	)
 	_restore_inventory(state.get("inventory", {}))
 	_restore_skills(state.get("skills", {}))
 	_pending_chests_restore = state.get("chests", [])

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://rmcxc2o11xym"]
+
+[ext_resource type="Script" path="res://scripts/structures/boss_altar.gd" id="1_ba"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/boss_altar.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ba"]
+size = Vector2(36, 36)
+
+[node name="BossAltar" type="Area2D"]
+script = ExtResource("1_ba")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -12)
+
+[node name="GlowLight" type="PointLight2D" parent="."]
+color = Color(0.85, 0.18, 0.1, 1)
+energy = 0.75
+texture_scale = 1.8
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ba")

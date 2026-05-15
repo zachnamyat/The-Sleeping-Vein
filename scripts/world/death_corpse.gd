@@ -31,6 +31,16 @@ func _ready() -> void:
 	circle.radius = PICKUP_RADIUS
 	shape.shape = circle
 	add_child(shape)
+	# Phase 4.62 — ping the minimap with a tombstone marker so the player can
+	# find their stash from across biomes. The marker auto-clears when the
+	# corpse is reclaimed (queue_free triggers tree_exiting on the minimap side).
+	get_tree().call_group(
+		"minimap",
+		"add_marker",
+		global_position,
+		"Tombstone",
+		Color(0.85, 0.45, 0.95, 1.0),
+	)
 	set_process(true)
 
 

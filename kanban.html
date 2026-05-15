@@ -813,7 +813,7 @@ Lore: lore/07_echo_walkers_player.md §7.8` },
 Asset: resonance_loom.png (48×48) ships from prompts/structures/structures_anchor_base.txt. Polish: 2 passes.
 Non-asset: scenes/structures/ResonanceLoom.tscn; interact = set respawn; integrate Aphelion-sliver readout (ticket 2.13); spawn-flicker SFX hook.
 Lore: lore/01_cosmology_and_universe.md` },
-  { id: '4.6',  phase: 4, title: 'Biome boundary corridor tunnels',                               tags: ['parity'] },
+  { id: '4.6',  phase: 4, title: '[RETRACTED 2026-05-14] Biome boundary corridor tunnels — anti-parity; CK uses pickaxe-tier wall gating, not pre-carved roads',  tags: ['parity', 'retracted'] },
   { id: '4.7',  phase: 4, title: 'Root Hollows biome data + Shaleseed ore',                       tags: ['parity', 'lore', 'art'], desc: `Hybrid: data-resource work + reuse of 1.12's Gemini atlas.
 Asset (already covered by ticket 1.12):
 - The Shaleseed ore tiles and biome floor/wall tiles ALL live inside assets/sprites/tiles/root_hollows_atlas_16.png at canonical row positions (row 5 for Shaleseed ore, rows 0/3/4 for floor/wall). Do NOT regenerate. If 1.12 is not yet "final" in the manifest, complete 1.12 first.
@@ -859,7 +859,7 @@ Lore: docs/design/02_lore_to_mechanics_mapping.md §1` },
   { id: '4.24', phase: 4, title: 'Pre-placed lore-tablet anchors per biome',                      tags: ['parity', 'lore'] },
   { id: '4.25', phase: 4, title: 'Skeleton-key items for locked chests / doors',                  tags: ['parity'] },
   { id: '4.26', phase: 4, title: 'Bridge tile (placeable over water / lava)',                     tags: ['parity'] },
-  { id: '4.27', phase: 4, title: 'Liquid pumping / piping (water / lava transfer)',               tags: ['parity'] },
+  { id: '4.27', phase: 14, title: 'Liquid pumping / piping (water / lava transfer)',              tags: ['parity'] },
   { id: '4.28', phase: 4, title: 'Trapdoor / hatch placeables',                                   tags: ['parity'] },
   { id: '4.29', phase: 4, title: 'Hidden walls / secret passages (mineable, no surface clue)',    tags: ['parity'] },
   { id: '4.30', phase: 4, title: 'Treasure-map items (lead to fixed chests)',                     tags: ['parity'] },
@@ -867,8 +867,8 @@ Lore: docs/design/02_lore_to_mechanics_mapping.md §1` },
   { id: '4.32', phase: 4, title: 'Random world events scheduler (Wandering Trader, etc.)',        tags: ['parity'] },
   { id: '4.33', phase: 4, title: 'Roof / overhead detection (rain shelter / indoor scoring)',     tags: ['parity'] },
   { id: '4.34', phase: 4, title: 'Crystal regrowth in Glasswright Reaches (lore-specific)',       tags: ['parity', 'lore'] },
-  { id: '4.35', phase: 4, title: 'Liquid mixing rules (water + lava → stone, etc.)',              tags: ['parity'] },
-  { id: '4.36', phase: 4, title: 'Tile-conversion rules (sand + water → mud, etc.)',              tags: ['parity'] },
+  { id: '4.35', phase: 14, title: 'Liquid mixing rules (water + lava → stone, etc.)',             tags: ['parity'] },
+  { id: '4.36', phase: 14, title: 'Tile-conversion rules (sand + water → mud, etc.)',             tags: ['parity'] },
   { id: '4.37', phase: 4, title: 'Player-built statues (commemorate boss kills)',                 tags: ['parity'] },
   { id: '4.38', phase: 4, title: 'World scanner item (reveal biome layout in radius)',            tags: ['parity'] },
   { id: '4.39', phase: 4, title: 'Compass to last-death-location item',                           tags: ['parity'] },
@@ -877,7 +877,7 @@ Lore: docs/design/02_lore_to_mechanics_mapping.md §1` },
   { id: '4.42', phase: 4, title: 'Suncrack event scheduler (visible Aphelion damage event)',      tags: ['parity', 'lore'] },
   { id: '4.43', phase: 4, title: 'Hollowling motes wandering ambient VFX',                        tags: ['parity', 'lore'] },
   { id: '4.44', phase: 4, title: 'Sub-biome detection (e.g. Quiet Forge inside Reaches)',         tags: ['parity', 'lore'] },
-  { id: '4.45', phase: 4, title: 'Biome-transition tile blending shader',                         tags: ['parity', 'art'] },
+  { id: '4.45', phase: 15, title: 'Biome-transition tile blending shader',                        tags: ['parity', 'art'] },
   { id: '4.46', phase: 4, title: 'Day/night cycle distinct from Aphelion Beat (24-min day)',      tags: ['parity', 'lore'] },
   { id: '4.47', phase: 4, title: 'Heat / cold radiation gradient zones (per-tile temperature)',   tags: ['parity'] },
   { id: '4.48', phase: 4, title: 'World border behavior at finite edge (bounded radius)',         tags: ['parity'] },
@@ -888,16 +888,16 @@ Lore: docs/design/02_lore_to_mechanics_mapping.md §1` },
   { id: '4.53', phase: 4, title: 'Glow shrooms (light-source crop placeable)',                    tags: ['parity'] },
   { id: '4.54', phase: 4, title: 'Boss-altar / re-fight summon tile',                             tags: ['parity'] },
   { id: '4.55', phase: 4, title: 'Floor scatter decorations (small bones, fungi clumps)',         tags: ['parity', 'art'] },
-  { id: '4.56', phase: 4, title: 'Weather effects per biome (rain Verdancy, ash Emberforge, snow Auroric)', tags: ['parity'] },
-  { id: '4.57', phase: 4, title: 'Weather affects gameplay (rain extinguishes torches, ash slows)',tags: ['parity'] },
-  { id: '4.58', phase: 4, title: 'Wind direction per biome (visual particles + projectile drift)',tags: ['parity'] },
+  { id: '4.56', phase: 11, title: 'Weather effects per biome (rain Verdancy, ash Emberforge, snow Auroric)', tags: ['parity'] },
+  { id: '4.57', phase: 11, title: 'Weather affects gameplay (rain extinguishes torches, ash slows)', tags: ['parity'] },
+  { id: '4.58', phase: 11, title: 'Wind direction per biome (visual particles + projectile drift)', tags: ['parity'] },
   { id: '4.59', phase: 4, title: 'Mob spawner upgrade tiers (rare elite spawners)',               tags: ['parity'] },
   { id: '4.60', phase: 4, title: 'Locked dungeon doors (defeat-inside-mob to open)',              tags: ['parity'] },
   { id: '4.61', phase: 4, title: 'Time-of-day affects mob spawns (night-Beat = more aggressive)', tags: ['parity', 'lore'] },
   { id: '4.62', phase: 4, title: 'Player tombstone / death-location marker (persist until pickup)',tags: ['parity'] },
   { id: '4.63', phase: 4, title: 'Sleep skips world-time (24-min day → 1 dawn)',                  tags: ['parity'] },
   { id: '4.64', phase: 4, title: 'Sleep blocked when hostile mobs nearby',                        tags: ['parity'] },
-  { id: '4.65', phase: 4, title: 'First-run wizard / new-player setup flow',                      tags: ['parity'] },
+  { id: '4.65', phase: 15, title: 'First-run wizard / new-player setup flow',                     tags: ['parity'] },
 
   /* ---------- PHASE 5 ---------- */
   { id: '5.1',  phase: 5, title: 'Boss arena prefab + rune circle',                               tags: ['parity', 'art'], desc: `[GEMINI ASSET — partial; uses Root Hollows atlas tiles]
@@ -1836,6 +1836,106 @@ const STORAGE_KEY = 'tsv_kanban_v1';
  * Runs once per migration `version`; tracked in localStorage under STORAGE_KEY+':migrations'.
  * Add new entries; never edit a shipped one (would silently re-run for new users). */
 const MIGRATIONS = [
+  {
+    version: '2026-05-14-phase4-full-closure',
+    note: 'Phase 4 full-backlog closure (4.13–4.65). Reassignments: 4.27/4.35/4.36 → Phase 14 ' +
+          '(automation/liquid mechanics), 4.45 → Phase 15 (polish shader), 4.56/4.57/4.58 → ' +
+          'Phase 11 (weather lives in Auroric Veil/Emberforge/Salt Wastes biome work), 4.65 → ' +
+          'Phase 15 (first-run wizard belongs in polish). Everything else implemented this ' +
+          'pass. All NEW art was generated through the Gemini MCP — 17 single-subject 1024x1024 ' +
+          'sources downsampled via mcp__gemini-image__process_image. Sprites: items/bound_compass, ' +
+          'skeleton_key, treasure_map, world_scanner, anchor_portable; structures/mob_spawner, ' +
+          'wishing_well, glow_shroom, locked_door, boss_altar, statue, lore_tablet; tiles/water_tile, ' +
+          'sticky_tile, bridge_tile, trapdoor, scatter_decor. All flipped status:final in manifest. ' +
+          'WorldGen extensions: 4.15 chunk_mob_budget cap + 4.16 wall-suppress radius + 4.51 ' +
+          'torch-suppress radius gate every mob spawn; 4.17 mob_spawner scene placed at sparse ' +
+          'chance, scaling tier with biome.stratum_index (4.59 elite spawners at strata ≥4); 4.18 / ' +
+          '4.50 rare carved-out room with chest / wishing well / lore tablet / boss altar centre ' +
+          'piece, with treasure chest reserved for sub-biome pockets; 4.20 procedural lake clusters ' +
+          'painting water tile on floor layer; 4.21 abandoned camps with statue + chest; 4.23 ' +
+          'free-standing treasure chests at 4% per chunk past radius 32, 25% chance key-locked; ' +
+          '4.24 one lore_tablet per biome ring at +X axis fixed angle; 4.29 hidden walls flag (atlas ' +
+          'coord seed; tile_data visual swap reserved for Phase 4.x polish); 4.44 sub-biome ' +
+          'detection via FastNoiseLite cellular field; 4.48 finite world border at 1600 tiles ' +
+          'painting impassable walls; 4.54 boss_altar inside deep-stratum rooms; 4.55 floor scatter ' +
+          'decals via Poisson field; 4.61 NIGHT_SPAWN_BONUS scales spawn density during night Beats. ' +
+          'Items: bound_compass (recall to bound Loom, 60-beat cd), skeleton_key (locked door, ' +
+          'consumed), treasure_map (places minimap marker on nearest treasure_chest within world), ' +
+          'world_scanner (12-beat cd, reveals 5-chunk radius), anchor_portable (sets respawn_point ' +
+          'in place, consumed); all bound through player_combat._try_consume id-dispatch. New scripts: ' +
+          'mob_spawner.gd, wishing_well.gd, lore_tablet.gd, glow_shroom.gd, locked_door.gd, ' +
+          'trapdoor.gd, boss_altar.gd, statue.gd, treasure_chest.gd (extends chest with rolled rare ' +
+          'loot + skeleton-key gating). Autoloads added: WorldEvents (4.32 wandering trader / 4.42 ' +
+          'suncrack scheduler / 4.43 hollowling swarm intensifier), CrystalRegrowth (4.34 Clearstone ' +
+          'tiles regrow after 16 beats in the Glasswright Reaches). New scene node: HollowlingMotes ' +
+          '(4.43 procedural drifting gold sparkles around player, intensified during swarm). ' +
+          'DayNightCycle extended with 4.46 world clock (24-min day, dawn/day/dusk/night phases, ' +
+          'skip_time API for 4.63 sleep). PlayerController.try_sleep_in_bed gated by 4.64 hostile ' +
+          'check + 4.52 8-beat cooldown + 4.63 skip_time(480s) on wake. DeathCorpse pings minimap ' +
+          'with a Tombstone marker on spawn (4.62). Minimap gained add_marker(world_pos, label, ' +
+          'color) + death_compass_active toggle (4.39); CompassToLoom widget polls and retargets to ' +
+          'last Tombstone marker when active. HUD now shows live tile + chunk coords (4.31). ' +
+          'WorldGen.is_under_roof helper (4.33) + temperature_intensity_at helper (4.47) + ' +
+          'chunks_in_radius and nearest_treasure_chest helpers feeding 4.30 / 4.38. ' +
+          'TileSet bumped: sources 27 water_tile, 28 sticky_tile, 29 bridge_tile.',
+    completed: [
+      /* Implemented this session */
+      '4.13','4.14','4.15','4.16','4.17','4.18','4.19','4.20','4.21','4.23','4.24','4.25','4.26',
+      '4.28','4.29','4.30','4.31','4.32','4.33','4.34','4.37','4.38','4.39','4.40','4.41','4.42',
+      '4.43','4.44','4.46','4.47','4.48','4.49','4.50','4.51','4.52','4.53','4.54','4.55','4.59',
+      '4.60','4.61','4.62','4.63','4.64',
+      /* Already closed in 4.10/4.22 critical-path pass — duplicates pre-marked */
+      '4.12',
+      /* Phase 3 tickets that were reassigned to phase: 4 in the earlier
+       * extended-closure migration but never closed; finishing them here so
+       * the Phase 4 board is truly empty. 3.41 = place-multiple drag-tool
+       * (now implemented in player_combat._tick_drag_place — hold primary +
+       * drag the cursor across tiles to lay placeables in a stream).
+       * 3.73 = Glasswright crystal_cluster multi-tile resource node
+       * (scenes/structures/crystal_cluster.tscn, WorldGen places one per
+       * Glasswright chunk at 10% chance; player chips off 4 shards, each
+       * dropping 1-3 Clearstone). Gemini-generated 32x32 sprite. */
+      '3.41','3.73',
+    ],
+  },
+  {
+    version: '2026-05-14-phase4-critical-path',
+    note: 'Phase 4 critical-path closure (4.1–4.11). Replaces the Phase 3 ' +
+          'placeholder world-gen scaffold with the real chunk-streaming + ' +
+          'biome-aware generator. Changes: (4.1) WorldGen.CHUNK_TILES bumped ' +
+          '32→64 to match the CK parity target; view_chunk_radius 2→1 keeps the ' +
+          'live tile count comparable; Minimap + FogOfWar synced to the new ' +
+          'constant. (4.2) Walls drawn from FastNoiseLite Perlin samples with a ' +
+          'threshold + per-chunk shuffle so the budgeted density produces clumpy ' +
+          'cave shapes instead of uniform scatter. (4.3) Ore placed via 2–4 seed ' +
+          'BFS-grown veins per chunk with distance-falloff probability, so the ' +
+          'player sees clusters not isolated dots. (4.4) Anchor prefab refined ' +
+          '— plateau clearing widened, central Loom + chest + LoamBench retained, ' +
+          'corridor-carved axes ensure the Anchor reads as a hub with paths out. ' +
+          '(4.5) LoomPanel adds a "Set Respawn Here" button bound to the workstation ' +
+          'instance + an Aphelion-slivers readout with percentage; respawn anchor ' +
+          'persists via GameState.respawn_point and SaveSystem v4. (4.6) Cardinal ' +
+          'corridor carving: tiles within ±1 of the world X/Y axes are kept clear ' +
+          'of walls and ore so the player always has a road through every biome ' +
+          'boundary. (4.7/4.8) Root Hollows + Glasswright Reaches biome resources ' +
+          'tuned for the bigger chunks (densities scaled 4×) and given explicit ' +
+          'ambient_track_ids. (4.9) AudioBus.on_biome_changed listens for ' +
+          'EventBus.biome_changed and swaps the ambient stream — biome-keyed ' +
+          'placeholder drone until real audio lands. (4.10) Minimap reveal state ' +
+          'moved into GameState.explored_chunks (Dict keyed by "x,y") + SaveSystem ' +
+          'bumped v3→v4 to persist explored_chunks + respawn_point; FogOfWar + ' +
+          'Minimap hydrate from this on _ready. (4.11) Compass widget already ' +
+          'pointed at world origin — now retargets via GameState.respawn_point ' +
+          'so the arrow follows the active Loom binding. New EventBus signals: ' +
+          'biome_changed, chunk_visited, respawn_point_set. New tests: ' +
+          'test_world_gen (chunk constant, corridor predicate, hash determinism, ' +
+          'world-to-chunk math) + test_explored_chunks (mark + idempotency + save ' +
+          'round-trip + new-game reset). 66/66 GUT pass. Phase 4 backlog (4.12–4.65) ' +
+          'remains open for future Phase 4.x extension work.',
+    completed: [
+      '4.1','4.2','4.3','4.4','4.5','4.6','4.7','4.8','4.9','4.10','4.11','4.22',
+    ],
+  },
   {
     version: '2026-05-13-phase3-extended-closure',
     note: 'Phase 3 extended parity-audit closure. After the 2026-05-13-phase3-closure migration ' +

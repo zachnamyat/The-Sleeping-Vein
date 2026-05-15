@@ -1,12 +1,16 @@
 extends Node2D
 class_name FogOfWar
 
-## Phase 1 placeholder fog-of-war (ticket 1.13). Tracks which 32x32-tile chunks
-## the player has been near and draws a dark overlay over the rest. Future
-## passes will swap this for a screen-space LOS shader.
+## Phase 1 placeholder fog-of-war (ticket 1.13), upgraded in Phase 4.10 to honour
+## the persisted explored-chunks list in GameState so revisiting a world from a
+## save doesn't black out previously walked areas. Tracks which CHUNK_TILES-tile
+## chunks the player has been near and draws a dark overlay over the rest.
+## Future passes will swap this for a screen-space LOS shader.
+##
+## CHUNK_TILES must match WorldGen.CHUNK_TILES; bumped to 64 in Phase 4.
 
 const TILE_PX: int = 16
-const CHUNK_TILES: int = 32
+const CHUNK_TILES: int = 64
 const REVEAL_RADIUS_CHUNKS: int = 1
 const DRAW_RADIUS_CHUNKS: int = 4
 
@@ -17,6 +21,13 @@ var _player: Node2D
 func _ready() -> void:
 	z_index = 90  # above world tiles, below HUD
 	EventBus.player_spawned.connect(_on_player_spawned)
+	# Phase 4.10 — hydrate from save. GameState already loaded its persisted
+	# explored_chunks before this scene's _ready runs (autoload order).
+	for key in GameState.explored_chunks.keys():
+		var parts: PackedStringArray = String(key).split(",")
+		if parts.size() != 2:
+			continue
+		_explored_chunks[Vector2i(int(parts[0]), int(parts[1]))] = true
 	set_process(true)
 
 

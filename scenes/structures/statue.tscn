@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://byvfuol2s8fmu"]
+
+[ext_resource type="Script" path="res://scripts/structures/statue.gd" id="1_st"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/statue.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_st"]
+size = Vector2(16, 24)
+
+[node name="Statue" type="Node2D"]
+script = ExtResource("1_st")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -12)
+
+[node name="InteractArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="InteractShape" type="CollisionShape2D" parent="InteractArea"]
+shape = SubResource("RectangleShape2D_st")

@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://5cpt5pyfdvpo"]
+
+[ext_resource type="Script" path="res://scripts/structures/locked_door.gd" id="1_ld"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/locked_door.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ld"]
+size = Vector2(16, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ld_area"]
+size = Vector2(28, 28)
+
+[node name="LockedDoor" type="StaticBody2D"]
+script = ExtResource("1_ld")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ld")
+
+[node name="InteractArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="InteractShape" type="CollisionShape2D" parent="InteractArea"]
+shape = SubResource("RectangleShape2D_ld_area")

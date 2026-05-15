@@ -18,6 +18,16 @@ var arrived_npcs: Dictionary = {}        # npc_id -> bool
 var unlocked_recipes: Dictionary = {}    # recipe_id -> bool
 var unlocked_compendium: Dictionary = {} # entry_id -> bool
 
+## Phase 4.10 — chunk visit log for the persistent map. Keyed by "x,y" so the
+## save round-trip can stringify without losing precision; value is the biome id
+## the chunk belonged to when first revealed. Survives scene reload.
+var explored_chunks: Dictionary = {}
+
+## Phase 4.5 — current Loom-bound respawn point. Defaults to world origin (the
+## Anchor's Loom). Updated when the player presses "Set Respawn" at the Loom or
+## places a Bed; consumed by PlayerController on death.
+var respawn_point: Vector2 = Vector2.ZERO
+
 ## Echo-Walker meta (per Lore §7.7) — gold threads earned per Sovereign kill.
 var sovereign_threads: int = 0
 
@@ -81,6 +91,35 @@ func reset_for_new_game() -> void:
 	allocated_talents.clear()
 	ng_plus = false
 	ng_plus_cycles = 0
+	explored_chunks.clear()
+	respawn_point = Vector2.ZERO
+
+
+## Phase 4.5 — bind the player's respawn to a world-space position. Called by
+## the Loom panel's Set-Respawn button and (Phase 9) Bed placement. Emits so
+## the HUD/Compass can refresh their anchor target.
+func set_respawn_point(world_pos: Vector2) -> void:
+	respawn_point = world_pos
+	EventBus.respawn_point_set.emit(world_pos)
+
+
+## Phase 4.10 — register a chunk as visited. Idempotent; first biome wins so the
+## map history doesn't flicker if a re-roll repaints the chunk.
+func mark_chunk_visited(chunk_coord: Vector2i, biome_id: StringName) -> void:
+	var key: String = "%d,%d" % [chunk_coord.x, chunk_coord.y]
+	if explored_chunks.has(key):
+		return
+	explored_chunks[key] = String(biome_id)
+	EventBus.chunk_visited.emit(chunk_coord, biome_id)
+
+
+func has_visited_chunk(chunk_coord: Vector2i) -> bool:
+	return explored_chunks.has("%d,%d" % [chunk_coord.x, chunk_coord.y])
+
+
+func explored_chunk_biome(chunk_coord: Vector2i) -> StringName:
+	var key: String = "%d,%d" % [chunk_coord.x, chunk_coord.y]
+	return StringName(String(explored_chunks.get(key, "")))
 
 
 func has_defeated_boss(boss_id: StringName) -> bool:

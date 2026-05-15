@@ -73,6 +73,9 @@ func _ready() -> void:
 			health.armor += armor_bonus
 		EventBus.skill_leveled_up.connect(_on_skill_leveled_up)
 	EventBus.player_spawned.emit(self)
+	# Phase 4.5 — honour the Loom-bound respawn point if the player set one in a
+	# prior session. The Loom's panel writes to GameState.respawn_point, which
+	# we read on death; no per-spawn signal binding required.
 	_respawn_position = global_position
 	_start_idle_breath()
 
@@ -95,17 +98,50 @@ func try_sit() -> void:
 		sprite.modulate = Color(0.85, 0.85, 0.95) if is_sitting else Color.WHITE
 
 
+const _SLEEP_COOLDOWN_BEATS: int = 8         ## Phase 4.52 — cannot sleep again until N beats pass
+const _SLEEP_HOSTILE_RADIUS_PX: float = 200.0 ## Phase 4.64 — hostile mob within range blocks sleep
+const _SLEEP_TIME_SKIP_SECONDS: float = 480.0 ## Phase 4.63 — skip 8 minutes of the 24-min day clock
+
+var _last_sleep_beat: int = -999999
+
+
 func try_sleep_in_bed() -> void:
 	# Ticket 1.35 — fade-to-black on bed interaction; advances Aphelion phases.
+	# Phase 4.64 — hostile-in-range check first; the player can't sleep through
+	# combat, only retreat from it.
+	if _hostile_nearby():
+		EventBus.ui_toast.emit("Too dangerous to rest here.", 2.0)
+		return
+	var now_beat: int = AudioBus.get("_phase_index") if AudioBus else 0
+	if now_beat < _last_sleep_beat + _SLEEP_COOLDOWN_BEATS:
+		EventBus.ui_toast.emit("You're not tired enough yet.", 2.0)
+		return
+	_last_sleep_beat = now_beat
 	is_sleeping = true
 	EventBus.letterbox_requested.emit(true, 0.6)
 	var t := get_tree().create_timer(1.5, true, false, false)
 	t.timeout.connect(_wake_from_bed)
 
 
+func _hostile_nearby() -> bool:
+	for m in get_tree().get_nodes_in_group("mob"):
+		if not (m is Node2D):
+			continue
+		if (m as Node2D).global_position.distance_to(global_position) <= _SLEEP_HOSTILE_RADIUS_PX:
+			return true
+	return false
+
+
 func _wake_from_bed() -> void:
 	is_sleeping = false
 	EventBus.letterbox_requested.emit(false, 0.6)
+	# Phase 4.63 — sleeping skips ~8 minutes of the world clock.
+	var dnc: Node = get_tree().current_scene.get_node_or_null("DayNightCycle") if get_tree().current_scene else null
+	if dnc and dnc.has_method("skip_time"):
+		dnc.call("skip_time", _SLEEP_TIME_SKIP_SECONDS)
+	# Mild HP restore on wake.
+	if health and health.current_health < health.max_health:
+		health.heal(int(health.max_health * 0.25), self)
 
 
 func play_eat_animation() -> void:
@@ -138,7 +174,7 @@ func _physics_process(delta: float) -> void:
 	var sprinting: bool = Input.is_action_pressed("sprint") and input.length() > 0.01
 	if sprinting and stamina and stamina.drain_continuous(stamina.sprint_drain_per_second, delta):
 		speed_mult *= SPRINT_MULT
-	velocity = input * BASE_SPEED * speed_mult
+	velocity = input * BASE_SPEED * speed_mult * DevConsole.dev_speed_mult
 	move_and_slide()
 	if PIXEL_SNAP:
 		global_position = global_position.round()
@@ -291,7 +327,14 @@ func _entity_layer_parent() -> Node:
 func _respawn() -> void:
 	if not is_dead:
 		return
-	global_position = _respawn_position
+	# Phase 4.5 — Loom-bound respawn wins over the legacy "fell-where-you-spawned"
+	# default. Zero stays a sentinel for "never bound at a Loom"; we only honour
+	# it once the player has visited the Anchor chunk (effectively always true
+	# in normal play).
+	var target: Vector2 = _respawn_position
+	if GameState.respawn_point != Vector2.ZERO or GameState.has_visited_chunk(Vector2i.ZERO):
+		target = GameState.respawn_point
+	global_position = target
 	health.revive(1.0)
 	is_dead = false
 	EventBus.player_respawned.emit(self, GameState.aphelion_slivers_remaining)
