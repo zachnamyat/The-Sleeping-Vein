@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bdiabearp1p12"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"diadem_bearer_phase1"
+phase_index = 0
+loop = true
+entries = [{
+"id": &"db_sword_arc",
+"kind": &"slam",
+"telegraph_seconds": 0.7,
+"cooldown_seconds": 1.8,
+"radius_pixels": 56.0,
+"damage": 42,
+"damage_type": &"physical",
+"speed": 0.0,
+}, {
+"id": &"db_shard_volley",
+"kind": &"ranged_arc",
+"telegraph_seconds": 1.0,
+"cooldown_seconds": 3.0,
+"radius_pixels": 240.0,
+"damage": 30,
+"damage_type": &"void",
+"speed": 220.0,
+}, {
+"id": &"db_dash_cut",
+"kind": &"dash",
+"telegraph_seconds": 0.4,
+"cooldown_seconds": 2.4,
+"radius_pixels": 48.0,
+"damage": 36,
+"damage_type": &"physical",
+"speed": 320.0,
+}]

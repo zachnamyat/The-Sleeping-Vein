@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cresalt13"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/resurrection_altar_placeable.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"resurrection_altar_placeable"
+display_name = "Resurrection Altar"
+description = "Place near the Anchor in multiplayer worlds. Lets one Walker spend an Aphelion sliver to immediately revive a fallen ally instead of waiting for the respawn timer."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 5
+tier = 8
+rarity = 4
+lore_text = "Loom-Twin etched the first one in a single Beat. The dead refuse to stay dead when you ask gently."
+lore_ref = "lore/07_walkers.md"

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cbearernam12"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bearers_pre_diadem_name.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bearers_pre_diadem_name"
+display_name = "The Bearer's Pre-Diadem Name"
+description = "Joren-of-the-Lattice. Signed in faint script on the final manifesto. A child's name carried to the end."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 7
+tier = 9
+rarity = 4
+resonance_bound = true
+lore_text = "Mira reads this and is silent for a long time."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-11"

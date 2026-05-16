@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://r14sigtx1"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_signal_transmitter"
+display_name = "Signal Transmitter"
+inputs = [{ "item_id": "aphelion_fragment", "count": 2 }, { "item_id": "clearstone_ingot", "count": 3 }, { "item_id": "wire_placeable", "count": 2 }]
+outputs = [{ "item_id": "signal_transmitter_placeable", "count": 1 }]
+stations = [&"anvil"]
+skill_xp_grant = 8
+skill_xp_id = &"skill_crafting"

@@ -31,7 +31,29 @@ const SAVE_ROOT: String = "user://saves/"
 ##        sub-quest, Wormbound covenant gesture, Hymnal Vault chord,
 ##        Emberforge journal + Forge-Compact tablets, weather, bellows fuel),
 ##        Skoldur recognition + Naeren peace flags (in GameState.collected_relics).
-const SAVE_VERSION: int = 9
+##   v10 — Phase 12: phase12_helpers (Mote Tide, Vacancy follower, Elision-Script
+##         puzzle, manifesto reader, Loom's Twin, ending selection, Diadem
+##         Reliquary conversion counter, Aphelion-Beat wave spawn count, Joren
+##         name reveal, Mira sibling scene, Walker silent epilogue flag, plus
+##         the endings_taken_history audit log per save slot).
+##   v11 — Phase 13: net_system + phase13_helpers (player profiles + per-world
+##         pvp / shared_xp / loot_mode / world-password-hash + per-peer
+##         color/portrait/idle pose / nameplate-visible setting, chat
+##         scrollback + typed-history recall, gamepad glyph set, recent-hosts
+##         list for the server browser / LAN tab).
+##   v12 — Phase 14: phase14_helpers (power graph + wire graph + logic gates +
+##         timer blocks + tile paint + blueprints + conveyor filters + storage
+##         pipes + robotic arms + auto-cookers + auto-fishing rigs + mob farms
+##         + auctioneer listings + wireless tx/rx) and mod_system
+##         (enabled mod ids + load order).
+##   v13 — Phase 15: phase15_helpers (difficulty / hardcore / run history /
+##         world stats / damage breakdown / combo / login streak / easter
+##         eggs / seasonal events / cheat detection / cloud sync / multi-char
+##         / NG+ inheritance overrides) + cosmetics_manager (dye colors +
+##         wardrobe outfits + visual layers) + logbook entries +
+##         steam_integration toggles (achievements enabled + workshop subs +
+##         trading cards + beta branch).
+const SAVE_VERSION: int = 13
 
 signal save_started(slot_name: String)
 signal save_completed(slot_name: String)
@@ -194,6 +216,31 @@ func _dump_game_state() -> Dictionary:
 		"phase10_helpers": Phase10Helpers.dump_state() if Phase10Helpers else {},
 		# Phase 11 v9.
 		"phase11_helpers": Phase11Helpers.dump_state() if Phase11Helpers else {},
+		# Phase 12 v10.
+		"phase12_helpers": Phase12Helpers.dump_state() if Phase12Helpers else {},
+		"ng_plus": GameState.ng_plus,
+		"ng_plus_cycles": GameState.ng_plus_cycles,
+		# Phase 13 v11 — multiplayer config + scrollback.
+		"net_system": NetSystem.dump_state() if NetSystem and NetSystem.has_method("dump_state") else {},
+		"phase13_helpers": Phase13Helpers.dump_state() if Phase13Helpers else {},
+		"net_player_slot_index": GameState.net_player_slot_index,
+		"net_player_color_hex": GameState.net_player_color_hex,
+		"net_player_portrait": String(GameState.net_player_portrait),
+		"net_player_vendor": GameState.net_player_vendor,
+		"net_world_password_hash": GameState.net_world_password_hash,
+		"net_pvp_enabled": GameState.net_pvp_enabled,
+		"net_shared_xp_enabled": GameState.net_shared_xp_enabled,
+		"net_loot_mode": GameState.net_loot_mode,
+		"net_nameplate_visible": GameState.net_nameplate_visible,
+		"net_recent_hosts": GameState.net_recent_hosts.duplicate(),
+		# Phase 14 v12 — automation, electricity, blueprints, mod system.
+		"phase14_helpers": Phase14Helpers.dump_state() if Phase14Helpers else {},
+		"mod_system": ModSystem.dump_state() if ModSystem else {},
+		# Phase 15 v13 — polish, accessibility, cosmetics, modes, achievements ext.
+		"phase15_helpers": Phase15Helpers.dump_state() if Phase15Helpers else {},
+		"cosmetics": CosmeticsManager.dump_state() if CosmeticsManager else {},
+		"logbook": _dump_logbook(),
+		"steam_integration": _dump_steam_integration(),
 	}
 
 
@@ -240,6 +287,38 @@ func _restore_game_state(state: Dictionary) -> void:
 	# Phase 11 v9.
 	if Phase11Helpers:
 		Phase11Helpers.restore_state(state.get("phase11_helpers", {}))
+	# Phase 12 v10.
+	if Phase12Helpers:
+		Phase12Helpers.restore_state(state.get("phase12_helpers", {}))
+	GameState.ng_plus = bool(state.get("ng_plus", false))
+	GameState.ng_plus_cycles = int(state.get("ng_plus_cycles", 0))
+	# Phase 13 v11 — multiplayer config + scrollback.
+	if NetSystem and NetSystem.has_method("restore_state"):
+		NetSystem.restore_state(state.get("net_system", {}))
+	if Phase13Helpers:
+		Phase13Helpers.restore_state(state.get("phase13_helpers", {}))
+	GameState.net_player_slot_index = int(state.get("net_player_slot_index", 0))
+	GameState.net_player_color_hex = String(state.get("net_player_color_hex", ""))
+	GameState.net_player_portrait = StringName(String(state.get("net_player_portrait", "portrait_default")))
+	GameState.net_player_vendor = int(state.get("net_player_vendor", 0))
+	GameState.net_world_password_hash = int(state.get("net_world_password_hash", 0))
+	GameState.net_pvp_enabled = bool(state.get("net_pvp_enabled", false))
+	GameState.net_shared_xp_enabled = bool(state.get("net_shared_xp_enabled", true))
+	GameState.net_loot_mode = int(state.get("net_loot_mode", 0))
+	GameState.net_nameplate_visible = bool(state.get("net_nameplate_visible", true))
+	GameState.net_recent_hosts = state.get("net_recent_hosts", []).duplicate()
+	# Phase 14 v12 — automation, electricity, blueprints, mod system.
+	if Phase14Helpers:
+		Phase14Helpers.restore_state(state.get("phase14_helpers", {}))
+	if ModSystem:
+		ModSystem.restore_state(state.get("mod_system", {}))
+	# Phase 15 v13 — polish & gap closure.
+	if Phase15Helpers:
+		Phase15Helpers.restore_state(state.get("phase15_helpers", {}))
+	if CosmeticsManager:
+		CosmeticsManager.restore_state(state.get("cosmetics", {}))
+	_pending_logbook_restore = state.get("logbook", {})
+	_restore_steam_integration(state.get("steam_integration", {}))
 	# Player restore is signal-driven: when SaveSystem holds pending state, it
 	# subscribes once to EventBus.player_spawned. The next player to spawn
 	# (either the existing one re-detected, or a fresh one after scene change)
@@ -592,6 +671,56 @@ func _read_json(path: String, out_data: Dictionary) -> Error:
 	for k in (json.data as Dictionary).keys():
 		out_data[k] = (json.data as Dictionary)[k]
 	return OK
+
+
+## Phase 15 — LogbookPanel persistence. Single-instance scene-bound panel;
+## stores its journal entries in a dict.
+var _pending_logbook_restore: Dictionary = {}
+
+
+func _dump_logbook() -> Dictionary:
+	if get_tree() == null:
+		return {}
+	for n in get_tree().get_nodes_in_group("logbook_panel"):
+		if n.has_method("dump_state"):
+			return n.call("dump_state")
+	return {}
+
+
+func consume_pending_logbook() -> Dictionary:
+	var out: Dictionary = _pending_logbook_restore.duplicate(true)
+	_pending_logbook_restore = {}
+	return out
+
+
+## Phase 15 — minimal SteamIntegration persistence for the toggles + workshop
+## subs + trading cards. The autoload itself stays initialized at runtime.
+func _dump_steam_integration() -> Dictionary:
+	if SteamIntegration == null:
+		return {}
+	return {
+		"achievements_enabled": SteamIntegration.achievements_enabled,
+		"on_beta_branch": SteamIntegration.on_beta_branch,
+		"steam_deck_layout_active": SteamIntegration.steam_deck_layout_active,
+		"subscribed_workshop_mods": SteamIntegration.subscribed_workshop_mods.duplicate(),
+		"trading_cards_collected": SteamIntegration.trading_cards_collected.duplicate(true),
+	}
+
+
+func _restore_steam_integration(d: Dictionary) -> void:
+	if d.is_empty() or SteamIntegration == null:
+		return
+	SteamIntegration.achievements_enabled = bool(d.get("achievements_enabled", true))
+	SteamIntegration.on_beta_branch = bool(d.get("on_beta_branch", false))
+	SteamIntegration.steam_deck_layout_active = bool(d.get("steam_deck_layout_active", false))
+	var subs: Array = d.get("subscribed_workshop_mods", [])
+	SteamIntegration.subscribed_workshop_mods.clear()
+	for m in subs:
+		SteamIntegration.subscribed_workshop_mods.append(String(m))
+	var cards: Dictionary = d.get("trading_cards_collected", {})
+	SteamIntegration.trading_cards_collected.clear()
+	for k in cards.keys():
+		SteamIntegration.trading_cards_collected[StringName(String(k))] = bool(cards[k])
 
 
 func _remove_directory_recursive(abs_path: String) -> Error:

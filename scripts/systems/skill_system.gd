@@ -138,23 +138,27 @@ func _apply_xp_multipliers(skill_id: StringName, raw_amount: int) -> int:
 	return int(round(float(raw_amount) * mult))
 
 
-## Phase 7.12 — when a party is connected, emit a 50% share for each peer.
-## Currently a stub that depends on NetSystem.is_party_active(); will be
-## fleshed out in Phase 13.
+## Phase 7.12 / 13.39 / 13.50 — when a party is connected and shared XP is
+## enabled, emit a 50% share for each peer. NetSystem.shared_xp_enabled is the
+## kill switch (lobby toggle); the host's setting is authoritative.
 func _share_party_xp(skill_id: StringName, amount: int) -> void:
 	if NetSystem == null or not NetSystem.has_method("is_party_active"):
 		return
 	if not NetSystem.is_party_active():
+		return
+	if NetSystem.has_method("get") and not bool(NetSystem.get("shared_xp_enabled")):
 		return
 	var peers: int = 0
 	if NetSystem.has_method("party_peer_count"):
 		peers = int(NetSystem.call("party_peer_count"))
 	if peers <= 0:
 		return
-	# Don't recurse — emit to each peer's mailbox once Phase 13 wires the RPC.
-	# For now we just emit a local skill_xp_gained at half magnitude so single-
-	# screen splitscreen testing reads the right multiplier.
-	pass
+	# Each peer receives a half-amount share. In the local-only path (split-
+	# screen / single-screen testing) the share lands on the existing skill XP
+	# pool, which feeds the level-up popups via existing UI hooks.
+	var share: int = maxi(1, amount / 2)
+	_xp[skill_id] = int(_xp.get(skill_id, 0)) + share
+	EventBus.skill_xp_gained.emit(skill_id, share)
 
 
 func _on_xp_gained(skill_id: StringName, amount: int) -> void:

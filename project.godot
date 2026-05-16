@@ -64,7 +64,27 @@ NpcLifecycle="*res://scripts/systems/npc_lifecycle.gd"
 Phase9Helpers="*res://scripts/systems/phase9_helpers.gd"
 Phase10Helpers="*res://scripts/systems/phase10_helpers.gd"
 Phase11Helpers="*res://scripts/systems/phase11_helpers.gd"
+Phase12Helpers="*res://scripts/systems/phase12_helpers.gd"
+Phase13Helpers="*res://scripts/systems/phase13_helpers.gd"
+Phase14Helpers="*res://scripts/systems/phase14_helpers.gd"
+ModSystem="*res://scripts/systems/mod_system.gd"
 DevConsole="*res://scripts/autoloads/dev_console.gd"
+Phase15Helpers="*res://scripts/systems/phase15_helpers.gd"
+AccessibilityManager="*res://scripts/systems/accessibility_manager.gd"
+CosmeticsManager="*res://scripts/systems/cosmetics_manager.gd"
+AchievementsExtended="*res://scripts/systems/achievements_extended.gd"
+SteamIntegration="*res://scripts/systems/steam_integration.gd"
+LocalizationManager="*res://scripts/systems/localization_manager.gd"
+AudioProfile="*res://scripts/systems/audio_profile.gd"
+PerfManager="*res://scripts/systems/perf_manager.gd"
+SaveBackup="*res://scripts/systems/save_backup.gd"
+NetPolish="*res://scripts/systems/net_polish.gd"
+PhotoMode="*res://scripts/systems/photo_mode.gd"
+DebugOverlay="*res://scripts/systems/debug_overlay.gd"
+CrashReporter="*res://scripts/systems/crash_reporter.gd"
+ReplaySystem="*res://scripts/systems/replay_system.gd"
+GameModes="*res://scripts/systems/game_modes.gd"
+MobDeathSfx="*res://scripts/systems/mob_death_sfx.gd"
 
 [display]
 
@@ -212,6 +232,46 @@ hotbar_9={
 hotbar_10={
 "deadzone": 0.5,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":48,"key_label":0,"unicode":48,"location":0,"echo":false,"script":null)
+]
+}
+toggle_chat={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194309,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+ping_marker={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194306,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+party_ui={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":89,"key_label":0,"unicode":121,"location":0,"echo":false,"script":null)
+]
+}
+voice_ptt={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":86,"key_label":0,"unicode":118,"location":0,"echo":false,"script":null)
+]
+}
+emote_wheel={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194446,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+photo_mode={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194333,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+toggle_bestiary={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":75,"key_label":0,"unicode":107,"location":0,"echo":false,"script":null)
+]
+}
+toggle_wardrobe={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":85,"key_label":0,"unicode":117,"location":0,"echo":false,"script":null)
 ]
 }
 

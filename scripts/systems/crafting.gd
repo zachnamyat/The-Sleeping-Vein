@@ -98,6 +98,13 @@ func all_recipes() -> Array:
 	return _recipes.values()
 
 
+## Phase 14.32 — Modded recipes land here. Later registrations win.
+func register(recipe: Recipe) -> void:
+	if recipe == null or recipe.id == &"":
+		return
+	_recipes[recipe.id] = recipe
+
+
 func recipes_for_station(station_id: StringName) -> Array:
 	var out: Array = []
 	for r in _recipes.values():

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cloomtwin12"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/loom_twin_placeable.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"loom_twin_placeable"
+display_name = "Resonance Loom's Twin (Replica)"
+description = "An inert replica of the broken Loom. Decorative; emits a faint hum that NPCs near it find unsettling."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 5
+tier = 9
+rarity = 4
+light_radius_pixels = 48.0
+light_color = Color(0.92, 0.84, 0.55, 1.0)
+light_energy = 0.6
+resonance_bound = true
+lore_ref = "lore/04_biomes.md#stratum-9--the-final-spiral"

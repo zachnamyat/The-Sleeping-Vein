@@ -634,6 +634,13 @@ func _spawn_mobs(chunk: Vector2i, biome: BiomeDef, rng: RandomNumberGenerator) -
 	var density_mult: float = 1.0
 	if AudioBus and not AudioBus.is_day():
 		density_mult = NIGHT_SPAWN_BONUS
+	# 12.16 — Final Spiral hostile density curve. Multiplier ramps with distance
+	# from the Anchor once the player crosses the Final Spiral boundary at 640t.
+	var p12: Node = Engine.get_main_loop().get_root().get_node_or_null("Phase12Helpers") if Engine.get_main_loop() else null
+	if p12 and p12.has_method("density_multiplier_for_distance"):
+		var chunk_center: Vector2 = Vector2(chunk * CHUNK_TILES + Vector2i(CHUNK_TILES / 2, CHUNK_TILES / 2))
+		var dist_tiles: float = chunk_center.length()
+		density_mult *= float(p12.call("density_multiplier_for_distance", dist_tiles))
 	var budget: int = clampi(
 		int(round(float(biome.mobs_per_chunk) * density_mult)),
 		1,

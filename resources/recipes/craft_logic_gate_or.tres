@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://r14orgg1"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_logic_gate_or"
+display_name = "Logic Gate — OR"
+inputs = [{ "item_id": "clearstone_ingot", "count": 2 }, { "item_id": "wire_placeable", "count": 3 }]
+outputs = [{ "item_id": "logic_gate_or_placeable", "count": 1 }]
+stations = [&"furnace"]
+skill_xp_grant = 4
+skill_xp_id = &"skill_crafting"

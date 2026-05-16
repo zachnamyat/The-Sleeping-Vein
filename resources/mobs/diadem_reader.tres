@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://brw3d3ieyeyl4"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/final_spiral/diadem_reader.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_final_spiral.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"diadem_reader"
+display_name = "Diadem-Reader"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 110
+armor = 9
+contact_damage = 22
+contact_damage_type = &"physical"
+move_speed = 36.0
+detection_radius = 160.0
+leash_radius = 220.0
+behavior = 2
+mob_class = 0
+xp_skill = &"skill_melee"
+xp_value = 60
+loot_table = ExtResource("3_loot")
+biome = &"final_spiral"
+stagger_threshold = 40
+stagger_recovery_seconds = 0.8
+knockback_resistance = 0.2
+resistances = {"void": 0.3}
+weaknesses = {"lightning": 1.4}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-9--final-spiral"

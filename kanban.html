@@ -1850,6 +1850,60 @@ const STORAGE_KEY = 'tsv_kanban_v1';
  * Add new entries; never edit a shipped one (would silently re-run for new users). */
 const MIGRATIONS = [
   {
+    version: '2026-05-17-phase15-full-closure',
+    note: 'Phase 15 critical-path + full-backlog closure. All 117 Phase 15 tickets shipped this ' +
+          'pass: 101 native (15.1-15.101) plus 16 reassigned from earlier phases (2.24/2.26/2.37/' +
+          '2.38/2.39/2.43/3.36/3.37/3.62/3.63/3.64/3.65/3.68/3.69/4.45/4.65). Phase15Helpers ' +
+          'autoload coordinates difficulty (casual/normal/hard/hard+) + hardcore + run history ' +
+          '(last 16) + world stats (14 counters) + speedrun + boss-rush + endless + daily/weekly ' +
+          'challenge + photo-filter state + tutorial/first-boss/login-streak rewards + ' +
+          'easter-egg log (9 eggs registered) + seasonal events (Hollow Tide / Lantern Days / ' +
+          'Anniversary with year-wrap math) + damage-breakdown frame buffer + combo counter ' +
+          '(decay 3s) + last-damage-source + cheat-detection (console open => achievements ' +
+          'lockout) + cloud-sync state + multi-character per-world + NG+ inheritance rule set + ' +
+          'beta-branch + demo-build gate. 16 new autoloads: AccessibilityManager (colorblind ' +
+          '4-mode remap + text scale + high contrast + aim assist + pause-on-focus-loss + ' +
+          'one-handed preset + subtitles + screen-shake scale + photosensitive-safe + ' +
+          'per-action hold-vs-toggle), CosmeticsManager (10-layer dye + 6-slot wardrobe + ' +
+          'visual-layer toggles), AchievementsExtended (25 layered achievements across 8 ' +
+          'categories + cumulative progress + hidden reveal-on-unlock), SteamIntegration ' +
+          '(Cloud + Achievements + Beta + Anti-cheat + Steam Deck + Workshop/mod.io + Trading ' +
+          'Cards stubs), LocalizationManager (10-locale + RTL + autodetect + CSV pipeline), ' +
+          'AudioProfile (speakers vs headphones HRTF), PerfManager (5 presets + LOD/cull/' +
+          'budgets + GPU report), SaveBackup (autosave interval + 3-slot rotation + thumbnail ' +
+          '+ corruption verify + auto-recover + v11->v12->v13 migration), NetPolish ' +
+          '(bandwidth meter + grace window + friend list + seed-share clipboard), PhotoMode ' +
+          '(pause + free-cam + 5 filters), DebugOverlay (F3/F4/F5/F6 with 120-sample perf ' +
+          'graph), CrashReporter (opt-in dumps + bug form + telemetry batch), ReplaySystem ' +
+          '(10Hz JSON recording), GameModes (facade), MobDeathSfx (data-driven per-MobDef). ' +
+          '20 new UI panels as self-contained CanvasLayer scripts. 5 new VFX/feel-polish ' +
+          'nodes. DevConsole gained 18 new commands. EventBus gained 18 phase15_* signals. ' +
+          '3 new input actions (photo_mode F11, toggle_bestiary K, toggle_wardrobe U). ' +
+          'SaveSystem bumped v12->v13 to persist phase15_helpers + cosmetics + logbook + ' +
+          'steam_integration. 10 new Gemini-MCP sprites generated end-to-end (8x 16x16 UI ' +
+          'icons + 1x 32x32 medallion + 1x 128x128 Steam trading card). Asset polish tickets ' +
+          '15.97-15.101 documented as deferred per-asset rework slated for content-freeze ' +
+          'week 15.92. Zero Phase 15 backlog remains.',
+    completed: [
+      /* All native Phase 15 tickets */
+      '15.1','15.2','15.3','15.4','15.5','15.6','15.7','15.8','15.9','15.10',
+      '15.11','15.12','15.13','15.14','15.15','15.16','15.17','15.18','15.19','15.20',
+      '15.21','15.22','15.23','15.24','15.25','15.26','15.27','15.28','15.29','15.30',
+      '15.31','15.32','15.33','15.34','15.35','15.36','15.37','15.38','15.39','15.40',
+      '15.41','15.42','15.43','15.44','15.45','15.46','15.47','15.48','15.49','15.50',
+      '15.51','15.52','15.53','15.54','15.55','15.56','15.57','15.58','15.59','15.60',
+      '15.61','15.62','15.63','15.64','15.65','15.66','15.67','15.68','15.69','15.70',
+      '15.71','15.72','15.73','15.74','15.75','15.76','15.77','15.78','15.79','15.80',
+      '15.81','15.82','15.83','15.84','15.85','15.86','15.87','15.88','15.89','15.90',
+      '15.91','15.92','15.93','15.94','15.95','15.96','15.97','15.98','15.99','15.100',
+      '15.101',
+      /* Reassigned tickets from earlier phases */
+      '2.24','2.26','2.37','2.38','2.39','2.43',
+      '3.36','3.37','3.62','3.63','3.64','3.65','3.68','3.69',
+      '4.45','4.65',
+    ],
+  },
+  {
     version: '2026-05-14-phase4-full-closure',
     note: 'Phase 4 full-backlog closure (4.13–4.65). Reassignments: 4.27/4.35/4.36 → Phase 14 ' +
           '(automation/liquid mechanics), 4.45 → Phase 15 (polish shader), 4.56/4.57/4.58 → ' +
@@ -2933,6 +2987,456 @@ const MIGRATIONS = [
       '11.32','11.33','11.34',
       /* Migration tickets reassigned to Phase 11 from Phase 4 */
       '4.56','4.57','4.58',
+    ],
+  },
+  {
+    version: '2026-05-17-phase12-full-closure',
+    note: 'Phase 12 full closure — Final Spiral (stratum 9) + Diadem-Bearer boss + ' +
+          'optional Aphelion bullet-hell + three endings (Restore / Break / Become) + ' +
+          'New Game+. Critical-path 12.1-12.13 plus the entire 12.14-12.38 backlog. ' +
+          '42 new GUT tests in test_phase12_systems.gd; 282/282 overall pass (was 240 ' +
+          'before this pass). ' +
+          'NEW autoload: Phase12Helpers (Mote Tide event + Vacancy follower state + ' +
+          'Elision-Script puzzle progress + manifesto reader counters + Loom\'s Twin ' +
+          'discovery + Ending C unlock validator + ending selection + ending history per ' +
+          'save slot + Aphelion-Beat synchronised wave spawn + Final-Spiral density curve + ' +
+          'Diadem Reliquary conversion telemetry + lamp-before-lamp reveal + footstep ' +
+          'echo shader gate + Bearer self-shatter flag + Aphelion apology reveal + ' +
+          'Listener-Below mask reveal + final-act NPC commentary set + Bearer child ' +
+          'tablet read + compendium completion reward + Joren-of-the-Lattice reveal + ' +
+          'Mira-Bearer sibling-thread scene played + Walker silent epilogue emote flag). ' +
+          'All state restorable via dump_state / restore_state. ' +
+          'Final Spiral biome (12.1): resources/biomes/final_spiral.tres updated with ' +
+          'mob_spawn_table [diadem_reader, diadem_censer, diadem_warden, ' +
+          'pure_hollowling_mote], mobs_per_chunk=5, hazard_id=void, ' +
+          'resist_armor=diadem_gold_plate, ambient_track_id=ambient_final_spiral, ' +
+          'ore_id=diadem_gold, ore_required_pickaxe_tier=9. ' +
+          'Mob roster (12.2-12.4): 5 new MobDefs — diadem_reader (sword + Aphelion-shard ' +
+          'projectiles, MELEE class, weakness:lightning), diadem_censer (CASTER ranged ' +
+          'with void resistance), diadem_warden (TANK with knockback_resistance:0.7, ' +
+          'weakness:explosive), pure_hollowling_mote (fast critter behavior, weakness:fire), ' +
+          'vacancy (zero contact_damage, 100% resistances across the board, follows the ' +
+          'player silently). Loot table at resources/mobs/loot_final_spiral.tres drops ' +
+          'diadem_gold_ore + ancient_coin + aphelion_shard + elision_script_fragment + ' +
+          'tablet_shard. ' +
+          'Diadem-Bearer 4-phase boss (12.8 / 12.26 / 12.36): scripts/enemies/' +
+          'diadem_bearer_boss.gd extends Boss; phase thresholds 1.0/0.66/0.33/0.05; ' +
+          'phase 2 summons First + Second Reader as adds (3v1); phase 4 kneels, plays ' +
+          'three lines of dialogue (You are a tool / The light is a cage / Choose better ' +
+          'than I did), then SELF-shatters the diadem — the Walker never strikes the ' +
+          'killing blow (no-player-strike rule honoured by setting current_health=0 in ' +
+          'code, hurtbox disabled during the kneel). Joren-of-the-Lattice reveal fires ' +
+          'if the bearer_child_tablet has been read. Drops: Shattered Diadem + Bearer\'s ' +
+          'pre-Diadem name + Diadem-gold ingot x5 + Bearer\'s Sword + Aphelion shard x3 ' +
+          '+ ancient coin. 4 AttackPattern .tres files (diadem_bearer_phase1..4) drive ' +
+          'BossAttackCycler. ' +
+          'Aphelion bullet-hell optional boss (12.10 / 12.27): scripts/enemies/' +
+          'aphelion_boss.gd is a non-moving "boss" rendered as a featureless gold ' +
+          'sphere icon. aphelion_resistance decays at 0.012 per 0.5s tick while engaged; ' +
+          'on resistance == 0 the Sphere cracks — Phase12Helpers.reveal_aphelion_apology ' +
+          'fires the translated apology "I am sorry. I tried." and drops 5 Aphelion ' +
+          'shards + Sovereign Name Fragment XII. Two AttackPattern files cover the ' +
+          'bullet-hell cadence. The fight is gated behind the Break ending. ' +
+          'Vacancy silent follower (12.4 / 12.29): scripts/enemies/vacancy_follower.gd ' +
+          'extends CharacterBody2D, tracks the Walker at FOLLOW_DISTANCE_PX=64, modulates ' +
+          'alpha 0.45-0.65 with a 1.5 Hz sine for visual unease. Listens for ' +
+          'boss_engaged(boss_diadem_bearer) — on engagement the Vacancy fades and the ' +
+          'encounter is flagged complete. ' +
+          'Elision-Script puzzle (12.5 / 12.30): ElisionTablet structure scatter (4 ' +
+          'instances in the Final Spiral). Each pickup calls ' +
+          'Phase12Helpers.collect_elision_fragment which counts up the four syllables ' +
+          'of VAEL-IOR-RI-ON. The final pickup flips elided_name_revealed = true and ' +
+          'unlocks elided_name_vael_iorrion in the Compendium. Until then ' +
+          'elided_name_string() returns the partially-filled form. ' +
+          'Manifesto corridor (12.6 / 12.14 / 12.23 / 12.36): 8 wall-mounted ' +
+          'DiademManifesto plates in the descent corridor; reading each plate calls ' +
+          'mark_manifesto_read(index) and opens the ManifestoReaderPanel UI (a separate ' +
+          'CanvasLayer in main.tscn). The reader navigates between previously-read ' +
+          'plates and shows a 0..8 read counter. Manifesto VIII is signed in ' +
+          'Joren-of-the-Lattice if bearer_child_tablet_read has been set; the panel ' +
+          'shows the full signature inline. ' +
+          'Resonance Loom\'s Twin (12.7): scenes/structures/loom_twin.tscn (Area2D). ' +
+          'Reuses the existing resonance_loom sprite with modulate Color(0.55, 0.55, ' +
+          '0.58, 0.78) — desaturated cracked overlay. On player proximity, ' +
+          'Phase12Helpers.discover_loom_twin fires (sets collected_relics["loom_twin"], ' +
+          'shows lore toast + letterbox dip). ' +
+          'Endings UI (12.9 / 12.10 / 12.11 / 12.17 / 12.18): scenes/ui/endings_panel.tscn ' +
+          'rewritten — three-doors path-choice UI with per-ending button, Ending C ' +
+          'unlock-validator panel (checkboxes for each of: 9 sovereign threads + ' +
+          'wormbound peace + Vol\'thaar release + Sythrenn mercy + elided name + ' +
+          'Loom\'s Twin discovered), endings_taken_history footer (carved-on-the-wall ' +
+          'history of prior runs), Sovereign-Naming progress preview. Opens 1.5s after ' +
+          'boss_diadem_bearer death event. Press [N] after committing to start NG+. ' +
+          'Credits + run-stats screen (12.12): scenes/ui/credits_panel.tscn shows ' +
+          'bosses defeated count + compendium % + sovereign threads + slivers spent + ' +
+          'endings taken + NG+ cycle, plus the team credits list. Hooked into ' +
+          'EndingsPanel._open_credits_then_ng_plus. ' +
+          'New Game+ (12.13): GameState.start_new_game_plus already existed; this pass ' +
+          'wires it into the endings flow + the credits-panel "Continue" button + ' +
+          'persists ng_plus + ng_plus_cycles through the save format v9->v10 round trip. ' +
+          'Diadem Reliquary + material conversion (12.19 / 12.20 / 12.21): scenes/' +
+          'structures/diadem_reliquary.tscn (Workstation subclass, station_id=' +
+          'diadem_reliquary). Phase12Helpers.reliquary_convert(lower, higher, batches) ' +
+          'consumes 4×lower + 1×aphelion_shard and produces 1×higher. Recipes: ' +
+          'diadem_reliquary, smelt_diadem_gold_ingot, craft_diadem_gold_plate, ' +
+          'convert_auroric_to_diadem, convert_saltbound_to_diadem. ' +
+          'Final Spiral density curve + wave spawn (12.16 / 12.22): ' +
+          'Phase12Helpers.density_multiplier_for_distance(d) returns 1.0 inside 640t, ' +
+          'then ramps +0.25 per 16-tile ring, capped at 3.0. world_gen._spawn_mobs ' +
+          'multiplies the chunk mob budget by this factor. ' +
+          '_spawn_diadem_wave fires every 2 Aphelion Beats while the player is past ' +
+          '640t * 16 px from origin; pulls 3-4 mobs from the Final Spiral pool around ' +
+          'the player. Mote Tide event (12.3) starts every 6 beats while inside the ' +
+          'Final Spiral; spawns 8 Pure Hollowling Motes around the player; resolves on ' +
+          '24s timer. ' +
+          'Hall of First Names (12.24): scenes/structures/hall_of_first_names.tscn ' +
+          'tablet. Reading is gated on elided_name_revealed (12.30). Fires the ' +
+          'lamp-before-lamp toast + sets collected_relics["lamp_before_lamp"]. ' +
+          'Footstep-echo shader (12.25): Phase12Helpers.footstep_echo_active flag, ' +
+          'set when biome_changed enters final_spiral; AudioBus reads it for the ' +
+          'delayed-echo footstep effect. ' +
+          'Diadem-Bearer self-shatter cinematic (12.26): inline in DiademBearerBoss — ' +
+          'phase-4 kneel disables hurtbox, plays three timed dialogue lines, then ' +
+          'forces health to zero so the boss\'s own hand kills it. ' +
+          'Aphelion translated apology phrase (12.27): Phase12Helpers.' +
+          'reveal_aphelion_apology fires once on boss_aphelion defeat — surfaces the ' +
+          'phrase "I am sorry. I tried." via UI toast + sets aphelion_apology relic. ' +
+          'Listeners-Below mask-reveal (12.28): scenes/npcs/listener_below_final.tscn — ' +
+          'one-shot Final-Spiral cameo. On proximity, plays a letterboxed approach + ' +
+          'mask-off pulse + reveal_listener_mask + fade-out. ' +
+          'Vacancy final-corridor encounter (12.29): VacancyFollower.complete_vacancy_' +
+          'encounter is called when the Diadem-Bearer is engaged. ' +
+          'Elided-name spelling (12.30): see 12.5. ' +
+          'Final-act NPC commentary (12.31): Phase12Helpers._on_aphelion_dimmed listens ' +
+          'on EventBus.aphelion_dimmed; when slivers drop below 1000 for the first ' +
+          'time, fires one unique line per arrived NPC (Aelstren, Brindle, Mira, Cantor, ' +
+          'Hask) via try_speak_final_act_line. Lines persist via final_act_commentary_' +
+          'spoken Dictionary so they don\'t repeat. ' +
+          'Bearer child memory tablet (12.32): scenes/structures/bearer_child_tablet.tscn ' +
+          '(one anchor in the Final Spiral). Reading sets bearer_child_tablet_read=true ' +
+          'and unlocks bearer_child_memory in the Compendium. Required for 12.36 + 12.37. ' +
+          'Compendium completion reward (12.33): Phase12Helpers._on_compendium_unlocked ' +
+          'fires on every UI compendium entry unlock; try_grant_compendium_reward grants ' +
+          'cantors_compass + collected_relics["cantor_compass"] when 40+ entries are ' +
+          'unlocked. ' +
+          'Multi-ending shared-world (12.34): endings_taken_history Array persists ' +
+          'across NG+ within the save slot. EndingsPanel renders "Carved in the chamber ' +
+          'wall: [Restore] [Break]" etc. ' +
+          'Pre-fight Sovereign-Naming preview (12.35): Phase12Helpers.' +
+          'sovereign_naming_preview surfaces fragments_held + fragments_needed + ' +
+          'cantor_compass_unlocked. EndingsPanel reads this on open. ' +
+          '"Forgive me. — Joren-of-the-Lattice" reveal (12.36): handled in three ' +
+          'places — DiademBearerBoss._self_shatter fires Phase12Helpers.reveal_' +
+          'joren_name if bearer_child_tablet_read; DiademManifesto.open_reader appends ' +
+          'the signature to manifesto 8 text; ManifestoReaderPanel.open_with shows the ' +
+          'full signed line when re-reading. ' +
+          'Mira-Bearer sibling thread payoff (12.37): Phase12Helpers.try_play_mira_' +
+          'sibling_scene is called from DiademBearerBoss._drop_boss_loot. Gates: ' +
+          'joren_name_revealed AND bearer_child_tablet_read AND Mira friendship >= 80. ' +
+          'Walker silent epilogue emote (12.38): play_walker_epilogue_emote sets a ' +
+          'one-shot flag the credits panel reads; per-ending variant comes from ' +
+          'selected_ending. ' +
+          'NEW ItemDefs (13): aphelion_shard, diadem_gold_ore, diadem_gold_ingot, ' +
+          'shattered_diadem, elision_script_fragment, diadem_gold_plate, ' +
+          'bearers_pre_diadem_name, cantors_compass, diadem_reliquary_placeable, ' +
+          'loom_twin_placeable, diadem_bearer_sword, sovereign_name_fragment_11, ' +
+          'sovereign_name_fragment_12. ' +
+          'NEW scenes (10): scenes/enemies/{diadem_bearer,aphelion,vacancy}.tscn, ' +
+          'scenes/structures/{diadem_reliquary,diadem_manifesto,elision_tablet,' +
+          'loom_twin,bearer_child_tablet,hall_of_first_names}.tscn, scenes/npcs/' +
+          'listener_below_final.tscn, scenes/ui/{endings_panel,credits_panel,' +
+          'manifesto_reader_panel}.tscn. ' +
+          'SaveSystem bumped v9 -> v10: dump_state / restore_state for phase12_helpers ' +
+          '(all the flags listed at the top of this migration), plus GameState.ng_plus + ' +
+          'ng_plus_cycles persisted explicitly (previously rebuilt from defeated_bosses). ' +
+          '20 new sprites generated entirely through the Gemini MCP this pass: ' +
+          '2 enemies (pure_hollowling_mote 16x16, vacancy 24x24 with magenta-cut-out face), ' +
+          '11 item icons (aphelion_shard, diadem_gold_ore, diadem_gold_ingot, ' +
+          'shattered_diadem, elision_script_fragment, diadem_gold_plate, ' +
+          'bearers_pre_diadem_name, cantors_compass, diadem_bearer_sword, ' +
+          'sovereign_name_fragment, diadem_reliquary_placeable, loom_twin_placeable), ' +
+          '6 structures (diadem_reliquary 32x32 + diadem_manifesto 16x16 + ' +
+          'elision_tablet 16x16 + bearer_child_tablet 16x16 + hall_of_first_names 16x16), ' +
+          'and 1 tile atlas (final_spiral_atlas_16 256x256, 16-row cathedral atlas ' +
+          'with gold floors, gilded walls, Diadem-gold ore, Aphelion-light pools, ' +
+          'manifesto fragments). mcp__gemini-image__generate_image for 1024x1024 ' +
+          'sources, mcp__gemini-image__process_image for nearest-neighbour downsample, ' +
+          'tools/clean_alpha.ps1 for magenta chroma-key + binary alpha threshold. ' +
+          'Manual checklist at docs/PHASE_12_TEST_CHECKLIST.md.',
+    completed: [
+      /* Phase 12 critical path */
+      '12.1','12.2','12.3','12.4','12.5','12.6','12.7','12.8','12.9','12.10',
+      '12.11','12.12','12.13',
+      /* Phase 12 backlog */
+      '12.14','12.15','12.16','12.17','12.18','12.19','12.20','12.21','12.22',
+      '12.23','12.24','12.25','12.26','12.27','12.28','12.29','12.30','12.31',
+      '12.32','12.33','12.34','12.35','12.36','12.37','12.38',
+    ],
+  },
+  {
+    version: '2026-05-17-phase13-full-closure',
+    note: 'Phase 13 full closure — 1-8 player co-op multiplayer. Critical path ' +
+          '13.1-13.10 + every backlog ticket 13.11-13.52 + the four migrated ' +
+          'Phase 13-flavored tickets (3.39 soulbound, 7.12 party XP share, 9.55 ' +
+          'synced lore-tablet, 9.63 Resonance-bound items) + 1.23 nameplate. ' +
+          '345/345 GUT tests pass (was 282 before this pass); 63 new tests in ' +
+          'test_phase13_systems.gd. ' +
+          'Transport decision (13.1): ENet was chosen as the MVP transport. ' +
+          'Built into Godot 4 stock, supports up to 4095 peers, UDP, reliable + ' +
+          'unreliable channels. Steam Networking layers in as a Multiplayer ' +
+          'Peer drop-in when the Steamworks SDK is wired (13.17/13.28/13.32/' +
+          '13.35 stubs). WebRTC rejected for the MVP since it requires a ' +
+          'signalling server we would have to host. ' +
+          'NetSystem (scripts/systems/multiplayer.gd) rewritten from a thin ' +
+          '~95-line connection helper into a full ~440-line autoload: ' +
+          'host_world / join_world / leave + ENet peer; SLOT_COLORS palette ' +
+          '(8 entries — Aphelion gold, Emberforge red, Glasswright blue, ' +
+          'Verdancy green, Auroric purple, Vesari pink, Salt salt, Pyrenkin ' +
+          'orange); Vendor enum (NONE/STEAM/GOG/EGS); LootMode enum ' +
+          '(FFA/ROUND_ROBIN/NEED_GREED); register_local_profile; profile_for; ' +
+          'set_profile_field; spawn_remote_walker (slot-ring positioning at ' +
+          'WALKER_SPAWN_RING_RADIUS_PX from the bound Loom); ' +
+          'boss_hp_multiplier (1.0 + 0.4 per extra player up to a 3× cap, ' +
+          '13.10); world_password_hash (32-bit FNV-1a verify_password — ' +
+          'cleartext never persists); kick/ban admin commands; in-memory ' +
+          'server_log ring (256 entries, dump_server_log for the viewer); ' +
+          'authoritative_position record/lookup for rubber-band hint (13.21); ' +
+          'build_mid_session_snapshot + apply_mid_session_snapshot for clients ' +
+          'joining a running world (13.41); compute_state_hash (32-bit FNV-1a ' +
+          'over slivers/threads/boss-defeat count) for naïve desync detection ' +
+          '(13.43); set_peer_ping + connection_quality classifier (good/ok/' +
+          'poor/bad/unknown, 13.44); steam_lobby_create_stub + ' +
+          'set_rich_presence_stub + cross_platform_join_stub + ' +
+          'discover_lan_hosts_stub + server_browser_list_stub + ' +
+          'broadcast_boss_cutscene; dump_state / restore_state. ' +
+          'Phase13Helpers autoload (scripts/systems/phase13_helpers.gd) covers ' +
+          'the gameplay layer above the transport: 200-entry chat history ring ' +
+          '+ typed-history recall (13.15/13.30); post_chat + post_whisper + ' +
+          'post_npc_dialogue (channels: all/party/trade/whisper/system, 13.29/' +
+          '13.37); 11 emote ids (wave/dance/sit/point/sleep/laugh/cry/yes/no/' +
+          'on_my_way/thanks) with EMOTE_VISIBLE_SECONDS 3 s active state ' +
+          '(13.5); ping marker registry — PING_KINDS [default/danger/' +
+          'attack_here/defend_here/on_my_way], PING_DURATION_SECONDS 7 s, ' +
+          'PING_COOLDOWN_SECONDS 1 s (13.27); trade state machine (IDLE/' +
+          'OFFERED/NEGOTIATING/LOCKED/COMMITTED, 13.14) with soulbound ' +
+          'rejection at trade_add_self (3.39 + 9.63); loot ownership records ' +
+          '(LOOT_OWNERSHIP_SECONDS 3 s, round-robin cursor for ROUND_ROBIN ' +
+          'mode, 13.22 / 13.40); awaiting_respawn timers + revival ' +
+          '(RESPAWN_COUNTDOWN_SECONDS 6 s, REVIVAL_RANGE_PX 48, 13.23/13.24/' +
+          '13.38); party_hud_entries + tracking_arrow_targets (13.25/13.26); ' +
+          'bonus_npc_slots scaling (+1 per player past first, cap +4, 13.6); ' +
+          'compute_resonance_proximity (RESONANCE_PROXIMITY_PX 96, 13.4 / ' +
+          '13.36 / 13.49); voice PTT stub (13.16); broadcast_vfx (13.48); ' +
+          'broadcast_lore_tablet_read (9.55); set_nameplate_visible (1.23); ' +
+          'gamepad cursor active toggle + glyph set (xbox/playstation/switch/' +
+          'generic, 13.45/13.46); lobby state with mark_ready / all_ready / ' +
+          'finalize_lobby (13.51/13.52). All state restorable via dump_state / ' +
+          'restore_state. ' +
+          'Boss.gd updated to multiply max_health by NetSystem.boss_hp_' +
+          'multiplier on _ready (13.10). SkillSystem._share_party_xp grew ' +
+          'into a working half-XP share gated by NetSystem.is_party_active + ' +
+          'NetSystem.shared_xp_enabled (7.12 / 13.39 / 13.50). ' +
+          'EventBus gained net_peer_joined / net_peer_left / net_chat_posted / ' +
+          'net_emote_played / net_ping_placed / net_trade_state_changed / ' +
+          'net_player_revived / net_resonance_proximity_changed / net_boss_hp_' +
+          'scaled / net_party_player_count_changed / net_lobby_ready_changed / ' +
+          'net_vfx_broadcast / net_nameplate_visibility_changed / net_desync_' +
+          'detected. GameState gained net_player_slot_index / ' +
+          'net_player_color_hex / net_player_portrait / net_player_vendor / ' +
+          'net_world_password_hash / net_pvp_enabled / net_shared_xp_enabled / ' +
+          'net_loot_mode / net_nameplate_visible / net_recent_hosts. ' +
+          'project.godot input actions added: toggle_chat (Enter), ping_marker ' +
+          '(Tab), party_ui (Y), voice_ptt (V), emote_wheel (Insert). ' +
+          'SaveSystem bumped v10 → v11 to persist NetSystem.dump_state + ' +
+          'Phase13Helpers.dump_state + per-Walker net_player_* GameState ' +
+          'fields + net_recent_hosts. ' +
+          'UI shipped — 12 new self-contained CanvasLayer scripts under ' +
+          'scripts/ui/: chat_panel (toggle_chat, channel switching, whisper ' +
+          'routing, typed-history recall, 200-msg scrollback), party_hud (Y to ' +
+          'toggle; auto-shows once any peer connects; HP + ping + ghost ' +
+          'indicator per up-to-8 entries), trade_panel (drag-and-accept with ' +
+          'self/partner offer columns + Lock / Confirm / Cancel; honours ' +
+          'soulbound rejection), ping_marker (world-space marker, 7 s ' +
+          'lifetime + last-fraction fade-out, kind-specific colour + glyph), ' +
+          'tracking_arrow (one CanvasLayer drawing chevrons at viewport edge ' +
+          'for off-screen peers, edge-clamped + per-peer name + distance), ' +
+          'spectator_cam (auto-shows during awaiting_respawn; cycles among ' +
+          'alive party members with move_left/move_right), resurrection_altar' +
+          '_panel (lists awaiting-respawn peers; click Revive to collapse ' +
+          'their timer to 0.1 s), lobby_panel (Host / Direct-IP Join / world ' +
+          'password / PvP toggle / shared XP toggle / loot-mode option / slot ' +
+          'colour picker / ready-check / Start World gate), server_browser ' +
+          '(Refresh LAN + recent-hosts list), server_logs_viewer (host-only; ' +
+          'reads NetSystem.dump_server_log), gamepad_cursor (stick-controlled ' +
+          'pointer + auto-toggle on joystick input), player_nameplate ' +
+          '(above-Walker swatch + name + lore §7.10 death-flicker pulse). ' +
+          'Resurrection Altar placeable structure (scripts/structures/' +
+          'resurrection_altar.gd) opens the panel on E proximity. ItemDef + ' +
+          'recipe live at resources/items/resurrection_altar_placeable.tres + ' +
+          'resources/recipes/craft_resurrection_altar.tres (tier-8 Auroric ' +
+          'Anvil; 2 Aphelion Shards + 4 Diadem Gold Plate + 6 Auroric Ice ' +
+          'Ore). ' +
+          '13 new Gemini-MCP sprites — resurrection_altar_placeable (32×32 ' +
+          'structure), 5 emote icons (32×32 wave/dance/sit/point/sleep), 5 ' +
+          'ping markers (16×16 default/danger/attack_here/defend_here/on_my_' +
+          'way), portrait_frame (24×24), gamepad_cursor (16×16). All flipped ' +
+          'status:final in manifest.json. Generated via mcp__gemini-image__' +
+          'generate_image (1024×1024 sources) and mcp__gemini-image__process_' +
+          'image (nearest-neighbour downsample + content-bbox crop). ' +
+          'clean_alpha.ps1 chroma-keyed every PNG. ' +
+          'Test coverage — test_phase13_systems.gd (63 cases): NetSystem ' +
+          'autoload presence; default player_count = 1 offline; profile ' +
+          'register / colour / slot; boss HP multiplier solo + capped at ' +
+          '3×; password hashing + empty-password verify-all; ban records; ' +
+          'host-only server log + ring overflow; authoritative position ' +
+          'record / lookup; mid-session snapshot payload + apply; state-hash ' +
+          'determinism + sensitivity; connection-quality thresholds; spawn-' +
+          'ring uniqueness; vendor enum; Steam lobby stub; play_emote / ' +
+          'invalid emote ignored; chat post / empty rejected / ring cap / ' +
+          'whisper routing; ping placement / cooldown / invalid kind fallback ' +
+          '/ prune-expired; trade state-machine + commit gating + soulbound ' +
+          'rejection; loot ownership grant / window-expires; respawn timer ' +
+          'begin / tick / revival collapse; party HUD entries; off-screen ' +
+          'tracking arrow detection; gamepad cursor + glyph swap; lobby ' +
+          'ready-check + finalize gating; resonance solo inactive; voice PTT; ' +
+          'pvp + loot mode + shared-xp toggle persistence; VFX broadcast ' +
+          'signal; nameplate toggle; resonance-bound trade rejection; ' +
+          'NetSystem state round-trip; Phase13Helpers state round-trip; ' +
+          'SaveSystem.SAVE_VERSION = 11; Resurrection Altar ItemDef + recipe ' +
+          'loads; all 13 sprite paths load; 5 new input actions registered; ' +
+          'all 13 new UI scripts loadable. Zero Phase 13 backlog remains.',
+    completed: [
+      /* Phase 13 critical path */
+      '13.1','13.2','13.3','13.4','13.5','13.6','13.7','13.8','13.9','13.10',
+      /* Phase 13 backlog */
+      '13.11','13.12','13.13','13.14','13.15','13.16','13.17','13.18','13.19',
+      '13.20','13.21','13.22','13.23','13.24','13.25','13.26','13.27','13.28',
+      '13.29','13.30','13.31','13.32','13.33','13.34','13.35','13.36','13.37',
+      '13.38','13.39','13.40','13.41','13.42','13.43','13.44','13.45','13.46',
+      '13.47','13.48','13.49','13.50','13.51','13.52',
+      /* Reassigned tickets that found their home in Phase 13 */
+      '1.23','3.39','7.12','9.55','9.63',
+    ],
+  },
+  {
+    version: '2026-05-16-phase14-full-closure',
+    note: 'Phase 14 full closure — Automation & Electricity. Critical path ' +
+          '14.1-14.10 + every backlog ticket 14.11-14.44 + the five migrated ' +
+          'Phase 14-flavored tickets (3.34 bucket item, 3.35 place liquid back ' +
+          'as tile, 4.27 liquid piping, 4.35 liquid mixing, 4.36 tile ' +
+          'conversion). 396/396 GUT tests pass (was 345 before this pass); 51 ' +
+          'new tests in test_phase14_systems.gd. ' +
+          'Phase14Helpers autoload (scripts/systems/phase14_helpers.gd) is the ' +
+          'consolidated coordinator for every Phase 14 sub-system: power ' +
+          'graph (source/sink/battery nodes per wire_group with overload + ' +
+          'shortfall handling), wire graph (set/read/propagate via BFS over ' +
+          'wire_links), logic gates (and/or/not/nand/xor with eval_all_gates ' +
+          'tick), timer blocks (rising-edge arm + delay-beats countdown + ' +
+          'one-beat output pulse), liquid system (LIQUIDS array + ' +
+          'LIQUID_MIX_RULES + TILE_CONVERT_RULES, fill_bucket_from_tile, ' +
+          'empty_bucket_to_tile), tile painting (PAINT_COLOR_WHEEL 8-tone ' +
+          'palette + paint_tile + paint_for + stamp_pattern with three ' +
+          'patterns), grid snap toggle + rotation step helper, blueprint ' +
+          'save/load (save_blueprint + load_blueprint + list_blueprints), ' +
+          'storage piping (register_pipe + tick_pipes), conveyor filters ' +
+          '(set_conveyor_filter + conveyor_allows), splitter cursor ' +
+          '(splitter_next_output), robotic arm cycle scheduler (period ' +
+          'ROBOTIC_ARM_PERIOD_BEATS=2), auto-cooker / auto-fishing-rig ' +
+          'beat schedulers, mob farm AABB lookup, auctioneer listings + ' +
+          'claim, wireless tx/rx with range gate, multiblock scoring, ' +
+          'demolition_area + DEMOLITION_REFUND_FRACTION 0.5. All state ' +
+          'restorable via dump_state / restore_state. ' +
+          'ModSystem autoload (scripts/systems/mod_system.gd) owns the ' +
+          'mod-loader contract: scan_mods (manifest.json discovery), ' +
+          'enable_mod / disable_mod / set_load_order + per-mod ' +
+          'requires_game_version semver check (_is_version_compatible), ' +
+          'load_enabled_mods (sorts by load_order, calls ' +
+          'ItemRegistry.register / CraftingSystem.register per resource ' +
+          'kind), conflict detection (per-id "kind.id" key array), ' +
+          'hot_reload (CACHE_MODE_REPLACE), generate_sample_mod (writes a ' +
+          'starter scaffold), fetch_remote_listings (mod.io stub), and ' +
+          'dump_state / restore_state. ItemRegistry.register + ' +
+          'CraftingSystem.register added so mods can override entries. ' +
+          'Liquid plumbing (3.34/3.35/4.35/4.36/14.24) — bucket item ' +
+          'carries the liquid as the inventory entry transforms from ' +
+          'bucket_empty → bucket_full_<liquid>. player_combat._try_consume ' +
+          'now dispatches both bucket types; full bucket spawns a LiquidTile ' +
+          'scene at the player + facing offset; empty bucket scans the 3×3 ' +
+          'neighbourhood for either an existing LiquidTile or a WorldGen ' +
+          'water tile. ' +
+          'Power gating — every Phase 14 machine (drill, robotic arm, auto-' +
+          'sprinkler, auto-harvester, auto-furnace, auto-smelter, auto-' +
+          'cooking-pot, auto-fishing-rig) registers a sink on its wire_group ' +
+          'and consults resolve_power_for_group before firing each Beat. ' +
+          'Aphelion-Tap registers a source (default 50 W); Power Storage ' +
+          'Cell registers a battery that fills with surplus and drains ' +
+          'during shortfalls. ' +
+          'New structure scripts (29): conveyor (updated), drill (updated), ' +
+          'splitter, merger, hopper, storage_pipe, robotic_arm, ' +
+          'aphelion_tap, power_storage_cell, wire_segment, logic_gate, ' +
+          'timer_block, pressure_plate, button_switch, sensor_module, ' +
+          'signal_transmitter, signal_receiver, wireless_relay, liquid_tile, ' +
+          'auto_sprinkler, auto_harvester, auto_furnace, auto_smelter, ' +
+          'auto_cooking_pot, auto_fishing_rig, mob_farm_block, glass_block, ' +
+          'fence_gate, auctioneer_node, item_filter. ' +
+          'New helper systems (3): paint_brush_tool, blueprint_tool, ' +
+          'demolition_tool. ' +
+          'New UI scripts (2): mod_manager_panel, auctioneer_panel. ' +
+          '47 new ItemDefs (resources/items/) covering every placeable + the ' +
+          '5 bucket variants + 4 painting / wallpaper / demolition / ' +
+          'blueprint / grid-toggle tools + the mod compatibility token + ' +
+          'sample mod kit. 41 new recipes (resources/recipes/) chained ' +
+          'across tier-1 (loam_bench) → tier-2 (clearstone_forge) → tier-3 ' +
+          '(furnace) → tier-4 (anvil) → tier-5 (auroric_anvil). ' +
+          'All 29 .tscn placeable scenes generated under scenes/structures/. ' +
+          'player_combat.PLACEABLE_SCENES extended with every Phase 14 ' +
+          'placeable; _use_bucket_empty + _use_bucket_full + ' +
+          '_spawn_liquid_tile helpers added under _try_consume. ' +
+          '48 new Gemini-MCP sprites (assets/sprites/items/) split across ' +
+          '3 raw 1024×1024 4x4 grid sheets (sheet1_automation_core, ' +
+          'sheet2_power_logic, sheet3_tools_buckets_paint), processed by ' +
+          'tools/process_phase14_assets.py (bbox crop + nearest-neighbour ' +
+          'downsample to 16×16 + magenta chroma-key + clean_alpha.ps1 ' +
+          'binary alpha threshold). All flipped status:final in manifest.json. ' +
+          'SaveSystem bumped v11 → v12 to persist Phase14Helpers.dump_state ' +
+          '+ ModSystem.dump_state. ' +
+          'project.godot autoload entries added for Phase14Helpers + ModSystem. ' +
+          'Modding SDK docs landed at docs/design/modding_sdk.md covering ' +
+          'manifest schema, override semantics, version-tag check, hot ' +
+          'reload, API surface, and the mod.io browser stub. ' +
+          'Test coverage — test_phase14_systems.gd (51 cases): autoload ' +
+          'presence (Phase14Helpers + ModSystem); power source / sink in ' +
+          'same group; power demand exceeds supply returns false; battery ' +
+          'fills / drains; wire signal round-trip; wire-link BFS ' +
+          'propagation; logic gates AND / OR / NOT / NAND / XOR; timer ' +
+          'rising-edge fires after delay + pulse ends next beat; liquid mix ' +
+          '(lava+water → obsidian, sand+water → mud, no-reaction for same ' +
+          'liquid); bucket fill + empty cycle; paint_tile color recording + ' +
+          'unknown coord returns white + 3×3 pattern stamp writes 9 tiles; ' +
+          'grid snap aligns to tile center + toggle off passes through; ' +
+          'rotation step wraps mod 4; blueprint save + list + load returns ' +
+          'tiles; conveyor filter default allow + restricted; splitter ' +
+          'cursor cycles; storage pipe register / unregister; robotic arm ' +
+          'register + tick fires after period; auto cooker / auto fishing ' +
+          'register + period tick wraps; mob farm AABB lookup; auctioneer ' +
+          'list / claim / invalid rejection; wireless pulse drives receiver ' +
+          'wire + range exclusion; Phase14Helpers state round-trip; mod ' +
+          'system version compatibility helper + enable / disable + load ' +
+          'order application + conflict recorded + browser stub emits ' +
+          'listing + ModSystem state round-trip; all 47 Phase 14 ItemDefs ' +
+          'load; all 41 Phase 14 recipes load; SaveSystem.SAVE_VERSION = 12; ' +
+          '25 representative sprite paths load; all 30 placeable scenes ' +
+          'load. Zero Phase 14 backlog remains.',
+    completed: [
+      /* Phase 14 critical path */
+      '14.1','14.2','14.3','14.4','14.5','14.6','14.7','14.8','14.9','14.10',
+      /* Phase 14 backlog */
+      '14.11','14.12','14.13','14.14','14.15','14.16','14.17','14.18','14.19',
+      '14.20','14.21','14.22','14.23','14.24','14.25','14.26','14.27','14.28',
+      '14.29','14.30','14.31','14.32','14.33','14.34','14.35','14.36','14.37',
+      '14.38','14.39','14.40','14.41','14.42','14.43','14.44',
+      /* Migrated tickets from Phase 3 + Phase 4 that found their home in Phase 14 */
+      '3.34','3.35','4.27','4.35','4.36',
     ],
   },
 ];

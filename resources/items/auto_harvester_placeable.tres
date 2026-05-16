@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://p14autohar01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/auto_harvester.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"auto_harvester_placeable"
+display_name = "Auto-Harvester"
+description = "Harvests ready crops within 3 tiles every Beat. Output piped via a Hopper."
+max_stack = 99
+item_type = 5
+tier = 4
+rarity = 2
+placeable_layer = &"structures"

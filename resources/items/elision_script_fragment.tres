@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://celisfrag12"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/elision_script_fragment.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"elision_script_fragment"
+display_name = "Elision-Script Fragment"
+description = "A scratched tablet shard. One syllable still legible. Four assembled spell a name."
+icon = ExtResource("2_icon")
+max_stack = 4
+item_type = 7
+tier = 9
+rarity = 3
+resonance_bound = true
+lore_text = "The scratching is deep. Someone wanted it gone. They almost succeeded."
+lore_ref = "lore/10_language_glyphs_writing.md"

@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://owsunulse3eq"]
+
+[ext_resource type="Script" path="res://scripts/structures/elision_tablet.gd" id="1_et"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/elision_tablet.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_et"]
+size = Vector2(16, 16)
+
+[node name="ElisionTablet" type="Area2D"]
+script = ExtResource("1_et")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -4)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_et")

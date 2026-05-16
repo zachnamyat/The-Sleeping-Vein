@@ -43,3 +43,11 @@ func has(item_id: StringName) -> bool:
 
 func all_ids() -> Array:
 	return _defs.keys()
+
+
+## Phase 14.32 — Modded ItemDefs land here. Late registration overrides earlier
+## entries, mirroring the load-order rule in ModSystem.
+func register(def: ItemDef) -> void:
+	if def == null or def.id == &"":
+		return
+	_defs[def.id] = def

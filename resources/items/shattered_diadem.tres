@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cshatdiadem12"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/shattered_diadem.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"shattered_diadem"
+display_name = "The Shattered Diadem"
+description = "The Diadem-Bearer's crown, split into halves by their own hand. Carry to the Aphelion's chamber to choose the world's ending."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 7
+tier = 9
+rarity = 4
+resonance_bound = true
+lore_text = "It is warm. It is half-light. It will tell you, when you ask it, what it cost the one who wore it."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-11"

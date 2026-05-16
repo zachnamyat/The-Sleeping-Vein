@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://bmain0scene000001"]
+[gd_scene load_steps=57 format=3 uid="uid://bmain0scene000001"]
 
 [ext_resource type="TileSet" path="res://resources/tilesets/biomes.tres" id="1_tileset"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
@@ -57,6 +57,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/boss_intro_crawl.tscn" id="44_bicrawl"]
 [ext_resource type="PackedScene" path="res://scenes/ui/boss_prep_panel.tscn" id="45_bprep"]
 [ext_resource type="PackedScene" path="res://scenes/ui/opening_sequence.tscn" id="46_opening"]
+[ext_resource type="PackedScene" path="res://scenes/ui/manifesto_reader_panel.tscn" id="96_manireader"]
+[ext_resource type="PackedScene" path="res://scenes/ui/credits_panel.tscn" id="97_credits"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("3_bootstrap")
@@ -220,3 +222,7 @@ script = ExtResource("33c_statspawn")
 [node name="BossPrepPanel" parent="." instance=ExtResource("45_bprep") groups=["boss_prep_panel"]]
 
 [node name="OpeningSequence" parent="." instance=ExtResource("46_opening") groups=["opening_sequence"]]
+
+[node name="ManifestoReaderPanel" parent="." instance=ExtResource("96_manireader") groups=["manifesto_reader_ui"]]
+
+[node name="CreditsPanel" parent="." instance=ExtResource("97_credits") groups=["credits_panel"]]

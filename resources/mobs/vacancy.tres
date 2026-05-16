@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://brw3d3051bulc"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/final_spiral/vacancy.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"vacancy"
+display_name = "Vacancy"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(24, 24)
+max_health = 9999
+armor = 0
+contact_damage = 0
+contact_damage_type = &"physical"
+move_speed = 28.0
+detection_radius = 999.0
+leash_radius = 999.0
+behavior = 0
+mob_class = 4
+xp_skill = &"skill_running"
+xp_value = 0
+biome = &"final_spiral"
+stagger_threshold = 9999
+stagger_recovery_seconds = 0.1
+knockback_resistance = 1.0
+resistances = {"physical": 1.0, "void": 1.0, "fire": 1.0, "cold": 1.0, "lightning": 1.0}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-9--final-spiral"

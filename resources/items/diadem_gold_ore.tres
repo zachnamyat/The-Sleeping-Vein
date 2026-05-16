@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cdiagoldore12"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/diadem_gold_ore.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"diadem_gold_ore"
+display_name = "Diadem-Gold Ore"
+description = "Pre-Inversion ore. The vein runs through every wall of the Final Spiral. Tier-9 crafting; cannot be smelted in any forge below the Diadem Reliquary."
+icon = ExtResource("2_icon")
+max_stack = 99
+item_type = 0
+tier = 9
+rarity = 3
+lore_text = "Old gold. Old patience."
+lore_ref = "lore/04_biomes.md#stratum-9--the-final-spiral"

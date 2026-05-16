@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://p14gridtg01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/place_grid_toggle.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"place_grid_toggle"
+display_name = "Place-Grid Toggle"
+description = "Right-click to switch between snap-to-tile placement and free placement."
+max_stack = 99
+item_type = 1
+tier = 1
+rarity = 0
+placeable_layer = &"structures"

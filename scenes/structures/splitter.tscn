@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://p14ssplt01"]
+
+[ext_resource type="Script" path="res://scripts/structures/splitter.gd" id="1_scr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/splitter.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+size = Vector2(16, 16)
+
+[node name="Splitter" type="Area2D"]
+script = ExtResource("1_scr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1")

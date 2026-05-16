@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bdiabearp4p12"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"diadem_bearer_phase4"
+phase_index = 3
+loop = false
+entries = [{
+"id": &"db_kneel_silence",
+"kind": &"none",
+"telegraph_seconds": 9999.0,
+"cooldown_seconds": 9999.0,
+"radius_pixels": 0.0,
+"damage": 0,
+"damage_type": &"physical",
+"speed": 0.0,
+}]

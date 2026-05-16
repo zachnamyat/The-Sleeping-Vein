@@ -11,6 +11,7 @@ const HOVER_SOUND: StringName = &"ui_hover"
 const PANEL_OPEN_SOUND: StringName = &"ui_panel_open"
 const PANEL_CLOSE_SOUND: StringName = &"ui_panel_close"
 const PAGE_FLIP_SOUND: StringName = &"ui_page_flip"
+const UNLOCK_SOUND: StringName = &"ui_unlock"
 
 
 static func wire_button_sfx(root: Node) -> void:
@@ -53,3 +54,8 @@ static func play_panel_close() -> void:
 static func play_page_flip() -> void:
 	if AudioBus:
 		AudioBus.play_sfx(PAGE_FLIP_SOUND)
+
+
+static func play_unlock() -> void:
+	if AudioBus:
+		AudioBus.play_sfx(UNLOCK_SOUND)

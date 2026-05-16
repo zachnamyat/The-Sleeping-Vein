@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://bor2f4s627kcg"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/final_spiral/pure_hollowling_mote.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_final_spiral.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"pure_hollowling_mote"
+display_name = "Pure Hollowling Mote"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 22
+armor = 0
+contact_damage = 14
+contact_damage_type = &"void"
+move_speed = 78.0
+detection_radius = 240.0
+leash_radius = 320.0
+behavior = 2
+mob_class = 4
+xp_skill = &"skill_melee"
+xp_value = 18
+loot_table = ExtResource("3_loot")
+biome = &"final_spiral"
+stagger_threshold = 10
+stagger_recovery_seconds = 0.4
+knockback_resistance = 0.0
+resistances = {"void": 0.6, "cold": 0.2}
+weaknesses = {"fire": 1.5, "lightning": 1.3}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-9--final-spiral"

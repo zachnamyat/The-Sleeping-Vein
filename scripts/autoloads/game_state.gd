@@ -191,6 +191,20 @@ var character_idle_pose: String = "Stand"
 var ng_plus: bool = false
 var ng_plus_cycles: int = 0
 
+## Phase 13 — multiplayer per-world settings + local profile. Persisted in SaveSystem v11.
+## NetSystem owns the live values; this is the disk-backed snapshot consulted at
+## world load + lobby finalize.
+var net_player_slot_index: int = 0
+var net_player_color_hex: String = ""    # "#rrggbb" — empty falls back to NetSystem.SLOT_COLORS[slot]
+var net_player_portrait: StringName = &"portrait_default"
+var net_player_vendor: int = 0           # NetSystem.Vendor enum index
+var net_world_password_hash: int = 0     # FNV-1a; 0 = no password
+var net_pvp_enabled: bool = false
+var net_shared_xp_enabled: bool = true
+var net_loot_mode: int = 0               # NetSystem.LootMode enum index
+var net_nameplate_visible: bool = true   # 1.23 toggle
+var net_recent_hosts: Array = []         # [{ ip, port, last_seen_unix }, ...]
+
 
 func start_new_game_plus() -> void:
 	# Preserve threads + compendium entries; reset slivers, bosses, relics, recipes.

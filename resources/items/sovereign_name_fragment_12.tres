@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://csovfrag12"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/sovereign_name_fragment.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"sovereign_name_fragment_12"
+display_name = "Sovereign Name Fragment XII"
+description = "The final syllable. The Aphelion's name in pre-Inversion Vesari. Only droppable in the Break ending."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 7
+tier = 9
+rarity = 4
+resonance_bound = true
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#sovereign-naming-sidequest"

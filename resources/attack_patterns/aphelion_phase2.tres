@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://dr7fu2cm7gpyx"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"aphelion_phase2"
+phase_index = 1
+loop = true
+entries = [{
+"id": &"aph_lattice_grid",
+"kind": &"ranged_arc",
+"telegraph_seconds": 0.5,
+"cooldown_seconds": 1.0,
+"radius_pixels": 380.0,
+"damage": 28,
+"damage_type": &"void",
+"speed": 220.0,
+}, {
+"id": &"aph_blinding_pulse",
+"kind": &"slam",
+"telegraph_seconds": 0.7,
+"cooldown_seconds": 2.4,
+"radius_pixels": 200.0,
+"damage": 36,
+"damage_type": &"void",
+"speed": 0.0,
+}]

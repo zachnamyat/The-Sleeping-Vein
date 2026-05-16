@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://p14wirele01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/wireless_relay.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"wireless_relay_placeable"
+display_name = "Wireless Relay"
+description = "Combined transmit + receive node — bridges signals between distant bases."
+max_stack = 99
+item_type = 5
+tier = 5
+rarity = 3
+placeable_layer = &"structures"

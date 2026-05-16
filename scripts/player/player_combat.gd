@@ -276,6 +276,14 @@ func _try_consume() -> void:
 	if held_id == &"canteen_full":
 		_use_canteen_full(player)
 		return
+	# Phase 3.34 / 3.35 / 14.24 — Bucket. Empty bucket near water/lava/slime/acid
+	# fills; full bucket places its liquid tile under the player's cursor.
+	if held_id == &"bucket_empty":
+		_use_bucket_empty(player)
+		return
+	if String(held_id).begins_with("bucket_full_"):
+		_use_bucket_full(player, held_id)
+		return
 	# Phase 9.23 — Curious Egg: when used near a heat source (torch / forge),
 	# hatch into a random pet variant. Otherwise nudge the player to find heat.
 	if held_id == &"curious_egg":
@@ -971,6 +979,40 @@ const PLACEABLE_SCENES: Dictionary = {
 	&"carpet_red_placeable":      "res://scenes/structures/carpet_red.tscn",
 	&"window_block_placeable":    "res://scenes/structures/window_block.tscn",
 	&"wallpaper_cream_placeable": "res://scenes/structures/wallpaper_cream.tscn",
+	# Phase 14 placeables.
+	&"conveyor_placeable":         "res://scenes/structures/conveyor.tscn",
+	&"drill_placeable":            "res://scenes/structures/drill.tscn",
+	&"robotic_arm_placeable":      "res://scenes/structures/robotic_arm.tscn",
+	&"aphelion_tap_placeable":     "res://scenes/structures/aphelion_tap.tscn",
+	&"wire_placeable":             "res://scenes/structures/wire_segment.tscn",
+	&"pressure_plate_placeable":   "res://scenes/structures/pressure_plate.tscn",
+	&"button_placeable":           "res://scenes/structures/button_switch.tscn",
+	&"logic_gate_and_placeable":   "res://scenes/structures/logic_gate.tscn",
+	&"logic_gate_or_placeable":    "res://scenes/structures/logic_gate.tscn",
+	&"logic_gate_not_placeable":   "res://scenes/structures/logic_gate.tscn",
+	&"logic_gate_nand_placeable":  "res://scenes/structures/logic_gate.tscn",
+	&"logic_gate_xor_placeable":   "res://scenes/structures/logic_gate.tscn",
+	&"sensor_placeable":           "res://scenes/structures/sensor_module.tscn",
+	&"storage_piping_placeable":   "res://scenes/structures/storage_pipe.tscn",
+	&"auto_sprinkler_placeable":   "res://scenes/structures/auto_sprinkler.tscn",
+	&"auto_harvester_placeable":   "res://scenes/structures/auto_harvester.tscn",
+	&"auto_furnace_placeable":     "res://scenes/structures/auto_furnace.tscn",
+	&"auto_smelter_placeable":     "res://scenes/structures/auto_smelter.tscn",
+	&"power_storage_cell_placeable": "res://scenes/structures/power_storage_cell.tscn",
+	&"splitter_placeable":         "res://scenes/structures/splitter.tscn",
+	&"merger_placeable":           "res://scenes/structures/merger.tscn",
+	&"timer_block_placeable":      "res://scenes/structures/timer_block.tscn",
+	&"hopper_placeable":           "res://scenes/structures/hopper.tscn",
+	&"item_filter_placeable":      "res://scenes/structures/item_filter.tscn",
+	&"signal_transmitter_placeable": "res://scenes/structures/signal_transmitter.tscn",
+	&"signal_receiver_placeable":  "res://scenes/structures/signal_receiver.tscn",
+	&"wireless_relay_placeable":   "res://scenes/structures/wireless_relay.tscn",
+	&"mob_farm_block_placeable":   "res://scenes/structures/mob_farm_block.tscn",
+	&"glass_block_placeable":      "res://scenes/structures/glass_block.tscn",
+	&"fence_gate_placeable":       "res://scenes/structures/fence_gate.tscn",
+	&"auctioneer_node_placeable":  "res://scenes/structures/auctioneer_node.tscn",
+	&"auto_cooking_pot_placeable": "res://scenes/structures/auto_cooking_pot.tscn",
+	&"auto_fishing_rig_placeable": "res://scenes/structures/auto_fishing_rig.tscn",
 }
 
 const PLACEABLE_DECOR: Dictionary = {
@@ -1188,6 +1230,73 @@ func is_blocking() -> bool:
 
 ## Phase 8.24 — Canteen refill. Player stands within 1 tile of a water tile
 ## and uses the empty canteen → swaps to canteen_full.
+## Phase 3.34 — Empty bucket picks up water/lava/slime/acid from the tile under
+## the player's cursor.
+func _use_bucket_empty(player: PlayerController) -> void:
+	var pos: Vector2 = player.global_position
+	var tree := get_tree()
+	if tree == null:
+		return
+	# Look for an existing LiquidTile in a small radius — the easiest source.
+	for n in tree.get_nodes_in_group("liquid_tile"):
+		var t := n as Node2D
+		if t == null:
+			continue
+		if t.global_position.distance_to(pos) <= 24.0:
+			var liquid_id: StringName = t.get("liquid_id") if "liquid_id" in t else &"water"
+			# Find the bucket's slot index.
+			for i in range(Inventory.slots.size()):
+				var s = Inventory.slots[i]
+				if s != null and StringName(s.get("item_id", "")) == &"bucket_empty":
+					if Phase14Helpers.fill_bucket_from_tile(i, liquid_id):
+						EventBus.ui_toast.emit("Bucket filled with %s." % String(liquid_id), 1.5)
+						t.queue_free()
+					return
+	# Fall back to scanning water tiles via WorldGen.
+	var wg := _find_world_gen()
+	if wg and wg.has_method("is_water_at"):
+		for dx in [-16, 0, 16]:
+			for dy in [-16, 0, 16]:
+				var probe: Vector2 = pos + Vector2(dx, dy)
+				if wg.call("is_water_at", probe):
+					for i in range(Inventory.slots.size()):
+						var s = Inventory.slots[i]
+						if s != null and StringName(s.get("item_id", "")) == &"bucket_empty":
+							if Phase14Helpers.fill_bucket_from_tile(i, &"water"):
+								EventBus.ui_toast.emit("Bucket filled with water.", 1.5)
+							return
+	EventBus.ui_toast.emit("No liquid nearby.", 1.5)
+
+
+## Phase 3.35 / 14.24 — Full bucket places its liquid as a tile.
+func _use_bucket_full(player: PlayerController, held_id: StringName) -> void:
+	var liquid_id: StringName = StringName(String(held_id).replace("bucket_full_", ""))
+	var place_at: Vector2 = Phase14Helpers.snap_to_grid(player.global_position + player.facing * 16.0)
+	# Find the slot.
+	for i in range(Inventory.slots.size()):
+		var s = Inventory.slots[i]
+		if s != null and StringName(s.get("item_id", "")) == held_id:
+			Phase14Helpers.empty_bucket_to_tile(i, place_at)
+			_spawn_liquid_tile(place_at, liquid_id)
+			EventBus.ui_toast.emit("Placed %s." % String(liquid_id), 1.5)
+			return
+
+
+func _spawn_liquid_tile(world_pos: Vector2, liquid_id: StringName) -> void:
+	var packed: PackedScene = load("res://scenes/structures/liquid_tile.tscn") as PackedScene
+	if packed == null:
+		return
+	var tile: Node2D = packed.instantiate() as Node2D
+	if tile == null:
+		return
+	tile.global_position = world_pos
+	if "liquid_id" in tile:
+		tile.set("liquid_id", liquid_id)
+	var parent := get_node_or_null(player_path)
+	if parent and parent.get_parent():
+		parent.get_parent().add_child(tile)
+
+
 func _use_canteen_empty(player: PlayerController) -> void:
 	var wg := _find_world_gen()
 	if wg == null or not wg.has_method("is_water_at"):

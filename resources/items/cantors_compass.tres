@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://ccantcomp12"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/cantors_compass.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"cantors_compass"
+display_name = "Cantor's Compass"
+description = "The compass the Cantor gives the Walker who completes the Sovereign-Naming song. Points to the next un-met Sovereign while held."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 7
+tier = 9
+rarity = 4
+resonance_bound = true
+lore_text = "The needle hums. The song completes whether you carry it or not."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#sovereign-naming-sidequest"

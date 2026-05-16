@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://r14mobfm1"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_mob_farm_block"
+display_name = "Mob Farm Block"
+inputs = [{ "item_id": "clearstone_ingot", "count": 4 }, { "item_id": "aphelion_fragment", "count": 2 }]
+outputs = [{ "item_id": "mob_farm_block_placeable", "count": 1 }]
+stations = [&"anvil"]
+skill_xp_grant = 7
+skill_xp_id = &"skill_crafting"

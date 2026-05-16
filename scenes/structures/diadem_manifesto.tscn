@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bdiamani12sce"]
+
+[ext_resource type="Script" path="res://scripts/structures/diadem_manifesto.gd" id="1_man"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/diadem_manifesto.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_man"]
+size = Vector2(20, 20)
+
+[node name="DiademManifesto" type="Area2D" groups=["diadem_manifesto"]]
+script = ExtResource("1_man")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_man")

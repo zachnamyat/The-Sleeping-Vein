@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bdiabearp3p12"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"diadem_bearer_phase3"
+phase_index = 2
+loop = true
+entries = [{
+"id": &"db_desperate_thrust",
+"kind": &"dash",
+"telegraph_seconds": 0.3,
+"cooldown_seconds": 1.6,
+"radius_pixels": 52.0,
+"damage": 52,
+"damage_type": &"physical",
+"speed": 360.0,
+}, {
+"id": &"db_shard_storm",
+"kind": &"ranged_arc",
+"telegraph_seconds": 0.6,
+"cooldown_seconds": 1.4,
+"radius_pixels": 260.0,
+"damage": 34,
+"damage_type": &"void",
+"speed": 260.0,
+}, {
+"id": &"db_recovery_slam",
+"kind": &"slam",
+"telegraph_seconds": 0.5,
+"cooldown_seconds": 1.4,
+"radius_pixels": 80.0,
+"damage": 56,
+"damage_type": &"physical",
+"speed": 0.0,
+}]

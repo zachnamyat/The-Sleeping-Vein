@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://ep84ie5n4nlg"]
+
+[ext_resource type="Script" path="res://scripts/structures/bearer_child_tablet.gd" id="1_bct"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/bearer_child_tablet.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bct"]
+size = Vector2(20, 20)
+
+[node name="BearerChildTablet" type="Area2D"]
+script = ExtResource("1_bct")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_bct")

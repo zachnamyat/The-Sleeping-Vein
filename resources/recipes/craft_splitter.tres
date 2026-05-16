@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://r14splt1"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_splitter"
+display_name = "Splitter Belt"
+inputs = [{ "item_id": "clearstone_ingot", "count": 3 }, { "item_id": "wire_placeable", "count": 2 }]
+outputs = [{ "item_id": "splitter_placeable", "count": 1 }]
+stations = [&"clearstone_forge"]
+skill_xp_grant = 3
+skill_xp_id = &"skill_crafting"

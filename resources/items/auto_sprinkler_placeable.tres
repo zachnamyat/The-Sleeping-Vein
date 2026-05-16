@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://p14autospr01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/auto_sprinkler.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"auto_sprinkler_placeable"
+display_name = "Auto-Sprinkler"
+description = "Powered upgrade over the basic sprinkler. Wider radius, every-Beat pulse."
+max_stack = 99
+item_type = 5
+tier = 3
+rarity = 2
+placeable_layer = &"structures"

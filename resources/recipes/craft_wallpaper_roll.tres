@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://r14wallrol"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_wallpaper_roll"
+display_name = "Wallpaper Roll"
+inputs = [{ "item_id": "wood", "count": 1 }, { "item_id": "loam_wax", "count": 1 }]
+outputs = [{ "item_id": "wallpaper_roll", "count": 4 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_crafting"

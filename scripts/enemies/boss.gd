@@ -67,7 +67,11 @@ func _ready() -> void:
 		if sprite and mob_def.sprite:
 			sprite.texture = mob_def.sprite
 		if health:
-			health.max_health = mob_def.max_health
+			# Phase 13.10 — scale max HP by player count multiplier.
+			var hp_mult: float = 1.0
+			if NetSystem and NetSystem.has_method("boss_hp_multiplier"):
+				hp_mult = float(NetSystem.boss_hp_multiplier())
+			health.max_health = int(round(float(mob_def.max_health) * hp_mult))
 			health.armor = mob_def.armor
 			health.current_health = health.max_health
 		if contact_hitbox:

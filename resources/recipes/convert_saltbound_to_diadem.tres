@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://dc6pfn8t5ld8"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"convert_saltbound_to_diadem"
+display_name = "Convert Saltbound Steel → Diadem Gold (4:1)"
+inputs = [{ "item_id": "saltbound_steel_ore", "count": 4 }, { "item_id": "aphelion_shard", "count": 1 }]
+outputs = [{ "item_id": "diadem_gold_ore", "count": 1 }]
+stations = [&"diadem_reliquary"]
+skill_xp_grant = 12
+skill_xp_id = &"skill_crafting"
+description = "Material conversion. Four saltbound-steel ore become one Diadem-Gold."

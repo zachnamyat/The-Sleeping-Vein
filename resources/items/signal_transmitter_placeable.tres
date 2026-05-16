@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://p14sigtx01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/signal_transmitter.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"signal_transmitter_placeable"
+display_name = "Signal Transmitter"
+description = "Broadcasts an electric pulse on a chosen frequency. Wireless redstone."
+max_stack = 99
+item_type = 5
+tier = 4
+rarity = 2
+placeable_layer = &"structures"

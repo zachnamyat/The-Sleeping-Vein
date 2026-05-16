@@ -15,50 +15,79 @@ layer = 100
 script = ExtResource("1_ending")
 
 [node name="Root" type="Panel" parent="."]
-offset_left = 40.0
-offset_top = 24.0
-offset_right = 440.0
-offset_bottom = 246.0
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 456.0
+offset_bottom = 262.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_end")
 
 [node name="Title" type="Label" parent="Root"]
 offset_left = 12.0
 offset_top = 8.0
-offset_right = 388.0
+offset_right = 420.0
 offset_bottom = 22.0
 modulate = Color(0.97, 0.85, 0.5, 1)
-text = "The Diadem-Bearer has fallen."
+text = "The Aphelion's chamber. Three paths."
 horizontal_alignment = 1
 
 [node name="Sub" type="RichTextLabel" parent="Root"]
 offset_left = 12.0
-offset_top = 24.0
-offset_right = 388.0
+offset_top = 22.0
+offset_right = 420.0
 offset_bottom = 58.0
 bbcode_enabled = true
+fit_content = true
 text = "[i]The Aphelion's last sliver hangs in the air. Three paths open before you.[/i]"
 
 [node name="Choices" type="HBoxContainer" parent="Root"]
 offset_left = 12.0
-offset_top = 64.0
-offset_right = 388.0
-offset_bottom = 90.0
+offset_top = 60.0
+offset_right = 420.0
+offset_bottom = 86.0
 
 [node name="Restore" type="Button" parent="Root/Choices"]
-custom_minimum_size = Vector2(120, 24)
+custom_minimum_size = Vector2(130, 24)
 text = "A — Restore"
 
 [node name="Break" type="Button" parent="Root/Choices"]
-custom_minimum_size = Vector2(120, 24)
+custom_minimum_size = Vector2(130, 24)
 text = "B — Break"
 
 [node name="Become" type="Button" parent="Root/Choices"]
-custom_minimum_size = Vector2(120, 24)
+custom_minimum_size = Vector2(130, 24)
 text = "C — Become"
+
+[node name="Validator" type="VBoxContainer" parent="Root"]
+offset_left = 12.0
+offset_top = 92.0
+offset_right = 420.0
+offset_bottom = 168.0
+
+[node name="Header" type="Label" parent="Root/Validator"]
+text = "Ending C — unlock conditions:"
+
+[node name="Conditions" type="VBoxContainer" parent="Root/Validator"]
+
+[node name="History" type="RichTextLabel" parent="Root"]
+offset_left = 12.0
+offset_top = 170.0
+offset_right = 420.0
+offset_bottom = 186.0
+bbcode_enabled = true
+fit_content = true
+
+[node name="SovereignPreview" type="RichTextLabel" parent="Root"]
+offset_left = 12.0
+offset_top = 186.0
+offset_right = 420.0
+offset_bottom = 202.0
+bbcode_enabled = true
+fit_content = true
 
 [node name="Credits" type="RichTextLabel" parent="Root"]
 offset_left = 12.0
-offset_top = 100.0
-offset_right = 388.0
-offset_bottom = 214.0
+offset_top = 206.0
+offset_right = 420.0
+offset_bottom = 236.0
 bbcode_enabled = true
+fit_content = true

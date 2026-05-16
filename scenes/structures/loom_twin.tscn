@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://c562dbevtt5yy"]
+
+[ext_resource type="Script" path="res://scripts/structures/loom_twin.gd" id="1_lt"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/resonance_loom.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lt"]
+size = Vector2(32, 32)
+
+[node name="LoomTwin" type="Area2D"]
+script = ExtResource("1_lt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+modulate = Color(0.55, 0.55, 0.58, 0.78)
+offset = Vector2(0, -12)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_lt")

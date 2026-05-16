@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cdiaplate12"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/diadem_gold_plate.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"diadem_gold_plate"
+display_name = "Diadem-Gold Plate"
+description = "Tier-9 chestpiece. Reduces void damage by 50%. Required to survive Final Spiral exposure without an Aphelion Shard."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 3
+tier = 9
+rarity = 4
+armor_value = 36
+equipment_slot = &"chest"
+status_resists = {"void": 0.5, "fire": 0.2}
+max_hp_bonus = 40
+reforgeable = true
+lore_text = "Forged from a single ingot the Diadem-Bearer wore as a child."
+lore_ref = "lore/04_biomes.md#stratum-9--the-final-spiral"

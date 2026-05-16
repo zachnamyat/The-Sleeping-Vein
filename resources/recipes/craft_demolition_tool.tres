@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://r14demoml"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_demolition_tool"
+display_name = "Demolition Mallet"
+inputs = [{ "item_id": "wood", "count": 4 }, { "item_id": "shaleseed_ingot", "count": 3 }]
+outputs = [{ "item_id": "demolition_tool", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 3
+skill_xp_id = &"skill_crafting"

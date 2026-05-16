@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cbearsword12"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/diadem_bearer_sword.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"diadem_bearer_sword"
+display_name = "The Bearer's Sword"
+description = "The Diadem-Bearer's sword. Forged of laminated Aphelion-shard. Each swing emits a soft chord that staggers void-aligned enemies."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 2
+tier = 9
+rarity = 4
+base_damage = 78
+damage_type = &"physical"
+attack_cooldown_seconds = 0.48
+melee_range_pixels = 28
+weapon_class = &"melee"
+weapon_subclass = &"melee"
+equipment_slot = &"off_hand"
+two_handed = false
+heavy_damage_multiplier = 2.4
+special_attack = &"thrust"
+on_hit_status = &"stagger"
+on_hit_status_chance = 0.18
+on_hit_status_duration = 1.2
+crit_chance_bonus = 0.06
+crit_damage_bonus = 0.25
+reforgeable = true
+resonance_bound = true
+lore_text = "She would not let you keep it. You took it anyway."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-11"

@@ -1,20 +1,31 @@
-[gd_resource type="Resource" script_class="MobDef" load_steps=3 format=3 uid="uid://mobdef0diadwarden"]
+[gd_resource type="Resource" script_class="MobDef" load_steps=4 format=3 uid="uid://mobdef0diadwarden"]
 
 [ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
 [ext_resource type="Texture2D" path="res://assets/sprites/enemies/final_spiral/diadem_reader.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_final_spiral.tres" id="3_loot"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"diadem_warden"
-display_name = "Diadem Warden"
+display_name = "Diadem-Warden"
 sprite = ExtResource("2_sprite")
 sprite_size = Vector2i(16, 16)
-max_health = 140
-armor = 14
-contact_damage = 24
+max_health = 220
+armor = 18
+contact_damage = 32
+contact_damage_type = &"physical"
 move_speed = 18.0
-detection_radius = 160.0
+detection_radius = 140.0
+leash_radius = 240.0
 behavior = 2
+mob_class = 3
 xp_skill = &"skill_melee"
-xp_value = 40
+xp_value = 90
+loot_table = ExtResource("3_loot")
 biome = &"final_spiral"
+stagger_threshold = 80
+stagger_recovery_seconds = 2.0
+knockback_resistance = 0.7
+resistances = {"physical": 0.3, "void": 0.2}
+weaknesses = {"explosive": 1.5}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-9--final-spiral"

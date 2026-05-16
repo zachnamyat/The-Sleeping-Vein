@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dlqvrk2tus0xg"]
+
+[ext_resource type="Script" path="res://scripts/structures/hall_of_first_names.gd" id="1_hfn"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/hall_of_first_names.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hfn"]
+size = Vector2(20, 20)
+
+[node name="HallOfFirstNames" type="Area2D"]
+script = ExtResource("1_hfn")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_hfn")

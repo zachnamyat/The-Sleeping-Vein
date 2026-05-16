@@ -145,6 +145,10 @@ func toggle() -> void:
 	if _open:
 		_input_line.clear()
 		_input_line.grab_focus()
+		# Phase 15.35 — opening the console disables Steam achievements for
+		# this run. Phase15Helpers records the lockout.
+		if Phase15Helpers and not Phase15Helpers.console_was_used:
+			Phase15Helpers.note_console_opened()
 	else:
 		_input_line.release_focus()
 
@@ -268,6 +272,24 @@ func _register_commands() -> void:
 		"load":         {"fn": Callable(self, "_cmd_load"),         "args": "[slot]",                 "desc": "Load (default dev_quicksave)"},
 		"reload_scene": {"fn": Callable(self, "_cmd_reload_scene"), "args": "",                       "desc": "Reload current scene"},
 		"quit_game":    {"fn": Callable(self, "_cmd_quit_game"),    "args": "",                       "desc": "Exit the application"},
+		# Phase 15 polish commands
+		"difficulty":   {"fn": Callable(self, "_cmd_difficulty"),   "args": "<casual|normal|hard|hard_plus>", "desc": "Set difficulty preset"},
+		"hardcore":     {"fn": Callable(self, "_cmd_hardcore"),     "args": "[on|off]",                "desc": "Toggle hardcore (permadeath)"},
+		"speedrun":     {"fn": Callable(self, "_cmd_speedrun"),     "args": "<start|stop|split [label]>", "desc": "Speedrun timer control"},
+		"bossrush":     {"fn": Callable(self, "_cmd_bossrush"),     "args": "<start|next>",            "desc": "Boss-rush mode"},
+		"endless":      {"fn": Callable(self, "_cmd_endless"),      "args": "<start|descend>",         "desc": "Endless mode"},
+		"egg":          {"fn": Callable(self, "_cmd_egg"),          "args": "<egg_id>",                "desc": "Discover an easter egg by id"},
+		"photo":        {"fn": Callable(self, "_cmd_photo"),        "args": "[filter]",                "desc": "Toggle photo mode (with optional filter)"},
+		"perf":         {"fn": Callable(self, "_cmd_perf"),         "args": "<preset>",                "desc": "Set performance preset"},
+		"f3":           {"fn": Callable(self, "_cmd_f3"),           "args": "",                        "desc": "Toggle F3 debug overlay"},
+		"netmeter":     {"fn": Callable(self, "_cmd_netmeter"),     "args": "",                        "desc": "Toggle bandwidth meter"},
+		"copy_seed":    {"fn": Callable(self, "_cmd_copy_seed"),    "args": "",                        "desc": "Copy world seed to clipboard"},
+		"locale":       {"fn": Callable(self, "_cmd_locale"),       "args": "<locale>",                "desc": "Set locale (en, vesari, ...)"},
+		"recover":      {"fn": Callable(self, "_cmd_recover"),      "args": "<slot>",                  "desc": "Auto-recover a corrupted save"},
+		"backup_now":   {"fn": Callable(self, "_cmd_backup_now"),   "args": "",                        "desc": "Trigger an autosave now"},
+		"report_bug":   {"fn": Callable(self, "_cmd_report_bug"),   "args": "<description>",           "desc": "File a bug report"},
+		"daily":        {"fn": Callable(self, "_cmd_daily"),        "args": "",                        "desc": "Start the daily challenge"},
+		"weekly":       {"fn": Callable(self, "_cmd_weekly"),       "args": "",                        "desc": "Start the weekly challenge"},
 	}
 
 
@@ -756,3 +778,183 @@ func _cmd_reload_scene(_args: PackedStringArray) -> void:
 
 func _cmd_quit_game(_args: PackedStringArray) -> void:
 	get_tree().quit()
+
+
+# ----- Phase 15 polish commands -----
+
+func _cmd_difficulty(args: PackedStringArray) -> void:
+	if args.is_empty():
+		err("usage: difficulty <casual|normal|hard|hard_plus>")
+		return
+	if Phase15Helpers == null:
+		err("Phase15Helpers not loaded")
+		return
+	if Phase15Helpers.set_difficulty(StringName(args[0])):
+		ok("difficulty = %s" % args[0])
+	else:
+		err("unknown preset '%s'" % args[0])
+
+
+func _cmd_hardcore(args: PackedStringArray) -> void:
+	if Phase15Helpers == null:
+		return
+	var target: bool = not Phase15Helpers.hardcore_active if args.is_empty() else _truthy(args[0])
+	Phase15Helpers.set_hardcore(target)
+	ok("hardcore %s" % ("on" if target else "off"))
+
+
+func _cmd_speedrun(args: PackedStringArray) -> void:
+	if args.is_empty() or GameModes == null:
+		err("usage: speedrun <start|stop|split [label]>")
+		return
+	match args[0]:
+		"start":
+			GameModes.speedrun_start()
+			ok("speedrun started")
+		"stop":
+			var total: float = GameModes.speedrun_finish()
+			ok("speedrun stopped: %.3fs" % total)
+		"split":
+			var label: String = " ".join(args.slice(1)) if args.size() > 1 else "split"
+			GameModes.speedrun_split(label)
+			ok("split: %s" % label)
+		_:
+			err("unknown subcommand")
+
+
+func _cmd_bossrush(args: PackedStringArray) -> void:
+	if args.is_empty() or GameModes == null:
+		err("usage: bossrush <start|next>")
+		return
+	match args[0]:
+		"start":
+			GameModes.boss_rush_start()
+			ok("boss-rush started")
+		"next":
+			var nxt: StringName = GameModes.boss_rush_next()
+			ok("next boss: %s" % String(nxt))
+		_:
+			err("unknown subcommand")
+
+
+func _cmd_endless(args: PackedStringArray) -> void:
+	if args.is_empty() or GameModes == null:
+		err("usage: endless <start|descend>")
+		return
+	match args[0]:
+		"start":
+			GameModes.endless_start()
+			ok("endless started — floor 1")
+		"descend":
+			var f: int = GameModes.endless_descend()
+			ok("descended to floor %d" % f)
+		_:
+			err("unknown subcommand")
+
+
+func _cmd_egg(args: PackedStringArray) -> void:
+	if args.is_empty() or Phase15Helpers == null:
+		err("usage: egg <egg_id>")
+		return
+	var was_new: bool = Phase15Helpers.discover_easter_egg(StringName(args[0]))
+	if was_new:
+		ok("discovered: %s" % args[0])
+	else:
+		info("already discovered.")
+
+
+func _cmd_photo(args: PackedStringArray) -> void:
+	if PhotoMode == null:
+		err("PhotoMode autoload not loaded")
+		return
+	if not args.is_empty():
+		PhotoMode.set_filter(StringName(args[0]))
+	PhotoMode.toggle()
+	ok("photo mode %s" % ("on" if PhotoMode.active else "off"))
+
+
+func _cmd_perf(args: PackedStringArray) -> void:
+	if args.is_empty() or PerfManager == null:
+		err("usage: perf <ultra|high|medium|low|potato>")
+		return
+	if PerfManager.apply_preset(StringName(args[0])):
+		ok("performance preset = %s" % args[0])
+	else:
+		err("unknown preset '%s'" % args[0])
+
+
+func _cmd_f3(_args: PackedStringArray) -> void:
+	if DebugOverlay == null:
+		return
+	DebugOverlay.toggle_f3()
+	ok("F3 overlay %s" % ("on" if DebugOverlay.f3_visible else "off"))
+
+
+func _cmd_netmeter(_args: PackedStringArray) -> void:
+	if NetPolish == null:
+		return
+	NetPolish.toggle_bandwidth_meter()
+	ok("bandwidth meter %s" % ("on" if NetPolish.bandwidth_meter_visible else "off"))
+
+
+func _cmd_copy_seed(_args: PackedStringArray) -> void:
+	if NetPolish == null:
+		err("NetPolish autoload missing")
+		return
+	var seed_v: int = NetPolish.copy_world_seed_to_clipboard()
+	ok("seed %d copied to clipboard" % seed_v)
+
+
+func _cmd_locale(args: PackedStringArray) -> void:
+	if args.is_empty() or LocalizationManager == null:
+		err("usage: locale <code>")
+		return
+	if LocalizationManager.apply_locale(StringName(args[0])):
+		ok("locale = %s" % args[0])
+	else:
+		err("locale not supported")
+
+
+func _cmd_recover(args: PackedStringArray) -> void:
+	if args.is_empty() or SaveBackup == null:
+		err("usage: recover <slot>")
+		return
+	if SaveBackup.auto_recover(args[0]):
+		ok("recovered '%s' from backup" % args[0])
+	else:
+		err("recovery failed")
+
+
+func _cmd_backup_now(_args: PackedStringArray) -> void:
+	if SaveBackup == null:
+		err("SaveBackup autoload missing")
+		return
+	if SaveBackup.perform_autosave():
+		ok("autosave fired")
+	else:
+		err("autosave failed")
+
+
+func _cmd_report_bug(args: PackedStringArray) -> void:
+	if args.is_empty() or CrashReporter == null:
+		err("usage: report_bug <description>")
+		return
+	var desc: String = " ".join(args)
+	var path: String = CrashReporter.file_bug_report(desc, true)
+	ok("bug saved: %s" % path)
+
+
+func _cmd_daily(_args: PackedStringArray) -> void:
+	if GameModes == null:
+		err("GameModes autoload missing")
+		return
+	var seed_v: int = GameModes.start_daily_challenge()
+	ok("daily challenge seed = %d" % seed_v)
+
+
+func _cmd_weekly(_args: PackedStringArray) -> void:
+	if GameModes == null:
+		err("GameModes autoload missing")
+		return
+	var seed_v: int = GameModes.start_weekly_challenge()
+	ok("weekly challenge seed = %d" % seed_v)

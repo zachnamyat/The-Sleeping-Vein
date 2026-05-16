@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://ccredits12sce"]
+
+[ext_resource type="Script" path="res://scripts/ui/credits_panel.gd" id="1_cr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cr"]
+bg_color = Color(0.02, 0.02, 0.04, 0.99)
+border_color = Color(0.95, 0.86, 0.5, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="CreditsPanel" type="CanvasLayer" groups=["credits_panel"]]
+layer = 110
+script = ExtResource("1_cr")
+
+[node name="Root" type="Panel" parent="."]
+offset_left = 24.0
+offset_top = 16.0
+offset_right = 456.0
+offset_bottom = 262.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_cr")
+
+[node name="EndingLabel" type="Label" parent="Root"]
+offset_left = 12.0
+offset_top = 8.0
+offset_right = 420.0
+offset_bottom = 22.0
+modulate = Color(0.97, 0.85, 0.5, 1)
+text = "The Walker's run."
+horizontal_alignment = 1
+
+[node name="Stats" type="RichTextLabel" parent="Root"]
+offset_left = 12.0
+offset_top = 28.0
+offset_right = 420.0
+offset_bottom = 120.0
+bbcode_enabled = true
+fit_content = true
+text = ""
+
+[node name="Credits" type="RichTextLabel" parent="Root"]
+offset_left = 12.0
+offset_top = 124.0
+offset_right = 420.0
+offset_bottom = 224.0
+bbcode_enabled = true
+fit_content = true
+text = ""
+
+[node name="Continue" type="Button" parent="Root"]
+offset_left = 168.0
+offset_top = 226.0
+offset_right = 264.0
+offset_bottom = 244.0
+text = "Continue"

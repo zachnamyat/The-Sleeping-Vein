@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://caphshard12"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/aphelion_shard.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"aphelion_shard"
+display_name = "Aphelion Shard"
+description = "A sliver of the Aphelion itself. Glows from inside the cracks; can be felt before it's seen. Reagent for the Diadem Reliquary."
+icon = ExtResource("2_icon")
+max_stack = 99
+item_type = 0
+tier = 9
+rarity = 4
+status_resists = {"void": 0.4}
+lore_text = "Cold to the touch and warm to the eye. The Walker doesn't know which sense to trust."
+lore_ref = "lore/04_biomes.md#stratum-9--the-final-spiral"

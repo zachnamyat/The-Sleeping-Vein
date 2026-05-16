@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://p14auctn01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/auctioneer_node.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"auctioneer_node_placeable"
+display_name = "Auctioneer Node"
+description = "List items for sale to other Walkers. Listings persist across sessions."
+max_stack = 99
+item_type = 5
+tier = 4
+rarity = 2
+placeable_layer = &"structures"

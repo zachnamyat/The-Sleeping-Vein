@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://p14ptnst01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/pattern_paint_stamp.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"pattern_paint_stamp"
+display_name = "Pattern Stamp"
+description = "Stamps a 3x3 pattern (checker / stripes / diamond) using two palette colours."
+max_stack = 99
+item_type = 1
+tier = 2
+rarity = 1
+placeable_layer = &"structures"

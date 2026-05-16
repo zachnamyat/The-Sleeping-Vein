@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://p14aphtap01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/aphelion_tap.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"aphelion_tap_placeable"
+display_name = "Aphelion-Tap"
+description = "Draws Aphelion light through a diadem-gold ring. Supplies 50 watts to its wire group."
+max_stack = 99
+item_type = 5
+tier = 4
+rarity = 2
+placeable_layer = &"structures"
+lore_text = "A small theft from a fading sun."
+lore_ref = "lore/01_cosmology_and_universe.md"

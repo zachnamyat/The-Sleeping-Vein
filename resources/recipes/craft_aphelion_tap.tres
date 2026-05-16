@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://r14aphtap1"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_aphelion_tap"
+display_name = "Aphelion-Tap"
+inputs = [{ "item_id": "aphelion_shard", "count": 1 }, { "item_id": "diadem_gold_ingot", "count": 2 }, { "item_id": "clearstone_ingot", "count": 4 }]
+outputs = [{ "item_id": "aphelion_tap_placeable", "count": 1 }]
+stations = [&"anvil"]
+skill_xp_grant = 10
+skill_xp_id = &"skill_crafting"

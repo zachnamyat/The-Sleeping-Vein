@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://p14ssigtx01"]
+
+[ext_resource type="Script" path="res://scripts/structures/signal_transmitter.gd" id="1_scr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/signal_transmitter.png" id="2_tex"]
+
+[node name="SignalTransmitter" type="Node2D"]
+script = ExtResource("1_scr")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://p14bckwt01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bucket_full_water.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"bucket_full_water"
+display_name = "Bucket of Water"
+description = "Place water tiles. Mix with lava to harden into obsidian."
+max_stack = 99
+item_type = 1
+tier = 1
+rarity = 0
+placeable_layer = &"structures"

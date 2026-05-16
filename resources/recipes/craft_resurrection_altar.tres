@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://recresalt13"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_resurrection_altar"
+display_name = "Resurrection Altar"
+inputs = [{ "item_id": "aphelion_shard", "count": 2 }, { "item_id": "diadem_gold_plate", "count": 4 }, { "item_id": "auroric_ice_ore", "count": 6 }]
+outputs = [{ "item_id": "resurrection_altar_placeable", "count": 1 }]
+stations = [&"auroric_anvil"]
+skill_xp_grant = 12
+skill_xp_id = &"skill_crafting"

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://r14autohr1"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_auto_harvester"
+display_name = "Auto-Harvester"
+inputs = [{ "item_id": "clearstone_ingot", "count": 5 }, { "item_id": "aphelion_fragment", "count": 2 }, { "item_id": "wire_placeable", "count": 3 }]
+outputs = [{ "item_id": "auto_harvester_placeable", "count": 1 }]
+stations = [&"anvil"]
+skill_xp_grant = 9
+skill_xp_id = &"skill_crafting"

@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://clistfin12sce"]
+
+[ext_resource type="Script" path="res://scripts/npcs/listener_below_final.gd" id="1_lf"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npcs/listener_below.png" id="2_tex"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_lf"]
+radius = 24.0
+
+[node name="ListenerBelowFinal" type="Area2D" groups=["listener_below_final"]]
+script = ExtResource("1_lf")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -12)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_lf")
