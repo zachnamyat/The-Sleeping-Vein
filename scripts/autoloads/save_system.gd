@@ -16,7 +16,9 @@ const SAVE_ROOT: String = "user://saves/"
 ##   v3 — Phase 3: chest persistence.
 ##   v4 — Phase 4: explored_chunks + respawn_point. Older saves load with an
 ##        empty exploration log; the map just appears fresh.
-const SAVE_VERSION: int = 4
+##   v5 — Phase 7: allocated_talent_nodes, talent_presets, equipped_affixes,
+##        SkillChallenges.mastery_unlocked.
+const SAVE_VERSION: int = 5
 
 signal save_started(slot_name: String)
 signal save_completed(slot_name: String)
@@ -152,6 +154,11 @@ func _dump_game_state() -> Dictionary:
 		"sovereign_threads": GameState.sovereign_threads,
 		"unallocated_talent_points": GameState.unallocated_talent_points,
 		"allocated_talents": _stringify_keys(GameState.allocated_talents),
+		"allocated_talent_nodes": _stringify_nested_talents(GameState.allocated_talent_nodes),
+		"talent_presets": _stringify_presets(GameState.talent_presets),
+		"active_preset_index": GameState.active_preset_index,
+		"equipped_affixes": _stringify_equipped_affixes(),
+		"mastery_unlocked": _stringify_keys(SkillChallenges.mastery_unlocked) if SkillChallenges else {},
 		"player": _dump_player(),
 		"inventory": _dump_inventory(),
 		"skills": _dump_skills(),
@@ -174,6 +181,12 @@ func _restore_game_state(state: Dictionary) -> void:
 	GameState.sovereign_threads = int(state.get("sovereign_threads", 0))
 	GameState.unallocated_talent_points = int(state.get("unallocated_talent_points", 0))
 	GameState.allocated_talents = _stringname_keys(state.get("allocated_talents", {}))
+	GameState.allocated_talent_nodes = _restore_nested_talents(state.get("allocated_talent_nodes", {}))
+	GameState.talent_presets = _restore_presets(state.get("talent_presets", [{}, {}, {}]))
+	GameState.active_preset_index = clampi(int(state.get("active_preset_index", 0)), 0, GameState.PRESET_COUNT - 1)
+	_restore_equipped_affixes(state.get("equipped_affixes", {}))
+	if SkillChallenges:
+		SkillChallenges.mastery_unlocked = _stringname_keys(state.get("mastery_unlocked", {}))
 	GameState.explored_chunks = state.get("explored_chunks", {})
 	GameState.respawn_point = Vector2(
 		float(state.get("respawn_point_x", 0.0)),
@@ -351,6 +364,67 @@ func _stringname_keys(d: Dictionary) -> Dictionary:
 	for k in d.keys():
 		out[StringName(String(k))] = d[k]
 	return out
+
+
+## Phase 7 — talent presets are Array[Dictionary] with nested skill/node maps.
+## JSON loses StringName so we must round-trip both layers.
+func _stringify_nested_talents(d: Dictionary) -> Dictionary:
+	var out: Dictionary = {}
+	for skill in d.keys():
+		var inner: Dictionary = d[skill]
+		var inner_out: Dictionary = {}
+		for node in inner.keys():
+			inner_out[String(node)] = int(inner[node])
+		out[String(skill)] = inner_out
+	return out
+
+
+func _restore_nested_talents(d: Dictionary) -> Dictionary:
+	var out: Dictionary = {}
+	for skill in d.keys():
+		var inner: Dictionary = d[skill]
+		var inner_out: Dictionary = {}
+		for node in inner.keys():
+			inner_out[StringName(String(node))] = int(inner[node])
+		out[StringName(String(skill))] = inner_out
+	return out
+
+
+func _stringify_presets(presets: Array) -> Array:
+	var out: Array = []
+	for p in presets:
+		out.append(_stringify_nested_talents(p))
+	return out
+
+
+func _restore_presets(arr: Array) -> Array:
+	var out: Array = []
+	for p in arr:
+		out.append(_restore_nested_talents(p))
+	while out.size() < GameState.PRESET_COUNT:
+		out.append({})
+	return out
+
+
+func _stringify_equipped_affixes() -> Dictionary:
+	var out: Dictionary = {}
+	for slot in Inventory.equipped_affixes.keys():
+		var affix: Dictionary = Inventory.equipped_affixes[slot]
+		var clean: Dictionary = {}
+		for k in affix.keys():
+			clean[String(k)] = affix[k]
+		out[String(slot)] = clean
+	return out
+
+
+func _restore_equipped_affixes(d: Dictionary) -> void:
+	Inventory.equipped_affixes.clear()
+	for slot in d.keys():
+		var clean: Dictionary = {}
+		var src: Dictionary = d[slot]
+		for k in src.keys():
+			clean[k] = src[k]
+		Inventory.equipped_affixes[StringName(String(slot))] = clean
 
 
 func _write_json(path: String, data: Variant) -> Error:

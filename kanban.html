@@ -2392,6 +2392,91 @@ const MIGRATIONS = [
       '3.47','3.54','3.55','3.75','3.76','3.77','3.78','3.79','3.80','3.81','3.82',
     ],
   },
+  {
+    version: '2026-05-15-phase7-full-closure',
+    note: 'Phase 7 full closure — Skill talent trees. Critical-path 7.1-7.7 plus the ' +
+          'entire 7.8-7.20 backlog and the eight tickets reassigned to Phase 7 from ' +
+          'earlier audits (2.22, 2.27, 2.32, 2.33, 2.47, 3.20, 3.29, 3.83). 23 NEW ' +
+          'GUT tests cover talent allocation, prerequisites, presets, set bonuses, ' +
+          'reforge affixes, luck rolls, mob affix rolls, XP buffs, accessory skill ' +
+          'bonuses, XP progress, and skill challenges; 113/113 overall pass. ' +
+          'NEW resources: TalentTree (.tres-ready, but bootstrap DEFAULT_TREES in ' +
+          'TalentRegistry seeds all 12 skills with 5-tier trees: 1 base node, 2 ' +
+          'branch nodes at tier 2, an inner node at tier 3-4, and a capstone at tier ' +
+          '5 with multi-parent prerequisites). NEW autoloads: TalentRegistry (indexed ' +
+          'by skill_id), LuckSystem (bonus drop count + rarity bump + roll multiplier ' +
+          'from PlayerStats.luck), SkillChallenges (per-skill time-trial → +1 talent ' +
+          'point + mastery cosmetic). NEW classes: TalentEffects (sum_value / ' +
+          'sum_global rollup keyed by effect_id), SetBonuses (Ember Iron / Auroric ' +
+          'Ice / Bone Plate threshold tables), MobAffixes (Elite + Champion roll, ' +
+          'apply, bonus_loot), Reforge (Anvil-driven affix roll on weapons / armor / ' +
+          'flagged items at 8 Ancient Coins per try). ' +
+          'GameState gained allocated_talent_nodes (per-node ranks) + talent_presets ' +
+          '(3 saved builds) + active_preset_index + allocate_talent_node + ' +
+          'load_talent_preset + save_talent_preset + total_talent_points_earned. ' +
+          'PlayerStats expanded with max_hp_bonus / max_mana_bonus / regen_per_second ' +
+          '/ loot_magnet_radius_bonus / luck / skill_level_bonus / set_bonus_active ' +
+          'and folds talent-tree effects + reforge affixes + set bonuses into the ' +
+          'recompute pass. HealthComponent gained bonus_max_health + regen_per_second ' +
+          '(per-second tick via _process). ManaComponent gained bonus_max_mana. ' +
+          'SkillSystem grew XP-buff multipliers (Tonic of Practice +25% global; ' +
+          'Stratasinger\'s Loaf +50% mining; combat & crafting variants), ' +
+          'effective_level (skill + accessory bonus), progress_into_level (UI XP ' +
+          'curve), skill_capped signal, and a Phase-13-ready _share_party_xp stub. ' +
+          'Inventory gained equipped_affixes (per-slot reforge bonus dict, mirrored ' +
+          'into PlayerStats). LootTable accepts apply_luck and pulls bonus rolls ' +
+          'from LuckSystem. ItemDrop magnet radius now honours ' +
+          'PlayerStats.loot_magnet_radius_bonus. ItemDef gained set_id, ' +
+          'skill_level_bonuses, luck_bonus, loot_magnet_radius_bonus, max_hp_bonus, ' +
+          'max_mana_bonus, reforgeable. ' +
+          'NEW items: respec_scroll (already existed, wired to refund_all_talents), ' +
+          'thread_ring_luck (+15 Luck), bracelet_loot_magnet (+150% pickup radius), ' +
+          'necklace_droprate (+30 Luck), ring_mining_skill (+5 Mining levels), ' +
+          'amulet_vigor (+40 max HP), xp_tonic (Tonic of Practice), ' +
+          'mining_focus_loaf (Stratasinger\'s Loaf), anvil_placeable. ' +
+          'NEW UI: TalentPanel rebuilt with TabBar of 12 skill tabs, 5-tier 3-column ' +
+          'tree grid, per-node tooltips (effect_id + value), maxed/locked/affordable ' +
+          'colour cues, preset save/load buttons (3 slots), respec button consuming a ' +
+          'Respec Scroll, right-click refund. CharacterSheetPanel (3-column: core ' +
+          'stats / skill XP table / talents per skill with capstone marker; footer ' +
+          'lists active buffs + accessory grants + set bonuses). AnvilPanel listens ' +
+          'for Workstation.interacted on station_id=&"anvil" and lists every ' +
+          'reforgeable inventory entry with a Reforge button. HUD level-up handler ' +
+          'now plays SFX + screen pulse + capstone fanfare on level 100. ' +
+          'PlayerCombat: mining splash radius from Stratabreaking talents (2.27/7.3), ' +
+          'mining-pierce chance, effective Mining level reads. MobSpawner rolls Elite ' +
+          '/ Champion affixes per spawn; tier-2/3 spawners force upgrade. Mob honours ' +
+          'affix metadata in _apply_affixes (HP/damage/speed multipliers + status ' +
+          'proc + tint + Champion name label). SaveSystem bumped v4 → v5 to persist ' +
+          'allocated_talent_nodes, talent_presets, active_preset_index, ' +
+          'equipped_affixes, and SkillChallenges.mastery_unlocked. ' +
+          'Default trees (each ≈5 nodes): Mining Stratabreaking (Hammer Hand → Quick ' +
+          'Swing/Strata-pierce → Patient Eye → Resonant Strike → Stratabreaker), ' +
+          'Running Walking (Light Step → Quick Recovery/Long Stride → Steady Breath ' +
+          '→ Walker\'s Promise), Melee Hand-Strike (Heavy Hand → Killing Eye/Bleeding ' +
+          'Cut → Bloodseed → Quiet Hand → Sovereign-strike), Ranged Hand-Throw (Long ' +
+          'Reach → Steady Aim/Fast Draw → Quill-Shot → Frugal Quiver → Eye of the ' +
+          'Walker), Vitality Anchoring (Stoneblood → Granite Skin/Reflected Rage → ' +
+          'Rooted → Slow Knitting → Sliver-Eater), Crafting Form-Making (Quick Form → ' +
+          'Lean Hands → Resonant Touch → Wide Bench → Form-Master), Gardening Tending ' +
+          '(Patient Tending → Plenty/Slow Stream → Saved Seed → Verdancy\'s Gift), ' +
+          'Fishing Listening (Patient Float → Sharp Eye → Big Net → Listening Hour → ' +
+          'Drowned-Kin), Cooking Hearth (Slow Brew → Warm Hearth/Open Pot → ' +
+          'Apprentice\'s Pot → Cantor\'s Loaf), Magic Resonance (Loud Resonance → ' +
+          'Deep Well/Slow Hum → Quiet Cast → Twin-Loom Voice), Summoning Calling ' +
+          '(Sharper Calls → Stronger Echo/Long Voice → Extra Throat → Bound Choir), ' +
+          'Explosives Bursting (Heavy Powder → Wide Burst/Short Fuse → Lucky Wick → ' +
+          'Burst-Walker).',
+    completed: [
+      /* Phase 7 critical path */
+      '7.1','7.2','7.3','7.4','7.5','7.6','7.7',
+      /* Phase 7 expansion + polish */
+      '7.8','7.9','7.10','7.11','7.12','7.13','7.14','7.15','7.16','7.17','7.18','7.19','7.20',
+      /* Migration tickets reassigned to Phase 7 from earlier audits */
+      '2.22','2.27','2.32','2.33','2.47',
+      '3.20','3.29','3.83',
+    ],
+  },
 ];
 
 const MIGRATIONS_KEY = STORAGE_KEY + ':migrations';

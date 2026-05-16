@@ -31,6 +31,9 @@ func _ready() -> void:
 	add_to_group("mob")
 	_spawn_position = global_position
 	_apply_def()
+	# Phase 2.32 / 2.33 — apply elite/champion affixes that were stashed in
+	# metadata by the spawner. Multiply HP/contact-damage and tint the sprite.
+	_apply_affixes()
 	if hurtbox:
 		hurtbox.team = &"enemy"
 		hurtbox.health_component = health
@@ -52,6 +55,59 @@ func _ready() -> void:
 	add_child(_status)
 	# Phase 6.42 — small HP bar above head. Visibility configurable via Settings.
 	_attach_hp_bar()
+
+
+## Phase 2.32 / 2.33 — Read metadata stashed by MobAffixes.apply and multiply
+## the mob's HP / damage / speed accordingly. Adds a tinted halo + optional
+## name label for Champions.
+func _apply_affixes() -> void:
+	if not has_meta(&"affix_tier"):
+		return
+	var tier: String = String(get_meta(&"affix_tier", "normal"))
+	if tier == "normal":
+		return
+	var hp_mult: float = float(get_meta(&"affix_hp_mult", 1.0))
+	var dmg_mult: float = float(get_meta(&"affix_dmg_mult", 1.0))
+	if health:
+		health.max_health = int(round(float(health.max_health) * hp_mult))
+		health.current_health = health.max_health
+	if contact_hitbox:
+		contact_hitbox.base_damage = int(round(float(contact_hitbox.base_damage) * dmg_mult))
+	# Speed + on-hit status from affix list.
+	var affixes: Array = get_meta(&"affix_list", [])
+	var speed_mult: float = 1.0
+	var on_hit_status: StringName = &""
+	for a in affixes:
+		speed_mult *= float(a.get("speed_mult", 1.0))
+		if a.has("on_hit_status"):
+			on_hit_status = StringName(a["on_hit_status"])
+	if mob_def:
+		mob_def = mob_def.duplicate(true)
+		mob_def.move_speed *= speed_mult
+	if contact_hitbox and on_hit_status != &"":
+		contact_hitbox.on_hit_status = on_hit_status
+		contact_hitbox.on_hit_status_chance = 0.6
+		contact_hitbox.on_hit_status_duration = 4.0
+	# Visual tint.
+	if sprite:
+		sprite.modulate = MobAffixes.tint_for(tier)
+	# Champion name label.
+	if tier == "champion":
+		var lbl := Label.new()
+		lbl.text = _champion_name(affixes)
+		lbl.position = Vector2(-24, -28)
+		lbl.modulate = Color(1.0, 0.85, 0.55)
+		lbl.add_theme_font_size_override("font_size", 7)
+		add_child(lbl)
+
+
+func _champion_name(affixes: Array) -> String:
+	if affixes.is_empty():
+		return "Champion"
+	var parts: Array = []
+	for a in affixes:
+		parts.append(String(a.get("name", "")))
+	return " ".join(parts) + " Champion"
 
 
 func _attach_hp_bar() -> void:
@@ -224,6 +280,8 @@ func _drop_loot() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.randomize()
 	var drops: Array = mob_def.loot_table.roll(rng)
+	# Phase 2.32 / 2.33 — bonus drops for elite/champion affixes.
+	drops.append_array(MobAffixes.bonus_loot(self, rng))
 	for drop in drops:
 		var item_id: StringName = drop["item_id"]
 		var count: int = int(drop["count"])

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"mining_focus_loaf"
+display_name = "Stratasinger's Loaf"
+description = "+50% Mining XP gain for 240s. Restores 15 HP."
+max_stack = 10
+item_type = 4
+tier = 1
+rarity = 1
+heal_amount = 15
+buff_id = &"buff_xp_mining"
+buff_duration_seconds = 240.0
+lore_text = "Eat slowly. The stone hears."

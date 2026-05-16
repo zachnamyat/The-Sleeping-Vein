@@ -831,13 +831,30 @@ func _resolve_mining(player: PlayerController, pick: ItemDef, dir: Vector2) -> v
 	var to_target: Vector2 = target_pos - player.global_position
 	if to_target.length() > PICKAXE_MAX_REACH_PIXELS:
 		target_pos = player.global_position + to_target.normalized() * PICKAXE_MAX_REACH_PIXELS
-	var mining_skill: int = SkillSystem.get_level(&"skill_mining")
+	var mining_skill: int = SkillSystem.effective_level(&"skill_mining")
 	var damage: int = CombatMath.mining_damage(pick.base_damage, mining_skill)
 	# Phase 6.56 — mining penetration affix: hit the next N tiles in the same line.
 	var pierce: int = pick.mining_pierce + PlayerStats.mining_pierce
 	var hit_positions: Array[Vector2] = [target_pos]
 	for i in range(pierce):
 		hit_positions.append(target_pos + dir * 16.0 * float(i + 1))
+	# Phase 2.27 / 7.3 — Stratabreaking "Resonant Strike" talent grows a splash
+	# radius around the swing. Each allocated rank adds 8 pixels; once we're
+	# wider than ~12 px the four cardinal neighbours of the target are added.
+	if has_node(^"/root/TalentRegistry"):
+		var splash_px: float = TalentEffects.sum_value(&"skill_mining", &"mining_area_radius")
+		if splash_px >= 8.0:
+			for offset in [Vector2.UP, Vector2.DOWN, Vector2.LEFT, Vector2.RIGHT]:
+				hit_positions.append(target_pos + offset * 16.0)
+		if splash_px >= 16.0:
+			for offset in [Vector2(1, 1), Vector2(-1, 1), Vector2(1, -1), Vector2(-1, -1)]:
+				hit_positions.append(target_pos + offset * 16.0)
+	# Phase 7 — Stratabreaking "Strata-pierce" rolls a chance to break an extra
+	# tile in front of the hit.
+	if has_node(^"/root/TalentRegistry"):
+		var pierce_chance: float = TalentEffects.sum_value(&"skill_mining", &"mining_pierce_chance")
+		if pierce_chance > 0.0 and randf() < pierce_chance:
+			hit_positions.append(target_pos + dir * 16.0 * float(pierce + 1))
 	for tp in hit_positions:
 		var hit: bool = false
 		for layer in ore_layers:
@@ -867,6 +884,7 @@ const PLACEABLE_SCENES: Dictionary = {
 	&"spike_trap_placeable":      "res://scenes/structures/spike_trap.tscn",
 	&"hidden_door_placeable":     "res://scenes/structures/hidden_door.tscn",
 	&"mural_placeable":           "res://scenes/structures/mural.tscn",
+	&"anvil_placeable":           "res://scenes/structures/anvil.tscn",
 }
 
 const PLACEABLE_DECOR: Dictionary = {

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"necklace_droprate"
+display_name = "Charm of the Open Hand"
+description = "+30 Luck. Drop tables roll one extra slot every 25 Luck."
+max_stack = 1
+item_type = 3
+tier = 3
+rarity = 3
+equipment_slot = &"necklace"
+luck_bonus = 30.0
+lore_text = "Carved from a single tooth of a Mossback that lived long enough to be polite."

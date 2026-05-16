@@ -76,6 +76,24 @@ func _spawn_one() -> void:
 	var angle: float = randf() * TAU
 	var radius: float = randf_range(24.0, SPAWN_RADIUS_PX)
 	mob.global_position = global_position + Vector2(cos(angle), sin(angle)) * radius
+	# Phase 2.32 / 2.33 — roll for elite/champion affixes BEFORE adopting into
+	# the tree, so Mob._ready can read the metadata.
+	var rng := RandomNumberGenerator.new()
+	rng.randomize()
+	# Tier-2/3 spawners (4.59 elite spawn rings) get extra elite bias.
+	if tier >= 2:
+		rng.seed = int(Time.get_unix_time_from_system() * 1000.0) % 1000003
+	var roll: Dictionary = MobAffixes.roll_for_spawn(rng)
+	# Tier 2/3 spawners always upgrade to at least elite.
+	if tier >= 2 and roll.get("tier", "normal") == "normal":
+		roll = {"tier": "elite", "affix": MobAffixes.AFFIX_DEFS[rng.randi() % MobAffixes.AFFIX_DEFS.size()]}
+	if tier >= 3 and roll.get("tier", "normal") != "champion":
+		roll = {
+			"tier": "champion",
+			"affix1": MobAffixes.AFFIX_DEFS[rng.randi() % MobAffixes.AFFIX_DEFS.size()],
+			"affix2": MobAffixes.AFFIX_DEFS[rng.randi() % MobAffixes.AFFIX_DEFS.size()],
+		}
+	MobAffixes.apply(mob, roll)
 	_alive_children.append(mob)
 	# Phase 4.16 — adopt the mob into the entity layer so y-sort works the
 	# same as world-spawned mobs.

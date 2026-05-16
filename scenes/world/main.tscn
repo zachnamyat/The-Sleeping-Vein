@@ -24,6 +24,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/loom_panel.tscn" id="21_loompanel"]
 [ext_resource type="PackedScene" path="res://scenes/ui/merchant_panel.tscn" id="22_merchant"]
 [ext_resource type="PackedScene" path="res://scenes/ui/talent_panel.tscn" id="23_talent"]
+[ext_resource type="PackedScene" path="res://scenes/ui/character_sheet_panel.tscn" id="47_charsheet"]
+[ext_resource type="PackedScene" path="res://scenes/ui/anvil_panel.tscn" id="48_anvil"]
 [ext_resource type="PackedScene" path="res://scenes/ui/cookbook_panel.tscn" id="24_cookbook"]
 [ext_resource type="PackedScene" path="res://scenes/ui/compendium_panel.tscn" id="25_compendium"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="26_pause"]
@@ -176,6 +178,10 @@ script = ExtResource("33c_statspawn")
 [node name="MerchantPanel" parent="." instance=ExtResource("22_merchant") groups=["merchant_ui"]]
 
 [node name="TalentPanel" parent="." instance=ExtResource("23_talent") groups=["talent_panel"]]
+
+[node name="CharacterSheetPanel" parent="." instance=ExtResource("47_charsheet") groups=["character_sheet"]]
+
+[node name="AnvilPanel" parent="." instance=ExtResource("48_anvil") groups=["anvil_ui"]]
 
 [node name="CookbookPanel" parent="." instance=ExtResource("24_cookbook") groups=["cookbook_panel"]]
 

@@ -21,6 +21,11 @@ const EQUIPMENT_SLOTS: Array[StringName] = [
 var slots: Array = []   ## Each entry: {"item_id": StringName, "count": int} or null
 var equipment: Dictionary = {}
 
+## Phase 3.29 — reforge affixes applied to equipped items. equipped_affixes[slot]
+## holds the per-slot bonus dictionary (mirrored from the inventory slot's
+## "affix" key when the item was equipped). Cleared on unequip.
+var equipped_affixes: Dictionary = {}
+
 ## Phase 3.43 — locked slot indices won't be sorted, dropped, trashed, or
 ## quick-stacked. Toggle via Inventory.toggle_lock(idx).
 var locked_slots: Dictionary = {}
@@ -196,9 +201,18 @@ func equip_from_slot(inv_index: int, target_slot: StringName) -> bool:
 		return false
 	# Swap with whatever's already in the slot (back into the inventory slot).
 	var previous: StringName = StringName(equipment.get(target_slot, &""))
+	var previous_affix: Dictionary = equipped_affixes.get(target_slot, {})
+	var new_affix: Dictionary = (entry.get("affix", {}) as Dictionary).duplicate(true)
 	equip(target_slot, item_id)
+	if new_affix.is_empty():
+		equipped_affixes.erase(target_slot)
+	else:
+		equipped_affixes[target_slot] = new_affix
 	if previous != &"":
-		slots[inv_index] = {"item_id": previous, "count": 1}
+		var restored: Dictionary = {"item_id": previous, "count": 1}
+		if not previous_affix.is_empty():
+			restored["affix"] = previous_affix
+		slots[inv_index] = restored
 		slot_changed.emit(inv_index, previous, 1)
 	else:
 		slots[inv_index] = null
@@ -213,19 +227,32 @@ func unequip(slot: StringName, target_inv_index: int = -1) -> bool:
 	var equipped: StringName = StringName(equipment.get(slot, &""))
 	if equipped == &"":
 		return false
+	var equipped_affix: Dictionary = (equipped_affixes.get(slot, {}) as Dictionary).duplicate(true)
 	if target_inv_index >= 0 and target_inv_index < slots.size():
 		var existing = slots[target_inv_index]
 		if existing == null:
-			slots[target_inv_index] = {"item_id": equipped, "count": 1}
+			var restored: Dictionary = {"item_id": equipped, "count": 1}
+			if not equipped_affix.is_empty():
+				restored["affix"] = equipped_affix
+			slots[target_inv_index] = restored
 			slot_changed.emit(target_inv_index, equipped, 1)
 			equip(slot, &"")
+			equipped_affixes.erase(slot)
 		else:
 			# Swap: if the existing item fits this slot, equip it; otherwise abort.
 			var existing_id := StringName(existing.get("item_id", ""))
 			var ex_defn: ItemDef = ItemRegistry.get_def(existing_id)
 			if ex_defn != null and ex_defn.equipment_slot == slot:
+				var existing_affix: Dictionary = (existing.get("affix", {}) as Dictionary).duplicate(true)
 				equip(slot, existing_id)
-				slots[target_inv_index] = {"item_id": equipped, "count": 1}
+				if existing_affix.is_empty():
+					equipped_affixes.erase(slot)
+				else:
+					equipped_affixes[slot] = existing_affix
+				var restored2: Dictionary = {"item_id": equipped, "count": 1}
+				if not equipped_affix.is_empty():
+					restored2["affix"] = equipped_affix
+				slots[target_inv_index] = restored2
 				slot_changed.emit(target_inv_index, equipped, 1)
 			else:
 				return false
@@ -235,6 +262,7 @@ func unequip(slot: StringName, target_inv_index: int = -1) -> bool:
 	if not try_add(equipped, 1):
 		return false
 	equip(slot, &"")
+	equipped_affixes.erase(slot)
 	return true
 
 

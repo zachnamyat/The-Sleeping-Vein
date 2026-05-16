@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"anvil_placeable"
+display_name = "Anvil"
+description = "Reforge a weapon or piece of armor for 8 Ancient Coins. Random affix per reforge."
+max_stack = 99
+item_type = 5
+tier = 2
+rarity = 2
+placeable_layer = &"structures"

@@ -12,7 +12,7 @@ class_name ItemDrop
 
 const POP_DURATION: float = 0.35
 const POP_RANGE: float = 12.0
-const MAGNET_RADIUS: float = 36.0
+const BASE_MAGNET_RADIUS: float = 36.0
 const MAGNET_SPEED: float = 220.0
 
 var _spawn_position: Vector2
@@ -48,7 +48,13 @@ func _process(delta: float) -> void:
 	var player := _nearest_player()
 	if player != null:
 		var to_player: Vector2 = player.global_position - global_position
-		if to_player.length() < MAGNET_RADIUS:
+		# Phase 2.22 / 7.19 — Loot magnet accessory + Luck both grow the pickup
+		# radius. The magnet stays under MAGNET_SPEED, so the effective sphere
+		# still drags items toward the player.
+		var magnet_radius: float = BASE_MAGNET_RADIUS
+		if PlayerStats:
+			magnet_radius *= 1.0 + PlayerStats.loot_magnet_radius_bonus
+		if to_player.length() < magnet_radius:
 			global_position += to_player.normalized() * MAGNET_SPEED * delta
 	for b in get_overlapping_bodies():
 		if b.is_in_group("player"):

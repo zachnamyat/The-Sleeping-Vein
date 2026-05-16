@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"ring_mining_skill"
+display_name = "Stratasinger's Ring"
+description = "+5 effective Mining levels while worn."
+max_stack = 1
+item_type = 3
+tier = 2
+rarity = 2
+equipment_slot = &"ring_2"
+skill_level_bonuses = {
+"skill_mining": 5,
+}
+lore_text = "The first sub-Cantor heard the stone first."

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://b7p1n2v3r4t5y"]
+
+[ext_resource type="Script" path="res://scripts/ui/character_sheet_panel.gd" id="1_csp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_csp"]
+bg_color = Color(0.04, 0.03, 0.03, 0.96)
+border_color = Color(0.95, 0.84, 0.5, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="CharacterSheetPanel" type="CanvasLayer"]
+layer = 80
+script = ExtResource("1_csp")
+
+[node name="Root" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -340.0
+offset_top = -160.0
+offset_right = 340.0
+offset_bottom = 160.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_csp")

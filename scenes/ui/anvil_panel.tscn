@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://bvy0z2anvilpa"]
+
+[ext_resource type="Script" path="res://scripts/ui/anvil_panel.gd" id="1_anv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_anv"]
+bg_color = Color(0.04, 0.03, 0.03, 0.96)
+border_color = Color(0.92, 0.7, 0.4, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="AnvilPanel" type="CanvasLayer"]
+layer = 82
+script = ExtResource("1_anv")
+
+[node name="Root" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -140.0
+offset_right = 220.0
+offset_bottom = 140.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_anv")
+
+[node name="List" type="VBoxContainer" parent="Root"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0

@@ -62,6 +62,19 @@ func is_online() -> bool:
 	return multiplayer.multiplayer_peer != null
 
 
+## Phase 7.12 — used by SkillSystem to decide whether to share XP across the
+## party. Returns true once any peer has connected; until then, XP rewards stay
+## local.
+func is_party_active() -> bool:
+	return is_online() and party_peer_count() > 0
+
+
+func party_peer_count() -> int:
+	if multiplayer.multiplayer_peer == null:
+		return 0
+	return multiplayer.get_peers().size()
+
+
 func _on_peer_connected(peer_id: int) -> void:
 	peer_connected.emit(peer_id)
 

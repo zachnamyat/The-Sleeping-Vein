@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bvy9z3anvilxx"]
+
+[ext_resource type="Script" path="res://scripts/structures/workstation.gd" id="1_ws"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_anv"]
+size = Vector2(28, 28)
+
+[node name="Anvil" type="Area2D"]
+script = ExtResource("1_ws")
+station_id = &"anvil"
+display_name = "Anvil"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+offset = Vector2(0, -8)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_anv")

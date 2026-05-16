@@ -27,6 +27,19 @@ signal staggered(seconds: float)
 @export var stagger_threshold: int = 30
 @export var stagger_recovery_seconds: float = 1.0
 
+## Phase 7 — extra HP / regen pumped in from PlayerStats (talents + Vitality
+## set bonuses + accessory items). `bonus_max_health` is added on top of
+## `max_health`; effective_max_health() is the cap exposed to callers.
+var bonus_max_health: int = 0:
+	set(value):
+		var ratio: float = effective_health_ratio()
+		bonus_max_health = value
+		# Keep ratio so a Walker who gains HP mid-game doesn't lose all of it.
+		current_health = clampi(int(round(effective_max_health() * ratio)), 1, effective_max_health())
+		health_changed.emit(current_health, effective_max_health())
+var regen_per_second: float = 0.0
+var _regen_accum: float = 0.0
+
 var current_health: int = 100
 var stagger_meter: int = 0
 var _resistances: Dictionary = {}
@@ -34,20 +47,42 @@ var _weaknesses: Dictionary = {}
 
 
 func _ready() -> void:
-	current_health = max_health
-	health_changed.emit(current_health, max_health)
+	current_health = effective_max_health()
+	health_changed.emit(current_health, effective_max_health())
+	set_process(true)
+
+
+func effective_max_health() -> int:
+	return max_health + bonus_max_health
+
+
+func effective_health_ratio() -> float:
+	var cap: int = effective_max_health()
+	if cap <= 0:
+		return 1.0
+	return float(current_health) / float(cap)
+
+
+func _process(delta: float) -> void:
+	if regen_per_second <= 0.0 or is_dead():
+		return
+	_regen_accum += regen_per_second * delta
+	if _regen_accum >= 1.0:
+		var whole: int = int(floor(_regen_accum))
+		_regen_accum -= float(whole)
+		heal(whole, self)
 
 
 func set_max_health(value: int, keep_ratio: bool = false) -> void:
 	if value <= 0:
 		value = 1
-	var ratio: float = float(current_health) / float(max_health) if max_health > 0 else 1.0
+	var ratio: float = effective_health_ratio()
 	max_health = value
 	if keep_ratio:
-		current_health = int(round(max_health * ratio))
+		current_health = int(round(effective_max_health() * ratio))
 	else:
-		current_health = mini(current_health, max_health)
-	health_changed.emit(current_health, max_health)
+		current_health = mini(current_health, effective_max_health())
+	health_changed.emit(current_health, effective_max_health())
 
 
 ## Phase 6 — damage pipeline. Multiplier order: weakness > resistance > armor
@@ -64,7 +99,7 @@ func apply_damage(amount: int, source: Node = null, type: StringName = DamageTyp
 	post = maxi(post, 0)
 	current_health = maxi(0, current_health - post)
 	damaged.emit(post, source, type)
-	health_changed.emit(current_health, max_health)
+	health_changed.emit(current_health, effective_max_health())
 	# Phase 6.39 — heavy hits build the stagger meter; once it caps, trigger.
 	if is_heavy and stagger_threshold > 0 and not is_dead():
 		stagger_meter = mini(stagger_threshold, stagger_meter + post)
@@ -86,11 +121,11 @@ func heal(amount: int, source: Node = null) -> int:
 	if amount <= 0:
 		return 0
 	var before: int = current_health
-	current_health = mini(max_health, current_health + amount)
+	current_health = mini(effective_max_health(), current_health + amount)
 	var delta: int = current_health - before
 	if delta > 0:
 		healed.emit(delta, source)
-		health_changed.emit(current_health, max_health)
+		health_changed.emit(current_health, effective_max_health())
 	return delta
 
 
@@ -116,9 +151,9 @@ func get_weakness(type: StringName) -> float:
 
 
 func revive(at_fraction: float = 1.0) -> void:
-	current_health = clampi(int(round(max_health * at_fraction)), 1, max_health)
+	current_health = clampi(int(round(effective_max_health() * at_fraction)), 1, effective_max_health())
 	stagger_meter = 0
-	health_changed.emit(current_health, max_health)
+	health_changed.emit(current_health, effective_max_health())
 
 
 func is_dead() -> bool:

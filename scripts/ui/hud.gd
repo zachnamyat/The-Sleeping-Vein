@@ -296,9 +296,21 @@ func _on_ui_toast(text: String, duration: float) -> void:
 func _on_skill_leveled_up(skill_id: StringName, new_level: int) -> void:
 	if skill_toast == null:
 		return
-	skill_toast.text = "%s -> Lv %d" % [_skill_display_name(skill_id), new_level]
+	# Phase 7.9 — louder level-up cue: toast + SFX + camera pulse. The TalentPanel
+	# already shows the new total; this is the in-world feedback.
+	skill_toast.text = "%s reaches Lv %d  •  +1 talent point" % [_skill_display_name(skill_id), new_level]
 	skill_toast.visible = true
-	_skill_toast_timer = 2.0
+	_skill_toast_timer = 2.5
+	if AudioBus:
+		AudioBus.play_sfx(&"skill_level_up")
+	EventBus.screen_pulse_requested.emit(0.35, 0.18)
+	# Phase 7.10 — capstone fanfare when a skill hits 100. SkillSystem also emits
+	# skill_capped; we already see the level-up so re-using this hook keeps the
+	# wiring shallow.
+	if new_level >= SkillSystem.SKILL_CAP_LEVEL:
+		EventBus.ui_toast.emit("%s MASTERED. Cosmetic unlocked." % _skill_display_name(skill_id), 4.0)
+		if AudioBus:
+			AudioBus.play_sfx(&"sovereign_fanfare")
 
 
 func _on_skill_xp_gained(skill_id: StringName, amount: int) -> void:

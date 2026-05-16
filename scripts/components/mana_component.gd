@@ -14,23 +14,35 @@ signal mana_failed(amount_needed: int)
 ## Phase 6.40 — additive mana-regen bonus written by PlayerStats from equipped
 ## items (rings, focus). Applied on top of `regen_per_second`.
 var equipment_regen_bonus: float = 0.0
+## Phase 7 — additive max-mana bonus written by PlayerStats from talent trees
+## (Resonance Deep Well) and accessory items.
+var bonus_max_mana: int = 0:
+	set(value):
+		var ratio: float = current_mana / float(effective_max_mana()) if effective_max_mana() > 0 else 1.0
+		bonus_max_mana = value
+		current_mana = minf(current_mana, float(effective_max_mana()))
+		mana_changed.emit(int(current_mana), effective_max_mana())
 
 var current_mana: float = 100.0
 
 
 func _ready() -> void:
-	current_mana = float(max_mana)
-	mana_changed.emit(int(current_mana), max_mana)
+	current_mana = float(effective_max_mana())
+	mana_changed.emit(int(current_mana), effective_max_mana())
+
+
+func effective_max_mana() -> int:
+	return max_mana + bonus_max_mana
 
 
 func _process(delta: float) -> void:
 	var rate: float = regen_per_second + equipment_regen_bonus
-	if current_mana < float(max_mana) and rate > 0.0:
+	if current_mana < float(effective_max_mana()) and rate > 0.0:
 		var before: int = int(current_mana)
-		current_mana = minf(float(max_mana), current_mana + rate * delta)
+		current_mana = minf(float(effective_max_mana()), current_mana + rate * delta)
 		var after: int = int(current_mana)
 		if after != before:
-			mana_changed.emit(after, max_mana)
+			mana_changed.emit(after, effective_max_mana())
 
 
 func try_spend(amount: int) -> bool:
@@ -41,7 +53,7 @@ func try_spend(amount: int) -> bool:
 		return false
 	current_mana -= float(amount)
 	mana_spent.emit(amount)
-	mana_changed.emit(int(current_mana), max_mana)
+	mana_changed.emit(int(current_mana), effective_max_mana())
 	return true
 
 
@@ -52,17 +64,17 @@ func can_afford(amount: int) -> bool:
 func add_mana(amount: int) -> void:
 	if amount <= 0:
 		return
-	current_mana = minf(float(max_mana), current_mana + float(amount))
-	mana_changed.emit(int(current_mana), max_mana)
+	current_mana = minf(float(effective_max_mana()), current_mana + float(amount))
+	mana_changed.emit(int(current_mana), effective_max_mana())
 
 
 func set_max_mana(value: int, keep_ratio: bool = false) -> void:
 	if value <= 0:
 		value = 1
-	var ratio: float = current_mana / float(max_mana) if max_mana > 0 else 1.0
+	var ratio: float = current_mana / float(effective_max_mana()) if effective_max_mana() > 0 else 1.0
 	max_mana = value
 	if keep_ratio:
-		current_mana = float(max_mana) * ratio
+		current_mana = float(effective_max_mana()) * ratio
 	else:
-		current_mana = minf(current_mana, float(max_mana))
-	mana_changed.emit(int(current_mana), max_mana)
+		current_mana = minf(current_mana, float(effective_max_mana()))
+	mana_changed.emit(int(current_mana), effective_max_mana())

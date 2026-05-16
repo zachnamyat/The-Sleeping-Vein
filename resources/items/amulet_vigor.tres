@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"amulet_vigor"
+display_name = "Amulet of Slow Knitting"
+description = "+40 max HP. +1 HP regen per second."
+max_stack = 1
+item_type = 3
+tier = 2
+rarity = 2
+equipment_slot = &"necklace"
+max_hp_bonus = 40
+lore_text = "Anchoring stays the longest in those who don't reach for it."

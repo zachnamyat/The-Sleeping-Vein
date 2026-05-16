@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"xp_tonic"
+display_name = "Tonic of Practice"
+description = "+25% XP gain for all skills for 300 seconds."
+max_stack = 10
+item_type = 4
+tier = 1
+rarity = 2
+buff_id = &"buff_xp_boost"
+buff_duration_seconds = 300.0
+lore_text = "Three drops of Cantor's water and silence enough to hear what you are doing."

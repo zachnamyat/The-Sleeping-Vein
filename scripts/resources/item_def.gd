@@ -166,3 +166,31 @@ enum ItemType { MATERIAL, TOOL, WEAPON, ARMOR, CONSUMABLE, PLACEABLE, AMMO, KEY 
 @export var off_hand_damage_multiplier: float = 0.6
 
 @export var lore_ref: String = ""
+
+# ============================================================================
+# Phase 7 — Accessories, set bonuses, Luck stat (tickets 3.20, 3.83, 7.11, 7.19)
+# ============================================================================
+
+## Phase 3.20 — set id: equipping >= 2 pieces with the same set_id triggers a
+## set bonus from SetBonuses.bonus_for(set_id, piece_count).
+@export var set_id: StringName = &""
+
+## Phase 7.11 — accessory items can grant +N levels to a skill. Maps StringName
+## skill_id -> int bonus. E.g. {"skill_mining": 2} = +2 effective Mining level.
+@export var skill_level_bonuses: Dictionary = {}
+
+## Phase 7.19 — Luck stat directly granted by an accessory. Each point of luck
+## bumps drop rolls / fishing rolls / treasure-chest rolls by 1%.
+@export var luck_bonus: float = 0.0
+
+## Phase 2.22 — loot magnet radius bonus. 0.5 = +50% pickup radius.
+@export var loot_magnet_radius_bonus: float = 0.0
+
+## Phase 7 — direct max-HP / max-mana bonus from accessories (e.g. amulets).
+@export var max_hp_bonus: int = 0
+@export var max_mana_bonus: int = 0
+
+## Phase 3.29 — reforge metadata. Anvil station applies one random affix to an
+## item; the affix is stored on the player's inventory entry, not on the
+## ItemDef. The boolean flag on the def says "this item type is reforgeable".
+@export var reforgeable: bool = false

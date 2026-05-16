@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bracelet_loot_magnet"
+display_name = "Bracelet of the Drawn Thread"
+description = "+150% pickup radius. Items slide to your hand from across a small room."
+max_stack = 1
+item_type = 3
+tier = 2
+rarity = 2
+equipment_slot = &"bracelet"
+loot_magnet_radius_bonus = 1.5
+lore_text = "The Walker reaches; the thing answers."
