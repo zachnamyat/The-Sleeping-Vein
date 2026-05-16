@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rechymvlt11"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_hymnal_vault"
+display_name = "Hymnal Vault"
+inputs = [{ "item_id": "auroric_ice_ore", "count": 8 }, { "item_id": "aurora_shard", "count": 4 }]
+outputs = [{ "item_id": "hymnal_vault_placeable", "count": 1 }]
+stations = [&"auroric_anvil"]
+skill_xp_grant = 32
+skill_xp_id = &"skill_crafting"

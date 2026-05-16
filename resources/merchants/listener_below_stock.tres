@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="MerchantInventory" format=3 uid="uid://h134jc27ae5c"]
+
+[ext_resource type="Script" path="res://scripts/resources/merchant_inventory.gd" id="1_mi"]
+
+[resource]
+script = ExtResource("1_mi")
+sell_items = [
+	{ "item_id": "aurora_shard",         "price": 65,  "stock": 3 },
+	{ "item_id": "recipe_scroll",        "price": 120, "stock": 1 },
+	{ "item_id": "respec_scroll",        "price": 220, "stock": 1 },
+	{ "item_id": "xp_tonic",             "price": 90,  "stock": 2 },
+	{ "item_id": "auroric_ice_ore",      "price": 40,  "stock": 4 },
+]
+buy_prices = {
+	"aphelion_fragment": 60,
+	"tablet_shard": 30,
+	"sovereign_name_fragment_7": 200,
+	"sovereign_name_fragment_8": 200,
+	"sovereign_name_fragment_9": 200,
+}
+restock_minutes = 45.0
+seasonal_extras = {}
+discount_thresholds = []
+repair_fee_per_point = 3
+preferred_biome = &"auroric_veil"
+theme_music = &"theme_listener_below"

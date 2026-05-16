@@ -1,15 +1,21 @@
-[gd_resource type="Resource" script_class="ItemDef" load_steps=2 format=3 uid="uid://itemdef0auroricchst"]
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0auroricchst"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/auroric_ice_chestpiece.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"auroric_ice_chestpiece"
 display_name = "Auroric-Ice Chestpiece"
-description = "+24 armor. Halves Auroric Veil cold damage while held."
+description = "Frost-tempered scale armor. While equipped, cold-damage ticks and frostbite buildup are halved."
+icon = ExtResource("2_icon")
 max_stack = 1
 item_type = 3
 tier = 8
 rarity = 3
 armor_value = 24
 equipment_slot = &"chest"
+status_resists = {"cold": 0.5}
+set_id = &"auroric_choir"
+lore_text = "Auroric crystal does not melt — only sings under heat."
+lore_ref = "lore/04_biomes.md#stratum-8--the-auroric-veil"

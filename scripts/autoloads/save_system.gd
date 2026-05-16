@@ -27,7 +27,11 @@ const SAVE_ROOT: String = "user://saves/"
 ##        flags, lore moments, Verdancy age, Sunken Glyph fragments,
 ##        Glow-Crane quest), per-LarvaTrap dump_state, Sythrenn mercy +
 ##        Vol'thaar release flags (already stored in GameState.collected_relics).
-const SAVE_VERSION: int = 8
+##   v9 — Phase 11: phase11_helpers (heat/cold/frostbite state, pyrenkin forge
+##        sub-quest, Wormbound covenant gesture, Hymnal Vault chord,
+##        Emberforge journal + Forge-Compact tablets, weather, bellows fuel),
+##        Skoldur recognition + Naeren peace flags (in GameState.collected_relics).
+const SAVE_VERSION: int = 9
 
 signal save_started(slot_name: String)
 signal save_completed(slot_name: String)
@@ -188,6 +192,8 @@ func _dump_game_state() -> Dictionary:
 		"phase9_structures": _dump_phase9_structures(),
 		# Phase 10 v8.
 		"phase10_helpers": Phase10Helpers.dump_state() if Phase10Helpers else {},
+		# Phase 11 v9.
+		"phase11_helpers": Phase11Helpers.dump_state() if Phase11Helpers else {},
 	}
 
 
@@ -231,6 +237,9 @@ func _restore_game_state(state: Dictionary) -> void:
 	# Phase 10 v8.
 	if Phase10Helpers:
 		Phase10Helpers.restore_state(state.get("phase10_helpers", {}))
+	# Phase 11 v9.
+	if Phase11Helpers:
+		Phase11Helpers.restore_state(state.get("phase11_helpers", {}))
 	# Player restore is signal-driven: when SaveSystem holds pending state, it
 	# subscribes once to EventBus.player_spawned. The next player to spawn
 	# (either the existing one re-detected, or a fresh one after scene change)

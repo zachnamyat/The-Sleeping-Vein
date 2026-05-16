@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://ccoldhollow11"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/auroric_veil/aurora_wisp.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_auroric_veil.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"cold_hollow"
+display_name = "Cold-Hollow"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 110
+armor = 8
+contact_damage = 28
+contact_damage_type = &"cold"
+move_speed = 26.0
+detection_radius = 120.0
+leash_radius = 210.0
+behavior = 2
+mob_class = 3
+xp_skill = &"skill_melee"
+xp_value = 78
+loot_table = ExtResource("3_loot")
+biome = &"auroric_veil"
+stagger_threshold = 48
+stagger_recovery_seconds = 1.1
+knockback_resistance = 0.45
+resistances = {"cold": 0.6, "physical": 0.2}
+weaknesses = {"fire": 1.6}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-8"

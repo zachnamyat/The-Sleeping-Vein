@@ -44,7 +44,7 @@ func validate_room(bed_world_pos: Vector2, wall_layer_path: NodePath, floor_laye
 	for y in range(-ROOM_HALF, ROOM_HALF + 1):
 		for x in range(-ROOM_HALF, ROOM_HALF + 1):
 			var coord: Vector2i = center + Vector2i(x, y)
-			var is_perim := (abs(x) == ROOM_HALF) or (abs(y) == ROOM_HALF)
+			var is_perim: bool = (abs(x) == ROOM_HALF) or (abs(y) == ROOM_HALF)
 			if wall_layer.get_cell_source_id(coord) >= 0:
 				walls += 1
 				if is_perim:

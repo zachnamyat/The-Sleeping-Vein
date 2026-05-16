@@ -512,6 +512,9 @@ func _spawn_decor_and_structures(chunk: Vector2i, biome: BiomeDef, rng: RandomNu
 				entities.add_child(s)
 	# 4.55 — floor scatter on a thin Poisson-ish field.
 	_scatter_floor(chunk, biome, rng, entities)
+	# Phase 11 — biome-specific scatter (Emberforge forges, Salt Wastes
+	# mirage/quicksand + Wormbound Elder, Auroric Veil Hymnal Vault).
+	_spawn_phase11_scatter(chunk, biome, rng, entities)
 	# Phase 3.73 — Glasswright multi-tile Clearstone crystal cluster. Spawns
 	# inside walls (the cluster IS the wall the player chips), so we
 	# specifically want to pick a *wall* tile, not an open one.
@@ -878,3 +881,93 @@ func temperature_intensity_at(world_pos: Vector2) -> float:
 	var radius: float = world_pos.length() / float(TILE_PX)
 	var into: float = (radius - b.distance_from_anchor_tiles) / max(1.0, b.ring_thickness_tiles)
 	return clampf(into, 0.0, 1.0)
+
+
+## Phase 11 biome-specific scatter — Pyrenkin forges in Emberforge, mirage +
+## quicksand in Salt Wastes, occasional Wormbound Elder + Hymnal Vault.
+##
+## Forges are deterministic on chunk + a per-chunk hash, so the three forges
+## sit at well-spread offsets through the biome ring; we cap at three via
+## Phase11Helpers.PYRENKIN_FORGES_TOTAL by giving each a stable index
+## derived from (chunk_x mod 3).
+const PHASE11_FORGE_CHANCE: float = 0.03
+const PHASE11_MIRAGE_CHANCE: float = 0.10
+const PHASE11_QUICKSAND_CHANCE: float = 0.07
+const PHASE11_WORMBOUND_ELDER_CHANCE: float = 0.008
+const PHASE11_HYMNAL_VAULT_CHANCE: float = 0.012
+
+
+func _spawn_phase11_scatter(chunk: Vector2i, biome: BiomeDef, rng: RandomNumberGenerator, entities: Node2D) -> void:
+	var wb := _layer(wall_base_layer_path)
+	var radius: float = Vector2(chunk * CHUNK_TILES + Vector2i(CHUNK_TILES / 2, CHUNK_TILES / 2)).length()
+	if radius < ANCHOR_CLEAR_RADIUS_TILES + 16:
+		return
+	match biome.id:
+		&"emberforge":
+			# 11.8 — Pyrenkin forge: at most 3 in the world, indexed by
+			# (chunk.x mod 3). We roll per-chunk but cap on uniqueness via a
+			# module-scoped registry of placed indices.
+			if rng.randf() < PHASE11_FORGE_CHANCE:
+				var forge_index: int = int(posmod(chunk.x + chunk.y, 3))
+				if not _placed_forge_indices.has(forge_index):
+					var tile: Vector2i = _find_open_floor_in_chunk(wb, chunk, rng)
+					if tile != Vector2i(-1, -1):
+						var scn := load("res://scenes/structures/pyrenkin_forge.tscn") as PackedScene
+						if scn:
+							var inst := scn.instantiate() as Node2D
+							if inst:
+								inst.position = _world_pos_from_tile(tile)
+								inst.set("forge_index", forge_index)
+								entities.add_child(inst)
+								_placed_forge_indices[forge_index] = true
+		&"salt_wastes":
+			# 11.19 — Mirage patch.
+			if rng.randf() < PHASE11_MIRAGE_CHANCE:
+				var tile: Vector2i = _find_open_floor_in_chunk(wb, chunk, rng)
+				if tile != Vector2i(-1, -1):
+					var scn := load("res://scenes/structures/mirage_patch.tscn") as PackedScene
+					if scn:
+						var inst := scn.instantiate() as Node2D
+						if inst:
+							inst.position = _world_pos_from_tile(tile)
+							entities.add_child(inst)
+			# 11.19 — Quicksand patch.
+			if rng.randf() < PHASE11_QUICKSAND_CHANCE:
+				var tile: Vector2i = _find_open_floor_in_chunk(wb, chunk, rng)
+				if tile != Vector2i(-1, -1):
+					var scn := load("res://scenes/structures/quicksand_patch.tscn") as PackedScene
+					if scn:
+						var inst := scn.instantiate() as Node2D
+						if inst:
+							inst.position = _world_pos_from_tile(tile)
+							entities.add_child(inst)
+			# 11.9/11.26 — Wormbound Elder. Rare; one in the world.
+			if not _placed_wormbound_elder and rng.randf() < PHASE11_WORMBOUND_ELDER_CHANCE:
+				var tile: Vector2i = _find_open_floor_in_chunk(wb, chunk, rng)
+				if tile != Vector2i(-1, -1):
+					var scn := load("res://scenes/npcs/wormbound_elder.tscn") as PackedScene
+					if scn:
+						var inst := scn.instantiate() as Node2D
+						if inst:
+							inst.position = _world_pos_from_tile(tile)
+							entities.add_child(inst)
+							_placed_wormbound_elder = true
+		&"auroric_veil":
+			# 11.27 — Hymnal Vault. Rare; one in the world.
+			if not _placed_hymnal_vault and rng.randf() < PHASE11_HYMNAL_VAULT_CHANCE:
+				var tile: Vector2i = _find_open_floor_in_chunk(wb, chunk, rng)
+				if tile != Vector2i(-1, -1):
+					var scn := load("res://scenes/structures/hymnal_vault.tscn") as PackedScene
+					if scn:
+						var inst := scn.instantiate() as Node2D
+						if inst:
+							inst.position = _world_pos_from_tile(tile)
+							entities.add_child(inst)
+							_placed_hymnal_vault = true
+		_:
+			pass
+
+
+var _placed_forge_indices: Dictionary = {}
+var _placed_wormbound_elder: bool = false
+var _placed_hymnal_vault: bool = false

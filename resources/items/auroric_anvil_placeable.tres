@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cauroanv11"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/auroric_anvil.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"auroric_anvil_placeable"
+display_name = "Auroric Anvil"
+description = "Tier-8 Auroric Veil crafting station. Forges aurora-shard equipment and Frostlark instruments."
+max_stack = 1
+item_type = 5
+tier = 8
+rarity = 4
+placeable_layer = &"structures"
+lore_ref = "lore/04_biomes.md#stratum-8--the-auroric-veil"

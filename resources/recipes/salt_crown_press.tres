@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://recsltcpr11"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_salt_crown_press"
+display_name = "Salt-Crown Press"
+inputs = [{ "item_id": "saltbound_steel_ore", "count": 16 }, { "item_id": "ember_iron_ore", "count": 4 }]
+outputs = [{ "item_id": "salt_crown_press_placeable", "count": 1 }]
+stations = [&"pyrenkin_bellows"]
+skill_xp_grant = 36
+skill_xp_id = &"skill_crafting"

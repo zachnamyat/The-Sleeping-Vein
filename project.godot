@@ -63,6 +63,7 @@ Pets="*res://scripts/systems/pets.gd"
 NpcLifecycle="*res://scripts/systems/npc_lifecycle.gd"
 Phase9Helpers="*res://scripts/systems/phase9_helpers.gd"
 Phase10Helpers="*res://scripts/systems/phase10_helpers.gd"
+Phase11Helpers="*res://scripts/systems/phase11_helpers.gd"
 DevConsole="*res://scripts/autoloads/dev_console.gd"
 
 [display]

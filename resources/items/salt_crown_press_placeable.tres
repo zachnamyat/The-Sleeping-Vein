@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://csaltcpress11"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/salt_crown_press.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"salt_crown_press_placeable"
+display_name = "Salt-Crown Press"
+description = "Tier-7 Salt Wastes ritual press. Compresses saltbound-steel ore into ritual ingots used in Wormbound and Naeren-path crafting."
+max_stack = 1
+item_type = 5
+tier = 7
+rarity = 3
+placeable_layer = &"structures"
+lore_ref = "lore/04_biomes.md#stratum-7--the-salt-wastes-of-dawning"

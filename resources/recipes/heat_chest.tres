@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://recheatch11"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_heat_chest"
+display_name = "Heat-Resistant Container"
+inputs = [{ "item_id": "ember_iron_ore", "count": 8 }, { "item_id": "heartwood", "count": 4 }]
+outputs = [{ "item_id": "heat_chest_placeable", "count": 1 }]
+stations = [&"pyrenkin_bellows"]
+skill_xp_grant = 12
+skill_xp_id = &"skill_crafting"

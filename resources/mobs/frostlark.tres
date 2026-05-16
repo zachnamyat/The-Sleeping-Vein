@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://cfrostlark11"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/auroric_veil/frostlark.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"frostlark"
+display_name = "Frostlark"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 4
+armor = 0
+contact_damage = 0
+contact_damage_type = &"physical"
+move_speed = 52.0
+detection_radius = 64.0
+leash_radius = 96.0
+behavior = 5
+mob_class = 4
+xp_skill = &"skill_running"
+xp_value = 4
+biome = &"auroric_veil"
+resistances = {"cold": 0.6}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-8"

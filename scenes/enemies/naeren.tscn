@@ -1,0 +1,55 @@
+[gd_scene format=3 uid="uid://cnaer11sce"]
+
+[ext_resource type="Script" path="res://scripts/enemies/naeren_boss.gd" id="1_boss"]
+[ext_resource type="Resource" path="res://resources/mobs/naeren.tres" id="2_def"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="3_health"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="4_hurtbox"]
+[ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="5_hitbox"]
+[ext_resource type="Resource" path="res://resources/attack_patterns/naeren_phase1.tres" id="6_pat1"]
+[ext_resource type="Resource" path="res://resources/attack_patterns/naeren_phase2.tres" id="7_pat2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body_naer"]
+radius = 28.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_contact_naer"]
+radius = 38.0
+
+[node name="Naeren" type="CharacterBody2D" groups=["boss"]]
+collision_layer = 16
+collision_mask = 1
+script = ExtResource("1_boss")
+mob_def = ExtResource("2_def")
+phase_patterns = [ExtResource("6_pat1"), ExtResource("7_pat2"), ExtResource("7_pat2")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+offset = Vector2(0, -32)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -24)
+shape = SubResource("CircleShape2D_body_naer")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_health")
+max_health = 4200
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_hurtbox")
+team = &"boss"
+
+[node name="HurtboxShape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -28)
+shape = SubResource("CircleShape2D_contact_naer")
+
+[node name="ContactHitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("5_hitbox")
+base_damage = 42
+team = &"boss"
+
+[node name="ContactHitboxShape" type="CollisionShape2D" parent="ContactHitbox"]
+position = Vector2(0, -28)
+shape = SubResource("CircleShape2D_contact_naer")

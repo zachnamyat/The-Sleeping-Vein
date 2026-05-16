@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cchoirres11"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/choirs_resonance.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"choirs_resonance"
+display_name = "Choir's Resonance"
+description = "A perfect chord made into a small bell. Slot in the Loom to unlock the Final Spiral corridor. While carried, cold ticks reduced 25%."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 7
+tier = 8
+rarity = 4
+status_resists = {"cold": 0.25}
+resonance_bound = true
+lore_text = "When the seventh spire fell silent the chord stayed in the air."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-9"

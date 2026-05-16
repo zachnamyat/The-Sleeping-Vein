@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bskoldph1p11"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"skoldur_phase1"
+phase_index = 0
+loop = true
+entries = [{
+"id": &"skld_forge_slam",
+"kind": &"slam",
+"telegraph_seconds": 1.4,
+"cooldown_seconds": 2.6,
+"radius_pixels": 96.0,
+"damage": 36,
+"damage_type": &"fire",
+"speed": 0.0,
+}, {
+"id": &"skld_ember_arc",
+"kind": &"ranged_arc",
+"telegraph_seconds": 0.9,
+"cooldown_seconds": 2.0,
+"radius_pixels": 160.0,
+"damage": 22,
+"damage_type": &"fire",
+"speed": 220.0,
+}]

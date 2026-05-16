@@ -2774,6 +2774,167 @@ const MIGRATIONS = [
       '10.44','10.45','10.46','10.47','10.48','10.49','10.50',
     ],
   },
+  {
+    version: '2026-05-16-phase11-full-closure',
+    note: 'Phase 11 full closure — Biomes 6-8 (Emberforge / Salt Wastes / Auroric Veil) + ' +
+          'Bosses 7-9 (Skoldur, Naeren, Veyl-Aurora). Critical-path 11.1-11.13 plus ' +
+          'the entire 11.14-11.34 backlog AND the 4.56/4.57/4.58 weather tickets that ' +
+          'were reassigned to Phase 11 at the end of Phase 4. ' +
+          '44 new GUT tests in test_phase11_systems.gd; 240/240 overall pass (was 196 ' +
+          'before this pass). ' +
+          'NEW autoload: Phase11Helpers (heat/cold/frostbite damage tick + temperature-' +
+          'swing routing + heat-resist + cold-resist lookup + Pyrenkin forge sub-quest ' +
+          'counter + Wormbound gesture minigame + Hymnal Vault chord matcher + ' +
+          'Emberforge journal + Forge-Compact tablet counters + Pyrenkin Bellows fuel ' +
+          'pool + per-biome weather roll + per-biome wind vector + mirage / quicksand ' +
+          'registry + Frostlark harmony detector). All state restorable via ' +
+          'dump_state / restore_state. ' +
+          'Biome resources extended (11.1/11.2/11.3): emberforge.tres now spawns slag_hound ' +
+          '+ forge_echo + ember_lurker + forge_cricket + charred_goat with hazard heat / ' +
+          'resist_armor ember_iron_chestpiece. salt_wastes.tres spawns salt_hopper + ' +
+          'dawning_predator + wormbound_stalker + salt_cat + wormbound_elder with hazard ' +
+          'dawning_swing. auroric_veil.tres spawns aurora_wisp + cold_hollow + ' +
+          'sunken_diadem_agent + frostlark + aurora_vole with hazard cold / resist_armor ' +
+          'auroric_ice_chestpiece. ' +
+          'Mob roster (15 new MobDefs): slag_hound, forge_echo, ember_lurker, ' +
+          'forge_cricket (friendly), charred_goat (friendly); salt_hopper, dawning_predator, ' +
+          'wormbound_stalker, salt_cat (friendly), wormbound_elder (friendly NPC); ' +
+          'aurora_wisp, cold_hollow, sunken_diadem_agent, frostlark (friendly), aurora_vole ' +
+          '(friendly). Loot tables per biome at resources/mobs/loot_{emberforge,salt_wastes,' +
+          'auroric_veil}.tres. ' +
+          'Boss scenes: skoldur.tscn (SkoldurBoss extends Boss; 4-phase with recognition ' +
+          'pause on phase 4 if Walker carries pyrenkin_pendant — sets ' +
+          'GameState.collected_relics.skoldur_recognized; on death drops the matching ' +
+          'pendant 11.28); naeren.tscn (NaerenBoss; peace path opens on engagement if ' +
+          'Walker carries wormbound_covenant_scroll — sets naeren_peace flag, drops crown + ' +
+          'scroll + coins); veyl_aurora.tscn (VeylAuroraBoss; 7-spire collective; ' +
+          'spires_remaining counter; Perfect Chord audio on phase 3 — uses ' +
+          'veyl_perfect_chord_simple unless Cantor bell has been chimed via ' +
+          'GameState.collected_relics.cantor_bell_unlocked, then full ' +
+          'veyl_perfect_chord — 11.30; drops 7 aurora-shards). 8 new AttackPattern .tres ' +
+          'files (skoldur_phase1..4 + naeren_phase1..2 + veyl_aurora_phase1..2) drive ' +
+          'BossAttackCycler. ' +
+          'Heat / cold damage (11.4 / 11.5): Phase11Helpers._tick_env runs every 1s while ' +
+          'player is in Emberforge / Auroric Veil; applies fire damage or cold damage ' +
+          'modulated by heat_resist / cold_resist lookup that sums Skoldur\'s Hammer (×0.5) ' +
+          '+ Ember-Iron Chestpiece (×0.4) + Naeren\'s Salt-Crown (×0.2) for heat and ' +
+          'Auroric-Ice Chestpiece (×0.5) + Choir\'s Resonance (×0.25) + Naeren\'s ' +
+          'Salt-Crown (×0.2) for cold, capped at 0.95. ' +
+          'Day/night temperature swing (11.6): Salt Wastes routes through dawning_swing ' +
+          'hazard id; when AudioBus.is_day() == true the damage type is fire, otherwise ' +
+          'cold. Frostbite buildup also accumulates on Salt Wastes nights. ' +
+          'Frostbite meter (11.18): Phase11Helpers tracks frostbite_level 0..1; emits ' +
+          'frostbite_changed signal; FrostbiteMeter HUD displays a bar; on freeze ' +
+          'threshold the player gets a freeze status proc for 2 seconds with 8s ' +
+          'cooldown. ' +
+          'Heat-shimmer post-process (11.17): scenes/ui/heat_shimmer.tscn modulates a ' +
+          'warm overlay with a subtle sine ripple while heat_zone_changed is true. ' +
+          'Pyrenkin forge sub-quest (11.8): three pyrenkin_forge.tscn scatter through ' +
+          'Emberforge (rare per chunk, indexed by chunk_x mod 3). Player relights with a ' +
+          'fuel_pellet; relighting all three triggers Pyrenkin Compact arrival (11.14) — ' +
+          'grants pyrenkin_pendant, unlocks craft_pyrenkin_bellows, bumps Brindle ' +
+          'friendship by 25, fires a Pyrenkin-accent dialogue line. ' +
+          'Pyrenkin Cricket fuel-pellet (11.32): bellows_lit_phases_remaining ticks down ' +
+          'one per Aphelion Beat; bellows_feed_pellet consumes a fuel_pellet and adds 4 ' +
+          'phases of lit time. PyrenkinBellows workstation overrides interact to require ' +
+          'a lit bellows. ' +
+          'Wormbound encounter (11.9 / 11.26 / 11.29): wormbound_elder NPC scatter ' +
+          '(1 in the world) gates a gesture minigame — sequence up / right / down on ' +
+          'WASD. Correct sequence grants wormbound_covenant_scroll. Wrong direction ' +
+          'resets the index. Naeren peace path consumes (well, requires) the scroll. ' +
+          'Veyl-Aurora boss + chord audio (11.12 / 11.30): VeylAuroraBoss._play_perfect_' +
+          'chord picks between veyl_perfect_chord and veyl_perfect_chord_simple based on ' +
+          'whether GameState.collected_relics.cantor_bell_unlocked is true. Triggers a ' +
+          'letterbox + UI toast. ' +
+          'Listeners-Below NPC + trade (11.13): listener_below.tscn NPC with merchant ' +
+          'inventory at resources/merchants/listener_below_stock.tres — sells ' +
+          'aurora_shard / recipe_scroll / respec_scroll / xp_tonic / auroric_ice_ore. ' +
+          'Buys sovereign name fragments + tablet shards. 45-min restock. ' +
+          'Frostlark harmony singing (11.15): _tick_frostlark_harmony scans for 3 ' +
+          'frostlark mobs within 64 px of the player; first activation fires a UI toast ' +
+          '+ AudioBus frostlark_harmony SFX. ' +
+          'Sunken Diadem agent hostile NPC class (11.16): sunken_diadem_agent mob def ' +
+          'with weakness to explosive. Mortal humanoids, not Hollowling-infected — ' +
+          'shown by lack of fire/cold resist + standard physical damage. ' +
+          'Mirage / quicksand (11.19): mirage_patch.tscn + quicksand_patch.tscn scatter ' +
+          'through Salt Wastes chunks (10% / 7% per chunk). Phase11Helpers._tick_patches ' +
+          'fires a flavor toast on mirage proximity and applies slow + 1 dmg / s on ' +
+          'quicksand. ' +
+          'Crafting stations (11.20 / 11.21 / 11.22): salt_crown_press_placeable + ' +
+          'pyrenkin_bellows_placeable + auroric_anvil_placeable items + scenes + recipes. ' +
+          'Recipes are chained: pyrenkin_bellows craft needs clearstone_forge; ' +
+          'salt_crown_press needs pyrenkin_bellows; auroric_anvil needs salt_crown_press; ' +
+          'hymnal_vault needs auroric_anvil. Heat-resistant container 11.23: ' +
+          'heat_chest_placeable + heat_chest.tscn (Chest subclass with heat_chest group ' +
+          'tag for future cook-buff freeze hook). ' +
+          'Emberforge previous-Walker journal tablet (11.24): ' +
+          'Phase11Helpers.collect_emberforge_journal unlocks tablet_ef_09 in the ' +
+          'compendium. ' +
+          'Korya the Returned (11.25): korya.tscn NPC + dialogue tree. Three response ' +
+          'branches all preserve the ambiguity (Korya never confirms whether they were ' +
+          'a previous Walker). No merchant stock. ' +
+          'Hymnal Vault musical interaction (11.27): hotbar_1 = low note, hotbar_2 = ' +
+          'high note. Three-note chord matched against HYMNAL_CORRECT_CHORD = ' +
+          '[low, high, low] unlocks the auroric passage flag. ' +
+          'Skoldur post-fight pendant detail (11.28): SkoldurBoss._drop_boss_loot ' +
+          'overrides Boss._drop_boss_loot to add a pyrenkin_pendant drop. ' +
+          'Wormbound silent-ritual gesture minigame (11.29): wormbound_gesture(direction) ' +
+          'with stateful wormbound_gesture_index; success grants Wormbound Covenant ' +
+          'Scroll. Wrong direction resets. ' +
+          'Pyrenkin Forge-Compact tablet collection (11.31): collect_forge_compact_tablet ' +
+          'counts up to 5; final tablet bumps Brindle friendship by 40. ' +
+          'Forge-Cricket / Charred Goat friendly fauna (11.33): both mob defs use ' +
+          'CRITTER_FLEE behavior and 0 contact damage; spawn through ' +
+          'biome.mob_spawn_table on emberforge. ' +
+          'Singing-Frost ambient choral audio (11.34): AudioBus.frostlark_harmony SFX ' +
+          'plays on first 3-bird detection per session. ' +
+          'Weather system (4.56 / 4.57 / 4.58): Phase11Helpers.BIOME_WEATHERS table ' +
+          '(rain Verdancy / ash Emberforge / snow Auroric / sandstorm Salt Wastes). ' +
+          'Rolls on biome enter + every Aphelion Beat. _tick_weather_effects applies ' +
+          'slow for ash + sandstorm, frostbite buildup for snow, 1 physical dmg for ' +
+          'sandstorm. Per-biome wind vectors via wind_vector_for_biome (consumed by ' +
+          'projectile drift in future polish — table exists now for forward compat). ' +
+          'NEW ItemDefs (13): skoldurs_hammer, naerens_salt_crown, choirs_resonance, ' +
+          'aurora_shard, pyrenkin_pendant, wormbound_covenant_scroll, fuel_pellet, ' +
+          'ember_iron_ore, saltbound_steel_ore, auroric_ice_ore, pyrenkin_bellows_placeable, ' +
+          'salt_crown_press_placeable, auroric_anvil_placeable, hymnal_vault_placeable, ' +
+          'heat_chest_placeable. ember_iron_chestpiece + auroric_ice_chestpiece updated ' +
+          'with status_resists + sprites + set ids. ' +
+          'NEW scenes (12): scenes/enemies/{skoldur,naeren,veyl_aurora}.tscn, ' +
+          'scenes/npcs/{listener_below,korya,wormbound_elder}.tscn, ' +
+          'scenes/structures/{pyrenkin_bellows,salt_crown_press,auroric_anvil,hymnal_vault,' +
+          'heat_chest,pyrenkin_forge,mirage_patch,quicksand_patch}.tscn, ' +
+          'scenes/ui/{frostbite_meter,heat_shimmer}.tscn. ' +
+          'world_gen._spawn_phase11_scatter places these structures + NPCs in their ' +
+          'respective biomes. ' +
+          'SaveSystem bumped v8 -> v9: dump_state / restore_state for phase11_helpers ' +
+          '(pyrenkin_forges_relit, pyrenkin_compact_arrived, frostbite_level, journal + ' +
+          'tablet counters, wormbound state, hymnal state, bellows fuel, current ' +
+          'weather + biome). Skoldur recognition + Naeren peace flags already stored in ' +
+          'GameState.collected_relics. ' +
+          '14 new sprites generated entirely through the Gemini MCP this pass: ' +
+          '3 NPCs (Listener-Below, Korya, Wormbound Elder) + 3 friendly fauna ' +
+          '(Forge-Cricket, Charred Goat, Frostlark) + 5 structures (Pyrenkin Bellows, ' +
+          'Salt-Crown Press, Auroric Anvil, Hymnal Vault, Heat-Resistant Container) + ' +
+          '13 item icons (Skoldur\'s Hammer, Naeren\'s Salt-Crown, Choir\'s Resonance, ' +
+          'Aurora-Shard, Pyrenkin Pendant, Ember-Iron Chestpiece, Auroric-Ice Chestpiece, ' +
+          'Wormbound Covenant Scroll, Fuel Pellet, Ember-Iron Ore, Saltbound Steel Ore, ' +
+          'Auroric Ice Ore). mcp__gemini-image__generate_image for 1024x1024 sources, ' +
+          'mcp__gemini-image__process_image for nearest-neighbour downsample + crop, ' +
+          'tools/clean_alpha.ps1 for magenta chroma-key + binary alpha threshold. ' +
+          'Manual checklist at docs/PHASE_11_TEST_CHECKLIST.md.',
+    completed: [
+      /* Phase 11 critical path */
+      '11.1','11.2','11.3','11.4','11.5','11.6','11.7','11.8','11.9','11.10',
+      '11.11','11.12','11.13',
+      /* Phase 11 backlog */
+      '11.14','11.15','11.16','11.17','11.18','11.19','11.20','11.21','11.22',
+      '11.23','11.24','11.25','11.26','11.27','11.28','11.29','11.30','11.31',
+      '11.32','11.33','11.34',
+      /* Migration tickets reassigned to Phase 11 from Phase 4 */
+      '4.56','4.57','4.58',
+    ],
+  },
 ];
 
 const MIGRATIONS_KEY = STORAGE_KEY + ':migrations';

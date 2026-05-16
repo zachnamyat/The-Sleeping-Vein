@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://cemblurker11"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/emberforge/slag_hound.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_emberforge.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"ember_lurker"
+display_name = "Ember-Lurker"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 48
+armor = 2
+contact_damage = 20
+contact_damage_type = &"fire"
+move_speed = 36.0
+detection_radius = 96.0
+leash_radius = 160.0
+behavior = 2
+mob_class = 0
+xp_skill = &"skill_melee"
+xp_value = 32
+loot_table = ExtResource("3_loot")
+biome = &"emberforge"
+stagger_threshold = 24
+stagger_recovery_seconds = 0.7
+knockback_resistance = 0.1
+resistances = {"fire": 0.5}
+weaknesses = {"cold": 1.7}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-6"

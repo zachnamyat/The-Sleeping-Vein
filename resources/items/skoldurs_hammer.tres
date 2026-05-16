@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bjpgd7126xjd7"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/skoldurs_hammer.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"skoldurs_hammer"
+display_name = "Skoldur's Hammer"
+description = "The Forge-Forsaken's hammer. Massive damage, slow swing. While held, fire damage taken is reduced by 50%."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 2
+tier = 6
+rarity = 4
+base_damage = 44
+damage_type = &"fire"
+attack_cooldown_seconds = 0.62
+melee_range_pixels = 26
+weapon_class = &"melee"
+weapon_subclass = &"melee"
+equipment_slot = &"off_hand"
+two_handed = true
+status_resists = {"fire": 0.5}
+heavy_damage_multiplier = 2.2
+special_attack = &"shield_bash"
+reforgeable = true
+resonance_bound = true
+lore_text = "He named the hammer Quench. He did not name himself."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-7"

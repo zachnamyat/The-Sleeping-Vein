@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://cwormelder11"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npcs/wormbound_elder.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"wormbound_elder"
+display_name = "Wormbound Elder"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(24, 24)
+max_health = 50
+armor = 2
+contact_damage = 0
+contact_damage_type = &"physical"
+move_speed = 18.0
+detection_radius = 0.0
+leash_radius = 0.0
+behavior = 0
+mob_class = 4
+xp_skill = &"skill_running"
+xp_value = 0
+biome = &"salt_wastes"
+lore_ref = "lore/03_factions_and_civilizations.md"

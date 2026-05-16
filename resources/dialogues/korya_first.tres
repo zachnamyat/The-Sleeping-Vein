@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="DialogueTree" format=3 uid="uid://bdialkorya11"]
+
+[ext_resource type="Script" path="res://scripts/resources/dialogue.gd" id="1_dlg"]
+
+[resource]
+script = ExtResource("1_dlg")
+entry_node_id = "start"
+nodes = {
+	"start": {
+		"speaker": "Korya",
+		"text": "\"I knew the road you walk. I left it behind. There is a kindness in stopping. You will not believe me yet.\"",
+		"responses": [
+			{ "label": "(ask who they were)", "goto": "were_chat" },
+			{ "label": "(ask why they stopped)", "goto": "stopped_chat" },
+			{ "label": "(silently step back)", "goto": "end" },
+		],
+	},
+	"were_chat": {
+		"speaker": "Korya",
+		"text": "\"I will not say. The Aphelion has the right to forget us, and I will not undo that for vanity.\"",
+		"responses": [{ "label": "(silently nod)", "goto": "end" }],
+	},
+	"stopped_chat": {
+		"speaker": "Korya",
+		"text": "\"Because the slivers are not unlimited. Spend yours well, Walker. I have stopped spending mine.\"",
+		"responses": [{ "label": "(silently nod)", "goto": "end" }],
+	},
+}

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bnaerenph1p11"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"naeren_phase1"
+phase_index = 0
+loop = true
+entries = [{
+"id": &"naer_crown_thrust",
+"kind": &"slam",
+"telegraph_seconds": 1.2,
+"cooldown_seconds": 2.4,
+"radius_pixels": 80.0,
+"damage": 30,
+"damage_type": &"physical",
+"speed": 0.0,
+}, {
+"id": &"naer_salt_glitter",
+"kind": &"ranged_arc",
+"telegraph_seconds": 1.0,
+"cooldown_seconds": 2.0,
+"radius_pixels": 140.0,
+"damage": 18,
+"damage_type": &"physical",
+"speed": 160.0,
+}]

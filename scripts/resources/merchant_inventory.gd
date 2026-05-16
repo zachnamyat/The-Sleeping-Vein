@@ -110,9 +110,14 @@ func sell_items_for_phase(phase_id: StringName) -> Array:
 
 ## Phase 9.57 — discount multiplier given an NPC mood (0..100). Tables are
 ## expected to be sorted by mood DESC; the first row whose `mood` <= current is
-## applied. `percent` is positive = discount, negative = markup.
+## applied. `percent` is positive = discount, negative = markup. If the mood is
+## below every threshold, the lowest bracket applies (typical use: a -10% row
+## at mood 20 keeps applying down to 0).
 func price_multiplier_for_mood(mood: int) -> float:
 	for row in discount_thresholds:
 		if mood >= int(row.get("mood", 0)):
 			return 1.0 - float(row.get("percent", 0.0)) / 100.0
+	if not discount_thresholds.is_empty():
+		var fallback: Dictionary = discount_thresholds[discount_thresholds.size() - 1]
+		return 1.0 - float(fallback.get("percent", 0.0)) / 100.0
 	return 1.0

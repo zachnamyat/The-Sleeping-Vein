@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://cejflhwdh0i3y"]
+
+[ext_resource type="Script" path="res://scripts/resources/loot_table.gd" id="1_loot"]
+
+[resource]
+script = ExtResource("1_loot")
+guaranteed_drops = []
+weighted_drops = [
+	{ "item_id": "ember_iron_ore", "min": 1, "max": 2, "weight": 2.0 },
+	{ "item_id": "ancient_coin", "min": 1, "max": 4, "weight": 2.5 },
+	{ "item_id": "fuel_pellet", "min": 1, "max": 1, "weight": 0.8 },
+	{ "item_id": "tablet_shard", "min": 1, "max": 1, "weight": 0.2 },
+]
+max_rolls = 1

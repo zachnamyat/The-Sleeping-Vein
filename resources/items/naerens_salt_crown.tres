@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cnaerensc11"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/naerens_salt_crown.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"naerens_salt_crown"
+display_name = "Naeren's Salt-Crown"
+description = "The Wandering Salt-Crown's own crown. +6 armor, +40 max HP. While worn, day/night temperature swing is muted."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 3
+tier = 7
+rarity = 4
+equipment_slot = &"helmet"
+armor_value = 6
+max_hp_bonus = 40
+status_resists = {"fire": 0.2, "cold": 0.2}
+set_id = &"wormbound_covenant"
+resonance_bound = true
+lore_text = "She did not surrender the crown. We picked it up."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-8"

@@ -258,6 +258,8 @@
 ## 26. GUT tests
 
 - [ ] Run GUT: `godot --headless --path . -s addons/gut/gut_cmdln.gd -gdir=res://tests/unit -gconfig=res://.gutconfig.json -gexit`.
-- [ ] Pass count is 24 in `test_phase10_systems.gd`; 0 failures (the 3
-  failures in test_phase9_systems.gd are pre-existing Phase 9 housing
-  bind-bed test setup issues that pre-date this pass).
+- [ ] Pass count is 28 in `test_phase10_systems.gd`; 196/196 overall pass.
+  The Phase 9 housing-autoload tests pass too now after fixing the
+  inferred-type bug at `housing.gd:47`, the `Color()` arg-count error in
+  `vorrkell_lantern.tres`, and the `price_multiplier_for_mood` fallthrough
+  in `merchant_inventory.gd`.

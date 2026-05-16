@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://cforgcrick11"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/emberforge/forge_cricket.png" id="2_sprite"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"forge_cricket"
+display_name = "Forge-Cricket"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 6
+armor = 0
+contact_damage = 0
+contact_damage_type = &"physical"
+move_speed = 48.0
+detection_radius = 80.0
+leash_radius = 140.0
+behavior = 5
+mob_class = 4
+xp_skill = &"skill_running"
+xp_value = 4
+biome = &"emberforge"
+resistances = {"fire": 0.8}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-6"

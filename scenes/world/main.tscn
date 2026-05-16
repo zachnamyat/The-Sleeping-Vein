@@ -26,6 +26,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/quest_log_panel.tscn" id="91_questlog"]
 [ext_resource type="PackedScene" path="res://scenes/ui/phase9_npc_panels.tscn" id="92_p9panels"]
 [ext_resource type="PackedScene" path="res://scenes/ui/breath_meter.tscn" id="93_breath"]
+[ext_resource type="PackedScene" path="res://scenes/ui/frostbite_meter.tscn" id="94_frostbite"]
+[ext_resource type="PackedScene" path="res://scenes/ui/heat_shimmer.tscn" id="95_heatshmr"]
 [ext_resource type="PackedScene" path="res://scenes/ui/talent_panel.tscn" id="23_talent"]
 [ext_resource type="PackedScene" path="res://scenes/ui/character_sheet_panel.tscn" id="47_charsheet"]
 [ext_resource type="PackedScene" path="res://scenes/ui/anvil_panel.tscn" id="48_anvil"]
@@ -186,6 +188,10 @@ script = ExtResource("33c_statspawn")
 [node name="Phase9NpcPanels" parent="." instance=ExtResource("92_p9panels")]
 
 [node name="BreathMeter" parent="." instance=ExtResource("93_breath") groups=["breath_meter"]]
+
+[node name="FrostbiteMeter" parent="." instance=ExtResource("94_frostbite") groups=["frostbite_meter"]]
+
+[node name="HeatShimmer" parent="." instance=ExtResource("95_heatshmr") groups=["heat_shimmer"]]
 
 [node name="TalentPanel" parent="." instance=ExtResource("23_talent") groups=["talent_panel"]]
 

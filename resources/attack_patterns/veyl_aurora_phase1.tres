@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bveylph1p11"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"veyl_aurora_phase1"
+phase_index = 0
+loop = true
+entries = [{
+"id": &"veyl_spire_chord",
+"kind": &"ranged_arc",
+"telegraph_seconds": 1.2,
+"cooldown_seconds": 2.4,
+"radius_pixels": 200.0,
+"damage": 26,
+"damage_type": &"cold",
+"speed": 200.0,
+}, {
+"id": &"veyl_freeze_cone",
+"kind": &"slam",
+"telegraph_seconds": 1.5,
+"cooldown_seconds": 3.0,
+"radius_pixels": 140.0,
+"damage": 32,
+"damage_type": &"cold",
+"speed": 0.0,
+}]

@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://csdagent11"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/auroric_veil/aurora_wisp.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_auroric_veil.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"sunken_diadem_agent"
+display_name = "Sunken Diadem Agent"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 88
+armor = 6
+contact_damage = 24
+contact_damage_type = &"physical"
+move_speed = 44.0
+detection_radius = 180.0
+leash_radius = 300.0
+behavior = 2
+mob_class = 1
+xp_skill = &"skill_melee"
+xp_value = 70
+loot_table = ExtResource("3_loot")
+biome = &"auroric_veil"
+stagger_threshold = 32
+stagger_recovery_seconds = 0.7
+knockback_resistance = 0.2
+resistances = {"physical": 0.15}
+weaknesses = {"explosive": 1.4}
+lore_ref = "lore/03_factions_and_civilizations.md"

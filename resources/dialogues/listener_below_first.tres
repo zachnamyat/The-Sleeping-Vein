@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="DialogueTree" format=3 uid="uid://q8246gwqnili"]
+
+[ext_resource type="Script" path="res://scripts/resources/dialogue.gd" id="1_dlg"]
+
+[resource]
+script = ExtResource("1_dlg")
+entry_node_id = "start"
+nodes = {
+	"start": {
+		"speaker": "The Listener-Below",
+		"text": "\"You walk under the salt and the auroric. I trade where the Diadem cannot reach. Show me what you carry.\"",
+		"responses": [
+			{ "label": "(browse their wares)", "action": "open_shop" },
+			{ "label": "(ask their name)", "goto": "name_chat" },
+			{ "label": "(silently step back)", "goto": "end" },
+		],
+	},
+	"name_chat": {
+		"speaker": "The Listener-Below",
+		"text": "\"My name is not for the open air. Bring me a Choir's Resonance, and I might whisper it.\"",
+		"responses": [
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+}

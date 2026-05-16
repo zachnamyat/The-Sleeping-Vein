@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://chymnvault11"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/hymnal_vault.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"hymnal_vault_placeable"
+display_name = "Hymnal Vault"
+description = "Auroric organ. Three nearby Frostlarks let you compose a chord that opens hidden Auroric paths."
+max_stack = 1
+item_type = 5
+tier = 8
+rarity = 3
+placeable_layer = &"structures"
+lore_ref = "lore/04_biomes.md#stratum-8--the-auroric-veil"
