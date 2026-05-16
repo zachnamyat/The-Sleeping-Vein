@@ -1,0 +1,43 @@
+[gd_scene load_steps=3 format=3 uid="uid://cfishingminigame00001"]
+
+[ext_resource type="Script" path="res://scripts/ui/fishing_minigame.gd" id="1_fm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fm"]
+bg_color = Color(0.04, 0.05, 0.08, 0.9)
+border_color = Color(0.55, 0.85, 0.95, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="FishingMinigame" type="CanvasLayer"]
+layer = 75
+script = ExtResource("1_fm")
+
+[node name="Root" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -120.0
+offset_top = -80.0
+offset_right = 120.0
+offset_bottom = -40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_fm")
+
+[node name="Stage" type="Label" parent="Root"]
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 232.0
+offset_bottom = 18.0
+horizontal_alignment = 1
+text = "Cast — wait"
+modulate = Color(0.85, 0.95, 1, 1)
+
+[node name="Bar" type="ProgressBar" parent="Root"]
+offset_left = 8.0
+offset_top = 22.0
+offset_right = 232.0
+offset_bottom = 34.0
+max_value = 100.0
+show_percentage = false

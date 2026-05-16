@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bimapfrag00000001"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/map_fragment.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"map_fragment"
+display_name = "Map Fragment"
+description = "A torn corner of Aelstren's map. Bring back the others; the map will redraw itself."
+icon = ExtResource("2_icon")
+max_stack = 12
+item_type = 7
+tier = 1
+rarity = 1
+lore_ref = "lore/03_factions_and_civilizations.md"

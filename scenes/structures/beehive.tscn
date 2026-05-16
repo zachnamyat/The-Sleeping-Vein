@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cbeehive00001"]
+
+[ext_resource type="Script" path="res://scripts/structures/beehive.gd" id="1_bh"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/beehive_placeable.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bh"]
+size = Vector2(18, 20)
+
+[node name="Beehive" type="Area2D"]
+script = ExtResource("1_bh")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -10)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_bh")

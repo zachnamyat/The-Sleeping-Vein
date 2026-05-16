@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0heartberryseed"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_heart_berry_seed"
+display_name = "Heart Berry Spore (3)"
+inputs = [{ "item_id": "heart_berry", "count": 1 }]
+outputs = [{ "item_id": "heart_berry_seed", "count": 3 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 1
+skill_xp_id = &"skill_gardening"

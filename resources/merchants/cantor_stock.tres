@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="MerchantInventory" load_steps=2 format=3 uid="uid://merchstock0cantor001"]
+
+[ext_resource type="Script" path="res://scripts/resources/merchant_inventory.gd" id="1_mi"]
+
+[resource]
+script = ExtResource("1_mi")
+sell_items = [
+	{ "item_id": "lantern",      "price": 35, "stock": 4 },
+	{ "item_id": "oil_lamp",     "price": 95, "stock": 2 },
+	{ "item_id": "ward_lantern", "price": 320, "stock": 1 },
+	{ "item_id": "recipe_scroll","price": 28, "stock": 6 },
+	{ "item_id": "torch",        "price": 4,  "stock": -1 },
+	{ "item_id": "xp_tonic",     "price": 70, "stock": 3 },
+]
+buy_prices = {
+	"glow_tube": 8,
+	"engorged_stone_shell": 25,
+	"aphelion_fragment": 22,
+	"glaurem_trinket": 80,
+	"recipe_scroll": 18,
+}
+restock_minutes = 40.0
+discount_thresholds = [
+	{ "mood": 70, "percent": 8.0 },
+	{ "mood": 30, "percent": -8.0 },
+]
+identify_fee = 18
+teleport_options = [
+	{ "label": "To the Anchor Loom", "world_pos_x": 0, "world_pos_y": 0, "fee": 12 },
+]
+preferred_biome = &"biome_vesari_necropolis"
+theme_music = &"theme_cantor_bells"

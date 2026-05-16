@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0composterpl"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/composter_placeable.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"composter_placeable"
+display_name = "Composter"
+description = "Workstation. Convert refuse into Fertilizer."
+max_stack = 99
+item_type = 5
+tier = 1
+rarity = 1
+placeable_layer = &"structures"

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0fishtrophy"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_fish_trophy"
+display_name = "Fish Trophy"
+inputs = [{ "item_id": "plank", "count": 1 }, { "item_id": "cave_guppy", "count": 1 }]
+outputs = [{ "item_id": "fish_trophy_placeable", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_fishing"

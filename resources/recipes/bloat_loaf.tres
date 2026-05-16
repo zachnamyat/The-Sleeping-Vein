@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0bloatloaf"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_bloat_loaf"
+display_name = "Bloat Loaf"
+inputs = [{ "item_id": "bloat_oat", "count": 3 }]
+outputs = [{ "item_id": "bloat_loaf", "count": 1 }]
+stations = [&"cooking_pot"]
+skill_xp_grant = 3
+skill_xp_id = &"skill_cooking"

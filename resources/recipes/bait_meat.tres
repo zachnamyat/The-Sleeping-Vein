@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0baitmeat"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_bait_meat"
+display_name = "Meat Bait"
+inputs = [{ "item_id": "raw_meat", "count": 1 }]
+outputs = [{ "item_id": "bait_meat", "count": 3 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_fishing"

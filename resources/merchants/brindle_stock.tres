@@ -12,6 +12,7 @@ sell_items = [
 	{ "item_id": "small_healing_potion",  "price": 15,  "stock": 8 },
 	{ "item_id": "small_mana_potion",     "price": 15,  "stock": 8 },
 	{ "item_id": "torch",                 "price": 3,   "stock": -1 },
+	{ "item_id": "anvil_placeable",       "price": 180, "stock": 1 },
 ]
 buy_prices = {
 	"loam": 1,
@@ -20,5 +21,19 @@ buy_prices = {
 	"pale_cap": 3,
 	"memory_root": 12,
 	"tablet_shard": 25,
+	"engorged_stone_shell": 18,
 }
 restock_minutes = 30.0
+seasonal_extras = {
+	"phase_long_night": [
+		{ "item_id": "combat_tonic", "price": 55, "stock": 2 },
+	],
+}
+discount_thresholds = [
+	{ "mood": 80, "percent": 10.0 },
+	{ "mood": 50, "percent": 0.0 },
+	{ "mood": 20, "percent": -10.0 },
+]
+repair_fee_per_point = 1
+preferred_biome = &"biome_glasswright_reaches"
+theme_music = &"theme_brindle_forge"

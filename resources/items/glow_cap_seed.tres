@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0glowcapseed"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/glow_cap_seed.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"glow_cap_seed"
+display_name = "Glow Cap Spore"
+description = "Plant on tilled soil. Harvest replaces it with a Glow Shroom."
+max_stack = 999
+item_type = 5
+tier = 0
+rarity = 0

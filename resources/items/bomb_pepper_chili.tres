@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0pepperchili"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bomb_pepper_chili.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"bomb_pepper_chili"
+display_name = "Pepper Chili"
+description = "Restores 32 HP. Buff: +15% damage for 60s."
+max_stack = 20
+item_type = 4
+tier = 1
+rarity = 2
+heal_amount = 32
+buff_id = &"buff_pepper_burn"
+buff_duration_seconds = 60.0

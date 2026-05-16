@@ -194,3 +194,12 @@ enum ItemType { MATERIAL, TOOL, WEAPON, ARMOR, CONSUMABLE, PLACEABLE, AMMO, KEY 
 ## item; the affix is stored on the player's inventory entry, not on the
 ## ItemDef. The boolean flag on the def says "this item type is reforgeable".
 @export var reforgeable: bool = false
+
+## Phase 9.63 — Resonance-bound items don't spoil and aren't dropped on death.
+## Walker-only; multiplayer-marked. UI tooltip prints the tag.
+@export var resonance_bound: bool = false
+
+## Phase 9.26 — Light-source brightness tier. 0 = no light; 1..3 = dim/medium/bright.
+## Players can right-click a light source to step through dim levels (saves power
+## in the wider world model, lowers NPC light-pollution penalty).
+@export var light_brightness_levels: int = 0

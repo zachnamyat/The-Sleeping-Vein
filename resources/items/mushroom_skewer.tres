@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0mushskew"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/mushroom_skewer.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"mushroom_skewer"
+display_name = "Mushroom Skewer"
+description = "Restores 30 HP. Buff: +6 max HP for 90s."
+max_stack = 20
+item_type = 4
+tier = 1
+rarity = 1
+heal_amount = 30
+buff_id = &"buff_mushroom_skew"
+buff_duration_seconds = 90.0

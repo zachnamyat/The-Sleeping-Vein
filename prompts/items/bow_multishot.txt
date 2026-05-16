@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Triplebow (tier-2 multi-shot bow — fires 3 arrows in a fan) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE vertical recurve bow centered with 1-2px of magenta padding on all four sides. Bow strung vertically, with THREE arrows nocked simultaneously in a tiny fan (the three arrowheads pointing right at the top, tails meeting at the string). The bow itself is dark heartwood with two faint grip bands at its centre. The three arrowheads are 1px each, slightly offset to suggest spread. NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Root Hollows ramp for the bow wood (#3a2a1c #6b5036), one warmer wood pixel for Heartwood (#a4854f), pale grey-white string (#b2b9c3), Vesari grey for the arrowheads (#7d8492 #b2b9c3). Pure magenta (#FF00FF) for keyed background.
+
+LORE: A Glasswright innovation — three light shafts loosed at once. Less stopping power per arrow, but a moving target rarely escapes the fan. See lore/04_biomes.md#stratum-2--the-glasswright-reaches.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple bows, modern compound bow, isometric.

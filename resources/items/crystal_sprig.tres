@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0crystalsprig"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/crystal_sprig.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"crystal_sprig"
+display_name = "Crystal Sprig"
+description = "Plant in Glasswright Reaches. Grows into a Crystal Cluster."
+max_stack = 99
+item_type = 5
+tier = 1
+rarity = 1
+placeable_layer = &"structures"

@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for a Throwing Knife (consumable thrown weapon, stacks up to 50) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE small throwing knife centered with 2-3px of magenta padding on all four sides. Diagonal orientation, point at top-right, grip at bottom-left. Very small overall (occupy ~8-10px of the 16): short narrow blade (1-px wide for most of its length, with a tiny barb halfway), tiny crossguard (1-2px wide), short black-leather grip with a single highlight pixel. NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Vesari Necropolis grey for the blade (#4a5159 #7d8492 #b2b9c3 #e8ecf0), dark leather for the grip (#1c130d #3a2a1c). Pure magenta (#FF00FF) for keyed background.
+
+LORE: Cheap to make at a Loam Bench, cheap to lose. Echo-Walkers throw them at fleeing critters and Glass-Glints alike. See lore/04_biomes.md#stratum-1--the-root-hollows.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple knives, modern combat knife, isometric.

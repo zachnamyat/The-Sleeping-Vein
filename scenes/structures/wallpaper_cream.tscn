@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bwallpaper000000001"]
+
+[ext_resource type="Script" path="res://scripts/structures/decor_static.gd" id="1_dc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/wallpaper_cream.png" id="2_tex"]
+
+[node name="WallpaperCream" type="StaticBody2D" groups=["wallpaper", "placed_decor"]]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_dc")
+decor_group = &"wallpaper"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+z_index = -1

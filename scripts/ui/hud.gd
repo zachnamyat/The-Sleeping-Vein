@@ -22,6 +22,9 @@ class_name HUD
 var coord_label: Label = null
 var _coord_accum: float = 0.0
 
+## Phase 9.4 — Ancient Coin readout under the slivers label.
+var coin_label: Label = null
+
 const PHASE_DISPLAY: Dictionary = {
 	0: "High Light",
 	1: "Falling",
@@ -50,6 +53,10 @@ func _ready() -> void:
 		AudioBus.aphelion_beat.connect(_refresh_time_label)
 	_refresh_sliver_label(GameState.aphelion_slivers_remaining)
 	_refresh_time_label()
+	# Phase 9.4 — Ancient Coin readout. Inject as a label child of TopRight.
+	_init_coin_label()
+	EventBus.inventory_changed.connect(_refresh_coin_label)
+	_refresh_coin_label()
 	_apply_hud_scale_opacity()
 	if Settings:
 		Settings.value_changed.connect(_on_settings_value_changed)
@@ -336,6 +343,31 @@ func _on_item_picked_up(item_id: StringName, count: int) -> void:
 	var defn: ItemDef = ItemRegistry.get_def(item_id)
 	var name: String = defn.display_name if defn else String(item_id)
 	_on_ui_toast("+%d %s" % [count, name], 1.2)
+	if item_id == &"ancient_coin":
+		_refresh_coin_label()
+
+
+func _init_coin_label() -> void:
+	if coin_label != null:
+		return
+	var top_right := get_node_or_null("TopRight") as Control
+	if top_right == null:
+		return
+	coin_label = Label.new()
+	coin_label.name = "Coins"
+	coin_label.offset_top = 18.0
+	coin_label.offset_right = 122.0
+	coin_label.offset_bottom = 32.0
+	coin_label.text = "Coins: 0"
+	coin_label.modulate = Color(0.95, 0.84, 0.5, 1)
+	coin_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	top_right.add_child(coin_label)
+
+
+func _refresh_coin_label() -> void:
+	if coin_label == null or Inventory == null:
+		return
+	coin_label.text = "Coins: %d" % Inventory.count_of(&"ancient_coin")
 	# Ticket 2.25 — rarity-keyed pickup tone so the player can hear "ooh, blue"
 	# without looking at the toast.
 	if AudioBus and defn:

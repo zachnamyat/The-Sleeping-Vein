@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bismallfishhook01"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/small_fishhook.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"small_fishhook"
+display_name = "Small Fishhook"
+description = "From Old Hask. Doesn't catch fish — catches Vol'thaar's attention."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 4
+tier = 3
+rarity = 3
+lore_text = "\"Throw it in the water before you call to him.\""
+lore_ref = "lore/05_aeon_sovereigns_bosses.md"
+resonance_bound = true

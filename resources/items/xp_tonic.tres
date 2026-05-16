@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemDef" format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/xp_tonic.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
+icon = ExtResource("2_icon")
 id = &"xp_tonic"
 display_name = "Tonic of Practice"
 description = "+25% XP gain for all skills for 300 seconds."

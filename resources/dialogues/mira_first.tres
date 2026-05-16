@@ -1,0 +1,60 @@
+[gd_resource type="Resource" script_class="DialogueTree" load_steps=2 format=3 uid="uid://bdialmira00000001"]
+
+[ext_resource type="Script" path="res://scripts/resources/dialogue.gd" id="1_dlg"]
+
+[resource]
+script = ExtResource("1_dlg")
+entry_node_id = "start"
+nodes = {
+	"start": {
+		"speaker": "Mira-no-Last-Name",
+		"text": "\"You'll be wanting more pockets. I sell bag-expansions. I also identify the strange ones — the items that hide their truth.\"",
+		"responses": [
+			{ "label": "(browse her wares)", "action": "open_shop" },
+			{ "label": "(offer a gift)", "action": "open_gift" },
+			{ "label": "(ask her to identify an item)", "action": "open_identify" },
+			{ "label": "(ask about her name)", "goto": "name_chat" },
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+	"start_happy": {
+		"speaker": "Mira-no-Last-Name",
+		"text": "\"Walker! Brought me something to sort? Or to identify? I'm in a sorting mood.\"",
+		"responses": [
+			{ "label": "(browse her wares)", "action": "open_shop" },
+			{ "label": "(offer a gift)", "action": "open_gift" },
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+	"start_sad": {
+		"speaker": "Mira-no-Last-Name",
+		"text": "\"…Walker. Sorting's slow today. Came up empty in dreams again.\"",
+		"responses": [
+			{ "label": "(browse anyway)", "action": "open_shop" },
+			{ "label": "(silently leave)", "goto": "end" },
+		],
+	},
+	"name_chat": {
+		"speaker": "Mira-no-Last-Name",
+		"text": "\"No-Last-Name's a placeholder. My family… well. Maybe one day. The Walker says it's safer this way.\"",
+		"responses": [
+			{ "label": "(ask about her family)", "goto": "family_chat", "require_friendship": 80 },
+			{ "label": "(thank her)", "goto": "end" },
+		],
+	},
+	"family_chat": {
+		"speaker": "Mira-no-Last-Name",
+		"text": "\"…I had a brother. Younger. He took the descent first. I never followed. If you ever — if you ever meet someone in the Final Spiral who looks like me, please — tell him I'm above. That his sister is here.\"",
+		"add_friendship": 12,
+		"set_flag": "mira_family_revealed",
+		"responses": [
+			{ "label": "(silently swear it)", "goto": "end" },
+		],
+	},
+	"after_wormbound_peace": {
+		"speaker": "Mira-no-Last-Name",
+		"event_flag": "wormbound_peace_made",
+		"text": "\"The Wormbound are with us. Their trail-stones are showing on every map. I'll mark them next time you bring me one.\"",
+		"responses": [{ "label": "(silently nod)", "goto": "end" }],
+	},
+}

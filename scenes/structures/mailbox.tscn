@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bmailbox0000000001"]
+
+[ext_resource type="Script" path="res://scripts/structures/mailbox.gd" id="1_mb"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/mailbox.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mb"]
+size = Vector2(14, 14)
+
+[node name="Mailbox" type="Area2D" groups=["mailbox", "placed_decor"]]
+script = ExtResource("1_mb")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_mb")

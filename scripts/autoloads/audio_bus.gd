@@ -162,6 +162,31 @@ func play_ambient(track_id: StringName) -> void:
 	_ambient_player.play()
 
 
+## Phase 9.65 — set or clear the per-NPC theme music layer. When `active`, the
+## given track_id crossfades over the ambient bed; when false, returns to the
+## currently bound biome ambient.
+var _npc_theme_active: StringName = &""
+
+
+func set_npc_theme(track_id: StringName, active: bool) -> void:
+	if _ambient_player == null:
+		return
+	if active and track_id != &"":
+		_npc_theme_active = track_id
+		var stream: AudioStream = _music_cache.get(track_id, null) as AudioStream
+		if stream == null:
+			stream = _build_placeholder_music(track_id)
+			_music_cache[track_id] = stream
+		_ambient_player.stream = stream
+		_ambient_player.volume_db = -10.0
+		if not _ambient_player.playing:
+			_ambient_player.play()
+	elif not active and track_id == _npc_theme_active:
+		_npc_theme_active = &""
+		# Don't immediately stop; the next biome_changed signal will swap back.
+		_ambient_player.volume_db = -16.0
+
+
 func _init_sfx_pool() -> void:
 	for _i in range(SFX_POOL_SIZE):
 		var p := AudioStreamPlayer.new()

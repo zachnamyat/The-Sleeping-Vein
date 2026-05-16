@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0fishgrillsalt"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/fish_grilled_salt.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"fish_grilled_salt"
+display_name = "Grilled Salt Minnow"
+description = "Restores 36 HP. Buff: +10 max HP for 2 min."
+max_stack = 20
+item_type = 4
+tier = 1
+rarity = 1
+heal_amount = 36
+buff_id = &"buff_grilled_salt"
+buff_duration_seconds = 120.0

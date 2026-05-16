@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://drwafvdsyt7wu"]
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://drwafvdsyt7wu"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/spike_trap.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"spike_trap_placeable"
 display_name = "Loamstone Spike Trap"
 description = "A pressure-tile rigged with shaleseed spines. Damages anything that walks over it — careful where you step."
-icon = null
+icon = ExtResource("2_icon")
 max_stack = 16
 item_type = 5
 tier = 1

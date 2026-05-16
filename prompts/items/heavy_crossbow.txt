@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Heavy Crossbow (tier-2 ranged, chargeable, pierces 2 targets) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE heavy crossbow centered with 1-2px of magenta padding on all four sides. Larger and bulkier than a regular crossbow — a thick wooden stock (5-6px long) reinforced with grey-iron bands at both ends; a wide steel-tipped bow arm bowed across the top with a thick string; a chunky iron windlass/crank visible as 2-3 black-iron pixels at the back of the stock. A loaded iron bolt pointing right (1px line with a fat 2px tip). NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Root Hollows ramp for wood (#1c130d #3a2a1c #6b5036 #a4854f), Vesari Necropolis steel (#4a5159 #7d8492 #b2b9c3 #e8ecf0). Pure magenta (#FF00FF) for keyed background.
+
+LORE: A war-quality crossbow scrapped together by Brindle Quench-of-Coals; takes a heartbeat longer to load, but the bolt punches through two foes before stopping. See lore/05_npcs.md.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple crossbows, modern firearm, isometric.

@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Sinew Whip (tier-1 long-reach single-target melee) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges, no anti-aliasing.
+
+COMPOSITION: A SINGLE whip centered with 1-2px of magenta padding on all four sides. The whip is coiled in a loose loop that fills most of the icon. A short straight wooden grip at the bottom-left (2-3px), with a braided cord that curls up and around in a teardrop coil. The coil should read as braided/twisted (alternating darker and lighter sinew-pixels along its length). The tip flares into a small barbed metal hook at the upper-right. NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Sunless Verdancy ramp for the sinew (#3e7a3b #7bbf64 muted) blended with leather (#3a2a1c #6b5036 #a4854f), small grey-iron pixel for the hook (#7d8492). Pure magenta (#FF00FF) for keyed background.
+
+LORE: A length of sinew braided from Vine-Stalker tendons, woven around a Heartwood grip; the barbed tip is salvaged from a Hollowling-corrupted bone-charm. Echo-Walkers use it to drag mobs into reach. See lore/06_creatures_and_enemies.md#stratum-4--sunless-verdancy.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple whips, photo of a leather belt, modern bullwhip cartoon, isometric.

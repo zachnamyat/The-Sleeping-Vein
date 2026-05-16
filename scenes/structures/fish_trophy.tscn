@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://cfishtrophy00001"]
+
+[ext_resource type="Script" path="res://scripts/structures/fish_trophy.gd" id="1_ft"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/fish_trophy_placeable.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ft"]
+size = Vector2(16, 12)
+
+[node name="FishTrophy" type="Area2D"]
+script = ExtResource("1_ft")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -6)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ft")

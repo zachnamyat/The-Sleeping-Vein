@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Bone Wand (tier-0 single-target magic, fast/cheap to cast) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE wand centered with 1-2px of magenta padding on all four sides. Diagonal orientation, polished bone shaft from bottom-left to upper-right. The tip is a small (2-3px) faceted crystal cluster glowing soft violet, with a single brighter pixel at its peak suggesting a charge. Halfway down the wand a tiny leather grip wraps the bone (2px wide darker band). NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Salt Wastes ramp for bone (#bdb5a8 #e3dccf #fdfbf0), Auroric Veil ramp for the crystal (#3a35a0 #7062d7 #c7a8ee), dark leather wrap (#1c130d #3a2a1c). Pure magenta (#FF00FF) for keyed background.
+
+LORE: A bone splinter taken from a Vesari ossuary, fitted with a Glasswright clearstone shard. Crackles softly when nothing is being cast through it. See lore/04_biomes.md#stratum-3--the-vesari-necropolis.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple wands, ornate fantasy wand, isometric.

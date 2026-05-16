@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://dvfoeglrwrqno"]
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://dvfoeglrwrqno"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/relics/hunters_crown.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"hunters_crown"
 display_name = "Hunter's Crown"
 description = "A circlet that materializes on the brow of a Walker who has felled a Sovereign. Cosmetic title; ten Sovereigns turns the gold thread permanently."
-icon = null
+icon = ExtResource("2_icon")
 max_stack = 1
 item_type = 3
 tier = 2

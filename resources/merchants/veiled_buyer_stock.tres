@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="MerchantInventory" load_steps=2 format=3 uid="uid://merchstock0veiled01"]
+
+[ext_resource type="Script" path="res://scripts/resources/merchant_inventory.gd" id="1_mi"]
+
+[resource]
+script = ExtResource("1_mi")
+sell_items = []
+buy_prices = {
+	"glaurem_trinket": 480,
+	"aphelion_fragment": 95,
+	"engorged_stone_shell": 110,
+	"drowned_pearl": 220,
+	"tablet_shard": 180,
+	"recipe_scroll": 95,
+	"photograph": 140,
+}
+restock_minutes = 25.0
+is_random_spawn = true
+preferred_biome = &"biome_root_hollows"
+theme_music = &"theme_veiled"

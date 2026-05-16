@@ -177,6 +177,16 @@ func total_talent_points_earned() -> int:
 	return have
 
 
+## Phase 1 ticket 1.16 — character cosmetics persisted at world creation.
+var character_name: String = "Walker"
+var character_template: String = "Walker (default)"
+var character_hair: String = "Short"
+var character_skin: String = "Tan"
+var character_outfit: String = "Starter Robes"
+## Phase 9.56 — Idle pose. Default 'Stand'.
+var character_idle_pose: String = "Stand"
+
+
 ## NG+ flag. When true on world load, scale boss HP +30% and grant carry-over cosmetics.
 var ng_plus: bool = false
 var ng_plus_cycles: int = 0

@@ -10,12 +10,15 @@ const TEMPLATE_OPTIONS: Array[String] = ["Walker (default)"]
 const HAIR_OPTIONS: Array[String] = ["Short", "Tied", "Crown"]
 const SKIN_OPTIONS: Array[String] = ["Tan", "Pale", "Dusk", "Coal"]
 const OUTFIT_OPTIONS: Array[String] = ["Starter Robes", "Hollow Wrap", "Aphelion Cloth"]
+## Phase 9.56 — Idle pose choices, applied as a per-Walker animation hint.
+const IDLE_POSE_OPTIONS: Array[String] = ["Stand", "Cross-arms", "Hand glow lifted", "Crouched", "Tipped-hat"]
 
 var name_edit: LineEdit
 var template_btn: OptionButton
 var hair_btn: OptionButton
 var skin_btn: OptionButton
 var outfit_btn: OptionButton
+var idle_pose_btn: OptionButton
 var accent_btn: ColorPickerButton
 var confirm_btn: Button
 var back_btn: Button
@@ -63,6 +66,7 @@ func _build() -> void:
 	hair_btn = _make_option_row(form, "Hair", HAIR_OPTIONS)
 	skin_btn = _make_option_row(form, "Skin", SKIN_OPTIONS)
 	outfit_btn = _make_option_row(form, "Outfit", OUTFIT_OPTIONS)
+	idle_pose_btn = _make_option_row(form, "Idle Pose", IDLE_POSE_OPTIONS)
 
 	var accent_row := HBoxContainer.new()
 	var accent_label := Label.new()
@@ -118,6 +122,11 @@ func _on_confirm() -> void:
 		GameState.set("character_hair", HAIR_OPTIONS[hair_btn.selected])
 		GameState.set("character_skin", SKIN_OPTIONS[skin_btn.selected])
 		GameState.set("character_outfit", OUTFIT_OPTIONS[outfit_btn.selected])
+		# Phase 9.56 — idle pose persisted in Settings (visual hint).
+		if idle_pose_btn:
+			GameState.set("character_idle_pose", IDLE_POSE_OPTIONS[idle_pose_btn.selected])
+		if Settings and idle_pose_btn:
+			Settings.set_value("idle_pose", IDLE_POSE_OPTIONS[idle_pose_btn.selected])
 	if Settings:
 		var c: Color = accent_btn.color
 		Settings.set_value("accent_color", "#%02x%02x%02x" % [int(c.r * 255), int(c.g * 255), int(c.b * 255)])

@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Oil Lamp (placeable light source, tier-2 — larger and steadier than a Lantern) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE squat oil lamp centered with 1-2px of magenta padding on all four sides. A round bulbous brass/iron base (5-6px wide × 4px tall), a narrow chimney rising above with one large yellow-orange flame pixel in the centre, a thin black smoke wisp (1-2px) trailing up. The base has a small carrying ring on the side (1px arch) and faint warm gold filigree on its face (1px). Sits firmly on a 1px dark shadow line. NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Iron/brass base (#3a2a1c #6b5036 #a4854f), Final Spiral gold filigree (#dab14a), warm flame (#a87f24 #dab14a #f8e088), faint smoke (#1c130d). Pure magenta (#FF00FF) for keyed background.
+
+LORE: Pyrenkin oil-lamp design — burns Glow-Shroom oil; brighter cone than a Lantern, twice the radius. See lore/04_biomes.md#stratum-6--the-emberforge-strata.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple lamps, modern desk lamp, isometric, electrified.

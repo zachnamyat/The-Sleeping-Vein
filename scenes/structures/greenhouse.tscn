@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgreenhouse00001"]
+
+[ext_resource type="Script" path="res://scripts/structures/greenhouse.gd" id="1_gh"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/greenhouse_placeable.png" id="2_tex"]
+
+[node name="Greenhouse" type="Node2D"]
+script = ExtResource("1_gh")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0potplanter"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_pot_planter"
+display_name = "Pot Planter"
+inputs = [{ "item_id": "loam", "count": 2 }, { "item_id": "wood", "count": 1 }]
+outputs = [{ "item_id": "pot_planter_placeable", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 1
+skill_xp_id = &"skill_gardening"

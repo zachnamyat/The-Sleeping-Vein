@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Splinter-Bow (tier-2 pierce-shot bow — single arrow passes through 3 mobs) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE vertical recurve bow centered with 1-2px of magenta padding on all four sides. A single long arrow nocked in the centre, the arrowhead a noticeably elongated steel spike (3-4px long, narrow and pointed, distinct from a regular arrow). The bow is recurved with slight gold filaments wrapping the limbs. A single bright highlight pixel along the steel spike. NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Root Hollows ramp for the bow wood (#3a2a1c #6b5036 #a4854f), Vesari grey for the arrow/spike (#4a5159 #7d8492 #b2b9c3 #e8ecf0), single thin Final Spiral gold filament on the limbs (#a87f24). Pure magenta (#FF00FF) for keyed background.
+
+LORE: A Vesari-Pyrenkin hybrid — wood from the Hollows, steel from the Pyrenkin forges. The spike is forged to keep momentum after it punches through. See lore/04_biomes.md#stratum-6--the-emberforge-strata.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple bows, modern weapon, isometric.

@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Ward Lantern (placeable light source, tier-3 — Echo-warding blue cone) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE tall standing lantern centered with 1-2px of magenta padding on all four sides. Roughly 6-7px wide and 12-13px tall. A four-pane glass column glowing electric blue-cyan, with delicate Vesari runic etchings (1px each on each panel face), a small pointed iron cap on top, and a flared iron base. The cyan flame inside has a single brightest white-cyan core pixel and fades through Auroric Veil hues. Faint blue halo (1px outer ring). NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Iron frame (#1c130d #3a2a1c #4a5159 #7d8492), Drowned Aphelion + Auroric Veil cyan-violet for the flame (#15527a #2c8fb8 #6cd3e1 #cdf7f3 #c7a8ee #f0e0ff). Pure magenta (#FF00FF) for keyed background.
+
+LORE: Forged in the Auroric Veil; the cyan light pushes back Hollowling motes. Hold one in a deep stratum and the dark itself recoils. See lore/04_biomes.md#stratum-8--the-auroric-veil.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple lanterns, modern lamp, isometric.

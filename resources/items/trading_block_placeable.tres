@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bitradingplace0001"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/trading_block.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"trading_block_placeable"
+display_name = "Trading Block"
+description = "Drop an item, set a coin price. Anyone may buy."
+icon = ExtResource("2_icon")
+max_stack = 5
+item_type = 5
+tier = 2
+rarity = 1

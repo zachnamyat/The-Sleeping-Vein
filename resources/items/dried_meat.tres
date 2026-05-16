@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0driedmeat"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/dried_meat.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"dried_meat"
+display_name = "Dried Meat"
+description = "Restores 28 HP. Buff: +6 max HP for 4 min."
+max_stack = 99
+item_type = 4
+tier = 1
+rarity = 1
+heal_amount = 28
+buff_id = &"buff_dried_meat"
+buff_duration_seconds = 240.0

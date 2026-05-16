@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://dusigxufv4433"]
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://dusigxufv4433"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/photograph.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"photograph"
 display_name = "Mote-Lens Photograph"
 description = "A pinhole-lens etcher. Aim and click to capture a mob image — adds the species to your Compendium without requiring a kill."
-icon = null
+icon = ExtResource("2_icon")
 max_stack = 1
 item_type = 1
 tier = 1

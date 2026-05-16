@@ -317,6 +317,8 @@ func _drop_boss_loot() -> void:
 		{"id": pulse_item_id, "count": 1},
 		{"id": fragment_item_id, "count": 1},
 		{"id": shell_item_id, "count": shell_drop_count},
+		# Phase 9.4 — Ancient Coin guaranteed drop from bosses.
+		{"id": &"ancient_coin", "count": int(round(randf_range(40.0, 65.0)))},
 	]
 	if trinket_item_id != &"":
 		drops.append({"id": trinket_item_id, "count": 1})

@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Hunter's Crossbow (tier-1 ranged, slower than a bow) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE crossbow centered with 1-2px of magenta padding on all four sides. Horizontal orientation. A short wooden stock at the centre (4-5px long), a perpendicular bow-arm bowed across the top with the string taut, and a small iron trigger guard underneath. The bow-arm is darker wood with a single steel-grey reinforcement pixel at its centre. A loaded bolt resting in the channel pointing right (1px line ending in a tiny iron tip). NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Root Hollows ramp for the wood (#3a2a1c #6b5036 #a4854f), Vesari grey for the iron parts (#4a5159 #7d8492), one white-grey pixel for the string (#b2b9c3). Pure magenta (#FF00FF) for keyed background.
+
+LORE: A hunter's tool of pre-Inversion design, kept usable through generations of Echo-Walker stewardship; slower than a bow but punches through Stoneslough plate. See lore/04_biomes.md#stratum-1--the-root-hollows.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple crossbows, modern military crossbow, isometric.

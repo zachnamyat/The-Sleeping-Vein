@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bidoormetal000001"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/door_metal.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"door_metal_placeable"
+display_name = "Metal Door"
+description = "Auto-opens for the Walker only. Blocks all non-boss mobs."
+icon = ExtResource("2_icon")
+max_stack = 10
+item_type = 5
+tier = 2
+rarity = 1

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0bloatloaf"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bloat_loaf.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"bloat_loaf"
+display_name = "Bloat Loaf"
+description = "Restores 48 HP. Buff: +6 max HP for 2 min."
+max_stack = 20
+item_type = 4
+tier = 1
+rarity = 1
+heal_amount = 48
+buff_id = &"buff_oat_strength"
+buff_duration_seconds = 120.0

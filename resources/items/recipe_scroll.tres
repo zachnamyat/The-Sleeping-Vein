@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cvtvgpemhg50g"]
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://cvtvgpemhg50g"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/recipe_scroll.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"recipe_scroll"
 display_name = "Recipe Scroll"
 description = "Vellum sketched with the marks of an unfamiliar craft. Use to learn a new recipe."
-icon = null
+icon = ExtResource("2_icon")
 max_stack = 16
 item_type = 4
 tier = 1

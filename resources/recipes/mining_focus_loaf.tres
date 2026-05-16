@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0miningfocusloaf"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_mining_focus_loaf"
+display_name = "Stratasinger's Loaf"
+inputs = [{ "item_id": "flour", "count": 2 }, { "item_id": "shaleseed", "count": 1 }]
+outputs = [{ "item_id": "mining_focus_loaf", "count": 1 }]
+stations = [&"oven"]
+skill_xp_grant = 5
+skill_xp_id = &"skill_cooking"

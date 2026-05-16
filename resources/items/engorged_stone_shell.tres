@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cstalcx1ji37q"]
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://cstalcx1ji37q"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/relics/engorged_stone_shell.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"engorged_stone_shell"
 display_name = "Engorged Stone-Shell"
 description = "A petrified fragment of Glaur-em's outer skin, still warm where the mineral fused around the corruption. Carries the weight of a Stone-Father who could not stop growing."
-icon = null
+icon = ExtResource("2_icon")
 max_stack = 16
 item_type = 0
 tier = 1

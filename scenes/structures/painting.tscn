@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://bpainting000000001"]
+
+[ext_resource type="Script" path="res://scripts/structures/painting.gd" id="1_pt"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/painting.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_paint"]
+size = Vector2(14, 14)
+
+[node name="Painting" type="Area2D" groups=["painting", "placed_decor"]]
+script = ExtResource("1_pt")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_paint")

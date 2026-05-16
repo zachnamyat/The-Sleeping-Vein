@@ -53,7 +53,8 @@ offset_bottom = 192.0
 
 [node name="BuyLabel" type="Label" parent="Root/Cols/BuyCol"]
 modulate = Color(0.7, 1, 0.6, 1)
-text = "BUY"
+text = "[ BUY ]"
+mouse_filter = 0
 
 [node name="Scroll" type="ScrollContainer" parent="Root/Cols/BuyCol"]
 custom_minimum_size = Vector2(232, 150)
@@ -65,7 +66,8 @@ custom_minimum_size = Vector2(228, 150)
 
 [node name="SellLabel" type="Label" parent="Root/Cols/SellCol"]
 modulate = Color(1.0, 0.7, 0.5, 1)
-text = "SELL"
+text = "[ SELL ]"
+mouse_filter = 0
 
 [node name="Scroll" type="ScrollContainer" parent="Root/Cols/SellCol"]
 custom_minimum_size = Vector2(232, 150)

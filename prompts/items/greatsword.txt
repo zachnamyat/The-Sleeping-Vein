@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Stoneslough Greatsword (tier-2 heavy two-handed melee) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling.
+
+COMPOSITION: A SINGLE greatsword centered with 1-2px of magenta padding on all four sides. Diagonal orientation, broad heavy blade at top-left, long two-handed grip running to bottom-right. The blade is THICK (3-4px wide at its base, narrowing slightly toward the tip), with chunky hammered-iron texture (one row of darker pixels suggesting the fuller). Crossguard is a chunky horizontal slab (4-5px wide). Two-handed leather grip (3-4px tall), pommel a small round disc. The metal carries faint warm gold flecks near the crossguard. NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Restrict to Root Hollows ramp for the iron (#1c130d #3a2a1c #6b5036 #a4854f) plus Vesari grey for the blade body (#4a5159 #7d8492 #b2b9c3), single accent of Final Spiral gold (#a87f24) near the crossguard. Pure magenta (#FF00FF) for keyed background.
+
+LORE: Forged from Stoneslough scrap iron at the Clearstone Forge after the first Sovereign falls; heavy enough to break Glaur-em's children, slow enough that wielding it well is a discipline. See lore/06_creatures_and_enemies.md#stratum-1--root-hollows and lore/04_biomes.md#stratum-2--the-glasswright-reaches.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient, sub-pixel detail, watermark, text labels, frame, border, multiple swords, isometric, fantasy filigree overdetail.

@@ -1,0 +1,35 @@
+[gd_resource type="Resource" script_class="MerchantInventory" load_steps=2 format=3 uid="uid://merchstock0mira0001"]
+
+[ext_resource type="Script" path="res://scripts/resources/merchant_inventory.gd" id="1_mi"]
+
+[resource]
+script = ExtResource("1_mi")
+sell_items = [
+	{ "item_id": "bag_expansion_1", "price": 80, "stock": 1 },
+	{ "item_id": "bag_expansion_2", "price": 240, "stock": 1 },
+	{ "item_id": "anchor_portable", "price": 200, "stock": 2 },
+	{ "item_id": "treasure_map",    "price": 90, "stock": 4 },
+	{ "item_id": "bound_compass",   "price": 75, "stock": 3 },
+	{ "item_id": "world_scanner",   "price": 110, "stock": 2 },
+]
+buy_prices = {
+	"glow_tube": 6,
+	"aphelion_fragment": 18,
+	"recipe_scroll": 14,
+	"tablet_shard": 35,
+	"photograph": 22,
+}
+restock_minutes = 35.0
+seasonal_extras = {
+	"phase_long_night": [
+		{ "item_id": "respec_scroll", "price": 60, "stock": 2 },
+	],
+}
+discount_thresholds = [
+	{ "mood": 80, "percent": 10.0 },
+	{ "mood": 50, "percent": 0.0 },
+	{ "mood": 20, "percent": -10.0 },
+]
+identify_fee = 12
+preferred_biome = &"biome_root_hollows"
+theme_music = &"theme_mira"

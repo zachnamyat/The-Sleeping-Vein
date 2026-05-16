@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0heartjam"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_heart_berry_jam"
+display_name = "Heart Berry Jam"
+inputs = [{ "item_id": "heart_berry", "count": 2 }, { "item_id": "honey", "count": 1 }]
+outputs = [{ "item_id": "heart_berry_jam", "count": 1 }]
+stations = [&"cooking_pot"]
+skill_xp_grant = 3
+skill_xp_id = &"skill_cooking"

@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Glasswright Spear (tier-1 long-reach two-handed thrust weapon) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE spear centered with 1-2px of magenta padding on all four sides. Diagonal orientation, narrow leaf-shaped spear-head at top-right, long wooden haft running to bottom-left. The spearhead is faceted blue-grey clearstone (2-3px wide leaf shape, with one bright highlight pixel). A small grey-iron collar where the head meets the haft. The haft is plain ash-wood with two faint darker bands wrapped around it as grip indicators. NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Glasswright Reaches ramp for the spearhead (#1c2c4a #3d5b8a #6e8fc4 #a5c2e8), Root Hollows ramp for the wood (#3a2a1c #6b5036 #a4854f), one grey-iron collar pixel (#7d8492). Pure magenta (#FF00FF) for keyed background.
+
+LORE: Glasswright apprentices learn to knap clearstone into spearheads before they earn the right to grind crystal lenses. The shaft is plain Heartwood. See lore/04_biomes.md#stratum-2--the-glasswright-reaches.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple spears, isometric, ornate banner, modern military spear.

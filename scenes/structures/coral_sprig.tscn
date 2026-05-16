@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccoralsprig00001"]
+
+[ext_resource type="Script" path="res://scripts/structures/coral_sprig.gd" id="1_co"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/coral_sprig.png" id="2_tex"]
+
+[node name="CoralSprig" type="Node2D"]
+script = ExtResource("1_co")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -4)
+scale = Vector2(0.5, 0.5)

@@ -8,15 +8,34 @@ entry_node_id = "start"
 nodes = {
 	"start": {
 		"speaker": "Aelstren the Cartographer",
-		"text": "[i]The old cartographer says nothing. She lays a half-burnt scroll of vellum at your feet — a partial map of the Root Hollows. Lines drawn in faded ink point toward the Loam Bench, the Glasswright descent, the place where Glaur-em fell.[/i]",
+		"text": "[i]The old cartographer says nothing. She lays a half-burnt scroll of vellum at your feet — a partial map of the Root Hollows.[/i]",
 		"responses": [
 			{ "label": "(touch the scroll)", "goto": "scroll" },
+			{ "label": "(ask after the descent)", "goto": "descent_chat", "require_flag": "glaurem_defeated" },
+			{ "label": "(offer a gift)", "action": "open_gift" },
 			{ "label": "(nod and turn away)", "goto": "end" },
 		],
 	},
 	"scroll": {
 		"speaker": "Aelstren the Cartographer",
-		"text": "[i]Aelstren's eyes brighten — she taps a small symbol near the bottom of the map, where the corruption-tendrils thicken. Then her fingers trace a long winding line down and inward. \"Find what was broken,\" she seems to say without speaking.[/i]",
+		"text": "[i]Aelstren taps a small symbol near the bottom of the map, where the corruption-tendrils thicken. \"Find what was broken,\" she seems to say without speaking.[/i]",
+		"set_flag": "aelstren_map_received",
+		"responses": [
+			{ "label": "(accept the map-fragment quest)", "goto": "fragment_quest" },
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+	"fragment_quest": {
+		"speaker": "Aelstren the Cartographer",
+		"text": "[i]She presses a folded, rolled corner of the map into your hand — a fragment. \"Bring back the others. Each from a chunk you cleared. The map will redraw itself.\"[/i]",
+		"add_friendship": 8,
+		"responses": [
+			{ "label": "(accept)", "goto": "end" },
+		],
+	},
+	"descent_chat": {
+		"speaker": "Aelstren the Cartographer",
+		"text": "[i]The descent corridor pulses on the map. She gestures: not yet, not yet. You need the second Pulse.[/i]",
 		"responses": [
 			{ "label": "(silently nod)", "goto": "end" },
 		],

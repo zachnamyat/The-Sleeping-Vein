@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Cleansing Tonic (consumable potion that removes all debuffs) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE tall narrow glass bottle centered with 1-2px of magenta padding on all four sides. Conical-shoulder shape (4-5px wide × 11-12px tall) with a small cork stopper at the top. The liquid inside is pale silver-white with a faint green tint (Memory Root brew). A single brighter pixel near the bottle's neck suggests catching the light. Tiny dark label band wraps around the neck (1px). NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Pale glass + liquid (#bdb5a8 #e3dccf #fdfbf0 with faint Verdancy green #7bbf64 mixed in), dark cork (#3a2a1c #6b5036), dark label (#1c130d). Pure magenta (#FF00FF) for keyed background.
+
+LORE: Brewed at a Cooking Pot from Memory Root and Pale Cap; the recipe is older than the Inversion — drink it to shake off burns, poisons, bleeds, and the confusion that comes from Vesari song-fragments. See lore/04_biomes.md#stratum-4--the-sunless-verdancy.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple bottles, modern medicine bottle, isometric, fantasy-glamour potion swirl.

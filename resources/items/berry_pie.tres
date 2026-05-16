@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0berrypie"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/berry_pie.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"berry_pie"
+display_name = "Berry Pie"
+description = "Restores 56 HP. Buff: regen 1.5 HP/s for 4 min."
+max_stack = 20
+item_type = 4
+tier = 2
+rarity = 2
+heal_amount = 56
+buff_id = &"buff_berry_pie"
+buff_duration_seconds = 240.0

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0vesarieel"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/vesari_eel.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"vesari_eel"
+display_name = "Vesari Eel"
+description = "Slow, brackish eel from the Necropolis. Restores 32 HP."
+max_stack = 99
+item_type = 4
+tier = 1
+rarity = 2
+heal_amount = 32

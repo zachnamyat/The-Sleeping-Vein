@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0fishstew"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/fish_stew.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"fish_stew"
+display_name = "Fish Stew"
+description = "Restores 50 HP. Buff: regen 1 HP/s for 3 min."
+max_stack = 20
+item_type = 4
+tier = 2
+rarity = 2
+heal_amount = 50
+buff_id = &"buff_fish_stew"
+buff_duration_seconds = 180.0

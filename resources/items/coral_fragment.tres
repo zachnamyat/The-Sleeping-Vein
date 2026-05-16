@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0coralfrag"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/coral_fragment.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"coral_fragment"
+display_name = "Coral Fragment"
+description = "Crafting reagent — Drowned Aphelion."
+max_stack = 99
+item_type = 0
+tier = 1
+rarity = 1

@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Bone Shield (off-hand block + parry tool) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE round shield centered with 1-2px of magenta padding on all four sides. Roughly 12-13px in diameter (filling the icon). The shield body is pale bone-white with dark grain striations (alternating bone-cream and darker-cream pixels in concentric rings). A small grey-iron boss (2-3px) at its centre. Two cross-hatched darker bone fragments riveted near the rim suggest construction from stitched-together shards. Subtle gold rune (1px) inscribed at top edge. NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Salt Wastes ramp for the bone (#857d72 #bdb5a8 #e3dccf #fdfbf0), Vesari grey for the boss (#4a5159 #7d8492), Final Spiral gold pixel for the rune (#a87f24). Pure magenta (#FF00FF) for keyed background.
+
+LORE: Forged from Glaur-em's Engorged Stone-Shell scraps and ribs of fallen Stoneslough; the rim is held together by Aphelion-Hymn knots. Hold to block, release timed to parry. See lore/06_creatures_and_enemies.md#stratum-1--root-hollows.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple shields, modern riot shield, ornate fantasy heater, isometric.

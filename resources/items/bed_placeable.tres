@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://dvkhh61mpydua"]
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://dvkhh61mpydua"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/bed.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"bed_placeable"
 display_name = "Loam Bed"
 description = "A pallet of woven loam-grass. Bind your respawn here and skip a portion of the world clock."
-icon = null
+icon = ExtResource("2_icon")
 max_stack = 5
 item_type = 5
 tier = 1

@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Held Lantern (off-hand light + mana regen utility) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE small hand-held lantern centered with 1-2px of magenta padding on all four sides. A small iron-frame box (4-5px wide × 6px tall), 2-3 yellow-cream "glass panel" pixels glowing in the centre, a tiny wire handle arching above the box (1px curve), a thin chain or hook hanging off the base. The flame inside is warm cream-white (1 brightest pixel at the centre, fading outward). NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Iron frame (#1c130d #3a2a1c #4a5159 #7d8492), Final Spiral gold for flame (#a87f24 #dab14a #f8e088), pale glass (#fdfbf0). Pure magenta (#FF00FF) for keyed background.
+
+LORE: An off-hand lantern carried instead of a shield. Lights one tile further than a torch and refunds a sliver of mana per Beat — Aphelion-resonant glass made by the Pyrenkin. See lore/04_biomes.md#stratum-6--the-emberforge-strata.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple lanterns, modern flashlight, isometric, ornate fantasy gem-lamp.

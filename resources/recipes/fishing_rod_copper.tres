@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0rodcopper"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_fishing_rod_copper"
+display_name = "Copper Fishing Rod"
+inputs = [{ "item_id": "fishing_rod_wood", "count": 1 }, { "item_id": "shaleseed_ingot", "count": 1 }]
+outputs = [{ "item_id": "fishing_rod_copper", "count": 1 }]
+stations = [&"clearstone_forge"]
+skill_xp_grant = 3
+skill_xp_id = &"skill_crafting"

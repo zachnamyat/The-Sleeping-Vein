@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bwindowblock0000001"]
+
+[ext_resource type="Script" path="res://scripts/structures/decor_static.gd" id="1_dc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/window_block.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w"]
+size = Vector2(16, 16)
+
+[node name="WindowBlock" type="StaticBody2D" groups=["window_block", "placed_decor", "wall_blocking"]]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_dc")
+decor_group = &"window_block"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_w")

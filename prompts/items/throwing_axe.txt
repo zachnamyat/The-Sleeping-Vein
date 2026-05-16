@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for a Throwing Axe (returning two-handed weapon, boomerang-style) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE throwing axe centered with 1-2px of magenta padding on all four sides. The axe is small and chunky — short Heartwood haft (3-4px tall, tapered) and a thick crescent blade-head (4-5px wide) cocked at a 45° angle. The blade has a tiny gold rune (1px of warm gold) etched into its centre that suggests it returns to the thrower. NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Root Hollows ramp for haft (#3a2a1c #6b5036 #a4854f), Vesari grey for the blade (#4a5159 #7d8492 #b2b9c3), single Final Spiral gold pixel for the rune (#dab14a). Pure magenta (#FF00FF) for keyed background.
+
+LORE: Echo-Walkers carve runes into the steel that "tug back" — an early Aphelion-Hymn fragment turned into a craft trick. The axe returns to the thrower's grip after each throw. See lore/07_echo_walkers_player.md.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple axes, modern hatchet, isometric.

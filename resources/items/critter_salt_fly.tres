@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0saltfly"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/critter_salt_fly.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"critter_salt_fly"
+display_name = "Salt Fly"
+description = "Necropolis fly. Carries dust on its wings."
+max_stack = 20
+item_type = 0
+tier = 0
+rarity = 0

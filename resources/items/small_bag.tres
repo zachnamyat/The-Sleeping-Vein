@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bismallbag0000001"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/canteen.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"small_bag"
+display_name = "Small Bag"
+description = "Holds 6 extra slots without opening another window. Activate to peek inside."
+icon = ExtResource("2_icon")
+max_stack = 4
+item_type = 4
+tier = 2
+rarity = 2

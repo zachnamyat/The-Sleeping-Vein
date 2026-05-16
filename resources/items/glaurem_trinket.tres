@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://c0xmw1vf0hjy3"]
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://c0xmw1vf0hjy3"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/relics/glaurem_trinket.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"glaurem_trinket"
 display_name = "Bound-Stone Trinket"
 description = "A loop of cord through a polished sliver of Glaur-em's shell. Wearers feel the weight of mountains move out of their way."
-icon = null
+icon = ExtResource("2_icon")
 max_stack = 1
 item_type = 3
 tier = 1

@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://bp5bedscn001"]
+[gd_scene load_steps=3 format=3 uid="uid://bp5bedscn001"]
 
 [ext_resource type="Script" path="res://scripts/structures/bed.gd" id="1_bed"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/bed.png" id="2_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bed"]
 size = Vector2(20, 14)
@@ -10,7 +11,8 @@ script = ExtResource("1_bed")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-modulate = Color(0.92, 0.78, 0.55, 1)
+texture = ExtResource("2_tex")
+offset = Vector2(0, -4)
 
 [node name="InteractShape" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_bed")

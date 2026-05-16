@@ -268,6 +268,39 @@ func _try_consume() -> void:
 				return
 			_use_anchor_portable(player)
 			return
+	# Phase 8.24 — Empty canteen tries to refill on a water tile; full canteen
+	# heals + clears Burn and converts back to empty.
+	if held_id == &"canteen":
+		_use_canteen_empty(player)
+		return
+	if held_id == &"canteen_full":
+		_use_canteen_full(player)
+		return
+	# Phase 9.23 — Curious Egg: when used near a heat source (torch / forge),
+	# hatch into a random pet variant. Otherwise nudge the player to find heat.
+	if held_id == &"curious_egg":
+		if _heat_source_nearby(player):
+			Inventory.try_remove(held_id, 1)
+			_hatch_curious_egg()
+		else:
+			EventBus.ui_toast.emit("The egg is cool. Stand by a forge or torch.", 2.5)
+		return
+	# Phase 9.6 — Bag Expansion: grow inventory by 10 slots, one-shot.
+	if held_id == &"bag_expansion_1" or held_id == &"bag_expansion_2":
+		Inventory.try_remove(held_id, 1)
+		Inventory._resize(Inventory.slots.size() + 10)
+		EventBus.ui_toast.emit("Inventory grows by 10 slots.", 2.0)
+		return
+	# Phase 3.27 — bag-in-bag: peek inside the small bag without closing the inventory.
+	if held_id == &"small_bag":
+		# Find which slot index the bag is in.
+		for i in range(Inventory.slots.size()):
+			var s = Inventory.slots[i]
+			if s != null and StringName(s.get("item_id", "")) == &"small_bag":
+				var opened: bool = Inventory.toggle_bag_open(i)
+				EventBus.ui_toast.emit("Bag opened." if opened else "Bag closed.", 1.0)
+				break
+		return
 	if Inventory.try_remove(held_id, 1) <= 0:
 		return
 	if held_id == &"respec_scroll":
@@ -296,7 +329,10 @@ func _try_consume() -> void:
 		var mc := player.get_node_or_null("ManaComponent") as ManaComponent
 		if mc:
 			mc.add_mana(defn.mana_restore)
-	if defn.buff_id != &"" and defn.buff_duration_seconds > 0.0:
+	# Phase 8.7 — Food buff stacking enforces one buff per category.
+	if CookingSystem and CookingSystem.FOOD_BUFFS.has(held_id):
+		CookingSystem.apply_food_buff(held_id)
+	elif defn.buff_id != &"" and defn.buff_duration_seconds > 0.0:
 		Buffs.apply(defn.buff_id, defn.buff_duration_seconds)
 	EventBus.skill_xp_gained.emit(&"skill_cooking", 1)
 
@@ -313,6 +349,10 @@ func _try_swing(damage_multiplier: float = 1.0, is_heavy: bool = false) -> void:
 	var aim_target: Vector2 = _aim_target(player)
 
 	# Farming branch.
+	if FarmingSystem and FarmingSystem.is_hoe(held_id):
+		FarmingSystem.till_at(aim_target)
+		_cooldown_timer = 0.3
+		return
 	if FarmingSystem and FarmingSystem.is_seed(held_id):
 		FarmingSystem.plant_seed(held_id, aim_target)
 		_cooldown_timer = 0.3
@@ -320,6 +360,15 @@ func _try_swing(damage_multiplier: float = 1.0, is_heavy: bool = false) -> void:
 	if FarmingSystem and FarmingSystem.is_watering_can(held_id):
 		FarmingSystem.water_at(aim_target)
 		_cooldown_timer = 0.3
+		return
+	if FarmingSystem and FarmingSystem.is_fertilizer(held_id):
+		FarmingSystem.apply_fertilizer(held_id, aim_target)
+		_cooldown_timer = 0.3
+		return
+	# Phase 8.15 — Bug net: when swung, captures any critter in its hit area.
+	if Critters and Critters.is_bug_net(held_id):
+		_try_bug_net(player, aim_target)
+		_cooldown_timer = 0.4
 		return
 
 	# Mining.
@@ -345,8 +394,12 @@ func _try_swing(damage_multiplier: float = 1.0, is_heavy: bool = false) -> void:
 	# Ranged / Magic / Summon / Fishing / Bomb.
 	if defn and defn.weapon_class != &"":
 		if defn.weapon_class == &"fishing":
+			# Phase 8.10 — click-to-hook during the HOOK stage of an active cast.
+			if FishingSystem.try_hook():
+				_cooldown_timer = 0.2
+				return
 			if FishingSystem.cast(player):
-				_cooldown_timer = 5.0
+				_cooldown_timer = 0.6
 			return
 		match defn.weapon_class:
 			&"ranged_bow", &"ranged_gun", &"ranged_crossbow":
@@ -885,6 +938,38 @@ const PLACEABLE_SCENES: Dictionary = {
 	&"hidden_door_placeable":     "res://scenes/structures/hidden_door.tscn",
 	&"mural_placeable":           "res://scenes/structures/mural.tscn",
 	&"anvil_placeable":           "res://scenes/structures/anvil.tscn",
+	# Phase 8 placeables.
+	&"sprinkler_placeable":       "res://scenes/structures/sprinkler.tscn",
+	&"aquarium_placeable":        "res://scenes/structures/aquarium.tscn",
+	&"composter_placeable":       "res://scenes/structures/composter.tscn",
+	&"greenhouse_placeable":      "res://scenes/structures/greenhouse.tscn",
+	&"beehive_placeable":         "res://scenes/structures/beehive.tscn",
+	&"drying_rack_placeable":     "res://scenes/structures/drying_rack.tscn",
+	&"mill_placeable":            "res://scenes/structures/mill.tscn",
+	&"oven_placeable":            "res://scenes/structures/oven.tscn",
+	&"pot_planter_placeable":     "res://scenes/structures/pot_planter.tscn",
+	&"trellis_placeable":         "res://scenes/structures/trellis.tscn",
+	&"sapling_placeable":         "res://scenes/structures/sapling.tscn",
+	&"crystal_sprig":             "res://scenes/structures/crystal_sprig.tscn",
+	&"coral_sprig":               "res://scenes/structures/coral_sprig.tscn",
+	&"fish_trophy_placeable":     "res://scenes/structures/fish_trophy.tscn",
+	&"net_trap_placeable":        "res://scenes/structures/net_trap.tscn",
+	&"glow_cap_placeable":        "res://scenes/structures/glow_shroom.tscn",
+	# Phase 9 placeables.
+	&"door_wood_placeable":       "res://scenes/structures/door_wood.tscn",
+	&"door_metal_placeable":      "res://scenes/structures/door_metal.tscn",
+	&"door_reinforced_placeable": "res://scenes/structures/door_reinforced.tscn",
+	&"sign_post_placeable":       "res://scenes/structures/sign_post.tscn",
+	&"painting_placeable":        "res://scenes/structures/painting.tscn",
+	&"mailbox_placeable":         "res://scenes/structures/mailbox.tscn",
+	&"trading_block_placeable":   "res://scenes/structures/trading_block.tscn",
+	&"pet_bowl_placeable":        "res://scenes/structures/pet_bowl.tscn",
+	&"fence_wood_placeable":      "res://scenes/structures/fence_wood.tscn",
+	&"pillar_stone_placeable":    "res://scenes/structures/pillar_stone.tscn",
+	&"banner_blue_placeable":     "res://scenes/structures/banner_blue.tscn",
+	&"carpet_red_placeable":      "res://scenes/structures/carpet_red.tscn",
+	&"window_block_placeable":    "res://scenes/structures/window_block.tscn",
+	&"wallpaper_cream_placeable": "res://scenes/structures/wallpaper_cream.tscn",
 }
 
 const PLACEABLE_DECOR: Dictionary = {
@@ -963,6 +1048,11 @@ func _build_decor_placement(defn: ItemDef, opts: Dictionary) -> Node2D:
 		light.texture = tex
 		light.texture_scale = float(opts.get("scale", 0.6))
 		root.add_child(light)
+		# Phase 9.26 — Tag for light-pollution scoring + brightness cycling.
+		root.add_to_group("light_source")
+		root.set_meta("base_energy", light.energy)
+		root.set_meta("base_scale", light.texture_scale)
+		root.set_meta("brightness_step", 0)
 	return root
 
 
@@ -1093,3 +1183,87 @@ func is_dodging() -> bool:
 
 func is_blocking() -> bool:
 	return _blocking
+
+
+## Phase 8.24 — Canteen refill. Player stands within 1 tile of a water tile
+## and uses the empty canteen → swaps to canteen_full.
+func _use_canteen_empty(player: PlayerController) -> void:
+	var wg := _find_world_gen()
+	if wg == null or not wg.has_method("is_water_at"):
+		EventBus.ui_toast.emit("No water source.", 1.5)
+		return
+	# Sample the 3x3 of tiles around the player to find any water.
+	for dx in [-16, 0, 16]:
+		for dy in [-16, 0, 16]:
+			var probe: Vector2 = player.global_position + Vector2(dx, dy)
+			if wg.call("is_water_at", probe):
+				Inventory.try_remove(&"canteen", 1)
+				Inventory.try_add(&"canteen_full", 1)
+				EventBus.ui_toast.emit("Canteen filled.", 1.5)
+				if AudioBus:
+					AudioBus.play_sfx(&"canteen_fill")
+				return
+	EventBus.ui_toast.emit("Stand next to water.", 1.5)
+
+
+func _use_canteen_full(player: PlayerController) -> void:
+	if Inventory.try_remove(&"canteen_full", 1) <= 0:
+		return
+	Inventory.try_add(&"canteen", 1)
+	var hc := player.get_node_or_null("HealthComponent") as HealthComponent
+	if hc:
+		hc.heal(16, player)
+	# Clear Burn so the canteen does something useful even at full HP.
+	var sef := player.get_node_or_null("StatusEffects") as StatusEffects
+	if sef and sef.has_method("clear"):
+		sef.call("clear", &"burn")
+	EventBus.ui_toast.emit("Refreshed.", 1.5)
+
+
+## Phase 8.15 — Bug net swing. Captures the first critter within a small arc
+## in front of the player. No damage; if it whiffs we still play a tone.
+func _try_bug_net(player: PlayerController, aim_target: Vector2) -> void:
+	_spawn_swing_visual(player, (aim_target - player.global_position).normalized())
+	var tree := get_tree()
+	if tree == null:
+		return
+	for n in tree.get_nodes_in_group("critter"):
+		var c := n as Node2D
+		if c == null:
+			continue
+		if c.global_position.distance_to(aim_target) <= 18.0:
+			Critters.capture(c)
+			if AudioBus:
+				AudioBus.play_sfx(&"net_catch")
+			return
+	if AudioBus:
+		AudioBus.play_sfx(&"net_swing")
+
+
+## Phase 9.23 — egg-hatch helper. Looks for a torch, forge, oven, or shrine
+## within 64 px of the player.
+func _heat_source_nearby(player: PlayerController) -> bool:
+	var tree := get_tree()
+	if tree == null:
+		return false
+	const HEAT_GROUPS: Array[String] = ["furnace", "oven", "light_source", "clearstone_forge", "anvil"]
+	for grp in HEAT_GROUPS:
+		for n in tree.get_nodes_in_group(grp):
+			if n is Node2D and (n as Node2D).global_position.distance_to(player.global_position) < 64.0:
+				return true
+	return false
+
+
+func _hatch_curious_egg() -> void:
+	# Phase 9.23 — random pet from the FAVORITES table.
+	if Pets == null:
+		return
+	var keys: Array = Pets.FAVORITES.keys()
+	if keys.is_empty():
+		return
+	var pet_id: StringName = keys[randi() % keys.size()]
+	var fav: StringName = Pets.FAVORITES.get(pet_id, &"")
+	Pets.tame(pet_id, fav)
+	EventBus.ui_toast.emit("The egg hatches!", 3.0)
+	if AudioBus and AudioBus.has_method("play_sfx"):
+		AudioBus.play_sfx(&"egg_hatch")

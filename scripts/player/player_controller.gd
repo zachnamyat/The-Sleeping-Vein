@@ -349,6 +349,10 @@ func _drop_stash_corpse() -> void:
 			continue
 		if item_id in _STARTER_KEEP_IDS:
 			continue
+		# Phase 9.63 — Resonance-bound items survive death.
+		var defn: ItemDef = ItemRegistry.get_def(item_id)
+		if defn and defn.resonance_bound:
+			continue
 		stash.append({"item_id": String(item_id), "count": count})
 		Inventory.try_remove(item_id, count)
 	if stash.is_empty():

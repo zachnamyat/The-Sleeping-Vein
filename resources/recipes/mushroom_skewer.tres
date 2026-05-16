@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0mushskew"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_mushroom_skewer"
+display_name = "Mushroom Skewer"
+inputs = [{ "item_id": "pale_cap", "count": 1 }, { "item_id": "glow_cap", "count": 1 }, { "item_id": "wood", "count": 1 }]
+outputs = [{ "item_id": "mushroom_skewer", "count": 1 }]
+stations = [&"cooking_pot"]
+skill_xp_grant = 3
+skill_xp_id = &"skill_cooking"

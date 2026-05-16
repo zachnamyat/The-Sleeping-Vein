@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://cwvlrgdg6kxbg"]
+[gd_scene load_steps=3 format=3 uid="uid://cwvlrgdg6kxbg"]
 
 [ext_resource type="Script" path="res://scripts/structures/healing_shrine.gd" id="1_hs"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/healing_shrine.png" id="2_tex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_hs"]
 radius = 10.0
@@ -10,7 +11,7 @@ script = ExtResource("1_hs")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-modulate = Color(0.78, 1, 0.78, 1)
+texture = ExtResource("2_tex")
 
 [node name="GlowLight" type="PointLight2D" parent="."]
 color = Color(0.5, 1, 0.65, 1)

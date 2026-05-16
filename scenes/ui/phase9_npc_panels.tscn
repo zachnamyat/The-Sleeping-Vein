@@ -1,0 +1,48 @@
+[gd_scene load_steps=3 format=3 uid="uid://bphase9panels001"]
+
+[ext_resource type="Script" path="res://scripts/ui/phase9_npc_panels.gd" id="1_p9"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p9"]
+bg_color = Color(0.04, 0.03, 0.03, 0.96)
+border_color = Color(0.85, 0.66, 0.34, 1)
+border_width_left = 2
+border_width_right = 2
+border_width_top = 2
+border_width_bottom = 2
+
+[node name="Phase9NpcPanels" type="CanvasLayer"]
+layer = 75
+script = ExtResource("1_p9")
+
+[node name="Root" type="Panel" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -100.0
+offset_right = 180.0
+offset_bottom = 100.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_p9")
+
+[node name="Title" type="Label" parent="Root"]
+offset_left = 8.0
+offset_top = 4.0
+offset_right = 352.0
+offset_bottom = 18.0
+modulate = Color(0.97, 0.85, 0.5, 1)
+text = "..."
+horizontal_alignment = 1
+
+[node name="Description" type="RichTextLabel" parent="Root"]
+offset_left = 8.0
+offset_top = 20.0
+offset_right = 352.0
+offset_bottom = 40.0
+bbcode_enabled = true
+
+[node name="List" type="VBoxContainer" parent="Root"]
+offset_left = 8.0
+offset_top = 44.0
+offset_right = 352.0
+offset_bottom = 196.0

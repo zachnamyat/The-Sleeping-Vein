@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0honeyloaf"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_honeyed_loaf"
+display_name = "Honeyed Loaf"
+inputs = [{ "item_id": "bread", "count": 1 }, { "item_id": "honey", "count": 1 }]
+outputs = [{ "item_id": "honeyed_loaf", "count": 1 }]
+stations = [&"oven"]
+skill_xp_grant = 4
+skill_xp_id = &"skill_cooking"

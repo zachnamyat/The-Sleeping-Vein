@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bpillar00000000001"]
+
+[ext_resource type="Script" path="res://scripts/structures/decor_static.gd" id="1_dc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/pillar_stone.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pillar"]
+size = Vector2(10, 10)
+
+[node name="PillarStone" type="StaticBody2D" groups=["pillar", "placed_decor"]]
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_dc")
+decor_group = &"pillar"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_pillar")

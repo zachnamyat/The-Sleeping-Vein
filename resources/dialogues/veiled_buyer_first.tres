@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="DialogueTree" load_steps=2 format=3 uid="uid://bdialveiled00001"]
+
+[ext_resource type="Script" path="res://scripts/resources/dialogue.gd" id="1_dlg"]
+
+[resource]
+script = ExtResource("1_dlg")
+entry_node_id = "start"
+nodes = {
+	"start": {
+		"speaker": "The Veiled Buyer",
+		"text": "\"…you have something to sell? I'm not here long.\"",
+		"responses": [
+			{ "label": "(show wares)", "action": "open_shop" },
+			{ "label": "(ask who they are)", "goto": "identity_chat" },
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+	"identity_chat": {
+		"speaker": "The Veiled Buyer",
+		"text": "\"Names are for shop-fronts. I pay better than shop-fronts. Show me what you have.\"",
+		"responses": [
+			{ "label": "(show wares)", "action": "open_shop" },
+			{ "label": "(silently leave)", "goto": "end" },
+		],
+	},
+}

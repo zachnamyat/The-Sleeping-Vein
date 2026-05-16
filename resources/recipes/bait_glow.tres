@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0baitglow"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_bait_glow"
+display_name = "Glow Bait"
+inputs = [{ "item_id": "glow_cap", "count": 1 }, { "item_id": "loambeetle", "count": 1 }]
+outputs = [{ "item_id": "bait_glow", "count": 4 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_fishing"

@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bibrindlepend0001"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/brindle_pendant.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"brindle_pendant"
+display_name = "Brindle's Pendant"
+description = "Pyrenkin flame-charm. Quiet warmth. Gift before Skoldur."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 4
+tier = 3
+rarity = 3
+equipment_slot = &"necklace"
+max_hp_bonus = 8
+lore_text = "A forge-oath, made portable."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md"
+resonance_bound = true

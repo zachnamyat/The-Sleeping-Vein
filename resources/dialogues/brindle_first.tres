@@ -8,17 +8,75 @@ entry_node_id = "start"
 nodes = {
 	"start": {
 		"speaker": "Brindle Quench-of-Coals",
-		"text": "\"Hello, Walker. I felt your hand-glow from a long way off — drew me out from the bench. Need anything forged? Shaleseed up, you're set for tier-two work. I can take coin or barter.\"",
+		"text": "\"Hello, Walker. I felt your hand-glow from a long way off. Need anything forged? I can take coin or barter.\"",
 		"responses": [
-			{ "label": "(browse her wares)", "goto": "shop" },
+			{ "label": "(browse her wares)", "action": "open_shop" },
+			{ "label": "(offer a gift)", "action": "open_gift" },
+			{ "label": "(repair my gear)", "action": "open_repair" },
+			{ "label": "(ask about the forge)", "goto": "forge_chat" },
+			{ "label": "(ask about her accent)", "goto": "accent_offer", "require_friendship": 60 },
+			{ "label": "(pledge a forge-oath)", "goto": "pact_intro", "require_friendship": 140 },
 			{ "label": "(silently nod and step back)", "goto": "end" },
 		],
 	},
-	"shop": {
+	"start_happy": {
 		"speaker": "Brindle Quench-of-Coals",
-		"text": "\"Most of my best pieces won't unlock 'til you bring me an ingot. Mine some shaleseed and come back — I'll show you a real edge.\"",
+		"text": "\"Walker! Your hand-glow's stronger today. Coin? Barter? I've got hot iron and time. Pick something.\"",
 		"responses": [
+			{ "label": "(browse her wares)", "action": "open_shop" },
+			{ "label": "(offer a gift)", "action": "open_gift" },
+			{ "label": "(repair my gear)", "action": "open_repair" },
 			{ "label": "(silently nod)", "goto": "end" },
 		],
+	},
+	"start_sad": {
+		"speaker": "Brindle Quench-of-Coals",
+		"text": "\"…Walker. Forge's cold today. I can still sell what's on the rack. Don't ask me to swing the hammer.\"",
+		"responses": [
+			{ "label": "(browse her wares)", "action": "open_shop" },
+			{ "label": "(offer a gift)", "action": "open_gift" },
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+	"forge_chat": {
+		"speaker": "Brindle Quench-of-Coals",
+		"text": "\"My people kept three forges below. Two went cold a generation back. The Pyrenkin tongue knows fifty words for a flame that won't catch. I'm hoping you'll bring me ore enough to need a new one.\"",
+		"responses": [
+			{ "label": "(thank her)", "goto": "end" },
+		],
+	},
+	"accent_offer": {
+		"speaker": "Brindle Quench-of-Coals",
+		"text": "\"My old speech? The Pyrenkin lilt. I clip my words around Aetherdeep tongues. Want to hear it for a while?\"",
+		"responses": [
+			{ "label": "(yes — speak in Pyrenkin)", "goto": "accent_on", "set_flag": "brindle_pyrenkin_accent" },
+			{ "label": "(no — speak Walker-tongue)", "goto": "accent_off", "clear_flag": "brindle_pyrenkin_accent" },
+		],
+	},
+	"accent_on": {
+		"speaker": "Brindle Quench-of-Coals",
+		"set_flag": "brindle_pyrenkin_accent",
+		"add_friendship": 4,
+		"text": "\"Aye, Walker. Th' tongue stays on now. Stop me when yer ears tire o' it.\"",
+		"responses": [{ "label": "(silently nod)", "goto": "end" }],
+	},
+	"accent_off": {
+		"speaker": "Brindle Quench-of-Coals",
+		"clear_flag": "brindle_pyrenkin_accent",
+		"text": "\"As you like. The lilt is heavy work. Easier in the smelt-pit anyway.\"",
+		"responses": [{ "label": "(silently nod)", "goto": "end" }],
+	},
+	"pact_intro": {
+		"speaker": "Brindle Quench-of-Coals",
+		"text": "\"A forge-oath. Pyrenkin make these — two strangers walk into one forge, both leave kin. There's no romance to it. Just the pact. Are you sure?\"",
+		"responses": [
+			{ "label": "(make the pact)", "goto": "pact_done", "set_flag": "brindle_pact_made", "add_friendship": 30 },
+			{ "label": "(not today)", "goto": "end" },
+		],
+	},
+	"pact_done": {
+		"speaker": "Brindle Quench-of-Coals",
+		"text": "\"Done. The hammer between us is a third witness. You go nowhere alone now, Walker. The Sovereigns know me by my name. They'll learn yours.\"",
+		"responses": [{ "label": "(silently nod)", "goto": "end" }],
 	},
 }

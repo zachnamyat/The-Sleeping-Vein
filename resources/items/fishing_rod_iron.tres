@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0rodiron"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/fishing_rod_iron.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"fishing_rod_iron"
+display_name = "Iron Fishing Rod"
+description = "3s cast, tight hook window. Unlocks tier-3 fish."
+max_stack = 1
+item_type = 1
+tier = 2
+rarity = 2
+weapon_class = &"fishing"

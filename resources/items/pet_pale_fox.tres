@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0petpalefox"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/pet_pale_fox.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"pet_pale_fox"
+display_name = "Pale Fox"
+description = "A pet. Equip in pet slot. Loves Heart Berry."
+max_stack = 1
+item_type = 1
+tier = 1
+rarity = 2
+equipment_slot = &"pet"

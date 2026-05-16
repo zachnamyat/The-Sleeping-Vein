@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bp5muralplc01"]
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bp5muralplc01"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/mural.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"mural_placeable"
 display_name = "Pre-Fight Mural"
 description = "A wall-tile depicting a Sovereign's downfall in fragments of paint. Decorative; some adventurers swear it steadies the breath."
-icon = null
+icon = ExtResource("2_icon")
 max_stack = 5
 item_type = 5
 tier = 1

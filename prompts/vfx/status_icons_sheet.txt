@@ -1,0 +1,39 @@
+SUBJECT: A pixel-art sheet of 9 status-effect icons for the HUD BuffStrip in The Sleeping Vein. Output as a 3×3 grid of 16×16 cells (final 48×48), one icon per cell, magenta background.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges, no anti-aliasing. Each icon is symbolic, readable at 14×14 px on a HUD strip — bold silhouette over restricted palette.
+
+COMPOSITION: A 3-column × 3-row grid of 16×16 cells = total source canvas 48×48 (we will downsample 32× from 1024×1024). Each cell holds a SINGLE symbolic icon centered with 1-2px of magenta padding. Background of every cell is pure magenta (#FF00FF). Each cell has a thin 1-px dark outline on its symbol so it reads against any HUD colour.
+
+Cell layout (row, col → icon):
+  (0,0) BURN: a small orange flame with a darker red core, 3-4 jaggy tongues
+  (0,1) POISON: a green skull-droplet — a teardrop with a tiny skull cutout, vivid green
+  (0,2) COLD: a blue snowflake-cross, 6-point asterisk silhouette, frosty cyan
+  (1,0) FREEZE: a full ice-cube silhouette, blocky pale-blue with a single highlight pixel
+  (1,1) STUN: a gold star cluster (3-4 small overlapping stars), yellow-gold with darker outline
+  (1,2) SLOW: a downward grey arrow with two short slow-mo lines after it (motion-blur dashes)
+  (2,0) BLEED: a red blood-drop with a thin dark outline, sharply tapered top
+  (2,1) CONFUSION: a violet question-mark "?" glyph, slightly tilted
+  (2,2) SHOCK: a bright cyan-white lightning bolt zig-zag
+
+SIZE: Output 1536×1536 source (so each 16×16 cell starts at 512×512). Downsample 32× nearest-neighbor to 48×48 final sheet.
+
+PALETTE:
+  Burn: #c44a1d #f08a2e #f8d167
+  Poison: #1f4022 #3e7a3b #7bbf64 #c0e08a
+  Cold + Freeze: #2c8fb8 #6cd3e1 #cdf7f3
+  Stun: #a87f24 #dab14a #f8e088
+  Slow: #4a443f #857d72 #bdb5a8
+  Bleed: #7a2814 #c44a1d (deep red)
+  Confusion: #3a35a0 #7062d7 #c7a8ee
+  Shock: #cdf7f3 #f0e0ff with 1 bright cyan-white core (#fdfbf0)
+  Pure black (#000000) for thin outlines, only 1px deep.
+  Background: pure magenta (#FF00FF).
+
+LORE: Status icons follow Aphelion-Hymn ideogram tradition — single symbol per malaise. See lore/03_aphelion_hymn.md.
+
+POST-GENERATION:
+- Downsample 32× nearest-neighbor to 48×48 sheet.
+- Crop 9 separate 16×16 PNGs to assets/sprites/vfx/status_<id>.png:
+  burn, poison, cold, freeze, stun, slow, bleed, confusion, shock.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels (other than the question mark glyph in the confusion cell), gradients, ornate detail, multiple symbols per cell.

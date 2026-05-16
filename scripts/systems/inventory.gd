@@ -39,6 +39,60 @@ var _acquired_counter: int = 0
 ## this on open. Auto-deposit + Quick Stack target this when present.
 var last_used_container: Node = null
 
+## Phase 3.27 — Bag-in-bag UX. A `Bag` consumable item, when right-clicked
+## (or kept in the bracelet slot), exposes 6 extra slots accessible without
+## closing the inventory. Each bag has its own contents.
+const BAG_SLOTS_PER_BAG: int = 6
+var open_bag_index: int = -1  ## inventory slot index of the bag currently open, or -1
+var bag_contents: Dictionary = {}  ## { inv_slot_index -> Array of {item_id, count} }
+
+
+## Phase 3.27 — open or close a bag stored at inventory slot index `idx`.
+## Returns whether the bag is now open.
+func toggle_bag_open(idx: int) -> bool:
+	if open_bag_index == idx:
+		open_bag_index = -1
+		return false
+	open_bag_index = idx
+	if not bag_contents.has(idx):
+		bag_contents[idx] = []
+	return true
+
+
+func bag_slot_contents(bag_inv_index: int) -> Array:
+	if not bag_contents.has(bag_inv_index):
+		bag_contents[bag_inv_index] = []
+	return bag_contents[bag_inv_index]
+
+
+func bag_try_add(bag_inv_index: int, item_id: StringName, count: int = 1) -> bool:
+	var bag := bag_slot_contents(bag_inv_index)
+	# Try stacking onto existing entries first.
+	var defn: ItemDef = ItemRegistry.get_def(item_id)
+	var max_stack: int = defn.max_stack if defn else 99
+	var remaining: int = count
+	for entry in bag:
+		if StringName(entry.get("item_id", "")) == item_id:
+			var space: int = max_stack - int(entry.get("count", 0))
+			var add: int = mini(space, remaining)
+			entry["count"] = int(entry["count"]) + add
+			remaining -= add
+			if remaining <= 0:
+				return true
+	if bag.size() >= BAG_SLOTS_PER_BAG:
+		return remaining == 0
+	bag.append({ "item_id": String(item_id), "count": remaining })
+	return true
+
+
+func bag_try_remove(bag_inv_index: int, slot_in_bag: int) -> Dictionary:
+	var bag := bag_slot_contents(bag_inv_index)
+	if slot_in_bag < 0 or slot_in_bag >= bag.size():
+		return {}
+	var out: Dictionary = bag[slot_in_bag]
+	bag.remove_at(slot_in_bag)
+	return out
+
 
 func _ready() -> void:
 	_resize(DEFAULT_ROWS * DEFAULT_COLS)

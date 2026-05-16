@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://b4ja1y1vqthtk"]
+[gd_scene load_steps=3 format=3 uid="uid://b4ja1y1vqthtk"]
 
 [ext_resource type="Script" path="res://scripts/structures/shrine.gd" id="1_sh"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/shrine.png" id="2_tex"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sh"]
 radius = 12.0
@@ -10,7 +11,8 @@ script = ExtResource("1_sh")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-modulate = Color(1, 0.92, 0.55, 1)
+texture = ExtResource("2_tex")
+offset = Vector2(0, -10)
 
 [node name="GlowLight" type="PointLight2D" parent="."]
 color = Color(0.97, 0.85, 0.5, 1)

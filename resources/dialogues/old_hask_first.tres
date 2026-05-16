@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="DialogueTree" load_steps=2 format=3 uid="uid://bdialhask000001"]
+
+[ext_resource type="Script" path="res://scripts/resources/dialogue.gd" id="1_dlg"]
+
+[resource]
+script = ExtResource("1_dlg")
+entry_node_id = "start"
+nodes = {
+	"start": {
+		"speaker": "Old Hask",
+		"text": "\"Aye, Walker. The deep waters listen. I sell rods, bait, and stories of the Drowned Aphelion.\"",
+		"responses": [
+			{ "label": "(browse rods + bait)", "action": "open_shop" },
+			{ "label": "(offer a gift)", "action": "open_gift" },
+			{ "label": "(ask about the Drowned Aphelion)", "goto": "drowned_chat" },
+			{ "label": "(accept a fishhook gift)", "goto": "fishhook_gift", "forbid_flag": "hask_gift_received", "require_friendship": 40 },
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+	"start_happy": {
+		"speaker": "Old Hask",
+		"text": "\"Walker! Tide's high. Good day for it. Browse anything you like.\"",
+		"responses": [
+			{ "label": "(browse rods + bait)", "action": "open_shop" },
+			{ "label": "(silently leave)", "goto": "end" },
+		],
+	},
+	"drowned_chat": {
+		"speaker": "Old Hask",
+		"text": "\"Vol'thaar sleeps below. The Drowned Crown walks the floor. I won't lie to you — if you go down there, take a Coral Veil. And take this — \"",
+		"responses": [
+			{ "label": "(accept a fishhook)", "goto": "fishhook_gift", "forbid_flag": "hask_gift_received" },
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+	"fishhook_gift": {
+		"speaker": "Old Hask",
+		"text": "\"There. A small fishhook. Won't catch a fish — won't catch what Vol'thaar is, either. But it'll catch his attention. Throw it in the water before you call to him.\"",
+		"set_flag": "hask_gift_received",
+		"add_friendship": 18,
+		"responses": [
+			{ "label": "(thank him)", "goto": "end" },
+		],
+	},
+}

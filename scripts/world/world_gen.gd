@@ -696,6 +696,19 @@ func biome_at(world_pos: Vector2) -> BiomeDef:
 	return _pick_biome_for_chunk(chunk)
 
 
+## Phase 8.24 — Returns true if the tile under `world_pos` is a water tile
+## (source id 27 on the floor layer). Used by the Canteen to refill.
+func is_water_at(world_pos: Vector2) -> bool:
+	var fl := _layer(floor_layer_path)
+	if fl == null:
+		return false
+	var tile_coord: Vector2i = Vector2i(
+		int(floor(world_pos.x / float(TILE_PX))),
+		int(floor(world_pos.y / float(TILE_PX))),
+	)
+	return fl.get_cell_source_id(tile_coord) == 27
+
+
 func biome_for_chunk(chunk: Vector2i) -> BiomeDef:
 	return _pick_biome_for_chunk(chunk)
 

@@ -22,8 +22,23 @@ const STARTER_RECIPES: Array[StringName] = [
 	&"craft_pale_cap_stew", &"craft_loam_loaf", &"craft_memory_root_broth",
 	# Phase 7 — respec scroll
 	&"craft_respec_scroll",
-	# Phase 8 — fishing
-	&"craft_fishing_rod_wood",
+	# Phase 8 — fishing + canteen + bug net + first farming placeables
+	&"craft_fishing_rod_wood", &"craft_canteen", &"craft_bug_net",
+	&"craft_pot_planter", &"craft_trellis", &"craft_sapling",
+	&"craft_sprinkler", &"craft_aquarium", &"craft_composter",
+	&"craft_drying_rack", &"craft_beehive", &"craft_fish_trophy", &"craft_net_trap",
+	&"craft_bait_basic", &"craft_bait_glow", &"craft_bait_meat",
+	# Phase 8 seed propagation recipes (loam_bench).
+	&"craft_bloat_oat_seed", &"craft_heart_berry_seed",
+	&"craft_glow_cap_seed", &"craft_bomb_pepper_seed",
+	# Phase 8 composter output recipe (unlocks once composter is placed too,
+	# but is also bench-craftable as a fallback).
+	&"craft_fertilizer",
+	# Phase 8 cooking pot recipes (the rest unlock on cooking_pot place).
+	&"craft_bloat_loaf", &"craft_heart_berry_jam", &"craft_glow_cap_skewer",
+	&"craft_bomb_pepper_chili", &"craft_mushroom_skewer",
+	&"craft_fish_grilled_basic", &"craft_fish_grilled_salt", &"craft_fish_stew",
+	&"craft_xp_tonic", &"craft_combat_tonic", &"craft_crafting_tonic",
 	# Phase 11.7 — heat/cold resist chest pieces
 	&"craft_ember_iron_chestpiece", &"craft_auroric_ice_chestpiece",
 	# Phase 3 extended — sawmill / furnace / glow-tube / coupler placeables
@@ -163,3 +178,20 @@ func _on_item_crafted(item_id: StringName, _count: int) -> void:
 	# Phase 3.57 — Resonance Coupler is a tier-2 cross-material reagent.
 	if item_id == &"clearstone_forge_placeable":
 		unlock(&"craft_station_tier_upgrade")
+	# Phase 8 — placing a Mill or Oven adds their derived recipes.
+	if item_id == &"mill_placeable":
+		unlock(&"craft_flour")
+	if item_id == &"oven_placeable":
+		for rid in [&"craft_bread", &"craft_berry_pie", &"craft_honeyed_loaf", &"craft_mining_focus_loaf"]:
+			unlock(rid)
+	if item_id == &"drying_rack_placeable":
+		unlock(&"craft_dried_meat")
+	if item_id == &"composter_placeable":
+		unlock(&"craft_fertilizer")
+	# Phase 8 — placing a fishing rod hotbar slot doesn't unlock anything but the
+	# fishing_rod_iron / copper unlock when their forge tier is reached, which is
+	# already handled by Crafting starter list above.
+	if item_id == &"clearstone_forge_placeable":
+		for rid in [&"craft_fishing_rod_copper", &"craft_fishing_rod_iron",
+				&"craft_greenhouse", &"craft_mill", &"craft_oven", &"craft_pet_revive_charm"]:
+			unlock(rid)

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0petrevivecharm"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/pet_revive_charm.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"pet_revive_charm"
+display_name = "Pet Revive Charm"
+description = "Consumes to revive a fallen pet at the Loom."
+max_stack = 20
+item_type = 4
+tier = 1
+rarity = 2

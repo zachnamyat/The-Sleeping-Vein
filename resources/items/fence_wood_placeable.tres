@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bifenceplace000001"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/fence_wood.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"fence_wood_placeable"
+display_name = "Wooden Fence"
+description = "A short fence section. Blocks pathing without being a wall."
+icon = ExtResource("2_icon")
+max_stack = 20
+item_type = 5
+tier = 1
+rarity = 0

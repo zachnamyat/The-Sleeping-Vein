@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://ccrystalsprig00001"]
+
+[ext_resource type="Script" path="res://scripts/structures/crystal_sprig.gd" id="1_cs"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/crystal_sprig.png" id="2_tex"]
+
+[node name="CrystalSprig" type="Node2D"]
+script = ExtResource("1_cs")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -4)
+scale = Vector2(0.5, 0.5)

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bibannerplace00001"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/banner_blue.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"banner_blue_placeable"
+display_name = "Aetherdeep Banner"
+description = "Hangs from the ceiling, mostly."
+icon = ExtResource("2_icon")
+max_stack = 10
+item_type = 5
+tier = 1
+rarity = 1

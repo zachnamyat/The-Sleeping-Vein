@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Vesari Rapier (tier-1 fast melee weapon) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, top-down 2D with a slight 3/4 lean. Hard pixel edges, nearest-neighbor scaling, no anti-aliasing.
+
+COMPOSITION: A SINGLE rapier centered with 1-2px of magenta padding on all four sides. Diagonal orientation, blade pointing top-right, slender hilt at bottom-left. Long thin straight blade (1-px wide for most of its length), a small swept basket guard (2-3px), narrow grip wrapped in dark leather, small pommel. The blade is polished bright steel with a single brighter highlight pixel down its centre. Solid magenta background (#FF00FF) keyed out later. NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Restrict to Vesari Necropolis accent ramp for the steel (#4a5159 #7d8492 #b2b9c3 #e8ecf0), with dark leather wrap (#3a2a1c #6b5036) on the grip, single warm gold pixel on the basket guard (#a4854f). Pure magenta (#FF00FF) for keyed background.
+
+LORE: A Vesari duelling rapier salvaged from the Necropolis cathedrals — light, surgical, prized by Echo-Walkers who fight on their feet. The pre-Inversion Vesari smiths beat steel thin enough to whistle in the air. See lore/04_biomes.md#stratum-3--the-vesari-necropolis.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, gradient, sub-pixel detail, watermark, text labels, frame, border, multiple rapiers, isometric perspective.

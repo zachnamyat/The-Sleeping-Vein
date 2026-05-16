@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Verdancy Tome (tier-1 held magic, mana-on-kill + mana regen) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE thick leather-bound book centered with 1-2px of magenta padding on all four sides. Closed book viewed slightly angled (3/4). Square cover (10-11px wide), spine on the left with three small darker stitch-pixels, the cover face has a single green leaf glyph (3-4px) embossed in its centre. Pages visible as a thin yellow-cream stripe at the right edge (1px wide). The book floats slightly with a faint Verdancy green halo behind it (1px outer ring). NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Dark leather for cover (#1c130d #3a2a1c #6b5036), Sunless Verdancy ramp for the leaf glyph + halo (#1f4022 #3e7a3b #7bbf64 #c0e08a), cream page edge (#e3dccf #fdfbf0). Pure magenta (#FF00FF) for keyed background.
+
+LORE: A Verdancy field-grimoire — bound in Vine-Stalker leather, pages of pressed Glow-Shroom paper. Reading it during a kill returns a sliver of mana. See lore/04_biomes.md#stratum-4--the-sunless-verdancy.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, ornate fantasy spellbook, multiple books, isometric.

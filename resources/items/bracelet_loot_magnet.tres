@@ -1,9 +1,11 @@
 [gd_resource type="Resource" script_class="ItemDef" format=3]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bracelet_loot_magnet.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
+icon = ExtResource("2_icon")
 id = &"bracelet_loot_magnet"
 display_name = "Bracelet of the Drawn Thread"
 description = "+150% pickup radius. Items slide to your hand from across a small room."

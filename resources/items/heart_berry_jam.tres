@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0heartjam"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/heart_berry_jam.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"heart_berry_jam"
+display_name = "Heart Berry Jam"
+description = "Restores 40 HP. Buff: regen 1 HP/s for 3 min."
+max_stack = 20
+item_type = 4
+tier = 1
+rarity = 1
+heal_amount = 40
+buff_id = &"buff_heart_regen"
+buff_duration_seconds = 180.0

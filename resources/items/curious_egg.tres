@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bicuriousegg00001"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/curious_egg.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"curious_egg"
+display_name = "Curious Egg"
+description = "Faintly warm. Hatches when carried near a heat source for long enough."
+icon = ExtResource("2_icon")
+max_stack = 4
+item_type = 4
+tier = 2
+rarity = 2
+lore_text = "Whatever is inside knows you already."

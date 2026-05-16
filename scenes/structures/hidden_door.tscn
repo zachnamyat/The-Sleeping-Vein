@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://cj3agbhe4yo0w"]
+[gd_scene load_steps=3 format=3 uid="uid://cj3agbhe4yo0w"]
 
 [ext_resource type="Script" path="res://scripts/structures/hidden_door.gd" id="1_hd"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/hidden_door.png" id="2_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hd_body"]
 size = Vector2(16, 16)
@@ -13,11 +14,15 @@ script = ExtResource("1_hd")
 
 [node name="WallSprite" type="Sprite2D" parent="."]
 texture_filter = 1
-modulate = Color(0.55, 0.5, 0.45, 1)
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)
+modulate = Color(0.6, 0.55, 0.5, 1)
 
 [node name="PassageSprite" type="Sprite2D" parent="."]
 texture_filter = 1
-modulate = Color(0.78, 0.65, 0.4, 1)
+texture = ExtResource("2_tex")
+offset = Vector2(0, -8)
+modulate = Color(1, 0.92, 0.7, 1)
 visible = false
 
 [node name="WallBody" type="StaticBody2D" parent="."]

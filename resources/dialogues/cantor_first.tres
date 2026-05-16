@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="DialogueTree" load_steps=2 format=3 uid="uid://bdialcantor0001"]
+
+[ext_resource type="Script" path="res://scripts/resources/dialogue.gd" id="1_dlg"]
+
+[resource]
+script = ExtResource("1_dlg")
+entry_node_id = "start"
+nodes = {
+	"start": {
+		"speaker": "The Cantor of Five Bells",
+		"text": "\"Walker. The bells in my chest count your respawns. Don't mistake that for judgment.\"",
+		"responses": [
+			{ "label": "(browse her wares)", "action": "open_shop" },
+			{ "label": "(offer a gift)", "action": "open_gift" },
+			{ "label": "(travel)", "action": "open_teleport" },
+			{ "label": "(ask about the bells)", "goto": "bells_chat" },
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+	"start_sad": {
+		"speaker": "The Cantor of Five Bells",
+		"text": "\"Walker. The sun grows dim because of mercies like yours. The bells… are quiet today.\"",
+		"event_flag": "many_deaths",
+		"responses": [
+			{ "label": "(browse her wares)", "action": "open_shop" },
+			{ "label": "(silently leave)", "goto": "end" },
+		],
+	},
+	"bells_chat": {
+		"speaker": "The Cantor of Five Bells",
+		"text": "\"Five bells. The fifth I never quite remember. Your slivers shake them.\"",
+		"responses": [
+			{ "label": "(silently nod)", "goto": "end" },
+		],
+	},
+}

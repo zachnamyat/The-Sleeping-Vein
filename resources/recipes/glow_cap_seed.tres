@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0glowcapseed"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_glow_cap_seed"
+display_name = "Glow Cap Spore (3)"
+inputs = [{ "item_id": "glow_cap", "count": 1 }]
+outputs = [{ "item_id": "glow_cap_seed", "count": 3 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 1
+skill_xp_id = &"skill_gardening"

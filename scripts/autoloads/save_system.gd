@@ -18,7 +18,12 @@ const SAVE_ROOT: String = "user://saves/"
 ##        empty exploration log; the map just appears fresh.
 ##   v5 — Phase 7: allocated_talent_nodes, talent_presets, equipped_affixes,
 ##        SkillChallenges.mastery_unlocked.
-const SAVE_VERSION: int = 5
+##   v6 — Phase 8: cooking_discovered_recipes, fishing_trophies, pets dict,
+##        and per-Aquarium/Beehive/NetTrap/FishTrophy dump_state.
+##   v7 — Phase 9: npc_lifecycle (friendship, mood, reputation, daily quests,
+##        flagged branches), housing.beds_to_npc, per-Sign/Mailbox/TradingBlock/
+##        PetBowl/Painting dump_state.
+const SAVE_VERSION: int = 7
 
 signal save_started(slot_name: String)
 signal save_completed(slot_name: String)
@@ -168,6 +173,15 @@ func _dump_game_state() -> Dictionary:
 		"explored_chunks": GameState.explored_chunks.duplicate(),
 		"respawn_point_x": GameState.respawn_point.x,
 		"respawn_point_y": GameState.respawn_point.y,
+		# Phase 8 v6.
+		"cooking_discovered": _stringify_keys(CookingSystem._discovered) if CookingSystem else {},
+		"fishing_trophies": _stringify_keys(FishingSystem.trophies) if FishingSystem else {},
+		"pets": _stringify_pets(),
+		"phase8_structures": _dump_phase8_structures(),
+		# Phase 9 v7.
+		"npc_lifecycle": NpcLifecycle.dump_state() if NpcLifecycle else {},
+		"housing": Housing.dump_state() if Housing else {},
+		"phase9_structures": _dump_phase9_structures(),
 	}
 
 
@@ -195,6 +209,19 @@ func _restore_game_state(state: Dictionary) -> void:
 	_restore_inventory(state.get("inventory", {}))
 	_restore_skills(state.get("skills", {}))
 	_pending_chests_restore = state.get("chests", [])
+	# Phase 8 v6.
+	if CookingSystem:
+		CookingSystem._discovered = _stringname_keys(state.get("cooking_discovered", {}))
+	if FishingSystem:
+		FishingSystem.trophies = _stringname_keys(state.get("fishing_trophies", {}))
+	_restore_pets(state.get("pets", {}))
+	_pending_phase8_structures = state.get("phase8_structures", [])
+	# Phase 9 v7.
+	if NpcLifecycle:
+		NpcLifecycle.restore_state(state.get("npc_lifecycle", {}))
+	if Housing:
+		Housing.restore_state(state.get("housing", {}))
+	_pending_phase9_structures = state.get("phase9_structures", [])
 	# Player restore is signal-driven: when SaveSystem holds pending state, it
 	# subscribes once to EventBus.player_spawned. The next player to spawn
 	# (either the existing one re-detected, or a fresh one after scene change)
@@ -414,6 +441,102 @@ func _stringify_equipped_affixes() -> Dictionary:
 		for k in affix.keys():
 			clean[String(k)] = affix[k]
 		out[String(slot)] = clean
+	return out
+
+
+func _stringify_pets() -> Dictionary:
+	var out: Dictionary = {}
+	if Pets == null:
+		return out
+	for k in Pets.pets.keys():
+		var rec: Dictionary = Pets.pets[k]
+		out[String(k)] = {
+			"xp": int(rec.get("xp", 0)),
+			"level": int(rec.get("level", 1)),
+			"mood": int(rec.get("mood", 50)),
+			"dead": bool(rec.get("dead", false)),
+		}
+	return out
+
+
+func _restore_pets(d: Dictionary) -> void:
+	if Pets == null:
+		return
+	Pets.pets.clear()
+	for k in d.keys():
+		var src: Dictionary = d[k]
+		Pets.pets[StringName(String(k))] = {
+			"xp": int(src.get("xp", 0)),
+			"level": int(src.get("level", 1)),
+			"mood": int(src.get("mood", 50)),
+			"dead": bool(src.get("dead", false)),
+		}
+
+
+## Phase 8 — per-structure persistence for aquariums / beehives / net traps /
+## fish trophies. Each contributing class implements dump_state() + restore_state().
+var _pending_phase8_structures: Array = []
+
+
+func _dump_phase8_structures() -> Array:
+	var out: Array = []
+	var tree := get_tree()
+	if tree == null:
+		return out
+	for group in [&"aquarium", &"beehive", &"net_trap", &"fish_trophy"]:
+		for n in tree.get_nodes_in_group(group):
+			if not is_instance_valid(n):
+				continue
+			if not n.has_method("dump_state"):
+				continue
+			var node := n as Node2D
+			if node == null:
+				continue
+			out.append({
+				"group": String(group),
+				"x": node.global_position.x,
+				"y": node.global_position.y,
+				"state": node.call("dump_state"),
+			})
+	return out
+
+
+func consume_pending_phase8_structures() -> Array:
+	var out: Array = _pending_phase8_structures.duplicate(true)
+	_pending_phase8_structures = []
+	return out
+
+
+# Phase 9 — Sign / Painting / Mailbox / TradingBlock / PetBowl persistence.
+var _pending_phase9_structures: Array = []
+
+
+func _dump_phase9_structures() -> Array:
+	var out: Array = []
+	var tree := get_tree()
+	if tree == null:
+		return out
+	for group in [&"sign", &"painting", &"mailbox", &"trading_block", &"pet_bowl"]:
+		for n in tree.get_nodes_in_group(group):
+			if not is_instance_valid(n):
+				continue
+			if not n.has_method("dump_state"):
+				continue
+			var node := n as Node2D
+			if node == null:
+				continue
+			out.append({
+				"group": String(group),
+				"x": node.global_position.x,
+				"y": node.global_position.y,
+				"state": node.call("dump_state"),
+			})
+	return out
+
+
+func consume_pending_phase9_structures() -> Array:
+	var out: Array = _pending_phase9_structures.duplicate(true)
+	_pending_phase9_structures = []
 	return out
 
 

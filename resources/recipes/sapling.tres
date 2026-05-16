@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0sapling"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_sapling"
+display_name = "Sapling"
+inputs = [{ "item_id": "wood", "count": 2 }, { "item_id": "heartwood", "count": 1 }]
+outputs = [{ "item_id": "sapling_placeable", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_gardening"

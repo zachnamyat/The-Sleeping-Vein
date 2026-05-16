@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0greenhousepl"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/greenhouse_placeable.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"greenhouse_placeable"
+display_name = "Greenhouse"
+description = "Crops within 4 tiles grow 60% faster."
+max_stack = 99
+item_type = 5
+tier = 2
+rarity = 2
+placeable_layer = &"structures"

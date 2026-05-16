@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://bdoorreinforced0001"]
+
+[ext_resource type="Script" path="res://scripts/structures/door.gd" id="1_door"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/door_reinforced.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door"]
+size = Vector2(16, 16)
+
+[node name="DoorReinforced" type="Area2D" groups=["door", "door_tier_3"]]
+script = ExtResource("1_door")
+tier = 3
+auto_open = false
+closed_tex = ExtResource("2_tex")
+open_tex = ExtResource("2_tex")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -4)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_door")

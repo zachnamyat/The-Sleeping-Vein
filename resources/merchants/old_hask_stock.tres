@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="MerchantInventory" load_steps=2 format=3 uid="uid://merchstock0hask0001"]
+
+[ext_resource type="Script" path="res://scripts/resources/merchant_inventory.gd" id="1_mi"]
+
+[resource]
+script = ExtResource("1_mi")
+sell_items = [
+	{ "item_id": "fishing_rod_wood",   "price": 40,  "stock": 2 },
+	{ "item_id": "fishing_rod_copper", "price": 120, "stock": 1 },
+	{ "item_id": "fishing_rod_iron",   "price": 320, "stock": 1 },
+	{ "item_id": "bait_basic", "price": 4, "stock": -1 },
+	{ "item_id": "bait_glow",  "price": 12, "stock": 8 },
+	{ "item_id": "bait_meat",  "price": 14, "stock": 8 },
+	{ "item_id": "canteen",    "price": 24, "stock": 3 },
+]
+buy_prices = {
+	"cave_guppy": 3,
+	"glow_eel": 8,
+	"glass_pike": 6,
+	"deep_pike": 22,
+	"drowned_pearl": 30,
+	"coral_fragment": 5,
+}
+restock_minutes = 35.0
+discount_thresholds = [
+	{ "mood": 75, "percent": 12.0 },
+	{ "mood": 40, "percent": 0.0 },
+]
+preferred_biome = &"biome_drowned_aphelion"
+theme_music = &"theme_old_hask"

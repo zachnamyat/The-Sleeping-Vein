@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://btilledsoil00001"]
+
+[ext_resource type="Script" path="res://scripts/farming/tilled_soil.gd" id="1_soil"]
+
+[sub_resource type="Gradient" id="Gradient_soil"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0.6)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_soil"]
+gradient = SubResource("Gradient_soil")
+width = 14
+height = 14
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="TilledSoil" type="Area2D" groups=["tilled_soil"]]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_soil")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = SubResource("GradientTexture2D_soil")
+modulate = Color(0.32, 0.22, 0.12, 1)

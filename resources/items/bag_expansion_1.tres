@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bibagexp10000001"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/ammo/arrow_wood.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bag_expansion_1"
+display_name = "Bag Expansion I"
+description = "Adds 10 inventory slots when used. (One per Walker.)"
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 4
+tier = 2
+rarity = 2

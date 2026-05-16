@@ -1,13 +1,14 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cw6f25i3eivbg"]
+[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://cw6f25i3eivbg"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/healing_shrine.png" id="2_icon"]
 
 [resource]
 script = ExtResource("1_def")
 id = &"healing_shrine_placeable"
 display_name = "Loom-Threaded Shrine"
 description = "A floor disc threaded with gold cord. Standing on it slowly knits your wounds, but the cord frays — moves use it up."
-icon = null
+icon = ExtResource("2_icon")
 max_stack = 5
 item_type = 5
 tier = 1

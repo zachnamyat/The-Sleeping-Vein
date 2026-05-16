@@ -1,0 +1,13 @@
+SUBJECT: A pixel-art inventory icon for the Lantern (placeable light source, tier-1) in The Sleeping Vein. Single 16×16 icon, 3/4 lean.
+
+STYLE: (see prompts/_STYLE.txt) 16-bit pixel art, hard pixel edges.
+
+COMPOSITION: A SINGLE small floor-standing lantern centered with 1-2px of magenta padding on all four sides. A short iron-frame box (5-6px wide × 8px tall) with a small dome cap on top, two yellow-cream "glass panel" pixels glowing in the centre. A tiny ring handle perches on the dome (1px arch). The lantern sits on a small dark base (1px line). The flame at its centre is warm yellow-orange (1 brightest pixel). NO grid, NO labels.
+
+SIZE: Output 1024×1024 source. Downsample 64× nearest-neighbor to 16×16 final.
+
+PALETTE: Iron frame (#1c130d #3a2a1c #4a5159 #7d8492), warm flame (#a87f24 #dab14a #f8e088), pale glass (#fdfbf0). Pure magenta (#FF00FF) for keyed background.
+
+LORE: A standing oil-lantern, more reliable than a torch. Doesn't burn out between Beats. See lore/04_biomes.md.
+
+ANTI-PROMPT: photorealism, soft shadows, blur, anti-aliasing, watermark, text labels, multiple lanterns, modern hurricane lamp, isometric, ornate.

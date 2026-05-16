@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0bloatoatseed"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_bloat_oat_seed"
+display_name = "Bloat Oat Spore (3)"
+inputs = [{ "item_id": "bloat_oat", "count": 1 }]
+outputs = [{ "item_id": "bloat_oat_seed", "count": 3 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 1
+skill_xp_id = &"skill_gardening"

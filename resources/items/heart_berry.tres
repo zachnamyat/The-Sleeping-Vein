@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0heartberry"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/heart_berry.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"heart_berry"
+display_name = "Heart Berry"
+description = "Restores 14 HP. Multi-harvest bush; eat for a soft glow."
+max_stack = 99
+item_type = 4
+tier = 0
+rarity = 0
+heal_amount = 14

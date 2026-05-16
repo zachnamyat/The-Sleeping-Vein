@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://boy4s0bjsrpwa"]
+[gd_scene load_steps=3 format=3 uid="uid://boy4s0bjsrpwa"]
 
 [ext_resource type="Script" path="res://scripts/structures/spike_trap.gd" id="1_st"]
+[ext_resource type="Texture2D" path="res://assets/sprites/structures/spike_trap.png" id="2_tex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_st"]
 size = Vector2(14, 14)
@@ -10,7 +11,7 @@ script = ExtResource("1_st")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-modulate = Color(0.7, 0.7, 0.78, 1)
+texture = ExtResource("2_tex")
 
 [node name="InteractShape" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_st")
