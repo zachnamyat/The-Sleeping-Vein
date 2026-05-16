@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://isv4ujpl36oa"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bow.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bow_multishot"
+display_name = "Triplebow"
+description = "Three arrows per draw, in a tight fan."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 2
+tier = 2
+rarity = 3
+base_damage = 5
+damage_type = &"physical"
+attack_cooldown_seconds = 0.7
+weapon_class = &"ranged_bow"
+weapon_subclass = &"bow"
+ammo_id = &"arrow_wood"
+projectile_speed = 260.0
+projectile_count = 3
+projectile_arc_degrees = 12.0
+two_handed = true

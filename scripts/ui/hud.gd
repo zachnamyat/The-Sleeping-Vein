@@ -53,6 +53,21 @@ func _ready() -> void:
 	_apply_hud_scale_opacity()
 	if Settings:
 		Settings.value_changed.connect(_on_settings_value_changed)
+	# Phase 6.57 / 2.46 — wire AmmoLabel to the active hotbar so it can listen
+	# for selection changes. Done at end of frame so the hotbar group is filled.
+	call_deferred("_wire_ammo_label")
+
+
+func _wire_ammo_label() -> void:
+	var hotbar_nodes := get_tree().get_nodes_in_group("hotbar")
+	if hotbar_nodes.is_empty():
+		return
+	var ammo := get_node_or_null("AmmoLabel")
+	if ammo == null:
+		return
+	ammo.set("hotbar_path", ammo.get_path_to(hotbar_nodes[0]))
+	if ammo.has_method("_refresh"):
+		ammo.call("_refresh")
 
 
 func _on_settings_value_changed(key: String, _value: Variant) -> void:
@@ -104,39 +119,47 @@ func _apply_pixel_sizes() -> void:
 		mp_bar.custom_minimum_size = Vector2(56, 5)
 		mp_bar.show_percentage = false
 	if sliver_label:
-		# Widen enough for "Slivers: 70000" at the 8x8 BMFont (clip-text default
-		# is false but tight bounds would hide the number under the Compass).
+		# Width holds "Slivers: 70000" at m5x7 size 16. Widened from the legacy
+		# 116×10 to 140×18 so the new font doesn't clip the trailing digit.
 		sliver_label.position = Vector2(0, 0)
-		sliver_label.size = Vector2(116, 10)
-		sliver_label.add_theme_font_size_override("font_size", 8)
+		sliver_label.size = Vector2(140, 18)
+		sliver_label.add_theme_font_size_override("font_size", 16)
 		sliver_label.clip_text = false
-	# Top-right container — pin to right edge of viewport. Width needs to fit
-	# the slivers label plus the compass widget below it.
+	# Top-right container — pin to right edge of viewport. Layout strip:
+	#   y=0..18    Slivers
+	#   y=24..50   Compass widget (small dial)
+	#   (y=32..88  Minimap, anchored independently to the right edge)
+	#   y=92..110  CompassDistance — sits BELOW the minimap so no overlap
+	#   y=112..130 TimeLabel       — Aphelion-phase readout
 	var top_right := $TopRight as Control
 	if top_right:
 		top_right.anchor_left = 1.0
 		top_right.anchor_right = 1.0
-		top_right.offset_left = -120.0
+		top_right.offset_left = -144.0
 		top_right.offset_top = 4.0
 		top_right.offset_right = -4.0
-		top_right.offset_bottom = 80.0
-	# Compass distance label
-	var compass_distance := $TopRight/CompassDistance as Label
-	if compass_distance:
-		compass_distance.position = Vector2(0, 46)
-		compass_distance.size = Vector2(116, 8)
-		compass_distance.add_theme_font_size_override("font_size", 6)
+		top_right.offset_bottom = 140.0
+	# Compass widget — pinned to the LEFT of the strip so it doesn't sit
+	# under the minimap. Small enough to read but not dominate.
 	var compass := $TopRight/Compass as Control
 	if compass:
-		compass.position = Vector2(94, 12)
+		compass.position = Vector2(0, 24)
 		compass.size = Vector2(22, 22)
 		if compass.has_method("set"):
 			compass.set("radius_pixels", 9.0)
-	# Time-of-day phase label sits below the compass distance.
+	# Compass distance label sits below the 56-tall minimap (which starts at
+	# y=32 within the strip → ends at y=88). Push the label to y=92 so the
+	# Aphelion-gold text never overlaps the chunk dots.
+	var compass_distance := $TopRight/CompassDistance as Label
+	if compass_distance:
+		compass_distance.position = Vector2(0, 92)
+		compass_distance.size = Vector2(140, 18)
+		compass_distance.add_theme_font_size_override("font_size", 16)
+	# Time-of-day phase label sits one line under CompassDistance.
 	if time_label:
-		time_label.position = Vector2(0, 58)
-		time_label.size = Vector2(116, 10)
-		time_label.add_theme_font_size_override("font_size", 6)
+		time_label.position = Vector2(0, 112)
+		time_label.size = Vector2(140, 18)
+		time_label.add_theme_font_size_override("font_size", 16)
 	# Phase 4.31 — coord readout. Anchored bottom-right of the viewport so the
 	# 96-tall minimap widget at top-right doesn't overlap it. Kept as a
 	# top-level HUD child (not inside TopRight) for that reason.
@@ -147,20 +170,20 @@ func _apply_pixel_sizes() -> void:
 		coord_label.anchor_right = 1.0
 		coord_label.anchor_top = 1.0
 		coord_label.anchor_bottom = 1.0
-		coord_label.offset_left = -132.0
+		coord_label.offset_left = -160.0
 		coord_label.offset_right = -4.0
-		coord_label.offset_top = -50.0
-		coord_label.offset_bottom = -40.0
-		coord_label.add_theme_font_size_override("font_size", 6)
+		coord_label.offset_top = -56.0
+		coord_label.offset_bottom = -38.0
+		coord_label.add_theme_font_size_override("font_size", 16)
 		coord_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		coord_label.modulate = Color(0.7, 0.65, 0.55, 0.9)
 		coord_label.text = "@ 0,0 (0,0)"
 		add_child(coord_label)
-	# Center toast labels — small, centered horizontally
+	# Center toast labels — body-size so they read cleanly at the m5x7 design grid.
 	if toast_label:
-		toast_label.add_theme_font_size_override("font_size", 6)
+		toast_label.add_theme_font_size_override("font_size", 16)
 	if skill_toast:
-		skill_toast.add_theme_font_size_override("font_size", 6)
+		skill_toast.add_theme_font_size_override("font_size", 16)
 
 
 func _process(delta: float) -> void:

@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://e5sfmsnmt5ma"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bow.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"crossbow"
+display_name = "Hunter's Crossbow"
+description = "Steady-shot ranged. Slower than a bow but harder hitting."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 2
+tier = 1
+rarity = 1
+base_damage = 12
+damage_type = &"physical"
+attack_cooldown_seconds = 0.85
+weapon_class = &"ranged_crossbow"
+weapon_subclass = &"crossbow"
+ammo_id = &"bolt_iron"
+projectile_speed = 320.0
+projectile_pierce = 1
+reload_seconds = 0.6
+two_handed = true

@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://b1masckod2x5a"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_greatsword"
+display_name = "Stoneslough Greatsword"
+inputs = [{ "item_id": "shaleseed_ingot", "count": 8 }, { "item_id": "engorged_stone_shell", "count": 1 }]
+outputs = [{ "item_id": "greatsword", "count": 1 }]
+stations = [&"clearstone_forge"]
+skill_xp_grant = 10
+skill_xp_id = &"skill_crafting"
+unlock_on_boss_kill = [&"boss_glaurem"]

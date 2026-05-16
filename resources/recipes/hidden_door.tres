@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://wbeo5ddklm0g"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_hidden_door"
+display_name = "Hidden Door (Loam)"
+inputs = [{ "item_id": "loam_wall", "count": 1 }, { "item_id": "wood", "count": 3 }]
+outputs = [{ "item_id": "hidden_door_placeable", "count": 1 }]
+stations = [&"sawmill"]
+skill_xp_grant = 4
+skill_xp_id = &"skill_crafting"
+description = "Phase 5.23 — passable from either side once approached; looks like wall otherwise."

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://lqu5pl6o87cy"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"shrine_placeable"
+display_name = "Aphelion Shrine"
+description = "A small cairn of warm stone. Pray at it once per beat to gain a brief blessing — Vigil, Hearth, or Resolve, depending on the world's mood."
+icon = null
+max_stack = 5
+item_type = 5
+tier = 1
+rarity = 2
+placeable_layer = &"structures"
+lore_text = "Even mute, a Walker can bend a knee."
+lore_ref = "lore/01_cosmology_and_universe.md"

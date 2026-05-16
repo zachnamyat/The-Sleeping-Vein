@@ -27,7 +27,7 @@ func _ready() -> void:
 	if hint:
 		hint.text = _short_hint(slot_id)
 		hint.add_theme_color_override("font_color", hint_color)
-		hint.add_theme_font_size_override("font_size", 6)
+		hint.add_theme_font_size_override("font_size", 16)
 
 
 func _refresh() -> void:

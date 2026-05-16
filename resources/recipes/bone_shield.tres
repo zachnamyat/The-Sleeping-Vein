@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://dvn6p1uu348cy"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_bone_shield"
+display_name = "Bone Shield"
+inputs = [{ "item_id": "engorged_stone_shell", "count": 2 }, { "item_id": "wood", "count": 4 }]
+outputs = [{ "item_id": "bone_shield", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 4
+skill_xp_id = &"skill_crafting"
+unlock_on_boss_kill = [&"boss_glaurem"]

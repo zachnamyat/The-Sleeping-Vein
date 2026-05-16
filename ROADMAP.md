@@ -167,7 +167,9 @@
 - 5.11 First lore tablet placement system (collect → compendium entry)
 - 5.12 Compendium UI shell (bestiary + tablets tabs)
 
-**Exit criterion.** Defeat Glaur-em. Aelstren appears at the Anchor with no prompt. Stone-Father's Pulse inserts into the Loom. Glasswright Reaches descent corridor unlocks.
+**Exit criterion.** Defeat Glaur-em. Aelstren appears at the Anchor with no prompt. Stone-Father's Pulse inserts into the Loom. Glasswright Reaches descent corridor unlocks. ✅ Met (2026-05-15) — Glaur-em fight wired with arena gate-lock + procedural attack telegraph + 240s enrage timer + defeat fanfare (camera shake + screen pulse + hit-pause + AudioBus sting); drops Pulse + Engorged Stone-Shell (×4) + Sovereign Name-Fragment + Glaur-em Trinket. BossDirector.respawn_boss enables BossAltar re-fight. NpcDirector restructured for cinematic arrival (letterbox dip + paper-bird flutter from Loom). CompendiumPanel grew Relics + Titles tabs alongside Bestiary + Tablets.
+
+**Phase 5 full backlog closed (2026-05-15 full-closure pass).** 5.13–5.40 implemented in full. New autoloads: TutorialDirector (5.15 first-step skippable hint queue, persists in Settings), BarkSystem (5.34 per-NPC × per-boss reaction lines), TitleSystem (5.19 Hunter's Crown + 10 future titles tracked through `unlocked_compendium` prefix). New structures: bed (5.13 respawn-bind + sleep+skip_time), shrine (5.14 phase-dependent Vigil/Hearth/Resolve/Mote buff), healing_shrine (5.22 charge-restocked regen tile), spike_trap (5.21 cooldown-gated AOE), hidden_door (5.23 wall-becomes-passage), mural (5.35 lore-flavor proximity toast), trial_chamber (5.31 wave-spawn + chest reward), glaurem_carving (5.33 carved-floor decal on Glaur-em death). New FX: boss_telegraph (5.28), paper_bird (5.32+5.36). New UI: boss_intro_crawl (5.39 text-crawl), boss_prep_panel (5.38 perimeter recommendation popup), opening_sequence (5.40 once-per-world title sequence; skippable, persists in Settings). Migration tickets reassigned to Phase 5 also shipped: 2.34 photograph (Mote-Lens scan tool; bestiary unlock without kill), 3.40 recipe_scroll (consumable; random unrevealed-recipe roll; refund if none), 3.70 glaurem_trinket (necklace-slot), 3.72 recipe-scroll drops from treasure chests (22% / 45% if key-locked). Tests: `test_phase5_systems.gd` (8 cases). **74/74 GUT pass. Zero Phase 5 backlog remains.**
 
 ---
 
@@ -189,7 +191,7 @@
 - 6.12 Armor calculation (final damage formula)
 - 6.13 Buff/debuff icon strip on HUD
 
-**Exit criterion.** Swap weapons. Apply burn to a Stone-Hopper → sees DoT ticks. Cold-slow a Mossback. Crit hits show distinct number color.
+**Exit criterion.** Swap weapons. Apply burn to a Stone-Hopper → sees DoT ticks. Cold-slow a Mossback. Crit hits show distinct number color. ✅ Met (2026-05-15) — ranged (bow / crossbow / heavy-crossbow / gun) + magic (staff / wand / tome) + summon classes wired through `player_combat`; melee gained dodge roll (Space, 0.32s i-frames + 1s cd), charge attack (hold attack_primary on chargeable weapons), heavy attack (RMB on heavy_damage_multiplier > 1), special attacks (whirlwind / thrust / whip pull / shield bash / rage burst), dual-wield alternation, multi-shot fan + pierce, aim-cone scatter, backstab bonus, boomerang return, throwable knife consumable, move-while-attack penalty. Status palette: burn / poison (4dps + -75% healing) / cold / freeze / stun / bleed (HP-scaling) / confusion (input flip) / slow — applied via `StatusEffects` with optional `magnitude`, resist-gated through `HealthComponent.get_resistance`. New autoload `PlayerStats` aggregates equipment + talents (crit chance / crit damage / lifesteal / manasteel / thorns / armor / KB resist / aim cone / cooldown reduction / mana regen / mining speed / mining pierce / per-element resists). `MobDef` gained `weaknesses` + `stagger_threshold` + `knockback_resistance`; `HealthComponent` consults weakness multiplier and emits `staggered`. Bosses gained `phase_patterns` array driving `BossAttackCycler` — Glaur-em ships phase1 (slam / split / stoneburst) + phase2 (double-slam / dash). HUD: rebuilt BuffStrip with timed icons, AmmoLabel under hotbar, opt-in DPS meter, character-level StatusOverlay drawing burn / poison / cold / freeze / bleed / confusion / stun procedurally, AoE indicator + lightning arc spawners. AudioBus: positional 2D pool, occlusion drop on long-distance hits, adaptive music layer fading on `combat_intensity_changed`, damage-type-keyed hit SFX. New light-tier items lantern → oil_lamp → ward_lantern (2.49). 90/90 GUT pass with `test_phase6_combat.gd` (16 cases). **Zero Phase 6 backlog remains.** Manual checklist at `docs/PHASE_6_TEST_CHECKLIST.md`.
 
 ---
 
@@ -361,7 +363,7 @@
 
 ## Phase 15 — Polish & Parity Gap Closure
 
-**Goal.** Visit every [VERIFY] in `docs/reference/core-keeper-mechanics.md` and either confirm or correct.
+**Goal.** Visit every [VERIFY] in `docs/reference/core-keeper-mechanics.md` and either confirm or correct, and re-art every placeholder asset to ship quality.
 
 - 15.1 Run a full content audit vs the parity reference doc
 - 15.2 Close [VERIFY] items one by one (test against CK or accept documented value)
@@ -374,7 +376,19 @@
 - 15.9 Localization scaffolding (Old Vesari "language" already conceptual)
 - 15.10 Accessibility pass (colorblind palette toggles, text size, key remap)
 
-**Exit criterion.** Mechanical-parity-complete demo build. Could plausibly be released as a "Core Keeper-like with original lore."
+### Asset polish gate (15.97–15.101)
+
+Every sprite, tile, icon, structure, mob, boss, and VFX in the 0.1.x-dev build is a documented Gemini-MCP **placeholder** that landed `status: "final"` in the manifest when first usable — NOT at ship quality. The Phase 1.12 atlas, for example, was generated in one 256×256 shot and Gemini smeared across cell boundaries. Most structure sprites in Phase 5 (bed, shrine, healing_shrine, spike_trap, hidden_door, mural, trial_chamber) shipped with `null` Sprite2D textures.
+
+This is a **release-blocker** for shipping. The polish ticket cluster is:
+
+- 15.97  All 9 biome wall/floor tile atlases re-art — per-row generation (1024×64 per row) instead of single-shot 256×256.
+- 15.98  All item icons (tools, weapons, armor, materials, relics, key items) — single-item Gemini calls against the locked palette.
+- 15.99  All structure sprites — every placeable in `resources/items/*_placeable.tres` gets a real texture.
+- 15.100 All mob + boss sprites — idle, walk, hit-flash, death, attack-pattern animations.
+- 15.101 VFX, particles, UI panels, font review.
+
+**Exit criterion.** Mechanical-parity-complete demo build with no `status: "needed"` manifest entries and no `null` Sprite2D textures anywhere in `scenes/`. Could plausibly be released as a "Core Keeper-like with original lore." Asset-polish gate must pass before pre-release content freeze (15.92).
 
 ---
 

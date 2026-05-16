@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://66nvwddogtpo"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/torch.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"oil_lamp"
+display_name = "Oil Lamp"
+description = "Larger placeable light. Steady, golden radius."
+icon = ExtResource("2_icon")
+max_stack = 99
+item_type = 5
+tier = 2
+rarity = 2
+light_radius_pixels = 132.0
+light_color = Color(1.0, 0.92, 0.66, 1.0)
+light_energy = 1.4

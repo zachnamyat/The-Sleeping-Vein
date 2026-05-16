@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bp5muralscn01"]
+
+[ext_resource type="Script" path="res://scripts/structures/mural.gd" id="1_mu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mu"]
+size = Vector2(20, 20)
+
+[node name="Mural" type="Area2D"]
+script = ExtResource("1_mu")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+modulate = Color(0.85, 0.7, 0.45, 1)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_mu")

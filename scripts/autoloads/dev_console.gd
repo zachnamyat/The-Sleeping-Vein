@@ -107,11 +107,11 @@ func _build_ui() -> void:
 	_output.scroll_following = true
 	_output.fit_content = false
 	_output.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	_output.custom_minimum_size = Vector2(0, 124)
-	_output.add_theme_font_size_override("normal_font_size", 8)
-	_output.add_theme_font_size_override("bold_font_size", 8)
-	_output.add_theme_font_size_override("italics_font_size", 8)
-	_output.add_theme_font_size_override("mono_font_size", 8)
+	_output.custom_minimum_size = Vector2(0, 140)
+	_output.add_theme_font_size_override("normal_font_size", 16)
+	_output.add_theme_font_size_override("bold_font_size", 16)
+	_output.add_theme_font_size_override("italics_font_size", 16)
+	_output.add_theme_font_size_override("mono_font_size", 16)
 	_output.add_theme_color_override("default_color", Color(0.92, 0.88, 0.74))
 	vbox.add_child(_output)
 	_output.append_text("[color=#888]Dev Console — F1 or ` to close. Type [b]help[/b] for commands.[/color]\n")
@@ -119,8 +119,8 @@ func _build_ui() -> void:
 	_input_line = LineEdit.new()
 	_input_line.process_mode = Node.PROCESS_MODE_ALWAYS
 	_input_line.placeholder_text = "> command"
-	_input_line.custom_minimum_size = Vector2(0, 14)
-	_input_line.add_theme_font_size_override("font_size", 8)
+	_input_line.custom_minimum_size = Vector2(0, 22)
+	_input_line.add_theme_font_size_override("font_size", 16)
 	_input_line.text_submitted.connect(_on_submitted)
 	_input_line.gui_input.connect(_on_input_gui)
 	vbox.add_child(_input_line)

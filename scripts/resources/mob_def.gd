@@ -30,3 +30,14 @@ enum MobClass { MELEE, RANGED, CASTER, TANK, CRITTER }
 
 # Resistances dictionary {StringName: float -1..1}
 @export var resistances: Dictionary = {}
+
+## Phase 6.39 — stagger meter. Heavy-attack hits add to the meter; once
+## stagger_threshold is reached the mob enters a stunned animation for
+## stagger_recovery_seconds. 0 disables stagger entirely (set high for tanks).
+@export var stagger_threshold: int = 30
+@export var stagger_recovery_seconds: float = 1.0
+@export var knockback_resistance: float = 0.0  ## 0..1; bosses set high
+
+## Phase 6.10 — weakness multiplier per damage type. Stacks multiplicatively
+## with resistances. Maps StringName damage_type -> float (1.5 = +50% damage).
+@export var weaknesses: Dictionary = {}

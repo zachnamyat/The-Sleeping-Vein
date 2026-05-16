@@ -45,9 +45,12 @@ func _draw() -> void:
 		scale_factor = 1.3
 	else:
 		color = Color(1.0, 1.0, 1.0, alpha)
-	# Use the default theme font with our pixel-art size.
-	var font := ThemeDB.fallback_font
-	var font_size: int = int(round(8.0 * scale_factor))
+	# Use m5x7 at its 16-px design size so damage numbers render with crisp
+	# pixel alignment. Crit numbers bump 1.3× to 21 px.
+	var font: Font = load("res://assets/fonts/m5x7.ttf") as Font
+	if font == null:
+		font = ThemeDB.fallback_font
+	var font_size: int = int(round(16.0 * scale_factor))
 	var width: float = font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
 	var origin := Vector2(-width * 0.5, 0)
 	# Outline for readability against busy biome tiles.

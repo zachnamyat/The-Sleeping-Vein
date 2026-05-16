@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://dltu24o2mdrtg"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/staff.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"tome"
+display_name = "Verdancy Tome"
+description = "Held magic. Buffs allies and refunds mana on enemy kills."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 2
+tier = 1
+rarity = 2
+base_damage = 7
+damage_type = &"magic"
+attack_cooldown_seconds = 0.5
+mana_cost = 6
+weapon_class = &"magic"
+weapon_subclass = &"tome"
+projectile_speed = 240.0
+mana_on_kill = 8
+mana_regen_bonus = 1.0

@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://v0wur61my2p5"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/ammo/arrow_wood.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bolt_iron"
+display_name = "Iron Bolt"
+description = "Heavy crossbow ammunition. Pierces armor."
+icon = ExtResource("2_icon")
+max_stack = 999
+item_type = 6
+tier = 1
+rarity = 0
+base_damage = 4
+damage_type = &"physical"

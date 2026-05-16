@@ -1,6 +1,7 @@
-[gd_scene format=3 uid="uid://d2xfmg7gplc8w"]
+[gd_scene load_steps=3 format=3 uid="uid://d2xfmg7gplc8w"]
 
 [ext_resource type="Script" path="res://scripts/ui/dialogue_panel.gd" id="1_dlg"]
+[ext_resource type="FontFile" uid="uid://bvcdcrljv8wjg" path="res://assets/fonts/monogram.ttf" id="2_monogram"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dlg"]
 bg_color = Color(0.03, 0.03, 0.04, 0.95)
@@ -40,6 +41,10 @@ offset_left = 6.0
 offset_top = 14.0
 offset_right = 316.0
 offset_bottom = 50.0
+theme_override_fonts/normal_font = ExtResource("2_monogram")
+theme_override_fonts/italics_font = ExtResource("2_monogram")
+theme_override_fonts/bold_font = ExtResource("2_monogram")
+theme_override_fonts/bold_italics_font = ExtResource("2_monogram")
 bbcode_enabled = true
 
 [node name="Responses" type="VBoxContainer" parent="Panel"]

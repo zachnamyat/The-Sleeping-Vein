@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://bp5recbed01"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_bed"
+display_name = "Loam Bed"
+inputs = [{ "item_id": "loam", "count": 8 }, { "item_id": "wood", "count": 4 }]
+outputs = [{ "item_id": "bed_placeable", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 3
+skill_xp_id = &"skill_crafting"
+description = "Phase 5.13 — bed placeable. Binds respawn and skips a chunk of the world clock."

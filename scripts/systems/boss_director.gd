@@ -86,6 +86,9 @@ func _ready() -> void:
 	set_process(true)
 
 
+const PREP_PANEL_RADIUS_TILES: float = 18.0
+
+
 func _process(_delta: float) -> void:
 	if _player == null or not is_instance_valid(_player):
 		var players := get_tree().get_nodes_in_group("player")
@@ -94,15 +97,28 @@ func _process(_delta: float) -> void:
 		_player = players[0]
 	for entry in BOSS_PLACEMENTS:
 		var id: StringName = entry["id"]
+		var pos: Vector2 = _world_position(entry["distance_tiles"], entry["angle_degrees"])
+		# Phase 5.38 — surface the prep panel when the player crosses the arena
+		# soft perimeter (does NOT engage the boss yet — the player must walk
+		# into the detection_radius to do that).
+		var dist: float = _player.global_position.distance_to(pos)
+		if dist < PREP_PANEL_RADIUS_TILES * 16.0 and not GameState.has_defeated_boss(id):
+			_try_show_prep_panel(id)
 		if _spawned.get(id, false):
 			continue
 		if GameState.has_defeated_boss(id):
 			continue
-		var pos: Vector2 = _world_position(entry["distance_tiles"], entry["angle_degrees"])
-		if _player.global_position.distance_to(pos) > PROXIMITY_TILES * 16.0:
+		if dist > PROXIMITY_TILES * 16.0:
 			continue
 		_spawn_boss(entry, pos)
 		_spawned[id] = true
+
+
+func _try_show_prep_panel(boss_id: StringName) -> void:
+	for panel in (Engine.get_main_loop() as SceneTree).get_nodes_in_group("boss_prep_panel"):
+		if panel.has_method("show_for"):
+			panel.call("show_for", boss_id)
+			return
 
 
 func _world_position(distance_tiles: float, angle_degrees: float) -> Vector2:
@@ -159,3 +175,25 @@ func _entities_layer() -> Node2D:
 	if tree == null or tree.current_scene == null:
 		return null
 	return tree.current_scene.get_node_or_null("WorldGen/YSortRoot/Entities") as Node2D
+
+
+## Phase 5.17 — re-fight summoning entry point. Boss-altars call into this so
+## the player can re-engage a defeated Sovereign for trinkets / titles. The
+## defeated record on GameState is *not* cleared; this is a re-spawn, not an
+## un-kill, so drops scale down to a re-fight loot rule (which sits in the
+## per-boss _drop_boss_loot fallback when GameState.has_defeated_boss is true —
+## not strictly enforced in MVP; the boss still drops the standard table).
+func respawn_boss(boss_id: StringName, at_world_pos: Vector2) -> bool:
+	if _template == null:
+		return false
+	var entry: Dictionary = {}
+	for e in BOSS_PLACEMENTS:
+		if e["id"] == boss_id:
+			entry = e
+			break
+	if entry.is_empty():
+		return false
+	_spawn_boss(entry, at_world_pos)
+	# Clear the per-session spawned flag so the altar can spawn it again later.
+	_spawned[boss_id] = false
+	return true

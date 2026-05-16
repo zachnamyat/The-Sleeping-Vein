@@ -28,6 +28,16 @@ signal camera_shake_requested(intensity: float, duration: float)
 signal hit_pause_requested(duration: float)
 signal screen_pulse_requested(strength: float, duration: float)
 signal letterbox_requested(enabled: bool, fade_seconds: float)
+## Phase 6 combat-depth signals.
+signal player_dodge_started(direction: Vector2)
+signal player_block_changed(active: bool, fraction: float)
+signal player_parry_success(attacker: Node)
+signal player_charge_progress(fraction: float)  ## 0..1 charge bar
+signal player_special_used(special_id: StringName)
+signal lightning_arc_requested(from_pos: Vector2, to_pos: Vector2)
+signal aoe_indicator_requested(world_pos: Vector2, radius: float, duration: float, color: Color)
+signal combat_intensity_changed(intensity: float)  ## 0..1 — adaptive music ramp
+signal stat_recompute_requested  ## PlayerStats listens; bubbles equipment changes
 
 # --- Inventory / crafting ---
 signal item_picked_up(item_id: StringName, count: int)

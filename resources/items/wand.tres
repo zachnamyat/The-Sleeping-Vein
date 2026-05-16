@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://kaufo1uqkvv1"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/staff.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"wand"
+display_name = "Bone Wand"
+description = "Single-target magic dart. Cheap to cast, fast cycle."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 2
+tier = 0
+rarity = 1
+base_damage = 5
+damage_type = &"magic"
+attack_cooldown_seconds = 0.35
+mana_cost = 3
+weapon_class = &"magic"
+weapon_subclass = &"wand"
+projectile_speed = 280.0
+manasteel_fraction = 0.05

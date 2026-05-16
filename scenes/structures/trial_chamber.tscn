@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dy3bvup48qf33"]
+
+[ext_resource type="Script" path="res://scripts/structures/trial_chamber.gd" id="1_tc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tc"]
+radius = 14.0
+
+[node name="TrialChamber" type="Area2D"]
+script = ExtResource("1_tc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+modulate = Color(0.95, 0.7, 0.3, 1)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_tc")

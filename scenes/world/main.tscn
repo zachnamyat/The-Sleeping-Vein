@@ -30,6 +30,8 @@
 [ext_resource type="Script" path="res://scripts/fx/fog_of_war.gd" id="27_fog"]
 [ext_resource type="Script" path="res://scripts/fx/screen_pulse.gd" id="28_pulse"]
 [ext_resource type="Script" path="res://scripts/fx/damage_number_spawner.gd" id="33_dmgnum"]
+[ext_resource type="Script" path="res://scripts/fx/aoe_indicator_spawner.gd" id="33b_aoespawn"]
+[ext_resource type="Script" path="res://scripts/fx/status_overlay_spawner.gd" id="33c_statspawn"]
 [ext_resource type="PackedScene" path="res://scenes/ui/death_screen.tscn" id="29_death"]
 [ext_resource type="PackedScene" path="res://scenes/ui/letterbox.tscn" id="30_letter"]
 [ext_resource type="PackedScene" path="res://scenes/ui/loading_screen.tscn" id="31_loading"]
@@ -44,6 +46,9 @@
 [ext_resource type="PackedScene" path="res://scenes/structures/glow_shroom.tscn" id="41_shroom"]
 [ext_resource type="Script" path="res://scripts/fx/hollowling_motes.gd" id="42_motes"]
 [ext_resource type="PackedScene" path="res://scenes/structures/crystal_cluster.tscn" id="43_crystal"]
+[ext_resource type="PackedScene" path="res://scenes/ui/boss_intro_crawl.tscn" id="44_bicrawl"]
+[ext_resource type="PackedScene" path="res://scenes/ui/boss_prep_panel.tscn" id="45_bprep"]
+[ext_resource type="PackedScene" path="res://scenes/ui/opening_sequence.tscn" id="46_opening"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("3_bootstrap")
@@ -137,6 +142,13 @@ script = ExtResource("28_pulse")
 script = ExtResource("33_dmgnum")
 spawn_parent_path = NodePath("../WorldGen/YSortRoot/Entities")
 
+[node name="AoeIndicatorSpawner" type="Node" parent="."]
+script = ExtResource("33b_aoespawn")
+spawn_parent_path = NodePath("../WorldGen/YSortRoot/Entities")
+
+[node name="StatusOverlaySpawner" type="Node" parent="."]
+script = ExtResource("33c_statspawn")
+
 [node name="HUD" parent="." instance=ExtResource("7_hud")]
 
 [node name="UI" type="CanvasLayer" parent="."]
@@ -178,3 +190,9 @@ spawn_parent_path = NodePath("../WorldGen/YSortRoot/Entities")
 [node name="LoadingScreen" parent="." instance=ExtResource("31_loading")]
 
 [node name="EmoteWheel" parent="UI" instance=ExtResource("32_emote")]
+
+[node name="BossIntroCrawl" parent="." instance=ExtResource("44_bicrawl") groups=["boss_intro_crawl"]]
+
+[node name="BossPrepPanel" parent="." instance=ExtResource("45_bprep") groups=["boss_prep_panel"]]
+
+[node name="OpeningSequence" parent="." instance=ExtResource("46_opening") groups=["opening_sequence"]]

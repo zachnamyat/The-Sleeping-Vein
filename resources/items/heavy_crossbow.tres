@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://i0an0s0w5foi"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bow.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"heavy_crossbow"
+display_name = "Heavy Crossbow"
+description = "Slow fire, high damage. Pierces two targets per bolt."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 2
+tier = 2
+rarity = 3
+base_damage = 18
+damage_type = &"physical"
+attack_cooldown_seconds = 1.05
+weapon_class = &"ranged_crossbow"
+weapon_subclass = &"crossbow"
+ammo_id = &"bolt_iron"
+projectile_speed = 360.0
+projectile_pierce = 2
+reload_seconds = 0.9
+chargeable = true
+charge_max_seconds = 1.0
+charge_max_multiplier = 2.5
+two_handed = true
+move_while_attack_factor = 0.5

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://b54kcvjfdp05a"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_lantern_offhand"
+display_name = "Held Lantern"
+inputs = [{ "item_id": "torch", "count": 1 }, { "item_id": "shaleseed_ingot", "count": 1 }]
+outputs = [{ "item_id": "lantern_offhand", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_crafting"

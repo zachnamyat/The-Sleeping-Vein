@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://b176fg3jd4e5a"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_heavy_crossbow"
+display_name = "Heavy Crossbow"
+inputs = [{ "item_id": "shaleseed_ingot", "count": 6 }, { "item_id": "engorged_stone_shell", "count": 1 }]
+outputs = [{ "item_id": "heavy_crossbow", "count": 1 }]
+stations = [&"clearstone_forge"]
+skill_xp_grant = 8
+skill_xp_id = &"skill_crafting"
+unlock_on_boss_kill = [&"boss_glaurem"]

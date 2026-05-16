@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://dms5yn11b4f33"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"hidden_door_placeable"
+display_name = "Hidden Door (Loam)"
+description = "A door that looks like wall. Cosmetic from the front; passable from either side once approached."
+icon = null
+max_stack = 8
+item_type = 5
+tier = 1
+rarity = 2
+placeable_layer = &"structures"
+lore_ref = "lore/03_factions_and_cultures.md"

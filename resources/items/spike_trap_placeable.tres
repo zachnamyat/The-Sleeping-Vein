@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://drwafvdsyt7wu"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"spike_trap_placeable"
+display_name = "Loamstone Spike Trap"
+description = "A pressure-tile rigged with shaleseed spines. Damages anything that walks over it — careful where you step."
+icon = null
+max_stack = 16
+item_type = 5
+tier = 1
+rarity = 1
+placeable_layer = &"structures"
+lore_ref = "lore/03_factions_and_cultures.md"

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://b41om17e07fc7"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/wooden_axe.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bone_shield"
+display_name = "Bone Shield"
+description = "Hold RMB to block 50% damage. Parry within 0.25s for a riposte slot."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 4
+tier = 1
+rarity = 2
+equipment_slot = &"off_hand"
+armor_value = 4
+block_fraction = 0.5
+parry_window_seconds = 0.25
+special_attack = &"shield_bash"
+knockback_resistance_bonus = 0.2

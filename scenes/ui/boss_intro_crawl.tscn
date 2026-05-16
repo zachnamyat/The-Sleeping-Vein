@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://bp8i5iu4otu85"]
+
+[ext_resource type="Script" path="res://scripts/ui/boss_intro_crawl.gd" id="1_bic"]
+[ext_resource type="FontFile" uid="uid://bvcdcrljv8wjg" path="res://assets/fonts/monogram.ttf" id="2_monogram"]
+
+[node name="BossIntroCrawl" type="CanvasLayer"]
+script = ExtResource("1_bic")
+
+[node name="Root" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Crawl" type="Label" parent="Root"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -220.0
+offset_top = -52.0
+offset_right = 220.0
+offset_bottom = -28.0
+theme_override_fonts/font = ExtResource("2_monogram")
+theme_override_font_sizes/font_size = 18
+modulate = Color(0.97, 0.85, 0.5, 1)
+text = ""
+horizontal_alignment = 1

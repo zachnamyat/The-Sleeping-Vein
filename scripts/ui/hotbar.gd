@@ -8,7 +8,10 @@ signal selected_changed(slot_index: int)
 
 const SLOT_COUNT: int = 10
 
-@export var slot_size: Vector2 = Vector2(20, 20)
+## Slot is 24×24 so a 16-px icon centers with 4px padding all round and the
+## m5x7 stack-count label (16-px design size) tucks into the bottom-right
+## corner without overflowing the slot.
+@export var slot_size: Vector2 = Vector2(24, 24)
 @export var slot_spacing: float = 2.0
 
 var selected_index: int = 0
@@ -40,30 +43,40 @@ func _build_slots() -> void:
 		icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon.size = Vector2(16, 16)
-		icon.position = Vector2(2, 2)
+		# Center the 16×16 icon inside the 24×24 slot — 4px padding all round.
+		icon.position = Vector2(int((slot_size.x - 16) * 0.5), int((slot_size.y - 16) * 0.5))
 		icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		panel.add_child(icon)
 		_slot_icons.append(icon)
 
+		# Stack-count label. Anchored bottom-right of the slot — the m5x7 glyph
+		# sits in the lower portion of its 16-px cell, so a 16-tall label whose
+		# bottom edge matches the slot bottom puts the digits low-right without
+		# overflowing.
 		var lbl := Label.new()
 		lbl.add_theme_constant_override("outline_size", 1)
 		lbl.add_theme_color_override("font_color", Color(1, 1, 1))
 		lbl.add_theme_color_override("font_outline_color", Color(0, 0, 0))
-		lbl.add_theme_font_size_override("font_size", 6)
-		lbl.size = Vector2(18, 8)
-		lbl.position = Vector2(1, 11)
+		lbl.add_theme_font_size_override("font_size", 16)
+		lbl.size = Vector2(slot_size.x - 2, 16)
+		lbl.position = Vector2(1, slot_size.y - 16)
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		lbl.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+		lbl.clip_text = true
 		lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		panel.add_child(lbl)
 		_slot_counts.append(lbl)
 
+		# Hotkey number (1-9, 0). Top-left corner. m5x7 glyphs sit at the
+		# baseline so a label whose top is at y=-3 lifts the digit into the
+		# slot's top-left corner cleanly.
 		var num_lbl := Label.new()
 		num_lbl.text = "%d" % ((i + 1) % 10)
-		num_lbl.size = Vector2(8, 6)
-		num_lbl.position = Vector2(2, 0)
+		num_lbl.size = Vector2(12, 16)
+		num_lbl.position = Vector2(2, -3)
 		num_lbl.add_theme_color_override("font_color", Color(0.7, 0.6, 0.4))
-		num_lbl.add_theme_font_size_override("font_size", 6)
+		num_lbl.add_theme_font_size_override("font_size", 16)
 		num_lbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		panel.add_child(num_lbl)
 

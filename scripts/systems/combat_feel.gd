@@ -22,13 +22,15 @@ func _ready() -> void:
 	EventBus.tile_changed.connect(_on_tile_changed)
 
 
-func _on_damage_dealt(_source: Node, target: Node, amount: int, _type: StringName) -> void:
+func _on_damage_dealt(_source: Node, target: Node, amount: int, type: StringName) -> void:
 	# Damage above the big-hit threshold gets the full combo: shake + microfreeze.
-	# Smaller hits emit shake only at reduced intensity. Every hit pings the
-	# audio bus so the player gets feedback on connect.
+	# Smaller hits emit shake only at reduced intensity.
 	if amount <= 0:
 		return
-	_play_hit_sfx(target)
+	# Phase 2.42 + 6.61 — damage-type-keyed hit SFX, played positionally if the
+	# target is a Node2D (mob). Player hits stay non-positional since they're
+	# the listener.
+	_play_hit_sfx(target, type)
 	if amount >= BIG_HIT_DAMAGE_THRESHOLD:
 		EventBus.hit_pause_requested.emit(0.06)
 		EventBus.camera_shake_requested.emit(2.5, 0.18)
@@ -36,16 +38,19 @@ func _on_damage_dealt(_source: Node, target: Node, amount: int, _type: StringNam
 		EventBus.camera_shake_requested.emit(1.0, 0.10)
 
 
-func _play_hit_sfx(target: Node) -> void:
+func _play_hit_sfx(target: Node, type: StringName) -> void:
 	if AudioBus == null:
 		return
-	# Distinguish player-hurt vs mob-hurt so the audio palette can diverge later.
-	# All hits route through audio_bus.play_sfx, which falls back to a procedural
-	# tone if no real WAV has been registered.
-	var sound: StringName = &"hit_mob"
-	if target and target.is_in_group("player"):
+	if target == null:
+		return
+	# Phase 2.42 — type-keyed sound; falls back to "hit_mob" if no map entry.
+	var sound: StringName = DamageType.hit_sfx_for(type)
+	if target.is_in_group("player"):
 		sound = &"hit_player"
-	AudioBus.play_sfx(sound)
+	if target is Node2D and not target.is_in_group("player"):
+		AudioBus.play_sfx(sound, (target as Node2D).global_position)
+	else:
+		AudioBus.play_sfx(sound)
 
 
 func _on_tile_mined(_coord: Vector2i, _ore_id: StringName, _source: Node) -> void:

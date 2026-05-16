@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://cj3agbhe4yo0w"]
+
+[ext_resource type="Script" path="res://scripts/structures/hidden_door.gd" id="1_hd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hd_body"]
+size = Vector2(16, 16)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hd_det"]
+radius = 24.0
+
+[node name="HiddenDoor" type="Node2D"]
+script = ExtResource("1_hd")
+
+[node name="WallSprite" type="Sprite2D" parent="."]
+texture_filter = 1
+modulate = Color(0.55, 0.5, 0.45, 1)
+
+[node name="PassageSprite" type="Sprite2D" parent="."]
+texture_filter = 1
+modulate = Color(0.78, 0.65, 0.4, 1)
+visible = false
+
+[node name="WallBody" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="WallShape" type="CollisionShape2D" parent="WallBody"]
+shape = SubResource("RectangleShape2D_hd_body")
+
+[node name="RevealArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="RevealShape" type="CollisionShape2D" parent="RevealArea"]
+shape = SubResource("CircleShape2D_hd_det")

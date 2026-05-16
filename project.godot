@@ -47,8 +47,13 @@ Housing="*res://scripts/systems/housing.gd"
 I18n="*res://scripts/systems/i18n.gd"
 Settings="*res://scripts/systems/settings_persistence.gd"
 CombatFeel="*res://scripts/systems/combat_feel.gd"
+PlayerStats="*res://scripts/systems/player_stats.gd"
+CombatTracker="*res://scripts/systems/combat_tracker.gd"
 WorldEvents="*res://scripts/systems/world_events.gd"
 CrystalRegrowth="*res://scripts/world/crystal_regrowth.gd"
+TutorialDirector="*res://scripts/systems/tutorial_director.gd"
+BarkSystem="*res://scripts/systems/bark_system.gd"
+TitleSystem="*res://scripts/systems/title_system.gd"
 DevConsole="*res://scripts/autoloads/dev_console.gd"
 
 [display]

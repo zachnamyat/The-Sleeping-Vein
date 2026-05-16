@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://cowcuxwmlriui"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_ward_lantern"
+display_name = "Ward Lantern"
+inputs = [{ "item_id": "oil_lamp", "count": 1 }, { "item_id": "aphelion_fragment", "count": 1 }]
+outputs = [{ "item_id": "ward_lantern", "count": 1 }]
+stations = [&"clearstone_forge"]
+skill_xp_grant = 6
+skill_xp_id = &"skill_crafting"

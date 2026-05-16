@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://5ap6f5q5mc0g"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_photograph"
+display_name = "Mote-Lens Photograph"
+inputs = [{ "item_id": "glow_tube", "count": 2 }, { "item_id": "aphelion_fragment", "count": 1 }]
+outputs = [{ "item_id": "photograph", "count": 1 }]
+stations = [&"clearstone_forge"]
+skill_xp_grant = 6
+skill_xp_id = &"skill_crafting"
+description = "Phase 2.34 — scan mobs without killing them. Compendium completion tool."

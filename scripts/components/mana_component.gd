@@ -11,6 +11,10 @@ signal mana_failed(amount_needed: int)
 @export var max_mana: int = 100
 @export var regen_per_second: float = 2.0
 
+## Phase 6.40 — additive mana-regen bonus written by PlayerStats from equipped
+## items (rings, focus). Applied on top of `regen_per_second`.
+var equipment_regen_bonus: float = 0.0
+
 var current_mana: float = 100.0
 
 
@@ -20,9 +24,10 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if current_mana < float(max_mana):
+	var rate: float = regen_per_second + equipment_regen_bonus
+	if current_mana < float(max_mana) and rate > 0.0:
 		var before: int = int(current_mana)
-		current_mana = minf(float(max_mana), current_mana + regen_per_second * delta)
+		current_mana = minf(float(max_mana), current_mana + rate * delta)
 		var after: int = int(current_mana)
 		if after != before:
 			mana_changed.emit(after, max_mana)

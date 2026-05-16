@@ -7,6 +7,7 @@ class_name Tooltip
 @onready var panel: Control = $Panel
 @onready var name_label: Label = $Panel/VBox/Name
 @onready var detail_label: Label = $Panel/VBox/Detail
+@onready var lore_label: Label = $Panel/VBox/Lore
 
 var _pending_item: StringName = &""
 var _pending_delay: float = 0.0
@@ -112,10 +113,14 @@ func _show_now(item_id: StringName) -> void:
 			detail += "\n  (2) +5%% mining speed"
 		if pieces >= 4:
 			detail += "\n  (4) +10%% loot drops"
-	# Phase 3.59 — show lore-text excerpt for relics / key items.
-	if defn.lore_text != "":
-		detail += "\n\n\"%s\"" % defn.lore_text
 	detail_label.text = detail
+	# Phase 3.59 — lore-text excerpt rendered in Monogram for flavor.
+	if defn.lore_text != "":
+		lore_label.text = "\"%s\"" % defn.lore_text
+		lore_label.visible = true
+	else:
+		lore_label.text = ""
+		lore_label.visible = false
 	visible = true
 
 

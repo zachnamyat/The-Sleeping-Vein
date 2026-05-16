@@ -1,0 +1,50 @@
+[gd_scene load_steps=3 format=3 uid="uid://dt07ar14fte33"]
+
+[ext_resource type="Script" path="res://scripts/ui/opening_sequence.gd" id="1_os"]
+[ext_resource type="FontFile" uid="uid://bvcdcrljv8wjg" path="res://assets/fonts/monogram.ttf" id="2_monogram"]
+
+[node name="OpeningSequence" type="CanvasLayer"]
+layer = 100
+script = ExtResource("1_os")
+
+[node name="Root" type="Control" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Bg" type="ColorRect" parent="Root"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 1)
+
+[node name="Title" type="Label" parent="Root"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -42.0
+offset_right = 200.0
+offset_bottom = -10.0
+theme_override_font_sizes/font_size = 32
+modulate = Color(0.97, 0.85, 0.5, 0)
+text = "AETHERDEEP"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Root"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -160.0
+offset_top = 6.0
+offset_right = 160.0
+offset_bottom = 34.0
+theme_override_fonts/font = ExtResource("2_monogram")
+theme_override_font_sizes/font_size = 18
+modulate = Color(0.97, 0.78, 0.42, 0)
+text = "— The Sunken Aeon —"
+horizontal_alignment = 1

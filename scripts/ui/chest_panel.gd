@@ -156,10 +156,13 @@ class ChestSlotUI extends Control:
 		icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		panel.add_child(icon)
 		count_label = Label.new()
-		count_label.position = Vector2(1, 8)
-		count_label.size = Vector2(18, 12)
-		count_label.add_theme_font_size_override("font_size", 6)
+		count_label.position = Vector2(0, 4)
+		count_label.size = Vector2(20, 16)
+		count_label.add_theme_font_size_override("font_size", 16)
+		count_label.add_theme_constant_override("outline_size", 1)
+		count_label.add_theme_color_override("font_outline_color", Color(0, 0, 0))
 		count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		count_label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 		count_label.add_theme_color_override("font_color", Color(1, 0.94, 0.7))
 		count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		panel.add_child(count_label)

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cvtvgpemhg50g"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"recipe_scroll"
+display_name = "Recipe Scroll"
+description = "Vellum sketched with the marks of an unfamiliar craft. Use to learn a new recipe."
+icon = null
+max_stack = 16
+item_type = 4
+tier = 1
+rarity = 2
+lore_text = "Some recipes are remembered only by paper now."
+lore_ref = "lore/03_factions_and_cultures.md"

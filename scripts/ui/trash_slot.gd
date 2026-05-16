@@ -28,12 +28,13 @@ func _ready() -> void:
 	add_child(_panel)
 	_label = Label.new()
 	_label.text = "X"
-	_label.size = Vector2(20, 20)
-	_label.position = Vector2(0, 4)
+	_label.size = Vector2(24, 24)
+	_label.position = Vector2(0, 2)
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_label.add_theme_color_override("font_color", Color(0.95, 0.45, 0.40))
-	_label.add_theme_font_size_override("font_size", 8)
+	_label.add_theme_font_size_override("font_size", 16)
 	_panel.add_child(_label)
 
 

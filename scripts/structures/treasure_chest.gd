@@ -49,5 +49,12 @@ func _roll_loot() -> void:
 		picks.append({"item_id": &"bound_compass", "count": 1})
 	if rng.randf() < 0.20:
 		picks.append({"item_id": &"world_scanner", "count": 1})
+	# Phase 3.72 — recipe-scroll drop. 22% per chest. Key-locked chests double.
+	var scroll_chance: float = 0.22 if not requires_key else 0.45
+	if rng.randf() < scroll_chance:
+		picks.append({"item_id": &"recipe_scroll", "count": rng.randi_range(1, 2)})
+	# Phase 2.34 — rare camera drop. 8% per chest.
+	if rng.randf() < 0.08:
+		picks.append({"item_id": &"photograph", "count": 1})
 	for p in picks:
 		deposit(StringName(p["item_id"]), int(p["count"]))

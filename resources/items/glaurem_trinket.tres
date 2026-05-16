@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://c0xmw1vf0hjy3"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"glaurem_trinket"
+display_name = "Bound-Stone Trinket"
+description = "A loop of cord through a polished sliver of Glaur-em's shell. Wearers feel the weight of mountains move out of their way."
+icon = null
+max_stack = 1
+item_type = 3
+tier = 1
+rarity = 4
+equipment_slot = &"necklace"
+armor_value = 2
+buff_id = &"buff_stone_weight"
+buff_duration_seconds = 0.0
+lore_text = "Each Sovereign leaves a single token. The Walker who carries it carries them, too."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-1--glaur-em-the-engorged-stone-father"

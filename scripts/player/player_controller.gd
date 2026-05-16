@@ -20,6 +20,11 @@ const SPRITE_VISUAL_SCALE: float = 0.5   ## Walker source is 24x48 — half-size
 @onready var stamina: StaminaComponent = $StaminaComponent
 @onready var hurtbox: HurtboxComponent = $Hurtbox
 
+## Phase 6 — runtime status manager attached programmatically so existing
+## scenes don't need editing. Burn / poison / cold / freeze / stun / bleed /
+## confusion / slow flow through here.
+var status_effects: StatusEffects
+
 const SPRINT_MULT: float = 1.5
 
 var facing: Vector2 = Vector2.DOWN
@@ -72,6 +77,12 @@ func _ready() -> void:
 		if armor_bonus > 0:
 			health.armor += armor_bonus
 		EventBus.skill_leveled_up.connect(_on_skill_leveled_up)
+	# Phase 6 — attach StatusEffects child before player_spawned.emit so
+	# subscribers can connect to it.
+	status_effects = StatusEffects.new()
+	status_effects.name = "StatusEffects"
+	status_effects.health_component_path = NodePath("../HealthComponent")
+	add_child(status_effects)
 	EventBus.player_spawned.emit(self)
 	# Phase 4.5 — honour the Loom-bound respawn point if the player set one in a
 	# prior session. The Loom's panel writes to GameState.respawn_point, which
@@ -160,17 +171,41 @@ func _physics_process(delta: float) -> void:
 	if is_dead or is_sitting or is_sleeping:
 		velocity = Vector2.ZERO
 		return
+	# Phase 6.23 — dodge consumes physics input until it ends; PlayerCombat sets
+	# velocity once on roll start and we coast through.
+	var combat: Node = get_node_or_null("PlayerCombat")
+	if combat and combat.has_method("is_dodging") and combat.call("is_dodging"):
+		move_and_slide()
+		if PIXEL_SNAP:
+			global_position = global_position.round()
+		return
 	_unstick_if_overlapping_wall()
+	# Phase 6.9 — stunned / frozen players freeze in place.
+	if status_effects and (status_effects.has_effect(&"stun") or status_effects.has_effect(&"freeze")):
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
 	var input: Vector2 = Vector2(
 		Input.get_action_strength("move_right") - Input.get_action_strength("move_left"),
 		Input.get_action_strength("move_down") - Input.get_action_strength("move_up"),
 	)
+	# Phase 6.22 — confusion flips both axes so WASD becomes mirrored.
+	if status_effects and status_effects.is_inputs_flipped():
+		input = -input
 	if input.length() > 1.0:
 		input = input.normalized()
 	if input.length() > 0.01:
 		facing = input.normalized()
 		_update_sprite_facing()
 	var speed_mult: float = CombatMath.player_speed_multiplier()
+	# Phase 6.8 / 6.30 — cold / slow / freeze multipliers from StatusEffects.
+	if status_effects:
+		speed_mult *= status_effects.current_speed_multiplier()
+	# Phase 6.34 — move-while-attack penalty per held weapon.
+	if Input.is_action_pressed("attack_primary"):
+		var ms_factor: float = _move_while_attack_factor()
+		if ms_factor < 1.0:
+			speed_mult *= ms_factor
 	var sprinting: bool = Input.is_action_pressed("sprint") and input.length() > 0.01
 	if sprinting and stamina and stamina.drain_continuous(stamina.sprint_drain_per_second, delta):
 		speed_mult *= SPRINT_MULT
@@ -180,6 +215,22 @@ func _physics_process(delta: float) -> void:
 		global_position = global_position.round()
 	_tick_footsteps(delta, input.length() > 0.01)
 	_tick_camera_shake(delta)
+
+
+func _move_while_attack_factor() -> float:
+	# Read the held hotbar item; use its move_while_attack_factor if defined.
+	var hotbar_nodes := get_tree().get_nodes_in_group("hotbar")
+	if hotbar_nodes.is_empty():
+		return 1.0
+	var hotbar := hotbar_nodes[0]
+	var idx: int = int(hotbar.get("selected_index"))
+	var iid: StringName = Inventory.get_hotbar_item(idx)
+	if iid == &"":
+		return 1.0
+	var defn: ItemDef = ItemRegistry.get_def(iid)
+	if defn == null:
+		return 1.0
+	return clampf(defn.move_while_attack_factor, 0.1, 1.0)
 
 
 func _tick_footsteps(delta: float, moving: bool) -> void:

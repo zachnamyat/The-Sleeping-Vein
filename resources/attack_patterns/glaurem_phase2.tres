@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bgapatglphas2xx0"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"glaurem_phase2"
+phase_index = 1
+loop = true
+entries = [{
+"id": &"glaur_double_slam",
+"kind": &"slam",
+"telegraph_seconds": 0.85,
+"cooldown_seconds": 1.0,
+"radius_pixels": 44.0,
+"damage": 10,
+"damage_type": &"physical",
+"speed": 0.0,
+}, {
+"id": &"glaur_double_slam_b",
+"kind": &"slam",
+"telegraph_seconds": 0.85,
+"cooldown_seconds": 1.6,
+"radius_pixels": 44.0,
+"damage": 10,
+"damage_type": &"physical",
+"speed": 0.0,
+}, {
+"id": &"glaur_dash",
+"kind": &"dash",
+"telegraph_seconds": 0.6,
+"cooldown_seconds": 1.4,
+"radius_pixels": 28.0,
+"damage": 9,
+"damage_type": &"physical",
+"speed": 220.0,
+}]

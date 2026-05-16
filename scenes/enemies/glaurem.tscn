@@ -1,10 +1,12 @@
-[gd_scene format=3 uid="uid://d4c7wh3q8uka7"]
+[gd_scene load_steps=8 format=3 uid="uid://d4c7wh3q8uka7"]
 
 [ext_resource type="Script" path="res://scripts/enemies/boss.gd" id="1_boss"]
 [ext_resource type="Resource" path="res://resources/mobs/glaurem.tres" id="2_def"]
 [ext_resource type="Script" path="res://scripts/components/health_component.gd" id="3_health"]
 [ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="4_hurtbox"]
 [ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="5_hitbox"]
+[ext_resource type="Resource" path="res://resources/attack_patterns/glaurem_phase1.tres" id="6_pat1"]
+[ext_resource type="Resource" path="res://resources/attack_patterns/glaurem_phase2.tres" id="7_pat2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_body"]
 radius = 22.0
@@ -21,6 +23,7 @@ boss_id = &"boss_glaurem"
 minion_def_path = "res://resources/mobs/stoneslough.tres"
 minion_spawn_period = 5.0
 minion_max_alive = 3
+phase_patterns = [ExtResource("6_pat1"), ExtResource("7_pat2"), ExtResource("7_pat2")]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1

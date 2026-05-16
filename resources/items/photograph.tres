@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://dusigxufv4433"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"photograph"
+display_name = "Mote-Lens Photograph"
+description = "A pinhole-lens etcher. Aim and click to capture a mob image — adds the species to your Compendium without requiring a kill."
+icon = null
+max_stack = 1
+item_type = 1
+tier = 1
+rarity = 2
+attack_cooldown_seconds = 0.8
+melee_range_pixels = 96
+lore_text = "Made by Aelstren from a fragment of the Loom's gold-thread and a Vesari hand-lens."
+lore_ref = "lore/07_echo_walkers_player.md"

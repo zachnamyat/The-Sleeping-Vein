@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://dpvchsu3yrwqi"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/bow.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bow_pierce"
+display_name = "Splinter-Bow"
+description = "Each arrow pierces three targets in line."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 2
+tier = 2
+rarity = 3
+base_damage = 9
+damage_type = &"physical"
+attack_cooldown_seconds = 0.6
+weapon_class = &"ranged_bow"
+weapon_subclass = &"bow"
+ammo_id = &"arrow_wood"
+projectile_speed = 280.0
+projectile_pierce = 3
+two_handed = true

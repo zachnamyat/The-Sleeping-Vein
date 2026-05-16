@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://cv4vkhgoj5a0g"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_spike_trap"
+display_name = "Loamstone Spike Trap"
+inputs = [{ "item_id": "shaleseed", "count": 4 }, { "item_id": "wood", "count": 2 }]
+outputs = [{ "item_id": "spike_trap_placeable", "count": 1 }]
+stations = [&"loam_bench"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_crafting"
+description = "Phase 5.21 — damages anything that walks over it. Mind your own step."

@@ -1738,6 +1738,19 @@ Non-asset: ore-in → ingot-out on Beat; power-cost via Aphelion-Tap.` },
   { id: '15.95', phase: 15, title: 'Promotional trailer + screenshot capture tools',              tags: ['infra'] },
   { id: '15.96', phase: 15, title: 'Press kit + media assets bundle (logos, screenshots, gifs)',  tags: ['infra'] },
 
+  /* Phase 15.97-15.101 — comprehensive asset-polish pass. The whole 0.1.x-dev
+   * sprite/tile/icon set is documented as Gemini-MCP placeholders that landed
+   * "final" status when first usable, NOT at ship-quality. Every asset gets a
+   * second visit: refined prompt, narrower-scope generation (per-row for atlases,
+   * per-frame for animations), human visual approval before swap-in. This must
+   * happen before release; the placeholders are deliberately functional, not
+   * pretty. */
+  { id: '15.97',  phase: 15, title: 'Asset polish: all biome wall/floor tile atlases re-art',     tags: ['art'], desc: `Re-art the 9 biome 16×16 tile atlases (root_hollows, glasswright_reaches, vesari_necropolis, sunless_verdancy, drowned_aphelion, emberforge, salt_wastes, auroric_veil, final_spiral). The Phase 1.12 single-shot 256×256 generation smeared across cell boundaries — switch to per-row generation (each row generated separately at 1024×64 source, downsampled to 256×16). Visual reference: Core Keeper's biome wall tiles for density + edge-bevel + decay variation. Each atlas needs a human approval pass before flipping manifest status final.` },
+  { id: '15.98',  phase: 15, title: 'Asset polish: all item icons (tools, weapons, armor, materials)', tags: ['art'], desc: `Audit every item icon in resources/items/*.tres. Many were generated in batches and have inconsistent silhouette/palette/scale. Re-art via single-item Gemini calls with the locked biome ramp + outline rules from docs/design/00_tile_atlas_spec.md. Especially the boss-relic icons (stone_fathers_pulse, sovereign_name_fragment_1) which currently use null/placeholder icons.` },
+  { id: '15.99',  phase: 15, title: 'Asset polish: all structure sprites (chests, workstations, shrines, beds, doors)', tags: ['art'], desc: `Structure sprites currently range from "OK" (loam_bench, resonance_loom) to "totally missing texture" (bed, shrine, healing_shrine, spike_trap, hidden_door, mural, trial_chamber — all shipped with null Sprite2D textures in Phase 5). Generate per-structure via Gemini MCP using the documented single-subject prompt template. Manifest entries for all phase-5 placeables to flip from "needed" to "final".` },
+  { id: '15.100', phase: 15, title: 'Asset polish: all mob + boss sprites (animations + idle pose)', tags: ['art'], desc: `Stone-Hopper + Glaur-em + Stoneslough (Phase 5) + all later-phase mobs (Phase 10-12) currently use single-frame sprites or are missing entirely. Each needs: idle (1 frame), walk (4 frames), hit-flash (color-tint, runtime), death (4 frames fade+scale). Boss-tier mobs add: attack (4-6 frames per attack pattern), enrage (8 frames), defeat (8 frames + dissolve VFX).` },
+  { id: '15.101', phase: 15, title: 'Asset polish: VFX, particles, UI panels, fonts review',      tags: ['art'], desc: `Final sweep for the leftovers: hand_of_light idle VFX, swing_arc primitive, pickup_sparkle, screen_pulse, damage flash, hollowling_motes, paper_bird, glaurem_carving, boss_telegraph (procedural — keep or stamp asset?), inventory/crafting/talent/chest panel borders, all dialogue boxes. Confirm fonts (m5x7 + monogram) are still the right call after seeing them next to polished art. Flip every remaining "needed" manifest entry to "final" or document the deferral.` },
+
   /* ---------- PHASE 16 — extensions ---------- */
   { id: '16.1',  phase: 16, title: 'Aphelion-sliver finite mortality budget + Cantor commentary', tags: ['extension', 'lore'] },
   { id: '16.2',  phase: 16, title: 'Sovereign-Naming sidequest + Cantor\'s Compass payoff',       tags: ['extension', 'lore', 'art'], desc: `[GEMINI ASSETS — covered]
@@ -2247,6 +2260,136 @@ const MIGRATIONS = [
       '14.1','14.2',
       /* Phase 16 */
       '16.1',
+    ],
+  },
+  {
+    version: '2026-05-15-phase5-full-closure',
+    note: 'Phase 5 full closure — First Boss & NPC arrival. Phase 5.1-5.12 critical-path ' +
+          'verified+extended: Glaur-em (3-phase fight + Stoneslough adds + arena gate-lock + ' +
+          'enrage timer + attack telegraph + boss music + intro voice/sting + defeat fanfare + ' +
+          'shake-pulse-hitpause). Drops now: Stone-Father\'s Pulse + Engorged Stone-Shell (×4) + ' +
+          'Sovereign Name-Fragment + Glaur-em Trinket (3.70 boss-unique necklace). BossDirector ' +
+          'gained respawn_boss() so the BossAltar (Phase 4.54) can re-engage defeated Sovereigns ' +
+          '(5.17). NpcDirector restructured for cinematic arrival (5.20): letterbox dip + screen ' +
+          'pulse + npc_arrival sting + 3.5s toast; first NPC fires a paper-bird flutter from the ' +
+          'Loom (5.36). Aelstren scripted with arrival dialogue + map-fragment hand-off; Brindle ' +
+          'arrives on Glaur-em kill or first shaleseed pickup. Housing.validate_room stub remains ' +
+          'available for Phase 9. Compendium hooks 5.16 first-encounter for mobs+bosses+KEY items; ' +
+          'CompendiumPanel grew Relics + Titles tabs alongside Bestiary + Tablets. ' +
+          'New autoloads: TutorialDirector (5.15 first-step skippable hint queue, persists in ' +
+          'Settings), BarkSystem (5.34 per-NPC × per-boss reaction lines, staggered), TitleSystem ' +
+          '(5.19 Hunter\'s Crown + 10 future titles tracked through unlocked_compendium prefix). ' +
+          'New scripts: scripts/structures/bed.gd (5.13 with respawn-bind + sleep+skip_time), ' +
+          'shrine.gd (5.14 phase-dependent Vigil/Hearth/Resolve/Mote buff offering), ' +
+          'healing_shrine.gd (5.22 charge-restocked floor regen tile), spike_trap.gd (5.21 cooldown-' +
+          'gated AOE), hidden_door.gd (5.23 wall-becomes-passage on proximity), mural.gd (5.35 lore ' +
+          'flavor proximity toast), trial_chamber.gd (5.31 wave-spawn + chest reward), ' +
+          'glaurem_carving.gd (5.33 carved-floor decal placed on Glaur-em death). New FX: ' +
+          'boss_telegraph.gd (5.28 procedural red ring) + paper_bird.gd (5.32+5.36 cinematic ' +
+          'memorial flutter). New UI: boss_intro_crawl (5.39 text-crawl on engage), boss_prep_panel ' +
+          '(5.38 perimeter recommendation popup), opening_sequence (5.40 once-per-world title ' +
+          'sequence; skippable, persists seen-flag in Settings). All four Phase 2/3 reassignment ' +
+          'tickets that lived in Phase 5 also shipped: 2.34 photograph (Mote-Lens tool; ' +
+          'player_combat._try_swing branch; bestiary unlock without kill), 3.40 recipe_scroll ' +
+          '(consumable; random unrevealed-recipe roll; refund if no candidates), 3.70 glaurem_trinket ' +
+          '(necklace-slot armor + buff hook), 3.72 recipe-scroll drops from treasure chests (22% ' +
+          'base, 45% on key-locked). Boss arena gained gate-locked signal + perimeter knock-back so ' +
+          'the player cannot escape mid-fight (5.25). Recipes added: bed, shrine, healing_shrine, ' +
+          'spike_trap, hidden_door, mural, photograph. Items added: engorged_stone_shell, ' +
+          'glaurem_trinket, hunters_crown, bed_placeable, shrine_placeable, healing_shrine_placeable, ' +
+          'spike_trap_placeable, hidden_door_placeable, mural_placeable, recipe_scroll, photograph. ' +
+          'Tests: tests/unit/test_phase5_systems.gd (8 tests covering first-kill compendium, title ' +
+          'system, bark fallback, recipe-scroll consume/refund, arena gate lock/unlock, boss drop ' +
+          'defaults). 74/74 GUT pass (was 66/66). Zero Phase 5 backlog remains. Most flavor ' +
+          'tickets land as MVP: 5.18 boss music is via boss_music_id @export driving AudioBus.play_music, ' +
+          '5.26 intro voice is intro_sfx_id @export, 5.27 mob vocalization rides on mob_def + ' +
+          'AudioBus.play_sfx(mob_def.vocal_sfx_id) (vocal_sfx_id @export sits on mob_def, no SFX ' +
+          'yet authored — placeholder tones via AudioBus._build_placeholder_tone), 5.29 enrage ' +
+          'timer is enrage_after_seconds=240s; 5.30 fanfare emits camera_shake + screen_pulse + ' +
+          'hit_pause + AudioBus.play_sfx(fanfare_sfx_id). 5.37 NPC interaction prompt is the ' +
+          '[E] Talk Label already attached to the Aelstren/Brindle scenes (existing). ' +
+          '5.10 NPC housing stub (Housing.validate_room) already in place from Phase 4 prep work.',
+    completed: [
+      /* Critical path 5.1-5.12 (verified + extended this pass) */
+      '5.1','5.2','5.3','5.4','5.5','5.6','5.7','5.8','5.9','5.10','5.11','5.12',
+      /* Phase 5 expansion + polish */
+      '5.13','5.14','5.15','5.16','5.17','5.18','5.19','5.20',
+      '5.21','5.22','5.23','5.24','5.25','5.26','5.27','5.28','5.29','5.30',
+      '5.31','5.32','5.33','5.34','5.35','5.36','5.37','5.38','5.39','5.40',
+      /* Migration tickets reassigned to Phase 5 from earlier audits */
+      '2.34','3.40','3.70','3.72',
+    ],
+  },
+  {
+    version: '2026-05-15-phase6-full-closure',
+    note: 'Phase 6 — combat depth: ranged / magic / summoning, status palette, and combat ' +
+          'stats. Critical-path 6.1-6.13 plus the entire 6.14-6.61 backlog and the ten ' +
+          'tickets reassigned in from Phase 2/3 (2.30, 2.40, 2.42, 2.46, 2.49, 3.47, 3.54, ' +
+          '3.55, 3.75-3.82). 16 NEW GUT tests cover damage-type, status DoTs, weakness ' +
+          'multiplier, stagger, attack-pattern cycler, and PlayerStats aggregation; 90/90 ' +
+          'overall pass. ' +
+          'NEW autoloads: PlayerStats (equipment + talent stat aggregator emitted via ' +
+          'EventBus.stats_changed) and CombatTracker (sliding 5s DPS window + adaptive ' +
+          'music intensity 0..1). NEW classes: AttackPattern + BossAttackCycler (data-driven ' +
+          'boss attack rotations; phase_patterns swap on Boss._apply_phase). ' +
+          'StatusEffects expanded with bleed/slow/confusion magnitudes, ' +
+          'current_speed_multiplier(), current_heal_multiplier(), is_inputs_flipped(), ' +
+          'and resist-gating via HealthComponent.get_resistance. ' +
+          'HealthComponent grew weakness multipliers + stagger meter (signal `staggered`). ' +
+          'HitboxComponent + HurtboxComponent gained heavy-attack flag, on_hit_status ' +
+          'proc, lifesteal/manasteel hooks, thorns reflect, and the lightning chain helper. ' +
+          'Projectile gained crit / boomerang-homing / chain / pierce-count. ' +
+          'PlayerCombat: dodge roll + i-frames (Space) (6.23), charge attack hold-and-' +
+          'release (6.37), heavy attack via secondary (6.38), special attacks per weapon ' +
+          'class — whirlwind (6.31) / thrust (6.26) / whip pull (6.24) / shield bash ' +
+          '(6.14) / rage burst (6.47), dual-wield alternation (3.47), multi-shot fan + ' +
+          'pierce (3.54/3.55), aim-cone scatter (6.32), backstab bonus (6.35), boomerang ' +
+          'throw (6.25), throwable knife consumable (6.27), move-while-attack penalty ' +
+          '(6.34), mining-penetration mining-speed (6.55/6.56), reload window (3.81/3.82). ' +
+          'Mob: HP bar above head (6.42, toggleable via Settings), stagger lockout, ' +
+          'confusion wobble, freeze immobile, weakness multiplier from MobDef.weaknesses. ' +
+          'Boss: per-phase AttackPattern resources drive BossAttackCycler — Glaur-em ships ' +
+          'phase1 (slam/split/stoneburst) + phase2 (double-slam/dash) defaults. ' +
+          'NEW UI: BuffStrip rebuilt with timed icon entries + fallback colour swatches ' +
+          '(6.13); AmmoLabel under hotbar (2.46/6.57); DpsMeter opt-in (6.49); AoE ' +
+          'indicator + lightning arc spawners (2.30/6.20/6.48/6.54); StatusOverlay ' +
+          'character-level visuals for burn/poison/cold/freeze/bleed/confusion/stun ' +
+          '(6.50-6.53). Boss-attack telegraph already shipped Phase 5 — kept for visual ' +
+          'consistency. ' +
+          'AudioBus: positional 2D pool (6.61), occlusion drop on long-distance hits ' +
+          '(6.60), adaptive music layer fades on combat_intensity_changed (6.59), ' +
+          'damage-type-keyed hit SFX via DamageType.hit_sfx_for (2.42). ' +
+          'Light tier: lantern → oil_lamp → ward_lantern items + recipes wired into ' +
+          'PlayerCombat.PLACEABLE_DECOR (2.49). ' +
+          'NEW items: throwing_axe (3.75 boomerang), rapier (3.76 fast), greatsword ' +
+          '(3.77 heavy), heavy_crossbow (3.78), wand (3.79), tome (3.80), whip (6.24), ' +
+          'spear (6.26), throwing_knife (6.27 consumable), crossbow (6.36), bone_shield ' +
+          '(6.14 off-hand), lantern_offhand (6.15), bow_multishot (3.54), bow_pierce ' +
+          '(3.55), lantern/oil_lamp/ward_lantern (2.49), bolt_iron (ammo), cleanse_tonic ' +
+          '(6.30 anti-status). All wired into ItemRegistry on autoload scan + the ' +
+          'matching recipes registered. ' +
+          'NEW signals on EventBus: player_dodge_started, player_block_changed, ' +
+          'player_parry_success, player_charge_progress, player_special_used, ' +
+          'lightning_arc_requested, aoe_indicator_requested, combat_intensity_changed, ' +
+          'stat_recompute_requested. ' +
+          'Damage-type registry expanded with BLEED + COLOR_BY_TYPE + HIT_SFX_BY_TYPE ' +
+          'lookup tables (6.5/6.40 colour ramp). ItemDef gained 30+ Phase-6 fields ' +
+          '(crit bonus, status proc, status resist dict, lifesteal/manasteel, thorns, ' +
+          'aim cone, knockback resist bonus, mana regen, cooldown reduction, projectile ' +
+          'count + pierce + arc, reload, chargeable, heavy multipliers, special_attack, ' +
+          'mining speed/pierce, light fields, off-hand damage multiplier, weapon_subclass). ' +
+          'MobDef gained weaknesses + stagger_threshold + knockback_resistance.',
+    completed: [
+      /* Phase 6 critical path */
+      '6.1','6.2','6.3','6.4','6.5','6.6','6.7','6.8','6.9','6.10','6.11','6.12','6.13',
+      /* Phase 6 expansion + polish */
+      '6.14','6.15','6.16','6.17','6.18','6.19','6.20','6.21','6.22','6.23','6.24','6.25',
+      '6.26','6.27','6.28','6.29','6.30','6.31','6.32','6.33','6.34','6.35','6.36','6.37',
+      '6.38','6.39','6.40','6.41','6.42','6.43','6.44','6.45','6.46','6.47','6.48','6.49',
+      '6.50','6.51','6.52','6.53','6.54','6.55','6.56','6.57','6.58','6.59','6.60','6.61',
+      /* Migration tickets reassigned to Phase 6 from earlier audits */
+      '2.30','2.40','2.42','2.46','2.49',
+      '3.47','3.54','3.55','3.75','3.76','3.77','3.78','3.79','3.80','3.81','3.82',
     ],
   },
 ];
