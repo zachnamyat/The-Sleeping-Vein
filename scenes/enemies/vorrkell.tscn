@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://cvorrk10sce"]
+
+[ext_resource type="Script" path="res://scripts/enemies/boss.gd" id="1_boss"]
+[ext_resource type="Resource" path="res://resources/mobs/vorrkell.tres" id="2_def"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="3_health"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="4_hurtbox"]
+[ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="5_hitbox"]
+[ext_resource type="Resource" path="res://resources/attack_patterns/vorrkell_phase1.tres" id="6_pat1"]
+[ext_resource type="Resource" path="res://resources/attack_patterns/vorrkell_phase2.tres" id="7_pat2"]
+[ext_resource type="Resource" path="res://resources/attack_patterns/vorrkell_phase3.tres" id="8_pat3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body_vor"]
+radius = 24.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_contact_vor"]
+radius = 32.0
+
+[node name="Vorrkell" type="CharacterBody2D" groups=["boss"]]
+collision_layer = 16
+collision_mask = 1
+script = ExtResource("1_boss")
+mob_def = ExtResource("2_def")
+boss_id = &"boss_vorrkell"
+boss_music_id = &"boss_vorrkell_theme"
+trinket_item_id = &"vorrkell_trinket"
+shell_item_id = &"vorrkell_lantern"
+shell_drop_count = 1
+fragment_item_id = &"sovereign_name_fragment_2"
+pulse_item_id = &"clearstone_resonator"
+minion_def_path = "res://resources/mobs/stoneslough.tres"
+minion_spawn_period = 6.0
+minion_max_alive = 2
+telegraph_radius_px = 40.0
+enrage_after_seconds = 300.0
+phase_patterns = [ExtResource("6_pat1"), ExtResource("7_pat2"), ExtResource("8_pat3")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+offset = Vector2(0, -28)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("CircleShape2D_body_vor")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_health")
+max_health = 1200
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_hurtbox")
+team = &"boss"
+
+[node name="HurtboxShape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -24)
+shape = SubResource("CircleShape2D_contact_vor")
+
+[node name="ContactHitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("5_hitbox")
+base_damage = 18
+team = &"boss"
+
+[node name="ContactHitboxShape" type="CollisionShape2D" parent="ContactHitbox"]
+position = Vector2(0, -24)
+shape = SubResource("CircleShape2D_contact_vor")

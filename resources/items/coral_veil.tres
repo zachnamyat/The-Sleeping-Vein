@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://ccoralveil10a"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/coral_veil.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"coral_veil"
+display_name = "Coral Veil"
+description = "A delicate teal-pink coral mask. While worn, breath underwater lasts 2.5× longer. Required to safely cross the Drowned Aphelion."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 3
+tier = 5
+rarity = 4
+equipment_slot = &"helmet"
+armor_value = 3
+status_resists = {"cold": 0.25}
+lore_text = "Pried from the Spawnmother's chest where the brood-cycle once anchored."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-3"
+resonance_bound = true

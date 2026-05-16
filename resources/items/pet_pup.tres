@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cpetpup10m"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/pet_pup.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"pet_pup"
+display_name = "Carrion Pup"
+description = "An orphaned Spawnmother offspring. Loyal once tamed. Bonded pet slot."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 4
+tier = 4
+rarity = 3
+equipment_slot = &"pet"
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-3"

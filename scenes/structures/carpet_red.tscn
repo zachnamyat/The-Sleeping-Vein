@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://bcarpet00000000001"]
+[gd_scene format=3 uid="uid://rb576v3x5cr5"]
 
 [ext_resource type="Script" path="res://scripts/structures/decor_static.gd" id="1_dc"]
 [ext_resource type="Texture2D" path="res://assets/sprites/structures/carpet_red.png" id="2_tex"]

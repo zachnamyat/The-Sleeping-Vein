@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://csknglyph10l"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/sunken_glyph_fragment.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"sunken_glyph_fragment"
+display_name = "Sunken Glyph Fragment"
+description = "A piece of Vesari pre-script. Collect all 7 to unlock the Hall of First Names reveal."
+icon = ExtResource("2_icon")
+max_stack = 7
+item_type = 0
+tier = 5
+rarity = 3
+lore_text = "Pre-script. The Vesari wrote longer than they spoke."
+lore_ref = "lore/04_biomes.md#stratum-3--the-vesari-necropolis"

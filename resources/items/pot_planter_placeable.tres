@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0potplanterpl"]
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://0i7w7qq2i2c4"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/pot_planter_placeable.png" id="2_icon"]

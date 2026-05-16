@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://csaltfox00e"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/vesari_necropolis/salt_fox.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_vesari.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"salt_fox"
+display_name = "Salt Fox"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 14
+armor = 0
+contact_damage = 0
+contact_damage_type = &"physical"
+move_speed = 56.0
+detection_radius = 100.0
+leash_radius = 200.0
+behavior = 5
+mob_class = 4
+xp_skill = &"skill_running"
+xp_value = 6
+loot_table = ExtResource("3_loot")
+biome = &"vesari_necropolis"
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-3"

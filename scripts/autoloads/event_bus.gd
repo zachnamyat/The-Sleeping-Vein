@@ -19,6 +19,13 @@ signal player_respawned(player: Node, slivers_remaining: int)
 signal player_health_changed(current: int, maximum: int)
 signal player_mana_changed(current: int, maximum: int)
 signal player_hunger_changed(current: float, maximum: float)
+# Phase 10.7 — swim state toggles on water tile / drowned biome entry.
+signal player_swim_changed(is_swimming: bool)
+# Phase 10.8 — breath meter; HUD subscribes for the meter UI.
+signal player_breath_changed(current_seconds: float, max_seconds: float)
+# Phase 10 — tile-hazard / environmental events the HUD + barks listen for.
+signal player_entered_hazard_tile(tile_kind: StringName)
+signal player_exited_hazard_tile(tile_kind: StringName)
 
 # --- Combat ---
 signal damage_dealt(source: Node, target: Node, amount: int, type: StringName)

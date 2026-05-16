@@ -27,6 +27,7 @@ const STARTER_RECIPES: Array[StringName] = [
 	&"craft_pot_planter", &"craft_trellis", &"craft_sapling",
 	&"craft_sprinkler", &"craft_aquarium", &"craft_composter",
 	&"craft_drying_rack", &"craft_beehive", &"craft_fish_trophy", &"craft_net_trap",
+	&"craft_tannery", &"craft_leather",
 	&"craft_bait_basic", &"craft_bait_glow", &"craft_bait_meat",
 	# Phase 8 seed propagation recipes (loam_bench).
 	&"craft_bloat_oat_seed", &"craft_heart_berry_seed",

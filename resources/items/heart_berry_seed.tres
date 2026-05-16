@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0heartberryseed"]
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://r7ru22d4bihf"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/heart_berry_seed.png" id="2_icon"]

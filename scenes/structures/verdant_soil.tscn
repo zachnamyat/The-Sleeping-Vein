@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://cverdsoilst10"]
+
+[ext_resource type="Script" path="res://scripts/structures/verdant_soil.gd" id="1_vs"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/verdant_soil_placeable.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vs"]
+size = Vector2(14, 14)
+
+[node name="VerdantSoil" type="Area2D" groups=["verdant_soil"]]
+script = ExtResource("1_vs")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_vs")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bpainting000000001"]
+[gd_scene format=3 uid="uid://c8idbqaoap20s"]
 
 [ext_resource type="Script" path="res://scripts/structures/painting.gd" id="1_pt"]
 [ext_resource type="Texture2D" path="res://assets/sprites/structures/painting.png" id="2_tex"]

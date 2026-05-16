@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://ctrellis00001"]
+[gd_scene format=3 uid="uid://ctrellis00001"]
 
 [ext_resource type="Script" path="res://scripts/structures/trellis.gd" id="1_tr"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/trellis_placeable.png" id="2_tex"]

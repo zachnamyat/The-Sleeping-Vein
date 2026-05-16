@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://bveilednpc000001"]
+[gd_scene format=3 uid="uid://dciu12wum44fc"]
 
 [ext_resource type="Script" path="res://scripts/npcs/npc.gd" id="1_npc"]
 [ext_resource type="Texture2D" path="res://assets/sprites/npcs/veiled_buyer.png" id="2_tex"]

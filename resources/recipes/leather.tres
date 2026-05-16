@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Recipe" format=3 uid="uid://rec0leather"]
+
+[ext_resource type="Script" path="res://scripts/resources/recipe.gd" id="1_rec"]
+
+[resource]
+script = ExtResource("1_rec")
+id = &"craft_leather"
+display_name = "Leather"
+inputs = [{ "item_id": "hide", "count": 2 }]
+outputs = [{ "item_id": "leather", "count": 1 }]
+stations = [&"tannery"]
+skill_xp_grant = 2
+skill_xp_id = &"skill_crafting"

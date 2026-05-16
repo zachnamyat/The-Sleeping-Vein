@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://cbloomhag00h"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/sunless_verdancy/bloom_hag.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_verdancy.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"bloom_hag"
+display_name = "Bloom-Hag"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(24, 24)
+max_health = 80
+armor = 2
+contact_damage = 10
+contact_damage_type = &"poison"
+move_speed = 8.0
+detection_radius = 160.0
+leash_radius = 240.0
+behavior = 3
+mob_class = 2
+xp_skill = &"skill_magic"
+xp_value = 50
+loot_table = ExtResource("3_loot")
+biome = &"sunless_verdancy"
+stagger_threshold = 30
+stagger_recovery_seconds = 1.0
+knockback_resistance = 0.55
+resistances = {"poison": 0.9}
+weaknesses = {"fire": 1.6, "physical": 1.2}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-4"

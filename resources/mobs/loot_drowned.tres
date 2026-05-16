@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="LootTable" format=3 uid="uid://clootdrown10c"]
+
+[ext_resource type="Script" path="res://scripts/resources/loot_table.gd" id="1_loot"]
+
+[resource]
+script = ExtResource("1_loot")
+guaranteed_drops = []
+weighted_drops = [
+	{ "item_id": "drowned_pearl", "min": 1, "max": 1, "weight": 1.5 },
+	{ "item_id": "coral_fragment", "min": 1, "max": 2, "weight": 2.0 },
+	{ "item_id": "ancient_coin", "min": 1, "max": 3, "weight": 2.5 },
+	{ "item_id": "deep_pike", "min": 1, "max": 1, "weight": 0.6 },
+	{ "item_id": "sunken_glyph_fragment", "min": 1, "max": 1, "weight": 0.25 },
+]
+max_rolls = 1

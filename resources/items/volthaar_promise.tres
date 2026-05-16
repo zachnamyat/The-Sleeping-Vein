@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://drpsi88ab88mp"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/volthaar_promise.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"volthaar_promise"
+display_name = "Vol'thaar's Promise"
+description = "A coiled eel-shell pendant. Summons a single Wreck-Wraith ally that fights for you for 30 seconds. Cooldown: 5 minutes."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 4
+tier = 6
+rarity = 4
+mana_cost = 25
+summon_mob_path = "res://resources/mobs/wreck_wraith.tres"
+equipment_slot = &"necklace"
+lore_text = "I asked for the long quiet. You let me have it."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-6"
+resonance_bound = true

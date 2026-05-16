@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cpotplanter00001"]
+[gd_scene format=3 uid="uid://bu0v0b80a7f0c"]
 
 [ext_resource type="Script" path="res://scripts/structures/pot_planter.gd" id="1_pp"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/pot_planter_placeable.png" id="2_tex"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cfishingminigame00001"]
+[gd_scene format=3 uid="uid://txdxd4wvsswu"]
 
 [ext_resource type="Script" path="res://scripts/ui/fishing_minigame.gd" id="1_fm"]
 

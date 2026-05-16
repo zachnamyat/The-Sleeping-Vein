@@ -221,6 +221,18 @@ SHEET5_MAP = [
     (3, 3, "glow_cap_placeable"),
 ]
 
+# Ticket 3.31 (reassigned to Phase 8) — tannery production chain. 3 used cells
+# in a single 4x4 sheet (rest blank).
+SHEET6_MAP = [
+    (0, 0, "hide"),
+    (0, 1, "leather"),
+    (0, 2, "tannery_placeable"),
+    (0, 3, None),
+    (1, 0, None), (1, 1, None), (1, 2, None), (1, 3, None),
+    (2, 0, None), (2, 1, None), (2, 2, None), (2, 3, None),
+    (3, 0, None), (3, 1, None), (3, 2, None), (3, 3, None),
+]
+
 
 def split_sheet(src_rel: str, mapping: list, icon_h_frac: float = 0.78) -> list[Path]:
     """Split a 4x4 Gemini sheet into individual 16x16 PNGs.
@@ -289,6 +301,14 @@ def main() -> int:
         "assets/raw/items/items_phase8_sheet5_structures.png",
         SHEET5_MAP,
         icon_h_frac=1.0,
+    )
+    # Sheet 6 — Tannery (ticket 3.31 / Phase 8). One label visible on the
+    # tannery cell (Gemini drew a "TANNERY" sign), but the icon sits above
+    # cell midline so a 0.78 crop loses it cleanly.
+    all_outputs += split_sheet(
+        "assets/raw/items/items_phase8_sheet6_tannery.png",
+        SHEET6_MAP,
+        icon_h_frac=0.78,
     )
 
     for path in all_outputs:

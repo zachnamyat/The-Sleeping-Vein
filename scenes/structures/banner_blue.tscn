@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://bbanner00000000001"]
+[gd_scene format=3 uid="uid://cfun1jdc8g5vg"]
 
 [ext_resource type="Script" path="res://scripts/structures/decor_static.gd" id="1_dc"]
 [ext_resource type="Texture2D" path="res://assets/sprites/structures/banner_blue.png" id="2_tex"]

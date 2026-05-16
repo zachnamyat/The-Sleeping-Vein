@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bvorrkphas10c"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"vorrkell_phase3_song"
+phase_index = 2
+loop = true
+entries = [{
+"id": &"vorr_song",
+"kind": &"ranged_arc",
+"telegraph_seconds": 0.4,
+"cooldown_seconds": 0.9,
+"radius_pixels": 84.0,
+"damage": 8,
+"damage_type": &"magic",
+"speed": 220.0,
+}]

@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://csporelurk00f"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/sunless_verdancy/spore_lurk.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_verdancy.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"spore_lurk"
+display_name = "Spore-Lurk"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(16, 16)
+max_health = 42
+armor = 1
+contact_damage = 8
+contact_damage_type = &"poison"
+move_speed = 22.0
+detection_radius = 110.0
+leash_radius = 180.0
+behavior = 2
+mob_class = 2
+xp_skill = &"skill_melee"
+xp_value = 28
+loot_table = ExtResource("3_loot")
+biome = &"sunless_verdancy"
+stagger_threshold = 28
+stagger_recovery_seconds = 0.8
+knockback_resistance = 0.1
+resistances = {"poison": 0.7}
+weaknesses = {"fire": 1.5}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-4"

@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://buxkdg4pttvk1"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/drowned_aphelion/wreck_wraith.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_drowned.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"wreck_wraith"
+display_name = "Wreck-Wraith"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(24, 24)
+max_health = 60
+armor = 0
+contact_damage = 11
+contact_damage_type = &"cold"
+move_speed = 30.0
+detection_radius = 180.0
+leash_radius = 260.0
+behavior = 2
+mob_class = 2
+xp_skill = &"skill_magic"
+xp_value = 42
+biome = &"drowned_aphelion"
+stagger_threshold = 16
+stagger_recovery_seconds = 0.4
+knockback_resistance = 0.0
+resistances = {"physical": 0.6, "cold": 0.6}
+weaknesses = {"fire": 1.5, "magic": 1.3}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-5"

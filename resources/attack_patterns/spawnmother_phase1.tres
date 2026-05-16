@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://chhb5qq6w6n5c"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"spawnmother_phase1"
+phase_index = 0
+loop = true
+entries = [{
+"id": &"spawn_hatchling_burst",
+"kind": &"summon",
+"telegraph_seconds": 1.5,
+"cooldown_seconds": 4.0,
+"radius_pixels": 36.0,
+"damage": 0,
+"damage_type": &"physical",
+"speed": 0.0,
+}, {
+"id": &"spawn_spawn_shriek",
+"kind": &"ranged_arc",
+"telegraph_seconds": 0.8,
+"cooldown_seconds": 2.4,
+"radius_pixels": 96.0,
+"damage": 14,
+"damage_type": &"magic",
+"speed": 140.0,
+}]

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bkvm7ytxdysel"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"volthaar_phase2_lullaby"
+phase_index = 1
+loop = true
+entries = [{
+"id": &"volt_lullaby",
+"kind": &"ranged_arc",
+"telegraph_seconds": 0.3,
+"cooldown_seconds": 0.7,
+"radius_pixels": 120.0,
+"damage": 12,
+"damage_type": &"magic",
+"speed": 240.0,
+}, {
+"id": &"volt_tide_pull",
+"kind": &"slam",
+"telegraph_seconds": 1.0,
+"cooldown_seconds": 2.0,
+"radius_pixels": 160.0,
+"damage": 24,
+"damage_type": &"cold",
+"speed": 0.0,
+}]

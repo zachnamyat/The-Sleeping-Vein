@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0saplingpl"]
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bfwwp08cs65er"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/sapling_placeable.png" id="2_icon"]

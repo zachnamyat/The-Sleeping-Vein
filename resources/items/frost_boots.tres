@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cfrstbt10d"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/frost_boots.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"frost_boots"
+display_name = "Frost Boots"
+description = "Insulated against the Auroric chill. Walk on ice without slipping; +25% cold resistance."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 3
+tier = 6
+rarity = 3
+equipment_slot = &"boots"
+armor_value = 4
+status_resists = {"cold": 0.25}
+lore_ref = "lore/04_biomes.md#stratum-8--the-auroric-veil"

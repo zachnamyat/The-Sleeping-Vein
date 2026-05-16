@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0petlanterneel"]
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://b1rldse4iprd0"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/pet_lantern_eel.png" id="2_icon"]

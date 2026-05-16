@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cgsmask10e"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/gas_mask.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"gas_mask"
+display_name = "Gas Mask"
+description = "Filtered mask used by Verdancy expeditions. Immune to toxic spore tiles; +50% poison resistance."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 3
+tier = 4
+rarity = 2
+equipment_slot = &"helmet"
+armor_value = 2
+status_resists = {"poison": 0.5}
+lore_ref = "lore/04_biomes.md#stratum-4--the-sunless-verdancy"

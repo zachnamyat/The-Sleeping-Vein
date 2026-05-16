@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://cdrwc10sce"]
+
+[ext_resource type="Script" path="res://scripts/enemies/drowned_crown_boss.gd" id="1_boss"]
+[ext_resource type="Resource" path="res://resources/mobs/drowned_crown.tres" id="2_def"]
+[ext_resource type="Script" path="res://scripts/components/health_component.gd" id="3_health"]
+[ext_resource type="Script" path="res://scripts/components/hurtbox_component.gd" id="4_hurtbox"]
+[ext_resource type="Script" path="res://scripts/components/hitbox_component.gd" id="5_hitbox"]
+[ext_resource type="Resource" path="res://resources/attack_patterns/drowned_crown_phase1.tres" id="6_pat1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_body_dc"]
+radius = 22.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_contact_dc"]
+radius = 30.0
+
+[node name="DrownedCrown" type="CharacterBody2D" groups=["boss"]]
+collision_layer = 16
+collision_mask = 1
+script = ExtResource("1_boss")
+mob_def = ExtResource("2_def")
+phase_patterns = [ExtResource("6_pat1"), ExtResource("6_pat1"), ExtResource("6_pat1")]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+offset = Vector2(0, -28)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("CircleShape2D_body_dc")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("3_health")
+max_health = 1700
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("4_hurtbox")
+team = &"boss"
+
+[node name="HurtboxShape" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, -22)
+shape = SubResource("CircleShape2D_contact_dc")
+
+[node name="ContactHitbox" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+script = ExtResource("5_hitbox")
+base_damage = 22
+team = &"boss"
+
+[node name="ContactHitboxShape" type="CollisionShape2D" parent="ContactHitbox"]
+position = Vector2(0, -22)
+shape = SubResource("CircleShape2D_contact_dc")

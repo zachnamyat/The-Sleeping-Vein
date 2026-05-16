@@ -3,6 +3,10 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/tiles/water_tile.png" id="t_water"]
 [ext_resource type="Texture2D" path="res://assets/sprites/tiles/sticky_tile.png" id="t_sticky"]
 [ext_resource type="Texture2D" path="res://assets/sprites/tiles/bridge_tile.png" id="t_bridge"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles/tile_slime.png" id="t_slime"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles/tile_acid.png" id="t_acid"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles/tile_cobweb.png" id="t_cobweb"]
+[ext_resource type="Texture2D" path="res://assets/sprites/tiles/tile_verdant_soil.png" id="t_vsoil"]
 [ext_resource type="Texture2D" uid="uid://drmajdvvjkkqi" path="res://assets/sprites/tiles/root_hollows_floor.png" id="t0"]
 [ext_resource type="Texture2D" uid="uid://bywwydke5t3ww" path="res://assets/sprites/tiles/root_hollows_wall.png" id="t1"]
 [ext_resource type="Texture2D" uid="uid://bk1ek4y1v5ecb" path="res://assets/sprites/tiles/smoke_test_shaleseed.png" id="t2"]
@@ -206,6 +210,22 @@ texture = ExtResource("t_sticky")
 texture = ExtResource("t_bridge")
 0:0/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="s_slime"]
+texture = ExtResource("t_slime")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="s_acid"]
+texture = ExtResource("t_acid")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="s_cobweb"]
+texture = ExtResource("t_cobweb")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="s_vsoil"]
+texture = ExtResource("t_vsoil")
+0:0/0 = 0
+
 [resource]
 physics_layer_0/collision_layer = 1
 custom_data_layer_0/name = "tile_tier"
@@ -242,3 +262,7 @@ sources/26 = SubResource("s_fs_ore")
 sources/27 = SubResource("s_water")
 sources/28 = SubResource("s_sticky")
 sources/29 = SubResource("s_bridge")
+sources/30 = SubResource("s_slime")
+sources/31 = SubResource("s_acid")
+sources/32 = SubResource("s_cobweb")
+sources/33 = SubResource("s_vsoil")

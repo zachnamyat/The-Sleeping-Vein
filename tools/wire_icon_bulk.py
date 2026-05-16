@@ -114,6 +114,10 @@ TARGETS = [
     ("fish_trophy_placeable",    "res://assets/sprites/items/fish_trophy_placeable.png"),
     ("net_trap_placeable",       "res://assets/sprites/items/net_trap_placeable.png"),
     ("glow_cap_placeable",       "res://assets/sprites/items/glow_cap_placeable.png"),
+    # Phase 8 — Tannery (ticket 3.31 reassigned).
+    ("hide",                     "res://assets/sprites/items/hide.png"),
+    ("leather",                  "res://assets/sprites/items/leather.png"),
+    ("tannery_placeable",        "res://assets/sprites/items/tannery_placeable.png"),
 ]
 
 

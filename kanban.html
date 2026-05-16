@@ -2535,6 +2535,30 @@ const MIGRATIONS = [
     ],
   },
   {
+    version: '2026-05-16-phase8-tannery-3-31',
+    note: 'Phase 8 follow-up — Ticket 3.31 Tannery (hides -> leather). Missed ' +
+          'in the original 2026-05-15-phase8-full-closure migration because ' +
+          'the ticket lives in the Phase 3 numeric range (reassigned to ' +
+          'phase: 8 via seedTickets.phase override). NEW items: hide, leather, ' +
+          'tannery_placeable. NEW recipes: craft_leather (2 hide -> 1 leather ' +
+          'at tannery station), craft_tannery (3 plank + 1 shaleseed_ingot -> ' +
+          'tannery_placeable at loam_bench). NEW script: scripts/structures/' +
+          'tannery.gd (Workstation subclass with station_id=&"tannery"). NEW ' +
+          'scene: scenes/structures/tannery.tscn wired with the new sheet6 ' +
+          'tannery sprite. Stone-Hopper loot table gained hide as a weighted ' +
+          'drop (weight 1.5). Both new recipes added to ' +
+          'CraftingSystem.STARTER_RECIPES so the player can craft a Tannery ' +
+          'from day 1. NEW Gemini sheet items_phase8_sheet6_tannery.png ' +
+          'produces the 3 sprites; the 13 unused cells stay blank. ' +
+          'tools/process_phase8_assets.py extended with SHEET6_MAP; ' +
+          'tools/wire_icon_bulk.py extended with the 3 new ItemDef rows. ' +
+          '4 NEW GUT tests in test_phase8_systems.gd cover registry presence, ' +
+          'station targeting, crafting consumption, and loot drop.',
+    completed: [
+      '3.31',
+    ],
+  },
+  {
     version: '2026-05-16-phase9-full-closure',
     note: 'Phase 9 full closure — NPCs, Housing, Merchants, Quests. ' +
           'Critical-path 9.1-9.12 plus the entire 9.13-9.65 backlog plus the ' +
@@ -2625,6 +2649,129 @@ const MIGRATIONS = [
       '9.57','9.58','9.59','9.60','9.61','9.62','9.63','9.64','9.65',
       /* Migration tickets reassigned to Phase 9 from earlier audits */
       '3.27',
+    ],
+  },
+  {
+    version: '2026-05-16-phase10-full-closure',
+    note: 'Phase 10 full closure — Biomes 3-5 (Vesari Necropolis / Sunless ' +
+          'Verdancy / Drowned Aphelion) + Bosses 2-6 (Vorrkell, Spawnmother, ' +
+          'Sythrenn, Auriax, Volthaar) + optional Drowned Crown. Critical-path ' +
+          '10.1-10.16 plus the entire 10.17-10.50 backlog. ~24 new GUT tests ' +
+          'in test_phase10_systems.gd; 217/220 overall pass (3 pre-existing ' +
+          'Phase 9 housing-autoload test failures untouched). ' +
+          'NEW autoload: Phase10Helpers (boss respawn cooldowns + Awakened ' +
+          'variants + pack-AI hint + tile-hazard tick for slime/acid/cobweb/' +
+          'lava + mushroom propagation + pheromone trail + per-biome champion ' +
+          'affix bias + lore-moment dispatch + Glow-Crane sub-quest + Sythrenn ' +
+          'spore-zone registry + boss cinematic camera lookup + per-biome ' +
+          'reverb profile). ' +
+          'Mob roster (15 new MobDefs): salt_bound_sailor + salt_bound_captain ' +
+          '+ coral_hollow + tideglass_cricket (friendly) + salt_fox (friendly); ' +
+          'spore_lurk + vine_stalker + bloom_hag + verdant_hare (friendly) + ' +
+          'glow_crane (friendly); deep_mawl + hollow_coral + wreck_wraith + ' +
+          'lantern_squid (friendly) + brinekin (friendly). Loot tables per ' +
+          'biome at resources/mobs/loot_{vesari,verdancy,drowned}.tres. ' +
+          'Generic phase10_mob.tscn scene template re-used by all 15. world_gen ' +
+          'now actually consults biome.mob_spawn_table via _spawn_mob_by_id ' +
+          'helper resolving through Phase10Helpers.mob_def_for(id). ' +
+          'Boss scenes: vorrkell.tscn (3-phase: tunneling -> segmented -> ' +
+          'singing), spawnmother.tscn (stationary adds-heavy; drops Coral Veil), ' +
+          'sythrenn.tscn (SythrennBoss script: 3-phase with mercy-kill alt ' +
+          'detected by hit distance; drops Sythrenn\'s Last Petal on mercy), ' +
+          'auriax.tscn (4-phase mega-boss; drops Verdant Heart pulse + ' +
+          'name_fragment_5), volthaar.tscn (VolthaarBoss script: 4-phase with ' +
+          'release-or-kill choice at HP fraction 0.05 over 5s; drops Vol\'thaar' +
+          's Promise if released), drowned_crown.tscn (DrownedCrownBoss script: ' +
+          'lays down sword + Drowned Diadem on defeat with silent letterbox). ' +
+          'Each boss owns 1-2 AttackPattern .tres files in resources/' +
+          'attack_patterns/{boss}_phase{N}.tres driving BossAttackCycler. ' +
+          'Player extensions: swimming (10.7) toggles on water tiles or ' +
+          'Drowned Aphelion biome, breath meter (10.8) drains at 1s/s base, ' +
+          'modified by Coral Veil (x0.4), Underwater Goggles (x0.85), and ' +
+          'Tidekin chestpiece (x0.5). Underwater current drift (10.20) from a ' +
+          'noise field. Drown damage when breath = 0. EventBus signals: ' +
+          'player_swim_changed, player_breath_changed, ' +
+          'player_entered_hazard_tile, player_exited_hazard_tile. ' +
+          'BiomeHazard extended (10.15/10.16): toxic_spore biome applies ' +
+          'poison status alongside its base damage; salt_corrosion ticks ' +
+          'durability decay on a random equipped piece every 10 seconds. ' +
+          'Equipment that breaks at 0 durability is unequipped + removed. ' +
+          'Toast throttle to once per 5s per hazard id. ' +
+          'New ItemDefs (16): coral_veil, underwater_goggles, lava_boots, ' +
+          'frost_boots, gas_mask, verdant_heart, drowned_diadem, ' +
+          'sword_threnos_king, sythrenn_last_petal, volthaar_promise, ' +
+          'vorrkell_lantern, sunken_glyph_fragment, pet_pup, ' +
+          'larva_trap_placeable, verdant_soil_placeable, glow_crane_feather, ' +
+          'spawnmother_toy. ' +
+          'Tile types added (10.23..10.26): TileSet sources 30 slime, 31 acid, ' +
+          '32 cobweb, 33 verdant_soil. world_gen._paint_hazard_tiles scatters ' +
+          'biome-specific pockets at ~10% per chunk. Phase10Helpers polls the ' +
+          'tile under the player and applies slow/damage/slip; lava tile (34) ' +
+          'is reserved for Phase 11 but the resist hook lives here so lava ' +
+          'boots immediately skip damage when on a lava tile. ' +
+          'New scenes: scenes/structures/larva_trap.tscn (Area2D, slows mobs ' +
+          'in 64px radius for 8s then destroys itself; dump_state persists ' +
+          'triggered state), scenes/structures/verdant_soil.tscn (Area2D, ' +
+          'growth_factor returns 1.5x for FarmingSystem hook). ' +
+          'Breath HUD: scenes/ui/breath_meter.tscn instanced as a CanvasLayer ' +
+          'child of main.tscn under group "breath_meter"; shows only while ' +
+          'is_swimming and warns at 25%. ' +
+          'Boss respawn cooldown (10.17): first kill = 60 Aphelion beats, ' +
+          'rematches = 40 beats. ' +
+          'Awakened variants (10.18): second-kill onwards bumps HP x1.45, ' +
+          'damage x1.30, speed x1.15, and advances the phase pattern by one. ' +
+          'Pack AI (10.19): chunk-level pack roll at 18% picks a single ' +
+          'mob_id; spawns cluster within 3 tiles of the first slot. ' +
+          'Vine climb (10.27): exposed via Phase10Helpers.can_climb_walls_here ' +
+          'for future PlayerController consumption. Mushroom propagation ' +
+          '(10.28) ticks every 6 Beats, spreads glow_shroom by one tile with ' +
+          '30% probability per parent, capped at 3 children. Pheromone trail ' +
+          '(10.33) marks broadcast for 4 seconds within 96px. Per-biome ' +
+          'affix bias (10.34) routed through MobAffixes via ' +
+          'Phase10Helpers.biome_affix_bias. Boss arena lock-in (10.22) was ' +
+          'pre-existing in boss.gd via the BossArena group + lock_gate_for; ' +
+          'all six Phase 10 bosses inherit the behaviour. ' +
+          'Lore moments (10.36..10.43, 10.46..10.47): Phase10Helpers.' +
+          'trigger_lore_moment dispatches one-shot toasts; biome_changed ' +
+          'auto-fires laughing_child_echo (Verdancy + Auriax defeated) and ' +
+          'underwater_echo_sailors (Drowned Aphelion entry); ' +
+          'verdancy_named_tree_death fires 200 beats after Auriax falls, then ' +
+          'schedules verdancy_crop_survives 30 beats later. ' +
+          'Sunken Glyph Fragments (10.42): 7 collected via ' +
+          'register_sunken_glyph; on completion fires hall_of_first_names ' +
+          'reveal + 23s pause. ' +
+          'Glow-Crane sub-quest (10.46): Brindle gates the Vorrkell\'s Lantern ' +
+          'recipe behind 3 feather deliveries. ' +
+          'Boss cinematic camera (10.49): BOSS_PHASE_CAMERA dict gives ' +
+          'per-boss x per-phase shake/zoom/letterbox config the Boss._apply_phase ' +
+          'consumes (auriax phase 2 = letterbox + zoom 1.5). ' +
+          'Per-biome reverb (10.50): BIOME_REVERB dict written into ' +
+          'AudioBus.current_reverb_profile on biome_changed; routed through ' +
+          'AudioBus.apply_reverb_profile placeholder until Phase 15 audio bus ' +
+          'lands. ' +
+          'SaveSystem bumped v7 -> v8 to persist phase10_helpers (boss_cooldowns ' +
+          '+ kill_counts + awakened_available + lore_moments_fired + ' +
+          'verdancy_age_beats + sunken_glyph_fragments_collected + ' +
+          'glow_crane_quest_state + glow_crane_feathers_delivered + ' +
+          'beat_counter). Volthaar release + Sythrenn mercy already stored in ' +
+          'GameState.collected_relics. ' +
+          'New sprites — generated entirely through the Gemini MCP this pass: ' +
+          '12 enemy sprites (4 each from 3 biome 2x2 sheets) + 16 relic / ' +
+          'equipment / placeable icons from items_phase10_sheet1_relics + 4 ' +
+          'hazard tile textures + env_toxic_spore + env_salt_corrosion 4-frame ' +
+          'strips. mcp__gemini-image__generate_image for the 1024x1024 sources, ' +
+          'tools/process_phase10_assets.py for content-bbox crop + nearest-' +
+          'neighbour resize + magenta-key + clean_alpha.ps1 binary alpha. ' +
+          'Manual checklist at docs/PHASE_10_TEST_CHECKLIST.md.',
+    completed: [
+      /* Phase 10 critical path */
+      '10.1','10.2','10.3','10.4','10.5','10.6','10.7','10.8','10.9','10.10',
+      '10.11','10.12','10.13','10.14','10.15','10.16',
+      /* Phase 10 backlog */
+      '10.17','10.18','10.19','10.20','10.21','10.22','10.23','10.24','10.25',
+      '10.26','10.27','10.28','10.29','10.30','10.31','10.32','10.33','10.34',
+      '10.35','10.36','10.37','10.38','10.39','10.40','10.41','10.42','10.43',
+      '10.44','10.45','10.46','10.47','10.48','10.49','10.50',
     ],
   },
 ];

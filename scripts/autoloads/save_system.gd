@@ -23,7 +23,11 @@ const SAVE_ROOT: String = "user://saves/"
 ##   v7 — Phase 9: npc_lifecycle (friendship, mood, reputation, daily quests,
 ##        flagged branches), housing.beds_to_npc, per-Sign/Mailbox/TradingBlock/
 ##        PetBowl/Painting dump_state.
-const SAVE_VERSION: int = 7
+##   v8 — Phase 10: phase10_helpers (boss cooldowns, kill counts, awakened
+##        flags, lore moments, Verdancy age, Sunken Glyph fragments,
+##        Glow-Crane quest), per-LarvaTrap dump_state, Sythrenn mercy +
+##        Vol'thaar release flags (already stored in GameState.collected_relics).
+const SAVE_VERSION: int = 8
 
 signal save_started(slot_name: String)
 signal save_completed(slot_name: String)
@@ -182,6 +186,8 @@ func _dump_game_state() -> Dictionary:
 		"npc_lifecycle": NpcLifecycle.dump_state() if NpcLifecycle else {},
 		"housing": Housing.dump_state() if Housing else {},
 		"phase9_structures": _dump_phase9_structures(),
+		# Phase 10 v8.
+		"phase10_helpers": Phase10Helpers.dump_state() if Phase10Helpers else {},
 	}
 
 
@@ -222,6 +228,9 @@ func _restore_game_state(state: Dictionary) -> void:
 	if Housing:
 		Housing.restore_state(state.get("housing", {}))
 	_pending_phase9_structures = state.get("phase9_structures", [])
+	# Phase 10 v8.
+	if Phase10Helpers:
+		Phase10Helpers.restore_state(state.get("phase10_helpers", {}))
 	# Player restore is signal-driven: when SaveSystem holds pending state, it
 	# subscribes once to EventBus.player_spawned. The next player to spawn
 	# (either the existing one re-detected, or a fresh one after scene change)

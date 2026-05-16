@@ -261,3 +261,39 @@ func test_first_item_crafted_marks_discovered() -> void:
 	# pale_cap_stew is a cooking recipe; fake the event.
 	EventBus.item_crafted.emit(&"pale_cap_stew", 1)
 	assert_true(CookingSystem.is_discovered(&"craft_pale_cap_stew"))
+
+
+# --- 3.31 (reassigned to Phase 8) — Tannery ------------------------------------
+
+
+func test_tannery_items_and_recipes_registered() -> void:
+	assert_not_null(ItemRegistry.get_def(&"hide"), "hide item must exist")
+	assert_not_null(ItemRegistry.get_def(&"leather"), "leather item must exist")
+	assert_not_null(ItemRegistry.get_def(&"tannery_placeable"), "tannery_placeable must exist")
+	assert_not_null(CraftingSystem.get_recipe(&"craft_leather"), "craft_leather recipe must exist")
+	assert_not_null(CraftingSystem.get_recipe(&"craft_tannery"), "craft_tannery recipe must exist")
+
+
+func test_leather_recipe_targets_tannery_station() -> void:
+	var rec: Recipe = CraftingSystem.get_recipe(&"craft_leather")
+	assert_true(&"tannery" in rec.stations)
+
+
+func test_leather_recipe_consumes_two_hides() -> void:
+	Inventory.try_add(&"hide", 2)
+	CraftingSystem.unlock(&"craft_leather")
+	var ok: bool = CraftingSystem.try_craft(&"craft_leather")
+	assert_true(ok)
+	assert_eq(Inventory.count_of(&"hide"), 0)
+	assert_eq(Inventory.count_of(&"leather"), 1)
+
+
+func test_stone_hopper_loot_table_includes_hide() -> void:
+	var lt: LootTable = load("res://resources/mobs/stone_hopper_loot.tres") as LootTable
+	assert_not_null(lt)
+	var found: bool = false
+	for entry in lt.weighted_drops:
+		if StringName(entry.get("item_id", "")) == &"hide":
+			found = true
+			break
+	assert_true(found, "Stone-Hopper loot table must include hide as a weighted drop (3.31)")

@@ -955,6 +955,7 @@ const PLACEABLE_SCENES: Dictionary = {
 	&"fish_trophy_placeable":     "res://scenes/structures/fish_trophy.tscn",
 	&"net_trap_placeable":        "res://scenes/structures/net_trap.tscn",
 	&"glow_cap_placeable":        "res://scenes/structures/glow_shroom.tscn",
+	&"tannery_placeable":         "res://scenes/structures/tannery.tscn",
 	# Phase 9 placeables.
 	&"door_wood_placeable":       "res://scenes/structures/door_wood.tscn",
 	&"door_metal_placeable":      "res://scenes/structures/door_metal.tscn",

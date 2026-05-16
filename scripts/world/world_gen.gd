@@ -228,9 +228,57 @@ func _generate_chunk(chunk: Vector2i) -> void:
 		_paint_ore_veins(ol, wb, chunk, biome, rng)
 	_carve_rooms(wb, ol, chunk, biome, rng)
 	_paint_lake(fl, wb, ol, chunk, biome, rng)
+	# Phase 10.24/10.25/10.26/10.23 — biome-specific hazard tiles. Sparse pockets
+	# of slime / acid / cobweb in Verdancy + Necropolis, plus rare placements of
+	# verdant_soil planters players can stand on for the 1.5× crop bonus.
+	_paint_hazard_tiles(fl, wb, chunk, biome, rng)
 	_spawn_decor_and_structures(chunk, biome, rng)
 	_spawn_mobs(chunk, biome, rng)
 	EventBus.chunk_generated.emit(chunk)
+
+
+## Phase 10.24/10.25/10.26 — hazard tile painter. Each biome rolls for a
+## sparse pocket of its signature hazard with a small radius. Carved cave
+## spots only (skips wall mass + ore + water + Anchor plateau).
+func _paint_hazard_tiles(fl: TileMapLayer, wb: TileMapLayer, chunk: Vector2i, biome: BiomeDef, rng: RandomNumberGenerator) -> void:
+	# Phase 10 hazard tile source IDs. Mirror Phase10Helpers constants.
+	const HAZARD_SLIME: int = 30
+	const HAZARD_ACID: int = 31
+	const HAZARD_COBWEB: int = 32
+	const HAZARD_VERDANT_SOIL: int = 33
+	var pick: int = -1
+	# Bias by biome: Verdancy gets cobweb + verdant soil; Necropolis gets
+	# acid + slime; Drowned Aphelion mostly skips since the whole biome is water.
+	match biome.id:
+		&"sunless_verdancy":
+			pick = HAZARD_COBWEB if rng.randf() < 0.5 else HAZARD_VERDANT_SOIL
+		&"vesari_necropolis":
+			pick = HAZARD_ACID if rng.randf() < 0.5 else HAZARD_SLIME
+		&"root_hollows":
+			pick = HAZARD_SLIME if rng.randf() < 0.5 else HAZARD_COBWEB
+		_:
+			pick = -1
+	if pick == -1:
+		return
+	if rng.randf() > 0.10:   # ~1 pocket per 10 chunks of eligible biome
+		return
+	var cx: int = rng.randi_range(8, CHUNK_TILES - 9)
+	var cy: int = rng.randi_range(8, CHUNK_TILES - 9)
+	var center: Vector2i = chunk * CHUNK_TILES + Vector2i(cx, cy)
+	if Vector2(center).length() < ANCHOR_CLEAR_RADIUS_TILES + 4:
+		return
+	var radius: int = rng.randi_range(2, 3)
+	for dy in range(-radius, radius + 1):
+		for dx in range(-radius, radius + 1):
+			if dx * dx + dy * dy > radius * radius:
+				continue
+			var c := center + Vector2i(dx, dy)
+			# Only paint over carved cave floor — never replace walls or ore.
+			if wb and wb.get_cell_source_id(c) != -1:
+				continue
+			if fl.get_cell_source_id(c) == 27:   # don't overwrite water
+				continue
+			fl.set_cell(c, pick, Vector2i(0, 0), 0)
 
 
 func _paint_border_wall(wb: TileMapLayer, chunk: Vector2i, biome: BiomeDef) -> void:
@@ -566,6 +614,12 @@ func _scatter_floor(chunk: Vector2i, _biome: BiomeDef, rng: RandomNumberGenerato
 ## WALL_SUPPRESS_RADIUS_TILES and lights within TORCH_SUPPRESS_RADIUS_PX
 ## silence the spawn slot. Night Beat phases scale density up to encourage
 ## evening exploration.
+##
+## Phase 10.4/10.5/10.6 — mob_spawn_table is now actually consulted. Each
+## biome ships its own mob_def ids; world_gen looks them up via
+## Phase10Helpers.mob_def_for(id) and instantiates the generic phase10_mob
+## scene with the resolved def. Falls back to stone_hopper_scene for biomes
+## that haven't migrated their tables yet.
 func _spawn_mobs(chunk: Vector2i, biome: BiomeDef, rng: RandomNumberGenerator) -> void:
 	if stone_hopper_scene == null or biome.mobs_per_chunk <= 0:
 		return
@@ -583,6 +637,13 @@ func _spawn_mobs(chunk: Vector2i, biome: BiomeDef, rng: RandomNumberGenerator) -
 		chunk_mob_budget,
 	)
 	var wb := _layer(wall_base_layer_path)
+	# Phase 10.19 — pack AI roll: when this chunk gets a "pack" spawn group, all
+	# mobs spawn from the same id and within 3 tiles of each other so they feel
+	# coordinated. Champion / Elite affixes still roll per-mob.
+	var pack_pick: StringName = &""
+	if rng.randf() < 0.18 and biome.mob_spawn_table.size() > 0:
+		pack_pick = biome.mob_spawn_table[rng.randi() % biome.mob_spawn_table.size()]
+	var pack_anchor: Vector2 = Vector2.ZERO
 	for _i in range(budget):
 		var sx: int = rng.randi_range(2, CHUNK_TILES - 3)
 		var sy: int = rng.randi_range(2, CHUNK_TILES - 3)
@@ -595,15 +656,58 @@ func _spawn_mobs(chunk: Vector2i, biome: BiomeDef, rng: RandomNumberGenerator) -
 		var pos: Vector2 = _world_pos_from_tile(coord)
 		if _suppressed_by_light(pos):
 			continue
-		# Phase 4.16 was originally "walls within N tiles suppress spawns" — that
-		# made sense when walls were the rare exception (the pre-screenshot
-		# placeholder). Now with natural caves filling ~70% of every chunk,
-		# nearly every floor tile has a wall within 4 tiles, so the check was
-		# suppressing ALL spawns. The CK rule is really about *player-placed*
-		# walls in safe-rooms; revisit when we track placed vs natural walls.
-		var mob := stone_hopper_scene.instantiate() as Node2D
-		mob.position = pos
+		if pack_pick != &"" and pack_anchor != Vector2.ZERO:
+			# Constrain pack members to within 3 tiles of the first spawn.
+			pos = pack_anchor + Vector2(rng.randi_range(-2, 2), rng.randi_range(-2, 2)) * float(TILE_PX)
+		var mob_id: StringName = pack_pick if pack_pick != &"" else biome.mob_spawn_table[rng.randi() % biome.mob_spawn_table.size()]
+		var mob := _spawn_mob_by_id(mob_id, pos)
+		if mob == null:
+			continue
 		entities.add_child(mob)
+		if pack_pick != &"" and pack_anchor == Vector2.ZERO:
+			pack_anchor = pos
+
+
+## Phase 10.4/10.5/10.6 — resolve mob_id → MobDef → phase10_mob scene with def
+## injected. Stone-Hopper retains its existing scene file for back-compat.
+func _spawn_mob_by_id(mob_id: StringName, pos: Vector2) -> Node2D:
+	if mob_id == &"stone_hopper":
+		var mob := stone_hopper_scene.instantiate() as Node2D
+		if mob:
+			mob.position = pos
+		return mob
+	var def: Resource = null
+	var helper: Node = Engine.get_main_loop().get_root().get_node_or_null("Phase10Helpers") if Engine.get_main_loop() else null
+	if helper and helper.has_method("mob_def_for"):
+		def = helper.call("mob_def_for", mob_id)
+	if def == null:
+		var dir := DirAccess.open("res://resources/mobs/")
+		if dir:
+			dir.list_dir_begin()
+			var entry := dir.get_next()
+			while entry != "":
+				if entry.ends_with(".tres"):
+					var maybe: MobDef = load("res://resources/mobs/" + entry) as MobDef
+					if maybe and maybe.id == mob_id:
+						def = maybe
+						break
+				entry = dir.get_next()
+			dir.list_dir_end()
+	if def == null:
+		# Unknown mob id — fall back to stone_hopper rather than skipping.
+		var fallback := stone_hopper_scene.instantiate() as Node2D
+		if fallback:
+			fallback.position = pos
+		return fallback
+	var scn := load("res://scenes/enemies/phase10_mob.tscn") as PackedScene
+	if scn == null:
+		return null
+	var instance := scn.instantiate() as Mob
+	if instance == null:
+		return null
+	instance.mob_def = def
+	instance.position = pos
+	return instance
 
 
 func _suppressed_by_light(world_pos: Vector2) -> bool:

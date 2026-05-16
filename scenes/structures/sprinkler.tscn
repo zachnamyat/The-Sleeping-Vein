@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://csprinkler00001"]
+[gd_scene format=3 uid="uid://cfg78otcsct3u"]
 
 [ext_resource type="Script" path="res://scripts/structures/sprinkler.gd" id="1_sp"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/sprinkler_placeable.png" id="2_tex"]

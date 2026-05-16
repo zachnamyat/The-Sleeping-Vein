@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://csbgsailor00b"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/vesari_necropolis/salt_bound_captain.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_vesari.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"salt_bound_captain"
+display_name = "Salt-Bound Captain"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(24, 24)
+max_health = 95
+armor = 4
+contact_damage = 14
+contact_damage_type = &"physical"
+move_speed = 20.0
+detection_radius = 150.0
+leash_radius = 220.0
+behavior = 2
+mob_class = 3
+xp_skill = &"skill_melee"
+xp_value = 60
+loot_table = ExtResource("3_loot")
+biome = &"vesari_necropolis"
+stagger_threshold = 50
+stagger_recovery_seconds = 1.0
+knockback_resistance = 0.4
+resistances = {"physical": 0.25}
+weaknesses = {"lightning": 1.5}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-3"

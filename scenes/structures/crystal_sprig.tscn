@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://ccrystalsprig00001"]
+[gd_scene format=3 uid="uid://btmshxljy2mhs"]
 
 [ext_resource type="Script" path="res://scripts/structures/crystal_sprig.gd" id="1_cs"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/crystal_sprig.png" id="2_tex"]

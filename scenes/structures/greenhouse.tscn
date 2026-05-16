@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cgreenhouse00001"]
+[gd_scene format=3 uid="uid://dxbr12t674ba3"]
 
 [ext_resource type="Script" path="res://scripts/structures/greenhouse.gd" id="1_gh"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/greenhouse_placeable.png" id="2_tex"]

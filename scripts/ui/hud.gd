@@ -368,14 +368,3 @@ func _refresh_coin_label() -> void:
 	if coin_label == null or Inventory == null:
 		return
 	coin_label.text = "Coins: %d" % Inventory.count_of(&"ancient_coin")
-	# Ticket 2.25 — rarity-keyed pickup tone so the player can hear "ooh, blue"
-	# without looking at the toast.
-	if AudioBus and defn:
-		var sfx: StringName = &"pickup_common"
-		match defn.rarity:
-			1: sfx = &"pickup_uncommon"
-			2: sfx = &"pickup_rare"
-			3: sfx = &"pickup_epic"
-			4: sfx = &"pickup_legendary"
-			_: sfx = &"pickup_common"
-		AudioBus.play_sfx(sfx)

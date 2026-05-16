@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="MerchantInventory" load_steps=2 format=3 uid="uid://merchstock0hask0001"]
+[gd_resource type="Resource" script_class="MerchantInventory" format=3 uid="uid://d4gf0y5jchbho"]
 
 [ext_resource type="Script" path="res://scripts/resources/merchant_inventory.gd" id="1_mi"]
 

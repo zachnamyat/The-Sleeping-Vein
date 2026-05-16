@@ -8,6 +8,7 @@ guaranteed_drops = [{ "item_id": "loambeetle", "min": 1, "max": 2 }]
 weighted_drops = [
 	{ "item_id": "loam", "min": 1, "max": 3, "weight": 4.0 },
 	{ "item_id": "shaleseed", "min": 1, "max": 1, "weight": 1.0 },
+	{ "item_id": "hide", "min": 1, "max": 1, "weight": 1.5 },
 	{ "item_id": "ancient_coin", "min": 1, "max": 2, "weight": 0.6 },
 ]
 max_rolls = 1

@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://baurxphas10b"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"auriax_phase2_grief"
+phase_index = 1
+loop = true
+entries = [{
+"id": &"aurx_grief_pulse",
+"kind": &"slam",
+"telegraph_seconds": 0.7,
+"cooldown_seconds": 1.4,
+"radius_pixels": 96.0,
+"damage": 26,
+"damage_type": &"magic",
+"speed": 0.0,
+}, {
+"id": &"aurx_falling_petals",
+"kind": &"ranged_arc",
+"telegraph_seconds": 0.3,
+"cooldown_seconds": 1.0,
+"radius_pixels": 160.0,
+"damage": 16,
+"damage_type": &"magic",
+"speed": 220.0,
+}]

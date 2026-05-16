@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://cundwgog10b"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/underwater_goggles.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"underwater_goggles"
+display_name = "Underwater Goggles"
+description = "Brass goggles with sea-glass lenses. Vision clarity below water; breath drains 15% slower."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 3
+tier = 3
+rarity = 1
+equipment_slot = &"helmet"
+armor_value = 1
+lore_ref = "lore/04_biomes.md#stratum-5--the-drowned-aphelion"

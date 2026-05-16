@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://ctannery00001"]
+
+[ext_resource type="Script" path="res://scripts/structures/tannery.gd" id="1_tn"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/tannery_placeable.png" id="2_tex"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tn"]
+size = Vector2(24, 20)
+
+[node name="Tannery" type="Area2D"]
+script = ExtResource("1_tn")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_tex")
+offset = Vector2(0, -10)
+
+[node name="InteractShape" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_tn")

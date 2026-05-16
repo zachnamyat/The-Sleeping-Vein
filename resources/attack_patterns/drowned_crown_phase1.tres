@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bdrownphas10a"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"drowned_crown_phase1"
+phase_index = 0
+loop = true
+entries = [{
+"id": &"dcrn_sword_swing",
+"kind": &"slam",
+"telegraph_seconds": 0.7,
+"cooldown_seconds": 1.4,
+"radius_pixels": 48.0,
+"damage": 22,
+"damage_type": &"physical",
+"speed": 0.0,
+}, {
+"id": &"dcrn_threnos_chord",
+"kind": &"ranged_arc",
+"telegraph_seconds": 0.5,
+"cooldown_seconds": 1.6,
+"radius_pixels": 100.0,
+"damage": 16,
+"damage_type": &"magic",
+"speed": 220.0,
+}]

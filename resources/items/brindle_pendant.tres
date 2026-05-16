@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="ItemDef" load_steps=3 format=3 uid="uid://bibrindlepend0001"]
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://bkqhcbs4m6l8c"]
 
 [ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/brindle_pendant.png" id="2_icon"]

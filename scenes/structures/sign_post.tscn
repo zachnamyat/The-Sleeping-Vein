@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bsignpost00000001"]
+[gd_scene format=3 uid="uid://bbxhclhx2ddxg"]
 
 [ext_resource type="Script" path="res://scripts/structures/sign_post.gd" id="1_sign"]
 [ext_resource type="Texture2D" path="res://assets/sprites/structures/sign_wood.png" id="2_tex"]

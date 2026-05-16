@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bpetbowl0000000001"]
+[gd_scene format=3 uid="uid://cjd2vxeuuhnr1"]
 
 [ext_resource type="Script" path="res://scripts/structures/pet_bowl.gd" id="1_pb"]
 [ext_resource type="Texture2D" path="res://assets/sprites/structures/pet_bowl.png" id="2_tex"]

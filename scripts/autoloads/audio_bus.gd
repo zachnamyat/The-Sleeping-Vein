@@ -162,6 +162,17 @@ func play_ambient(track_id: StringName) -> void:
 	_ambient_player.play()
 
 
+## Phase 10.50 — per-biome reverb profile. Stored as `wet_db` (sent gain) and
+## `room_size` (0..1). The placeholder pool just remembers the values so test
+## code can verify the routing; a full Reverb bus comes online when audio
+## samples land in Phase 15 polish.
+var current_reverb_profile: Dictionary = {}
+
+
+func apply_reverb_profile(profile: Dictionary) -> void:
+	current_reverb_profile = profile.duplicate()
+
+
 ## Phase 9.65 — set or clear the per-NPC theme music layer. When `active`, the
 ## given track_id crossfades over the ambient bed; when false, returns to the
 ## currently bound biome ambient.

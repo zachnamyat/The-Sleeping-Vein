@@ -12,6 +12,20 @@ const RUNNING_BONUS_PER_LEVEL: float = 0.001
 const PIXEL_SNAP: bool = true
 const SPRITE_VISUAL_SCALE: float = 0.5   ## Walker source is 24x48 — half-size puts the character at ~12x24, sane vs 16px tiles.
 
+# Phase 10.7 — swimming mechanic. Player enters swim state when standing on a
+# water tile (WorldGen.is_water_at). Swim speed is reduced; breath meter
+# depletes. Coral Veil or underwater goggles can extend the breath window.
+const SWIM_SPEED_MULT: float = 0.55
+const SWIM_BREATH_MAX_SECONDS: float = 30.0
+const SWIM_BREATH_DRAIN_PER_SECOND: float = 1.0  ## seconds-of-breath per real second
+const SWIM_BREATH_RESTORE_PER_SECOND: float = 6.0
+const SWIM_DROWN_DAMAGE_PER_TICK: int = 6
+const SWIM_DROWN_TICK_INTERVAL: float = 1.0
+# Phase 10.20 — underwater drift physics. While submerged in the Drowned
+# Aphelion, an ambient current pushes the Walker in a slow direction; the
+# vector is sampled every chunk transition from a low-frequency noise field.
+const SWIM_CURRENT_STRENGTH_PX_PER_SECOND: float = 8.0
+
 @export var hand_glow_strength: float = 1.0
 
 @onready var sprite: Sprite2D = $Sprite2D
@@ -33,6 +47,12 @@ var is_sitting: bool = false
 var is_sleeping: bool = false
 var is_eating: bool = false
 var _respawn_position: Vector2 = Vector2.ZERO
+
+# Phase 10.7/10.8/10.20/10.21 — swim + breath state.
+var is_swimming: bool = false
+var breath_seconds: float = SWIM_BREATH_MAX_SECONDS
+var _drown_tick_accum: float = 0.0
+var _swim_current: Vector2 = Vector2.ZERO
 
 # Camera shake state
 var _shake_remaining: float = 0.0
@@ -209,12 +229,79 @@ func _physics_process(delta: float) -> void:
 	var sprinting: bool = Input.is_action_pressed("sprint") and input.length() > 0.01
 	if sprinting and stamina and stamina.drain_continuous(stamina.sprint_drain_per_second, delta):
 		speed_mult *= SPRINT_MULT
+	# Phase 10.7 — swim state polls every frame: any water tile under the
+	# player toggles swim mode on, otherwise off. While swimming, speed is
+	# reduced (10.7) and breath drains (10.8). Drift (10.20) layers on top.
+	_tick_swim_state(delta)
+	if is_swimming:
+		speed_mult *= SWIM_SPEED_MULT
 	velocity = input * BASE_SPEED * speed_mult * DevConsole.dev_speed_mult
+	if is_swimming:
+		velocity += _swim_current
 	move_and_slide()
 	if PIXEL_SNAP:
 		global_position = global_position.round()
 	_tick_footsteps(delta, input.length() > 0.01)
 	_tick_camera_shake(delta)
+
+
+## Phase 10.7/10.8/10.20/10.21 — swim state machine.
+##
+## Submerged detection asks WorldGen.is_water_at; while submerged the breath
+## meter drains at SWIM_BREATH_DRAIN_PER_SECOND (modified by equipment +
+## inventory items). When breath hits 0 we tick drown damage. Surface = breath
+## restores quickly.
+##
+## Current drift (10.20) is a soft constant push in the Drowned Aphelion to
+## sell underwater movement; deterministic from world position so the player
+## learns to navigate against it.
+func _tick_swim_state(delta: float) -> void:
+	var wg: Node = get_tree().current_scene.get_node_or_null("WorldGen") if get_tree().current_scene else null
+	var on_water: bool = false
+	if wg and wg.has_method("is_water_at"):
+		on_water = bool(wg.call("is_water_at", global_position))
+	# Drowned Aphelion biome additionally counts as "submerged" everywhere; the
+	# water lakes elsewhere are wading depth and trigger swim too.
+	var biome: BiomeDef = null
+	if wg and wg.has_method("biome_at"):
+		biome = wg.call("biome_at", global_position) as BiomeDef
+	var in_deep_biome: bool = biome != null and biome.id == &"drowned_aphelion"
+	var swimming_now: bool = on_water or in_deep_biome
+	if swimming_now != is_swimming:
+		is_swimming = swimming_now
+		EventBus.player_swim_changed.emit(is_swimming)
+	# Current drift (10.20) — only in deep biome, sampled from world position.
+	if in_deep_biome:
+		var t: float = Time.get_ticks_msec() / 1000.0
+		var angle: float = sin(global_position.x * 0.005 + t * 0.1) * PI + cos(global_position.y * 0.005) * 0.5
+		_swim_current = Vector2(cos(angle), sin(angle)) * SWIM_CURRENT_STRENGTH_PX_PER_SECOND
+	else:
+		_swim_current = Vector2.ZERO
+	# Breath drain / restore (10.8).
+	var drain_mult: float = 1.0
+	# Coral Veil (10.8) → 0.4× drain (extends breath ~2.5×).
+	if Inventory.count_of(&"coral_veil") > 0:
+		drain_mult *= 0.4
+	# Underwater goggles (10.29) → small extension.
+	if Inventory.count_of(&"underwater_goggles") > 0:
+		drain_mult *= 0.85
+	# Phase 10.21 — Tidekin armor (full set) → 0.5× drain.
+	if Inventory.count_of(&"tidekin_chestpiece") > 0:
+		drain_mult *= 0.5
+	if is_swimming:
+		breath_seconds = maxf(0.0, breath_seconds - SWIM_BREATH_DRAIN_PER_SECOND * drain_mult * delta)
+		EventBus.player_breath_changed.emit(breath_seconds, SWIM_BREATH_MAX_SECONDS)
+		if breath_seconds <= 0.0:
+			_drown_tick_accum += delta
+			if _drown_tick_accum >= SWIM_DROWN_TICK_INTERVAL:
+				_drown_tick_accum = 0.0
+				if health and not health.is_dead():
+					health.apply_damage(SWIM_DROWN_DAMAGE_PER_TICK, null, &"physical")
+					EventBus.ui_toast.emit("Drowning!", 1.0)
+	else:
+		if breath_seconds < SWIM_BREATH_MAX_SECONDS:
+			breath_seconds = minf(SWIM_BREATH_MAX_SECONDS, breath_seconds + SWIM_BREATH_RESTORE_PER_SECOND * delta)
+			EventBus.player_breath_changed.emit(breath_seconds, SWIM_BREATH_MAX_SECONDS)
 
 
 func _move_while_attack_factor() -> float:

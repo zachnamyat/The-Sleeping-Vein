@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="AttackPattern" format=3 uid="uid://bvorrkphas10a"]
+
+[ext_resource type="Script" path="res://scripts/resources/attack_pattern.gd" id="1_pat"]
+
+[resource]
+script = ExtResource("1_pat")
+pattern_id = &"vorrkell_phase1"
+phase_index = 0
+loop = true
+entries = [{
+"id": &"vorr_tunnel",
+"kind": &"slam",
+"telegraph_seconds": 1.0,
+"cooldown_seconds": 1.8,
+"radius_pixels": 40.0,
+"damage": 12,
+"damage_type": &"physical",
+"speed": 0.0,
+}, {
+"id": &"vorr_segment_lash",
+"kind": &"ranged_arc",
+"telegraph_seconds": 0.7,
+"cooldown_seconds": 2.2,
+"radius_pixels": 64.0,
+"damage": 10,
+"damage_type": &"physical",
+"speed": 200.0,
+}]

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://csythpetal10i"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/sythrenn_last_petal.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"sythrenn_last_petal"
+display_name = "Sythrenn's Last Petal"
+description = "A single pale-pink petal with golden veins. Held when the heart wavers — alters a late-game line."
+icon = ExtResource("2_icon")
+max_stack = 1
+item_type = 0
+tier = 5
+rarity = 4
+lore_text = "Mercy kept where mercy is rarely earned."
+lore_ref = "lore/05_aeon_sovereigns_bosses.md#boss-4"
+resonance_bound = true

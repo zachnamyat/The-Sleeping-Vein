@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="MobDef" format=3 uid="uid://b8t2o87yjrel2"]
+
+[ext_resource type="Script" path="res://scripts/resources/mob_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/drowned_aphelion/hollow_coral.png" id="2_sprite"]
+[ext_resource type="Resource" path="res://resources/mobs/loot_drowned.tres" id="3_loot"]
+
+[resource]
+script = ExtResource("1_def")
+id = &"hollow_coral"
+display_name = "Hollow Coral"
+sprite = ExtResource("2_sprite")
+sprite_size = Vector2i(24, 24)
+max_health = 100
+armor = 8
+contact_damage = 6
+contact_damage_type = &"poison"
+move_speed = 0.0
+detection_radius = 200.0
+leash_radius = 0.0
+behavior = 3
+mob_class = 2
+xp_skill = &"skill_magic"
+xp_value = 60
+loot_table = ExtResource("3_loot")
+biome = &"drowned_aphelion"
+stagger_threshold = 80
+stagger_recovery_seconds = 1.5
+knockback_resistance = 1.0
+resistances = {"physical": 0.3, "poison": 0.7}
+weaknesses = {"explosive": 1.6, "fire": 1.3}
+lore_ref = "lore/06_creatures_and_enemies.md#stratum-5"

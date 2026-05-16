@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bmailbox0000000001"]
+[gd_scene format=3 uid="uid://dm82pda82hddo"]
 
 [ext_resource type="Script" path="res://scripts/structures/mailbox.gd" id="1_mb"]
 [ext_resource type="Texture2D" path="res://assets/sprites/structures/mailbox.png" id="2_tex"]

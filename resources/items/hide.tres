@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="ItemDef" format=3 uid="uid://itemdef0hide"]
+
+[ext_resource type="Script" path="res://scripts/resources/item_def.gd" id="1_def"]
+[ext_resource type="Texture2D" path="res://assets/sprites/items/hide.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_def")
+icon = ExtResource("2_icon")
+id = &"hide"
+display_name = "Raw Hide"
+description = "Untanned animal pelt. Cure at the Tannery to make leather."
+max_stack = 99
+item_type = 0
+tier = 0
+rarity = 0

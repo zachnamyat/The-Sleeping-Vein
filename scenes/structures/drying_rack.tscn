@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://cdryingrack00001"]
+[gd_scene format=3 uid="uid://dk62bta20hy77"]
 
 [ext_resource type="Script" path="res://scripts/structures/drying_rack.gd" id="1_dr"]
 [ext_resource type="Texture2D" path="res://assets/sprites/items/drying_rack_placeable.png" id="2_tex"]
